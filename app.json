@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "FCA_Partner",
-    "slug": "FCA_Partner",
+    "name": "FCA_Customer",
+    "slug": "FCA_Customer",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
