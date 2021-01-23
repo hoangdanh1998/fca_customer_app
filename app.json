@@ -5,10 +5,11 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
+    "backgroundColor": "#e6d7ab",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/images/fast-coffee-img-logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#e6d7ab"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
