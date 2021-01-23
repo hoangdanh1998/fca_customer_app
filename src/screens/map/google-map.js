@@ -10,7 +10,7 @@ const MapScreen = () => {
   return (
     <View style={styles.container}>
       <MapView
-        style={{flex: 1, paddingBottom: {valueMarginBottom}}}
+        style={{ flex: 1, paddingBottom: { valueMarginBottom } }}
         onMapReady={() => {
           PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
@@ -36,7 +36,7 @@ const MapScreen = () => {
         }}
         showsUserLocation={true}
         showsMyLocationButton={true}
-        
+
       ></MapView>
     </View>
   );
