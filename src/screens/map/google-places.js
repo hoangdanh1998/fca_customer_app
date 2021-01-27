@@ -1,11 +1,23 @@
-import { Dimensions, View } from "react-native";
+import { Dimensions, ToastAndroid, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { KEY_GGMAP } from "../../constance/constance";
 
 var screenWidth = Dimensions.get("window").width;
+// const [initialRegion, setInitialRegion] = useState({
+//   description: "empty",
+//   latitude: 10.8274174,
+//   longitude: 106.6793407 ,
+//   latitudeDelta: 0.0922,
+//   longitudeDelta: 0.0421,
+// });
+
 const openSearchModal = () => {
+  // const showToast = () => {
+  //   ToastAndroid.show(`${initialRegion.description} + ${initialRegion.latitude}`, ToastAndroid.SHORT);
+  // };
+
   return (
     // <View>
       <GooglePlacesAutocomplete
@@ -18,7 +30,17 @@ const openSearchModal = () => {
         fetchDetails={true}
         onPress={(data, details = null) => {
           // 'details' is provided when fetchDetails = true
-          console.log(data, details);
+          // console.log(data, details);
+          // console.log(data,details.description);
+          console.log(data.description);
+          console.log(details.geometry.location.lat);
+          console.log(details.geometry.location.lng);
+          // setInitialRegion({
+          //   description: details.description,
+          //   latitude:details.geometry.location.lat,
+          //   longitude: details.geometry.location.lng,
+          // })
+
         }}
         query={{
           key: KEY_GGMAP,
