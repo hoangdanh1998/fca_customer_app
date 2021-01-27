@@ -1,4 +1,5 @@
 import {useEffect, useState} from 'react';
+
 import yelp from '../service/yelp-api/yelp';
 
 export default () => {
@@ -9,14 +10,14 @@ export default () => {
     const searchApi = async searchTerm => {
         
         try {
-            const response = await yelp.get('/search', {
-                params: {
-                    limit: 50,
-                    term:searchTerm,
-                    location: 'san jose'
-                }
-            });
-            setResults(response.data.businesses);
+            // const response = await yelp.get('/search', {
+            //     params: {
+            //         limit: 50,
+            //         term:searchTerm,
+            //         location: 'san jose'
+            //     }
+            // });
+            // setResults(response.data.businesses);
             
         } catch (error) {
             seterrorMessage("Something went wrong");
