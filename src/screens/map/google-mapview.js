@@ -4,7 +4,7 @@ import { Dimensions, Platform, StyleSheet, Text, View } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import React, { useCallback, useEffect, useState } from "react";
 
-import { KEY_GGMAP } from "../../constance/constance";
+import { KEY_GOOGLE_MAP } from "../../constance/constance";
 import MapViewDirections from "react-native-maps-directions";
 
 const width = Dimensions.get("window").width;
@@ -38,7 +38,7 @@ const MapScreen = () => {
         <MapViewDirections
           origin={{ latitude: 10.8274174, longitude: 106.6793407 }}
           destination={{ latitude: 10.8155516, longitude: 106.6780962 }}
-          apikey={KEY_GGMAP}
+          apikey={KEY_GOOGLE_MAP}
           strokeWidth={4}
           strokeColor="blue"
         />

@@ -1,7 +1,7 @@
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 
-import { KEY_GGMAP } from "../../constance/constance";
+import { KEY_GOOGLE_MAP } from "../../constance/constance";
 
 export default () => {
   const [isLoading, setLoading] = useState(true);
@@ -11,7 +11,7 @@ export default () => {
     "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial";
   // "&origin="
   // "&destination="
-  // "&key="${KEY_GGMAP}
+  // "&key="${KEY_GOOGLE_MAP}
   const searchApi = async (searchTerm) => {
     try {
       const response = await yelp.get("/search", {

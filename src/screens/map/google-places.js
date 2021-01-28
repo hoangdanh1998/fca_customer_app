@@ -2,7 +2,7 @@ import { Dimensions, ToastAndroid, View } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { KEY_GGMAP } from "../../constance/constance";
+import { KEY_GOOGLE_MAP } from "../../constance/constance";
 
 var screenWidth = Dimensions.get("window").width;
 // const [initialRegion, setInitialRegion] = useState({
@@ -43,7 +43,7 @@ const openSearchModal = () => {
 
         }}
         query={{
-          key: KEY_GGMAP,
+          key: KEY_GOOGLE_MAP,
           components: 'country:vn', //limit country
         }}
         currentLocation={true}
