@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 
-import  MapScreen  from "../map/ggMap";
+import  MapScreen  from "../map/google-map";
 import ResultsList from '../../components/molecules/ResultsList';
 import SearchBar from '../../components/atoms/SearchBar';
 import useResults from '../../hooks/useResults';
