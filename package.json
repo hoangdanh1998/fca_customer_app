@@ -9,6 +9,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-community/geolocation": "^2.0.2",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/compat": "^5.3.11",
     "@react-navigation/native": "^5.9.0",
@@ -23,7 +24,7 @@
     "react-native-gesture-handler": "~1.8.0",
     "react-native-google-places": "^3.1.2",
     "react-native-google-places-autocomplete": "^2.1.2",
-    "react-native-maps": "^0.27.1",
+    "react-native-maps": "0.27.1",
     "react-native-maps-directions": "^1.8.0",
     "react-native-reanimated": "~1.13.0",
     "react-native-safe-area-context": "3.1.9",
