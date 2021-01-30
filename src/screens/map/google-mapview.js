@@ -4,7 +4,7 @@ import { Dimensions, StyleSheet, Text, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import React, { useEffect, useState } from "react";
 
-import { KEY_GGMAP } from "../../constance/constance";
+import { KEY_GOOGLE_MAP } from "../../constance/constance";
 import MapViewDirections from "react-native-maps-directions";
 
 const width = Dimensions.get("window").width;
@@ -40,7 +40,6 @@ const MapScreen = () => {
         // followsUserLocation={true} //work on ios only
         // onMapReady={getLocation}
         // onUserLocationChange={(coordinate) => {console.log(coordinate)}}
-
         showsUserLocation={true}
         showsScale
         showsCompass
@@ -54,7 +53,7 @@ const MapScreen = () => {
         <MapViewDirections
           origin={{ latitude: userRegion.latitude, longtitude: userRegion.longtitude }}
           destination={{ latitude: 10.8155516, longitude: 106.6780962 }}
-          apikey={KEY_GGMAP}
+          apikey={KEY_GOOGLE_MAP}
           strokeWidth={4}
           strokeColor="blue" 
          /> 
