@@ -1,8 +1,8 @@
 import * as Location from "expo-location";
 
-import { Dimensions, Platform, StyleSheet, Text, View } from "react-native";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import React, { useCallback, useEffect, useState } from "react";
+import { Dimensions, StyleSheet, Text, View } from "react-native";
+import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
+import React, { useEffect, useState } from "react";
 
 import { KEY_GOOGLE_MAP } from "../../constance/constance";
 import MapViewDirections from "react-native-maps-directions";
@@ -11,37 +11,54 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 
 const MapScreen = () => {
-  const [initialRegion, setInitialRegion] = useState({
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+  const [userRegion, setUserRegion] = useState(null);
 
-    latitude: 10.8274174,
-    longitude: 106.6793407 ,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
-  });
+  useEffect(() => {
+    (async () => {
+      let { status } = await Location.requestPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
 
-  
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+      setUserRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      })
+    })();
+  }, []);
   return (
     <View style={{ flex: 1 }}>
       <MapView
         style={styles.map}
-        followsUserLocation={true}
-        // onMapReady={_onMapReady}
-        showsUserLocation
+        // followsUserLocation={true} //work on ios only
+        // onMapReady={getLocation}
+        // onUserLocationChange={(coordinate) => {console.log(coordinate)}}
+        showsUserLocation={true}
         showsScale
         showsCompass
         toolbarEnabled
         zoomEnabled
         rotateEnabled
         provider={PROVIDER_GOOGLE}
-        region={initialRegion}
+        region={userRegion}
       >
+       { (userRegion.latitude != null) ?
         <MapViewDirections
-          origin={{ latitude: 10.8274174, longitude: 106.6793407 }}
+          origin={{ latitude: userRegion.latitude, longtitude: userRegion.longtitude }}
           destination={{ latitude: 10.8155516, longitude: 106.6780962 }}
           apikey={KEY_GOOGLE_MAP}
           strokeWidth={4}
-          strokeColor="blue"
-        />
+          strokeColor="blue" 
+         /> 
+         : null
+         }
       </MapView>
     </View>
   );
