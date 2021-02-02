@@ -33,6 +33,7 @@ const MapScreen = () => {
       })
     })();
   }, []);
+  console.log("userRegion", userRegion);
   return (
     <View style={{ flex: 1 }}>
       <MapView
@@ -49,16 +50,16 @@ const MapScreen = () => {
         provider={PROVIDER_GOOGLE}
         region={userRegion}
       >
-       { (userRegion.latitude != null) ?
-        <MapViewDirections
-          origin={{ latitude: userRegion.latitude, longtitude: userRegion.longtitude }}
-          destination={{ latitude: 10.8155516, longitude: 106.6780962 }}
-          apikey={KEY_GOOGLE_MAP}
-          strokeWidth={4}
-          strokeColor="blue" 
-         /> 
-         : null
-         }
+        {(userRegion) ?
+          <MapViewDirections
+            origin={{ latitude: userRegion.latitude, longitude: userRegion.longitude }}
+            destination={{ latitude: 10.8155516, longitude: 106.6780962 }}
+            apikey={KEY_GOOGLE_MAP}
+            strokeWidth={4}
+            strokeColor="blue"
+          />
+          : null
+        }
       </MapView>
     </View>
   );
