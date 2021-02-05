@@ -1,7 +1,7 @@
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 
-import { KEY_GOOGLE_MAP } from "../../constance/constance";
+import { KEY_GOOGLE_MAP } from "../../constants/index";
 
 const GoogleMatrix = () => {
   // const dumData=[{
