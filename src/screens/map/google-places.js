@@ -32,9 +32,9 @@ const openSearchModal = () => {
                     // 'details' is provided when fetchDetails = true
                     // console.log(data, details);
                     // console.log(data,details.description);
-                    console.log(data.description);
-                    console.log(details.geometry.location.lat);
-                    console.log(details.geometry.location.lng);
+                    // console.log(data.description);
+                    // console.log(details.geometry.location.lat);
+                    // console.log(details.geometry.location.lng);
                     // setInitialRegion({
                     //   description: details.description,
                     //   latitude:details.geometry.location.lat,

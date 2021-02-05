@@ -34,7 +34,7 @@ const MapScreen = () => {
             setUserRegion(null);
         })();
     }, []);
-    console.log("userRegion", userRegion);
+    // console.log("userRegion", userRegion);
     return (
         <View style={{ flex: 1 }}>
             <MapView

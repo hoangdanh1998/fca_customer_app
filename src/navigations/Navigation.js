@@ -1,17 +1,15 @@
 import React from 'react';
-import SearchScreen from '../screens/items/index';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import ResultShowScreen from '../screens/item-detail/index'
+import MapScreen from '../screens/map/google-map';
 
 
 const Stack = createStackNavigator();
 export default function Navigation() {
     return (
         <NavigationContainer>
-            <Stack.Navigator>
-                <Stack.Screen name="Home" component={SearchScreen} />
-                <Stack.Screen name="Result" component={ResultShowScreen} />
+            <Stack.Navigator screenOptions={{headerShown: false}}>
+                <Stack.Screen name="HOME" component={MapScreen} />               
             </Stack.Navigator>
         </NavigationContainer>
     );

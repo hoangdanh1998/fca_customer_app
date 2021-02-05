@@ -20,13 +20,15 @@ import { restaurantData } from "../../data/restaurant";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
+
+
 const MapScreen = () => {
   const screenWidth = Dimensions.get("window").width;
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
   const [detailsGeometry, setDetailsGeometry] = useState(null);
-  const [popUpMarker, setPopUpMarker] = useState(null);
+  const [popUpMarker, setPopUpMarker] = useState();
 
   const openSearchModal = () => {
     // const showToast = () => {
@@ -37,6 +39,7 @@ const MapScreen = () => {
       <View>
         <GooglePlacesAutocomplete
           // style={styles.searchBar}
+          
           placeholder="Search location"
           minLength={2}
           autoFocus={false}
@@ -55,6 +58,7 @@ const MapScreen = () => {
             //   latitude:details.geometry.location.lat,
             //   longitude: details.geometry.location.lng,
             // })
+            
             setDetailsGeometry({
               description: data.description,
               latitude: details.geometry.location.lat,
@@ -100,6 +104,7 @@ const MapScreen = () => {
   const mapView = () => {
     // console.log("userRegion", userRegion);
     return (
+      
       <View style={{ flex: 1 }}>
         <MapView
           style={styles.map}
@@ -154,18 +159,20 @@ const MapScreen = () => {
   };
 
   const popUpView = () => {
+    // console.log(popUpMarker);
     return <>  
         {
             popUpMarker ?
             <View style={{
                 height:200,
                 width: screenWidth,
-                flex: 1,
+                height:"50%",
+                backgroundColor:"red"
             }}>
                 <Text>
-                   {
-                       popUpMarker.name
-                   } 
+                  {
+                      popUpMarker.name
+                  } 
                 </Text>
             </View>
             :null
@@ -196,6 +203,7 @@ const MapScreen = () => {
     })();
   }, []);
 
+  console.log(popUpView());
   return (
     <View
       style={{
