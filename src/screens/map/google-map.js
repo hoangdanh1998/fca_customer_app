@@ -36,7 +36,9 @@ const MapScreen = () => {
     })
       .then((response) => response.json())
       .then((suggestedStores) => {
-        console.log(suggestedStores);
+        if (suggestedStores.status=="OK")
+        setStoreSuggestion(suggestedStores);
+        else console.log("get Stores failed!")
       })
       .catch((error) => {
         console.error(error);
@@ -197,34 +199,49 @@ const MapScreen = () => {
               onPress={() => setPopUpMarker(restaurant)}
             />
           ))} */}
-          {/* {storeData.data.partners
-            ? storeData.data.partners.map((stores) => (
+          {/* {storeSuggestion
+            ? storeSuggestion.data.partners.map((stores) => (
                 <Marker
                   key={stores.id}
                   title={stores.name}
                   destination={stores.address.description}
                   coordinate={{
-                    latitude: stores.address.latitude,
-                    longitude: stores.address.longitude,
-                  }}
-                  onPress={() => setPopUpMarker(stores)}
-                />
-              ))
-            : null}
-            {storeData.data.suggestion
-            ? storeData.data.suggestion.map((stores) => (
-                <Marker
-                  key={stores.id}
-                  title={stores.name}
-                  destination={stores.address.description}
-                  coordinate={{
-                    latitude: stores.address.latitude,
-                    longitude: stores.address.longitude,
+                    latitude: parseFloat(stores.address.latitude),
+                    longitude: parseFloat(stores.address.longitude),
                   }}
                   onPress={() => setPopUpMarker(stores)}
                 />
               ))
             : null} */}
+
+          {storeSuggestion
+            ? storeSuggestion.data.partners.map((stores) =>
+                stores.id == storeSuggestion.data.suggestion.id ? (
+                  <Marker
+                    pinColor="blue"
+                    key={stores.id}
+                    title={stores.name}
+                    destination={stores.address.description}
+                    coordinate={{
+                      latitude: parseFloat(stores.address.latitude),
+                      longitude: parseFloat(stores.address.longitude),
+                    }}
+                    onPress={() => setPopUpMarker(stores)}
+                  />
+                ) : (
+                  <Marker
+                    key={stores.id}
+                    title={stores.name}
+                    destination={stores.address.description}
+                    coordinate={{
+                      latitude: parseFloat(stores.address.latitude),
+                      longitude: parseFloat(stores.address.longitude),
+                    }}
+                    onPress={() => setPopUpMarker(stores)}
+                  />
+                )
+              )
+            : null}
         </MapView>
       </View>
     );
@@ -264,8 +281,6 @@ const MapScreen = () => {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       });
-      // console.log("aaa");
-      // setUserRegion(null);
     })();
   }, []);
 
