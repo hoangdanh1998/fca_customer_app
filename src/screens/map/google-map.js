@@ -16,7 +16,6 @@ import GoogleMatrix from "../map/google-matrix";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { KEY_GOOGLE_MAP } from "../../constants/index";
 import MapViewDirections from "react-native-maps-directions";
-import { restaurantData } from "../../data/restaurant";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -27,12 +26,56 @@ const MapScreen = () => {
   const [userRegion, setUserRegion] = useState(null);
   const [detailsGeometry, setDetailsGeometry] = useState(null);
   const [popUpMarker, setPopUpMarker] = useState(null);
+  const [directionReturn, setDirectionReturn] = useState(null);
+  const [storeSuggestion, setStoreSuggestion] = useState(null);
+
+  const getSuggestionStores = (plainText) => {
+    fetch("https://api-fca.xyz/api/partner/suggestion", {
+      method: "POST",
+      body: JSON.stringify(plainText),
+    })
+      .then((response) => response.json())
+      .then((suggestedStores) => {
+        console.log(suggestedStores);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const getDirectionApi = async () => {
+    await fetch(
+      `https://maps.googleapis.com/maps/api/directions/json?origin=${location.coords.latitude},${location.coords.longitude}&destination=${detailsGeometry.latitude},${detailsGeometry.longitude}&key=${KEY_GOOGLE_MAP}`,
+      {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.status == "OK") {
+          // console.log(responseJson.rows[0].elements[0].distance.text)
+          // console.log("DiretionAPI");
+          //console.log(responseJson.routes[0].legs[0].steps);
+          getSuggestionStores(responseJson.routes[0].legs[0].steps);
+          // getSuggestionStores(JSON.stringify(responseJson.routes.legs.steps));
+          // setDirectionReturn(JSON.stringify(responseJson.routes.legs.steps));
+        } else {
+          console.log("Not OK");
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   const openSearchModal = () => {
     // const showToast = () => {
     //   ToastAndroid.show(`${initialRegion.description} + ${initialRegion.latitude}`, ToastAndroid.SHORT);
     // };
-
     return (
       <View>
         <GooglePlacesAutocomplete
@@ -60,6 +103,7 @@ const MapScreen = () => {
               latitude: details.geometry.location.lat,
               longitude: details.geometry.location.lng,
             });
+            // getDirectionApi();
           }}
           query={{
             key: KEY_GOOGLE_MAP,
@@ -128,6 +172,11 @@ const MapScreen = () => {
               apikey={KEY_GOOGLE_MAP}
               strokeWidth={4}
               strokeColor="blue"
+              onReady={() => getDirectionApi()}
+              // onReady={result => {
+              //   setDirectionReturn(result);
+              //   console.log(result.routes);
+              // }}
             />
           ) : null}
           {detailsGeometry ? (
@@ -138,7 +187,7 @@ const MapScreen = () => {
               }}
             />
           ) : null}
-          {restaurantData.map((restaurant) => (
+          {/* {restaurantData.map((restaurant) => (
             <Marker
               key={restaurant.id}
               coordinate={{
@@ -147,32 +196,56 @@ const MapScreen = () => {
               }}
               onPress={() => setPopUpMarker(restaurant)}
             />
-          ))}
+          ))} */}
+          {/* {storeData.data.partners
+            ? storeData.data.partners.map((stores) => (
+                <Marker
+                  key={stores.id}
+                  title={stores.name}
+                  destination={stores.address.description}
+                  coordinate={{
+                    latitude: stores.address.latitude,
+                    longitude: stores.address.longitude,
+                  }}
+                  onPress={() => setPopUpMarker(stores)}
+                />
+              ))
+            : null}
+            {storeData.data.suggestion
+            ? storeData.data.suggestion.map((stores) => (
+                <Marker
+                  key={stores.id}
+                  title={stores.name}
+                  destination={stores.address.description}
+                  coordinate={{
+                    latitude: stores.address.latitude,
+                    longitude: stores.address.longitude,
+                  }}
+                  onPress={() => setPopUpMarker(stores)}
+                />
+              ))
+            : null} */}
         </MapView>
       </View>
     );
   };
 
   const popUpView = () => {
-    return <>  
-        {
-            popUpMarker ?
-            <View style={{
-                height:200,
-                width: screenWidth,
-                flex: 1,
-            }}>
-                <Text>
-                   {
-                       popUpMarker.name
-                   } 
-                </Text>
-            </View>
-            :null
-        }
+    return (
+      <>
+        {popUpMarker ? (
+          <View
+            style={{
+              height: 200,
+              width: screenWidth,
+              flex: 1,
+            }}
+          >
+            <Text>{popUpMarker.name}</Text>
+          </View>
+        ) : null}
       </>
-    
-    
+    );
   };
 
   useEffect(() => {
