@@ -1,6 +1,6 @@
-import OrderCard from "./src/components/atoms/order-card/index.js";
+import HistoryOrder from "./src/screens/history-order/index.js";
 import React from "react";
 
 export default function App() {
-  return <OrderCard />;
+  return <HistoryOrder />;
 }
