@@ -12,18 +12,20 @@ import {
 import NumberFormat from "react-number-format";
 import { styles } from "./styles";
 import { ORDER } from "../../../constants/seeding.js";
-import { convertStringToCamel } from "../../../utils/utils.js";
+import { IMLocalized, init } from "../../../i18n/IMLocalized";
+import { LANGUAGE } from "../../../constants/index.js";
 
 const OrderCard = (props) => {
   //   var order = props.order;
   var order = ORDER;
-
+  init(LANGUAGE.VI);
   return (
     <Content>
       <Card style={styles.card}>
         <CardItem>
           <Left>
-            <Text>{convertStringToCamel(order.orderStatus)}</Text>
+            {/* <Text>{convertStringToCamel(order.orderStatus)}</Text> */}
+            <Text>{IMLocalized(order.orderStatus.toLowerCase())}</Text>
           </Left>
           <Right>
             <Text>{order.createdAt}</Text>
@@ -40,7 +42,8 @@ const OrderCard = (props) => {
                   thousandSeparator={true}
                   renderText={(formattedValue) => (
                     <Text>
-                      {formattedValue} VND - {order.orderItems} items
+                      {formattedValue} VND - {order.orderItems}{" "}
+                      {IMLocalized("wording-item")}
                     </Text>
                   )}
                 />
