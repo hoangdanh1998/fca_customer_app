@@ -1,0 +1,14 @@
+{
+    "initialization": "Initialization",
+    "acceptance": "Acceptance",
+    "rejection": "Rejection",
+    "preparation": "Preparation",
+    "wait": "Wait",
+    "readiness": "Readiness",
+    "arrival": "Arrival",
+    "reception": "Reception",
+    "closure": "Closure",
+    "cancellation": "Cancellation",
+
+    "wording-item": "item(s)"
+}

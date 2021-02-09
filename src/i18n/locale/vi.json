@@ -1,0 +1,14 @@
+{
+    "initialization": "Mới",
+    "acceptance": "Chấp nhận",
+    "rejection": "Từ chối",
+    "preparation": "Đang pha chế",
+    "wait": "Đang pha chế",
+    "readiness": "Sẵn sàng",
+    "arrival": "Chờ nhận hàng",
+    "reception": "Đã nhận hàng",
+    "closure": "Hoàn tất",
+    "cancellation": "Huỷ",
+
+    "wording-item": "món"
+}
