@@ -11,5 +11,8 @@
     "cancellation": "Huỷ",
 
     "wording-item": "món",
-    "wording-my-orders": "Đơn hàng của tôi"
+    "wording-my-orders": "Đơn hàng của tôi",
+    "wording-accepted": "Đặt hàng thành công",
+    "wording-rejected": "Đơn hàng bị từ chối",
+    "wording-done": "Hoàn tất"
 }

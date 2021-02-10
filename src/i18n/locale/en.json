@@ -11,5 +11,8 @@
     "cancellation": "Cancellation",
 
     "wording-item": "item(s)",
-    "wording-my-orders": "My Orders"
+    "wording-my-orders": "My Orders",
+    "wording-accepted": "Accepted",
+    "wording-rejected": "Rejected",
+    "wording-done": "Done"
 }
