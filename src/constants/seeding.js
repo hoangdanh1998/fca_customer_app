@@ -1,0 +1,67 @@
+export const ORDER = {
+  id: 1,
+  orderStatus: "PREPARATION",
+  storeName: "ABC Cafe",
+  orderAmount: "55000",
+  orderItems: "2",
+  createdAt: "10/02/2021",
+};
+
+export const HISTORY_ORDER = [
+  {
+    id: 1,
+    orderStatus: "PREPARATION",
+    storeName: "ABC Cafe",
+    orderAmount: "55000",
+    orderItems: "2",
+    createdAt: "10/02/2021",
+  },
+  {
+    id: 2,
+    orderStatus: "CLOSURE",
+    storeName: "ABC Cafe",
+    orderAmount: "55000",
+    orderItems: "2",
+    createdAt: "10/02/2021",
+  },
+  {
+    id: 3,
+    orderStatus: "REJECTION",
+    storeName: "ABC Cafe",
+    orderAmount: "55000",
+    orderItems: "2",
+    createdAt: "10/02/2021",
+  },
+  {
+    id: 4,
+    orderStatus: "CANCELLATION",
+    storeName: "ABC Cafe",
+    orderAmount: "55000",
+    orderItems: "2",
+    createdAt: "10/02/2021",
+  },
+  {
+    id: 5,
+    orderStatus: "PREPARATION",
+    storeName: "ABC Cafe",
+    orderAmount: "55000",
+    orderItems: "2",
+    createdAt: "10/02/2021",
+  },
+  {
+    id: 6,
+    orderStatus: "PREPARATION",
+    storeName: "ABC Cafe",
+    orderAmount: "55000",
+    orderItems: "2",
+    createdAt: "10/02/2021",
+  },
+  {
+    id: 7,
+    orderStatus: "PREPARATION",
+    storeName: "ABC Cafe",
+    orderAmount: "55000",
+    orderItems: "2",
+    createdAt: "10/02/2021",
+  },
+];
