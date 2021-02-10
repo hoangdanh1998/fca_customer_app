@@ -14,5 +14,7 @@
     "wording-my-orders": "My Orders",
     "wording-accepted": "Accepted",
     "wording-rejected": "Rejected",
-    "wording-done": "Done"
+    "wording-done": "Done",
+    "wording-next": "Next",
+    "wording-order": "Order"
 }

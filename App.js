@@ -1,5 +1,4 @@
-import StoreInformation from "./src/components/atoms/store-information/index";
-import StoreProfile from "./src/components/molecules/store-profile/index";
+import StoreDetails from "./src/screens/store-details/index";
 import React from "react";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
@@ -23,7 +22,7 @@ export default class App extends React.Component {
 
   render() {
     if (this.state.isReady) {
-      return <StoreProfile />;
+      return <StoreDetails />;
     } else {
       return null;
     }

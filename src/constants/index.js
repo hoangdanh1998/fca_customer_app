@@ -13,6 +13,8 @@ export const MESSAGES = {
   ACCEPTED: "accepted",
   DONE: "done",
   REJECTED: "rejected",
+  NEXT: "next",
+  ORDER: "order",
 };
 
 // APP STATUS
