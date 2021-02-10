@@ -1,31 +1,43 @@
 import React, { useState } from "react";
 import { View, Image } from "react-native";
-import { Content, Text, Button, Toast, Root } from "native-base";
-// import { styles } from "./styles";
+import { Content, Button } from "native-base";
+
+import { styles } from "./styles";
+import NotificationModal from "../../components/atoms/notification-modal/index";
 import { QR_CODE_BASE64 } from "../../constants/seeding";
-import { IMLocalized, init } from "../../i18n/IMLocalized";
-import { LANGUAGE } from "../../constants/index.js";
+import { MESSAGES } from "../../constants/index.js";
 
 const DeliveryOrder = (props) => {
   //   var imageBase64 = props.imageString;
   var imageBase64 = QR_CODE_BASE64;
-  init(LANGUAGE.VI);
+
+  const [visible, setVisible] = useState(false);
+
+  showModal = () => {
+    setVisible(true);
+    setTimeout(() => {
+      setVisible(false);
+    }, 3000);
+  };
   return (
-    <Root style={{ flex: 1 }}>
-      <Image
-        style={{
-          borderWidth: 1,
-          borderColor: "black",
-          width: 300,
-          height: 300,
-          marginVertical: "70%",
-          marginHorizontal: "15%",
-          resizeMode: "contain",
-          flex: 1,
+    <Content style={{ flex: 1 }}>
+      <View style={styles.view}>
+        <Image
+          style={{
+            flex: 1,
+          }}
+          source={{ uri: imageBase64 }}
+        />
+      </View>
+      <Button
+        style={{ width: 400, height: 400 }}
+        title="Show Modal"
+        onPress={() => {
+          showModal();
         }}
-        source={{ uri: imageBase64 }}
       />
-    </Root>
+      {visible === true ? <NotificationModal message={MESSAGES.DONE} /> : null}
+    </Content>
   );
 };
 

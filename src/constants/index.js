@@ -8,6 +8,13 @@ export const LANGUAGE = {
   EN: "en",
 };
 
+// APP MESSAGE
+export const MESSAGES = {
+  ACCEPTED: "accepted",
+  DONE: "done",
+  REJECTED: "rejected",
+};
+
 // APP STATUS
 export const OrderStatus = {
   INITIALIZATION: "INITIALIZATION",
