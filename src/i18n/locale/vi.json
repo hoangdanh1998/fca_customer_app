@@ -10,6 +10,8 @@
     "closure": "Hoàn tất",
     "cancellation": "Huỷ",
 
+    "currency": "đ",
+
     "wording-item": "món",
     "wording-my-orders": "Đơn hàng của tôi",
     "wording-accepted": "Đặt hàng thành công",
@@ -17,5 +19,6 @@
     "wording-done": "Hoàn tất",
     "wording-next": "Tiếp theo",
     "wording-order": "Đặt hàng",
-    "wording-too-much-item": "Bạn chỉ có thể đặt tối đa 2 món trong một đơn hàng"
+    "wording-too-much-item": "Bạn chỉ có thể đặt tối đa 2 món trong một đơn hàng",
+    "wording-cart": "Giỏ hàng"
 }
