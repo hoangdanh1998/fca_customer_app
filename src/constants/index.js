@@ -7,6 +7,7 @@ export const LANGUAGE = {
   VI: "vi",
   EN: "en",
 };
+export const MAX_ORDER_ITEM = 2;
 
 // APP MESSAGE
 export const MESSAGES = {

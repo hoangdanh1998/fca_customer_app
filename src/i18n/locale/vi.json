@@ -16,5 +16,6 @@
     "wording-rejected": "Đơn hàng bị từ chối",
     "wording-done": "Hoàn tất",
     "wording-next": "Tiếp theo",
-    "wording-order": "Đặt hàng"
+    "wording-order": "Đặt hàng",
+    "wording-too-much-item": "Bạn chỉ có thể đặt tối đa 2 món trong một đơn hàng"
 }

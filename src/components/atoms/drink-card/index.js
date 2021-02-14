@@ -34,7 +34,7 @@ const DrinkCard = (props) => {
       <Right style={styles.right}>
         <Icon
           button
-          onPress={() => alert("This is Card Header")}
+          onPress={props.addItem}
           android={"add-circle-outline"}
           name="add-circle-outline"
         />
