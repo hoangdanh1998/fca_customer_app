@@ -48,9 +48,7 @@ const DrinkCard = (props) => {
                 />
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={{ textAlign: "center", fontSize: 20 }}>
-                  {drink.quantity}
-                </Text>
+                <Text style={styles.action1text}>{drink.quantity}</Text>
               </View>
               <View style={{ flex: 1 }}>
                 <Icon
@@ -65,7 +63,7 @@ const DrinkCard = (props) => {
           ) : (
             <View style={{ flex: 1 }}>
               <Icon
-                style={{ marginLeft: "33.3%", fontSize: 25, color: "black" }}
+                style={styles.action0}
                 button
                 onPress={props.addItem}
                 android={"add-circle-outline"}

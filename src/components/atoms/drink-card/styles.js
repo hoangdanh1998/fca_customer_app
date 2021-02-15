@@ -10,4 +10,6 @@ export const styles = StyleSheet.create({
   price: { fontSize: 15 },
   right: { justifyContent: "space-between", flexDirection: "row" },
   icon: { fontSize: 25, color: "black" },
+  action0: { marginLeft: "33.3%", fontSize: 25, color: "black" },
+  action1text: { textAlign: "center", fontSize: 20 },
 });
