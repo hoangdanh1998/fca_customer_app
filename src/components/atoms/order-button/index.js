@@ -14,8 +14,7 @@ const OrderButton = (props) => {
   init(LANGUAGE.VI);
   return (
     <Button block light disabled={disable} style={styles.button}>
-      {/* <Text style={styles.text}>{IMLocalized(`wording-${name}`)}</Text> */}
-      <Text style={styles.text}>{name.quantity}</Text>
+      <Text style={styles.text}>{IMLocalized(`wording-${name}`)}</Text>
     </Button>
   );
 };

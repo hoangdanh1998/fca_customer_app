@@ -1,20 +1,20 @@
 import React, { useState } from "react";
+import { SafeAreaView, ScrollView, StatusBar, View } from "react-native";
 import {
   Content,
   Card,
   List,
   Toast,
   Root,
-  CardItem,
-  Right,
-  Left,
-  Body,
   Text,
+  Footer,
+  Header,
 } from "native-base";
 import NumberFormat from "react-number-format";
 import StoreProfile from "../../components/molecules/store-profile/index";
 import DrinkCard from "../../components/atoms/drink-card/index";
 import OrderButton from "../../components/atoms/order-button/index";
+import StoreCard from "../../components/molecules/store-cart/index";
 import { MENU_DRINK } from "../../constants/seeding";
 import {
   MESSAGES,
@@ -52,12 +52,13 @@ const StoreDetails = (props) => {
     newCart.items.push(item);
     newCart.quantity += quantity;
     newCart.total += parseInt(item.price);
-    setCart(newCart);
+    setCart({ ...cart, ...newCart });
     console.log("after", cart);
   };
 
   return (
     <Root>
+      <Header />
       <Content style={{ flex: 1 }}>
         <StoreProfile />
         <Card>
@@ -76,72 +77,17 @@ const StoreDetails = (props) => {
             )}
           />
         </Card>
-        {console.log("cart", cart)}
-        {cart.quantity > 0 ? (
-          <Card
-            style={{
-              width: "100%",
-              height: "100%",
-              backgroundColor: LIGHT_COLOR,
-            }}
-          >
-            <CardItem
-              style={{
-                backgroundColor: LIGHT_COLOR,
-              }}
-            >
-              <Right>
-                <Text
-                  style={{
-                    width: "100%",
-                    textAlign: "left",
-                    fontSize: 20,
-                    color: DARK_COLOR,
-                    fontWeight: "bold",
-                  }}
-                >
-                  {IMLocalized("wording-cart")}
-                </Text>
-              </Right>
-              <Body>
-                <Text
-                  style={{
-                    width: "100%",
-                    textAlign: "center",
-                    fontSize: 20,
-                    color: DARK_COLOR,
-                    fontWeight: "bold",
-                  }}
-                >
-                  {cart.quantity} {IMLocalized("wording-item")}
-                </Text>
-              </Body>
-              <Left>
-                <NumberFormat
-                  value={cart.total}
-                  displayType={"text"}
-                  thousandSeparator={true}
-                  renderText={(formattedValue) => (
-                    <Text
-                      style={{
-                        width: "100%",
-                        textAlign: "right",
-                        fontSize: 20,
-                        color: DARK_COLOR,
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {formattedValue} {IMLocalized("currency")}
-                    </Text>
-                  )}
-                />
-              </Left>
-            </CardItem>
-            <OrderButton name={MESSAGES.NEXT} disable={false} />
-          </Card>
-        ) : null}
-        <OrderButton name={cart} disable={false} />
+        {/* {cart.quantity > 0 ? <StoreCard cart={cart} /> : null} */}
       </Content>
+      <Footer
+        style={{
+          height: "auto",
+          backgroundColor: "white",
+          borderColor: LIGHT_COLOR,
+        }}
+      >
+        {cart.quantity > 0 ? <StoreCard cart={cart} /> : null}
+      </Footer>
     </Root>
   );
 };
