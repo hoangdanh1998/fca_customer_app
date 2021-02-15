@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { DARK_COLOR } from "../../../constants/index";
 export const styles = StyleSheet.create({
   container: { flex: 1 },
   image: {
@@ -9,7 +10,7 @@ export const styles = StyleSheet.create({
   name: { fontSize: 20 },
   price: { fontSize: 15 },
   right: { justifyContent: "space-between", flexDirection: "row" },
-  icon: { fontSize: 25, color: "black" },
-  action0: { marginLeft: "33.3%", fontSize: 25, color: "black" },
+  icon: { fontSize: 25, color: DARK_COLOR },
+  action0: { marginLeft: "33.3%", fontSize: 25, color: DARK_COLOR },
   action1text: { textAlign: "center", fontSize: 20 },
 });
