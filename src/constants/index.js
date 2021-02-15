@@ -2,6 +2,8 @@
 export const KEY_GOOGLE_MAP = "AIzaSyCbsRxuA3NGxpOMeC0UkmJTi0V2bvSyAJo";
 
 // APP CONFIG
+export const IMAGE_1 = require("../assets/1.png");
+export const IMAGE_2 = require("../assets/2.png");
 export const DARK_COLOR = "#603a18";
 export const LIGHT_COLOR = "#e6d7ab";
 export const NOTICE_DURATION = 3000;

@@ -9,7 +9,7 @@ import {
   Icon,
   Left,
 } from "native-base";
-import OrderCard from "../../components/atoms/order-card/index";
+import OrderCard from "../../components/molecules/order-card/index";
 // import { styles } from "./styles";
 import { HISTORY_ORDER } from "../../constants/seeding";
 import { IMLocalized, init } from "../../i18n/IMLocalized";

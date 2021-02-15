@@ -9,8 +9,6 @@ import { MESSAGES } from "../../../constants/index";
 const OrderButton = (props) => {
   var name = props.name;
   var disable = props.disable;
-  //   var name = MESSAGES.NEXT;
-  //   var disable = false;
   init(LANGUAGE.VI);
   return (
     <Button block light disabled={disable} style={styles.button}>
