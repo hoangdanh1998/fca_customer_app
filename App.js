@@ -1,4 +1,4 @@
-import DeliveryOrder from "./src/screens/delivery-order/index.js";
+import StoreDetails from "./src/screens/store-details/index";
 import React from "react";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
@@ -22,7 +22,7 @@ export default class App extends React.Component {
 
   render() {
     if (this.state.isReady) {
-      return <DeliveryOrder />;
+      return <StoreDetails />;
     } else {
       return null;
     }
