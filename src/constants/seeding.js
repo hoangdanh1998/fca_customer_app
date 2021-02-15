@@ -9,6 +9,23 @@ export const ORDER = {
   createdAt: "10/02/2021",
 };
 
+export const STORE = {
+  id: 1,
+  name: "Coffee Go CAGO",
+  rate: 4.5,
+  address: "123 Nguyễn Oanh, phường 7, quận Gò Vấp, TPHCM",
+  image:
+    "https://upload.wikimedia.org/wikipedia/commons/a/a3/R%C3%B6e_g%C3%A5rd_caf%C3%A9_2.jpg",
+};
+
+export const DRINK = {
+  id: 1,
+  name: "Cà phê sữa",
+  price: "35000",
+  image:
+    "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+};
+
 export const HISTORY_ORDER = [
   {
     id: 1,
@@ -65,5 +82,101 @@ export const HISTORY_ORDER = [
     orderAmount: "55000",
     orderItems: "2",
     createdAt: "10/02/2021",
+  },
+];
+
+export const MENU_DRINK = [
+  {
+    id: 1,
+    name: "Cà phê sữa",
+    price: "35000",
+    image:
+      "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+  },
+  {
+    id: 2,
+    name: "Cà phê",
+    price: "30000",
+    image:
+      "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+  },
+  {
+    id: 3,
+    name: "Cacao",
+    price: "38000",
+    image:
+      "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+  },
+  {
+    id: 4,
+    name: "Cà phê sữa",
+    price: "35000",
+    image:
+      "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+  },
+  {
+    id: 5,
+    name: "Cà phê",
+    price: "30000",
+    image:
+      "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+  },
+  {
+    id: 6,
+    name: "Cacao",
+    price: "38000",
+    image:
+      "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+  },
+];
+
+export const CART_MENU_DRINK = [
+  {
+    id: 1,
+    name: "Cà phê sữa",
+    price: "35000",
+    quantity: 0,
+    image:
+      "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+  },
+  {
+    id: 2,
+    name: "Cà phê",
+    price: "30000",
+    quantity: 0,
+    image:
+      "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+  },
+  {
+    id: 3,
+    name: "Cacao",
+    price: "38000",
+    quantity: 0,
+    image:
+      "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+  },
+  {
+    id: 4,
+    name: "Cà phê sữa",
+    price: "35000",
+    quantity: 0,
+    image:
+      "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+  },
+  {
+    id: 5,
+    name: "Cà phê",
+    price: "30000",
+    quantity: 0,
+    image:
+      "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+  },
+  {
+    id: 6,
+    name: "Cacao",
+    price: "38000",
+    quantity: 0,
+    image:
+      "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
   },
 ];

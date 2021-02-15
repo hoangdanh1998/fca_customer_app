@@ -41,8 +41,8 @@ const OrderCard = (props) => {
                   thousandSeparator={true}
                   renderText={(formattedValue) => (
                     <Text>
-                      {formattedValue} VND - {order.orderItems}{" "}
-                      {IMLocalized("wording-item")}
+                      {formattedValue} {IMLocalized("currency")} -{" "}
+                      {order.orderItems} {IMLocalized("wording-item")}
                     </Text>
                   )}
                 />
