@@ -1,7 +1,8 @@
 import { StyleSheet } from "react-native";
+import { DARK_COLOR } from "../../../constants/index";
 export const styles = StyleSheet.create({
   button: {
-    backgroundColor: "#603a18",
+    backgroundColor: DARK_COLOR,
   },
   text: {
     color: "white",

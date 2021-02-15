@@ -4,6 +4,7 @@ export const KEY_GOOGLE_MAP = "AIzaSyCbsRxuA3NGxpOMeC0UkmJTi0V2bvSyAJo";
 // APP CONFIG
 export const DARK_COLOR = "#603a18";
 export const LIGHT_COLOR = "#e6d7ab";
+export const NOTICE_DURATION = 3000;
 export const DATE_FORMAT = "DD/MM/YYYY";
 export const LANGUAGE = {
   VI: "vi",
