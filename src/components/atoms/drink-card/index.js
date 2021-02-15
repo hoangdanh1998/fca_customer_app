@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Image } from "react-native";
-import { Body, Left, Right, Icon, Text, CardItem } from "native-base";
+import { Image, View, Text } from "react-native";
+import { Body, Left, Right, Icon, CardItem } from "native-base";
 import NumberFormat from "react-number-format";
 import { styles } from "./styles";
 import { DRINK } from "../../../constants/seeding";
@@ -34,13 +34,46 @@ const DrinkCard = (props) => {
           )}
         />
       </Body>
-      <Right style={styles.right}>
-        <Icon
-          button
-          onPress={props.addItem}
-          android={"add-circle-outline"}
-          name="add-circle-outline"
-        />
+      <Right>
+        <View style={styles.right}>
+          {drink.quantity > 0 ? (
+            <>
+              <View style={{ flex: 1 }}>
+                <Icon
+                  style={styles.icon}
+                  button
+                  onPress={props.removeItem}
+                  android={"remove-circle-outline"}
+                  name="remove-circle-outline"
+                />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={{ textAlign: "center", fontSize: 20 }}>
+                  {drink.quantity}
+                </Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Icon
+                  style={styles.icon}
+                  button
+                  onPress={props.addItem}
+                  android={"add-circle-outline"}
+                  name="add-circle-outline"
+                />
+              </View>
+            </>
+          ) : (
+            <View style={{ flex: 1 }}>
+              <Icon
+                style={{ marginLeft: "33.3%", fontSize: 25, color: "black" }}
+                button
+                onPress={props.addItem}
+                android={"add-circle-outline"}
+                name="add-circle-outline"
+              />
+            </View>
+          )}
+        </View>
       </Right>
     </CardItem>
   );

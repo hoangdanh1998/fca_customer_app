@@ -8,5 +8,6 @@ export const styles = StyleSheet.create({
   body: { justifyContent: "space-around" },
   name: { fontSize: 20 },
   price: { fontSize: 15 },
-  right: { justifyContent: "center" },
+  right: { justifyContent: "space-between", flexDirection: "row" },
+  icon: { fontSize: 25, color: "black" },
 });

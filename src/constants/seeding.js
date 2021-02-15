@@ -129,3 +129,54 @@ export const MENU_DRINK = [
       "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
   },
 ];
+
+export const CART_MENU_DRINK = [
+  {
+    id: 1,
+    name: "Cà phê sữa",
+    price: "35000",
+    quantity: 0,
+    image:
+      "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+  },
+  {
+    id: 2,
+    name: "Cà phê",
+    price: "30000",
+    quantity: 0,
+    image:
+      "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+  },
+  {
+    id: 3,
+    name: "Cacao",
+    price: "38000",
+    quantity: 0,
+    image:
+      "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+  },
+  {
+    id: 4,
+    name: "Cà phê sữa",
+    price: "35000",
+    quantity: 0,
+    image:
+      "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+  },
+  {
+    id: 5,
+    name: "Cà phê",
+    price: "30000",
+    quantity: 0,
+    image:
+      "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+  },
+  {
+    id: 6,
+    name: "Cacao",
+    price: "38000",
+    quantity: 0,
+    image:
+      "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+  },
+];

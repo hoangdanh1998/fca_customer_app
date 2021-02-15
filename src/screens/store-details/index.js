@@ -4,7 +4,7 @@ import { styles } from "./styles";
 import StoreProfile from "../../components/molecules/store-profile/index";
 import DrinkCard from "../../components/atoms/drink-card/index";
 import StoreCard from "../../components/molecules/store-cart/index";
-import { MENU_DRINK } from "../../constants/seeding";
+import { MENU_DRINK, CART_MENU_DRINK } from "../../constants/seeding";
 import {
   MAX_ORDER_ITEM,
   LANGUAGE,
@@ -16,7 +16,8 @@ import { IMLocalized, init } from "../../i18n/IMLocalized";
 const StoreDetails = (props) => {
   init(LANGUAGE.VI);
   //   var menuDrink = props.menuDrink;
-  var menuDrink = MENU_DRINK;
+  // convert MENU_DRINK to CART_MENU_DRINK
+  var menuDrink = CART_MENU_DRINK;
 
   const [cart, setCart] = useState({
     items: [],
@@ -26,7 +27,7 @@ const StoreDetails = (props) => {
 
   const updateCart = (item, quantity) => {
     var newCart = cart;
-    if (newCart.quantity >= MAX_ORDER_ITEM) {
+    if (newCart.quantity >= MAX_ORDER_ITEM && quantity > 0) {
       Toast.show({
         text: IMLocalized("wording-too-much-item"),
         buttonText: "OK",
@@ -37,7 +38,8 @@ const StoreDetails = (props) => {
     }
     newCart.items.push(item);
     newCart.quantity += quantity;
-    newCart.total += parseInt(item.price);
+    newCart.total += quantity * parseInt(item.price);
+    item.quantity += quantity;
     setCart({ ...cart, ...newCart });
   };
 
@@ -58,6 +60,7 @@ const StoreDetails = (props) => {
                   updateCart(item, -1);
                 }}
                 drink={item}
+                cart={cart.quantity}
               />
             )}
           />
