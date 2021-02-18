@@ -19,6 +19,11 @@
     "wording-done": "Hoàn tất",
     "wording-next": "Tiếp theo",
     "wording-order": "Đặt hàng",
+    "wording-cancel-order": "Huỷ đơn hàng",
     "wording-too-much-item": "Bạn chỉ có thể đặt tối đa 2 món trong một đơn hàng",
-    "wording-cart": "Giỏ hàng"
+    "wording-cart": "Giỏ hàng",
+    "wording-take-order-at": "Địa điểm nhận hàng",
+    "wording-order-information": "Thông tin đơn hàng",
+    "wording-total-price": "Tổng cộng",
+    "wording-processing": "Đang xử lí"
 }

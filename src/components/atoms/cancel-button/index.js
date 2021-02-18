@@ -6,12 +6,13 @@ import { LANGUAGE } from "../../../constants/index.js";
 import { styles } from "./styles";
 import { MESSAGES } from "../../../constants/index";
 
-const OrderButton = (props) => {
+const CancelButton = (props) => {
   var name = props.name;
   var disable = props.disable;
   init(LANGUAGE.VI);
   return (
     <Button
+      bordered
       {...props}
       light
       disabled={disable}
@@ -23,4 +24,4 @@ const OrderButton = (props) => {
   );
 };
 
-export default OrderButton;
+export default CancelButton;
