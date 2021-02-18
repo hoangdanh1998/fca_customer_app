@@ -34,7 +34,7 @@ const StoreCart = (props) => {
           />
         </Left>
       </CardItem>
-      <OrderButton name={MESSAGES.NEXT} />
+      <OrderButton name={MESSAGES.NEXT} block />
     </Card>
   );
 };

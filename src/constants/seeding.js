@@ -26,6 +26,25 @@ export const DRINK = {
     "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
 };
 
+export const ORDER_DETAILS = {
+  store: STORE,
+  items: [
+    {
+      id: 1,
+      name: "Cà phê sữa",
+      price: "35000",
+      quantity: 1,
+    },
+    {
+      id: 2,
+      name: "Cà phê",
+      price: "30000",
+      quantity: 1,
+    },
+  ],
+  total: "65000",
+};
+
 export const HISTORY_ORDER = [
   {
     id: 1,
