@@ -67,7 +67,7 @@ const GoogleMatrix = () => {
   // }
   return(
     <View>
-   
+  
     </View>
   );
 }

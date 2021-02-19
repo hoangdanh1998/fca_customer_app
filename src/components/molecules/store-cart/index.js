@@ -5,10 +5,12 @@ import { styles } from "./styles";
 import OrderButton from "../../../components/atoms/order-button/index";
 import { MESSAGES, LANGUAGE } from "../../../constants/index";
 import { IMLocalized, init } from "../../../i18n/IMLocalized";
+import {withNavigation} from '@react-navigation/compat'
 
 const StoreCart = (props) => {
   init(LANGUAGE.VI);
-  var cart = props.cart;
+  const cart = props.cart;
+  const store = props.store;
 
   return (
     <Card style={styles.card}>
@@ -34,9 +36,9 @@ const StoreCart = (props) => {
           />
         </Left>
       </CardItem>
-      <OrderButton name={MESSAGES.NEXT} block />
+      <OrderButton onPress={() => props.navigation.navigate("CREATE_ORDER", {cart: cart, store: store})} name={MESSAGES.NEXT} block />
     </Card>
   );
 };
 
-export default StoreCart;
+export default withNavigation(StoreCart);

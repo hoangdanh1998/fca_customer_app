@@ -8,6 +8,9 @@ import { LANGUAGE } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 
 const CreateOrder = (props) => {
+  const order = props.route.params.cart;
+  const store = props.route.params.store;
+  
   init(LANGUAGE.VI);
   //   var menuDrink = props.menuDrink;
   const [visibleTimer, setVisibleTimer] = useState(false);
@@ -27,10 +30,9 @@ const CreateOrder = (props) => {
   };
   return (
     <>
-      <Header />
       <Content>
         <View style={{ width: "95%", marginLeft: "2.5%" }}>
-          <OrderDetail />
+          <OrderDetail store = {store} orderDetails={order} />
         </View>
         {visibleTimer ? (
           <ProcessingModal

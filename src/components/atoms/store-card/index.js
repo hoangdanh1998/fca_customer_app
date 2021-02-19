@@ -15,7 +15,7 @@ const StoreCard = (props) => {
             <Text note>
               <Rating imageSize={15} readonly startingValue={store.rate} />
             </Text>
-            <Text>{store.address}</Text>
+            <Text>{store.address.description}</Text>
           </Body>
         </Left>
       </CardItem>

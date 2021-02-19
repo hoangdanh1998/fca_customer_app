@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Content, Card, List, Toast, Root, Footer, Header } from "native-base";
 import { styles } from "./styles";
 import StoreProfile from "../../components/molecules/store-profile/index";
 import DrinkCard from "../../components/atoms/drink-card/index";
 import StoreCard from "../../components/molecules/store-cart/index";
 import { MENU_DRINK, CART_MENU_DRINK } from "../../constants/seeding";
+import {useSelector} from 'react-redux';
 import {
   MAX_ORDER_ITEM,
   LANGUAGE,
@@ -13,11 +14,15 @@ import {
 
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 
+
+
 const StoreDetails = (props) => {
   init(LANGUAGE.VI);
   //   var menuDrink = props.menuDrink;
   // convert MENU_DRINK to CART_MENU_DRINK
   var menuDrink = CART_MENU_DRINK;
+
+  const store = useSelector(state => state.store.store);
 
   const [cart, setCart] = useState({
     items: [],
@@ -26,7 +31,7 @@ const StoreDetails = (props) => {
   });
 
   const updateCart = (item, quantity) => {
-    var newCart = cart;
+    var newCart = {...cart};
     if (newCart.quantity >= MAX_ORDER_ITEM && quantity > 0) {
       Toast.show({
         text: IMLocalized("wording-too-much-item"),
@@ -36,21 +41,44 @@ const StoreDetails = (props) => {
       });
       return;
     }
-    newCart.items.push(item);
-    newCart.quantity += quantity;
-    newCart.total += quantity * parseInt(item.price);
+    const index = newCart.items.findIndex((cartItem) => {
+      return cartItem.id === item.id;
+    });
+
+    //update quantity of item
     item.quantity += quantity;
+    console.log("item quantity: ", item.quantity);
+
+    if(item.quantity <= 0) {
+      newCart.items.splice(index,1);
+    } else {
+      if(index === -1) {
+        newCart.items.push(item);
+      }else {
+        newCart.items[index] = item;
+      }
+    }
+    
+    newCart.quantity += quantity;
+    
+    newCart.total += quantity * parseInt(item.price);
+    
     setCart({ ...cart, ...newCart });
   };
+
+  useEffect(() => {
+    console.log("cart",cart);
+  },[cart])
 
   return (
     <Root>
       {/* <Header /> */}
       <Content style={styles.content}>
-        <StoreProfile />
+        <StoreProfile store = {store}/>
         <Card>
           <List
             dataArray={menuDrink}
+            keyExtractor={(item) => item.id}
             renderRow={(item) => (
               <DrinkCard
                 addItem={() => {
@@ -68,7 +96,7 @@ const StoreDetails = (props) => {
       </Content>
       {cart.quantity > 0 ? (
         <Footer style={styles.footer}>
-          <StoreCard cart={cart} />
+          <StoreCard store={store} cart={cart} />
         </Footer>
       ) : null}
     </Root>
