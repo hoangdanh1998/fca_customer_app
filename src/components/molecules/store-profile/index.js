@@ -3,11 +3,12 @@ import { Image } from "react-native";
 import { Content, Card, CardItem } from "native-base";
 import StoreCard from "../../atoms/store-card/index";
 // import { styles } from "./styles";
-import { STORE } from "../../../constants/seeding";
+import {useSelector} from 'react-redux';
 
 const StoreProfile = (props) => {
-  //   var store = props.store;
-  var store = STORE;
+
+  const store = props.store;
+  console.log(store);
   return (
     <Content>
       <Card>
@@ -19,10 +20,10 @@ const StoreProfile = (props) => {
             style={{ height: 300, width: "100%" }}
           />
         </CardItem>
-        <StoreCard store={STORE} />
+        <StoreCard store={store} />
       </Card>
     </Content>
   );
-};
+}
 
 export default StoreProfile;
