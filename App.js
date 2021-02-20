@@ -1,3 +1,4 @@
+
 import CreateOrder from "./src/screens/create-order/index";
 import React from "react";
 import * as Font from "expo-font";
@@ -17,6 +18,7 @@ export default class App extends React.Component {
       isReady: false,
     };
   }
+
 
   async componentDidMount() {
     await Font.loadAsync({
