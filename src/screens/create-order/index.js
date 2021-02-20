@@ -1,8 +1,9 @@
+import * as Location from "expo-location";
+import * as Permissions from "expo-permissions";
 import React, { useEffect, useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { createOrder } from "../../redux/actions/order";
 import { Content, Footer, View } from "native-base";
-import Geolocation from "react-native-geolocation-service";
 import OrderButton from "../../components/atoms/order-button/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import ProcessingModal from "../../components/molecules/processing-modal/index";
@@ -17,62 +18,45 @@ const CreateOrder = (props) => {
 
   // ================================= HANDLE CALL API =================================
   const dispatch = useDispatch();
-  const createOrder = useCallback(async () => {
+  const submitOrder = useCallback(async () => {
     // setIsLoading(true);
     try {
-      Geolocation.getCurrentPosition(
-        //Will give you the current location
-        (position) => {
-          //getting the Longitude from the location json
-          const currentLongitude = JSON.stringify(position.coords.longitude);
+      const { status } = await Permissions.getAsync(Permissions.LOCATION);
+      if (status !== "granted") {
+        alert(
+          "Hey! You might want to enable notifications for my app, they are good."
+        );
+        return;
+      }
+      var location = await Location.getCurrentPositionAsync({});
 
-          //getting the Latitude from the location json
-          const currentLatitude = JSON.stringify(position.coords.latitude);
-          console.log("position", { position });
-        },
-        (error) => {
-          console.log(error.code, error.message);
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 15000,
-          maximumAge: 10000,
-        }
+      await dispatch(
+        createOrder({
+          customerId: "76babaeb-3a80-4c35-8695-0305083e88fd",
+          partnerId: store.id,
+          currentLocation: {
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+          },
+          items: Array.from(order.items, (item) => {
+            return {
+              partnerItemId: item.id,
+              quantity: item.quantity,
+            };
+          }),
+        })
       );
-      await dispatch(createOrder("1ceee651-7dea-4a0f-b517-b49166cb6cfb"));
     } catch (error) {
-      setError(error);
+      console.log("error", error);
     }
   }, [dispatch]);
-  // useEffect(() => {
-  //   createOrder();
-  // }, [dispatch, createOrder]);
   // ================================= HANDLE UI =================================
   init(LANGUAGE.VI);
   const [visibleTimer, setVisibleTimer] = useState(false);
   const [timeout, handleTimeout] = useState();
-  const handlePressOrderButton = () => {
+  const handlePressOrderButton = async () => {
     setVisibleTimer(true);
-
-    Geolocation.getCurrentPosition(
-      //Will give you the current location
-      (position) => {
-        //getting the Longitude from the location json
-        // const currentLongitude = JSON.stringify(position.coords.longitude);
-
-        //getting the Latitude from the location json
-        // const currentLatitude = JSON.stringify(position.coords.latitude);
-        console.log("position", { position });
-      },
-      (error) => {
-        console.log(error.code, error.message);
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 15000,
-        maximumAge: 10000,
-      }
-    );
+    submitOrder();
     handleTimeout(
       setTimeout(() => {
         setVisibleTimer(false);

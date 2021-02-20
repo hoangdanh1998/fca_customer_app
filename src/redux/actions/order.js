@@ -3,9 +3,11 @@ import { ORDER_ACTIONS } from "../action-types/actions";
 import api from "../../service/fca-api/fca-api";
 
 export const createOrder = (param) => {
+  console.log("createorder");
   return async (dispatch) => {
     try {
       const response = await api.post("/order", param);
+      console.log("response", response);
 
       if (response.data.meta.status !== SUCCESS) {
         throw new Error("Something went wrong");
