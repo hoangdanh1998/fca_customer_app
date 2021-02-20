@@ -1,4 +1,3 @@
-import { STORE_DETAILS } from "../../constants/seeding";
 import { SUCCESS } from "../../constants/index";
 import { PARTNER_ACTIONS } from "../action-types/actions";
 import api from "../../service/fca-api/fca-api";
