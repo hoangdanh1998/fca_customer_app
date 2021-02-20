@@ -163,9 +163,9 @@ const MapScreen = () => {
                 flex: 1,
             }}>
                 <Text>
-                   {
-                       popUpMarker.name
-                   } 
+                  {
+                      popUpMarker.name
+                  } 
                 </Text>
             </View>
             :null

@@ -12,7 +12,8 @@ import { IMLocalized, init } from "../../../i18n/IMLocalized";
 const PreparingOrder = (props) => {
   init(LANGUAGE.VI);
   // var orderDetails = props.orderDetails;
-  var orderDetails = ORDER_DETAILS;
+  const orderDetails = props.orderDetails;
+  const store = props.store;
 
   return (
     <View style={{ flex: 1 }}>
@@ -21,7 +22,7 @@ const PreparingOrder = (props) => {
           {IMLocalized("wording-take-order-at")}
         </H3>
         <View style={{ width: "95%", marginLeft: "2.5%" }}>
-          <StoreCard store={orderDetails.store} />
+          <StoreCard store={store} />
         </View>
       </View>
       <View style={{ flex: 6, marginTop: "5%" }}>

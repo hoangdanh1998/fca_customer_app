@@ -16,7 +16,7 @@ const OrderButton = (props) => {
       light
       disabled={disable}
       style={styles.button}
-      onPress={props.onPress}
+      // onPress={props.onPress}
     >
       <Text style={styles.text}>{IMLocalized(`wording-${name}`)}</Text>
     </Button>
