@@ -1,0 +1,29 @@
+{
+    "initialization": "Mới",
+    "acceptance": "Chấp nhận",
+    "rejection": "Từ chối",
+    "preparation": "Đang pha chế",
+    "wait": "Đang pha chế",
+    "readiness": "Sẵn sàng",
+    "arrival": "Chờ nhận hàng",
+    "reception": "Đã nhận hàng",
+    "closure": "Hoàn tất",
+    "cancellation": "Huỷ",
+
+    "currency": "đ",
+
+    "wording-item": "món",
+    "wording-my-orders": "Đơn hàng của tôi",
+    "wording-accepted": "Đặt hàng thành công",
+    "wording-rejected": "Đơn hàng bị từ chối",
+    "wording-done": "Hoàn tất",
+    "wording-next": "Tiếp theo",
+    "wording-order": "Đặt hàng",
+    "wording-cancel-order": "Huỷ đơn hàng",
+    "wording-too-much-item": "Bạn chỉ có thể đặt tối đa 2 món trong một đơn hàng",
+    "wording-cart": "Giỏ hàng",
+    "wording-take-order-at": "Địa điểm nhận hàng",
+    "wording-order-information": "Thông tin đơn hàng",
+    "wording-total-price": "Tổng cộng",
+    "wording-processing": "Đang xử lí"
+}

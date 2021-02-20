@@ -1,0 +1,29 @@
+{
+    "initialization": "Initialization",
+    "acceptance": "Acceptance",
+    "rejection": "Rejection",
+    "preparation": "Preparation",
+    "wait": "Wait",
+    "readiness": "Readiness",
+    "arrival": "Arrival",
+    "reception": "Reception",
+    "closure": "Closure",
+    "cancellation": "Cancellation",
+
+    "currency": "$",
+
+    "wording-item": "item(s)",
+    "wording-my-orders": "My Orders",
+    "wording-accepted": "Accepted",
+    "wording-rejected": "Rejected",
+    "wording-done": "Done",
+    "wording-next": "Next",
+    "wording-order": "Order",
+    "wording-cancel-order": "Cancel",
+    "wording-too-much-item": "You can only order up to 2 items in an order",
+    "wording-cart": "Your Cart",
+    "wording-take-order-at": "Take order at",
+    "wording-order-information": "Order Information",
+    "wording-total-price": "Total",
+    "wording-processing": "Processing"
+}
