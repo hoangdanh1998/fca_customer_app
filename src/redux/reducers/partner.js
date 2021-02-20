@@ -1,4 +1,5 @@
 import { PARTNER_ACTIONS } from "../action-types/actions";
+import { convertToCartItem } from "../../models/item";
 
 const initialState = {
   partner: {
@@ -22,7 +23,11 @@ const initialState = {
 const partnerReducer = (state = initialState, action) => {
   switch (action.type) {
     case PARTNER_ACTIONS.GET_PARTNER_INFORMATION: {
-      const data = action.payload.data.data.partner;
+      var data = action.payload.data.data.partner;
+      var items = Array.from(data.items, (item) => {
+        return convertToCartItem(item);
+      });
+      data.items = items;
       return { ...state, partner: data };
     }
 

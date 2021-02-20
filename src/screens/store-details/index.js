@@ -17,15 +17,13 @@ import { IMLocalized, init } from "../../i18n/IMLocalized";
 
 const StoreDetails = (props) => {
   init(LANGUAGE.VI);
-  //   var menuDrink = props.menuDrink;
-  // convert MENU_DRINK to CART_MENU_DRINK
-  var menuDrink = CART_MENU_DRINK;
 
   const store = useSelector((state) => state.store.store);
   // ================================= HANDLE CALL API =================================
   const partner = useSelector((state) => {
     return state.partner.partner;
   });
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const dispatch = useDispatch();
@@ -33,7 +31,7 @@ const StoreDetails = (props) => {
     setIsLoading(true);
     try {
       await dispatch(
-        getPartnerInformation("8ceee651-7dea-4a0f-b517-b49166cb6cfb")
+        getPartnerInformation("1ceee651-7dea-4a0f-b517-b49166cb6cfb")
       );
     } catch (error) {
       setError(error);
@@ -85,18 +83,13 @@ const StoreDetails = (props) => {
     setCart({ ...cart, ...newCart });
   };
 
-  useEffect(() => {
-    // console.log("cart",cart);
-  }, [cart]);
-
   return (
     <Root>
       <Content style={styles.content}>
         <StoreProfile store={partner} />
         <Card>
           <List
-            dataArray={menuDrink}
-            keyExtractor={(item) => item.id}
+            dataArray={partner.items}
             renderRow={(item) => (
               <DrinkCard
                 addItem={() => {
