@@ -1,20 +1,18 @@
 import { SUCCESS } from "../../constants/index";
-import { ORDER_ACTIONS } from "../action-types/actions";
+import { PARTNER_ACTIONS } from "../action-types/actions";
 import api from "../../service/fca-api/fca-api";
 
-export const createOrder = (param) => {
-  console.log("createorder");
+export const getPartnerInformation = (param) => {
   return async (dispatch) => {
     try {
-      const response = await api.post("/order", param);
-      console.log("response", response);
+      const response = await api.get(`/partner/${param}`);
 
       if (response.data.meta.status !== SUCCESS) {
         throw new Error("Something went wrong");
       }
 
       dispatch({
-        type: ORDER_ACTIONS.CREATE_ORDER,
+        type: PARTNER_ACTIONS.GET_PARTNER_INFORMATION,
         payload: response,
       });
     } catch (error) {
