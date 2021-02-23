@@ -29,6 +29,32 @@ const MapScreen = () => {
   const [directionReturn, setDirectionReturn] = useState(null);
   const [storeSuggestion, setStoreSuggestion] = useState(null);
 
+  const [distanceTravel, setDistanceTravel]=useState(0);
+
+  const getDistance =(location2) => {
+    const lat1=location.coords.latitude;
+    const lon1=location.coords.longitude;
+    const lat2=location2.coords.latitude;
+    const lon2=location2.coords.longitude;
+
+    const R=6371e3;
+    const o1=lat1* Math.PI/180;
+    const o2=lat2* Math.PI/180;
+    const deltaO=(lat2-lat1)* Math.PI/180;
+    const deltaL=(lon2-lon1)* Math.PI/180;
+
+    const a=Math.sin(deltaO/2)*Math.sin(deltaO/2)+
+            Math.cos(o1)*Math.cos(o2)*
+            Math.sin(deltaL/2)* Math.sin(deltaL/2);
+    const c=2* Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+    const d= R*c; //in metres
+
+    setDistanceTravel(distanceTravel + d);
+    setLocation(location2);
+    console.log(`Distance: ${distanceTravel} `);
+   
+  }
+
   const getSuggestionStores = (plainText) => {
     fetch("https://api-fca.xyz/api/partner/suggestion", {
       method: "POST",
@@ -153,6 +179,9 @@ const MapScreen = () => {
           // onMapReady={getLocation}
           // onUserLocationChange={(coordinate) => {console.log(coordinate)}}
           showsUserLocation={true}
+          onUserLocationChange={async ()=> {
+            getDistance(await Location.getCurrentPositionAsync({}));
+          }}
           showsScale
           showsCompass
           toolbarEnabled
