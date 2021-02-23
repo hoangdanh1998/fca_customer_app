@@ -220,31 +220,7 @@ const MapScreen = () => {
                 longitude: detailsGeometry.longitude,
               }}
             />
-          ) : null}
-          {/* {restaurantData.map((restaurant) => (
-            <Marker
-              key={restaurant.id}
-              coordinate={{
-                latitude: restaurant.location.latitude,
-                longitude: restaurant.location.longitude,
-              }}
-              onPress={() => setPopUpMarker(restaurant)}
-            />
-          ))} */}
-          {/* {storeSuggestion
-            ? storeSuggestion.data.partners.map((stores) => (
-                <Marker
-                  key={stores.id}
-                  title={stores.name}
-                  destination={stores.address.description}
-                  coordinate={{
-                    latitude: parseFloat(stores.address.latitude),
-                    longitude: parseFloat(stores.address.longitude),
-                  }}
-                  onPress={() => setPopUpMarker(stores)}
-                />
-              ))
-            : null} */}
+          ) : null}      
 
           {storeSuggestion
             ? storeSuggestion.data.partners.map((stores) => (
