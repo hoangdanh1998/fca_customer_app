@@ -12,10 +12,12 @@ const StoreCard = (props) => {
         <Left>
           <Body>
             <H3>{store.name}</H3>
-            <Text note>
-              <Rating imageSize={15} readonly startingValue={store.rate} />
-            </Text>
-            <Text>{store.address.description}</Text>
+            {store.rate ? (
+              <Text note>
+                <Rating imageSize={15} readonly startingValue={store.rate} />
+              </Text>
+            ) : null}
+            <Text>{store.address ? store.address.description : "-"}</Text>
           </Body>
         </Left>
       </CardItem>

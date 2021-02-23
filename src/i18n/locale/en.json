@@ -12,6 +12,9 @@
 
     "currency": "$",
 
+    "title-store-information": "Store information",
+    "title-order-information": "Order Details",
+
     "wording-item": "item(s)",
     "wording-my-orders": "My Orders",
     "wording-accepted": "Accepted",
@@ -25,5 +28,8 @@
     "wording-take-order-at": "Take order at",
     "wording-order-information": "Order Information",
     "wording-total-price": "Total",
-    "wording-processing": "Processing"
+    "wording-processing": "Processing",
+    "wording-home": "Back to home",
+    "wording-direction": "Direction",
+    "wording-error-location": "We don't have permission to access your location"
 }

@@ -12,6 +12,9 @@
 
     "currency": "đ",
 
+    "title-store-information": "Thông tin cửa hàng",
+    "title-order-information": "Chi tiết đơn hàng",
+
     "wording-item": "món",
     "wording-my-orders": "Đơn hàng của tôi",
     "wording-accepted": "Đặt hàng thành công",
@@ -25,5 +28,8 @@
     "wording-take-order-at": "Địa điểm nhận hàng",
     "wording-order-information": "Thông tin đơn hàng",
     "wording-total-price": "Tổng cộng",
-    "wording-processing": "Đang xử lí"
+    "wording-processing": "Đang xử lí",
+    "wording-home": "Quay lại trang chủ",
+    "wording-direction": "Chỉ đường",
+    "wording-error-location": "Bạn chưa cấp quyền truy cập vị trí"
 }
