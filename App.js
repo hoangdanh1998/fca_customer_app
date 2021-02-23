@@ -8,8 +8,11 @@ import { createStore, applyMiddleware } from 'redux';
 import ReduxThunk from 'redux-thunk';
 import { Provider } from "react-redux";
 import rootReducer from './src/redux/reducers/root-reducer'
+import * as firebase from 'firebase';
+import { registerForPushNotificationsAsync } from './src/service/notification/expo-notification'
+import { LogBox } from 'react-native';
 
-
+LogBox.ignoreAllLogs();
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 export default class App extends React.Component {
   constructor(props) {
@@ -27,6 +30,9 @@ export default class App extends React.Component {
       ...Ionicons.font,
     });
     this.setState({ isReady: true });
+
+    registerForPushNotificationsAsync();
+    initializeFirebase();
   }
 
   render() {
@@ -40,5 +46,22 @@ export default class App extends React.Component {
     } else {
       return null;
     }
+  }
+}
+
+
+
+function initializeFirebase() {
+  const firebaseConfig = {
+    apiKey: 'AIzaSyAYB22QAFUtlPnYjUOxoliIjNCHDJjvoQ8',
+    authDomain: 'fast-coffee-2021.firebaseapp.com',
+    databaseURL: 'https://fast-coffee-2021-default-rtdb.firebaseio.com/',
+    projectId: 'fast-coffee-2021',
+    storageBucket: 'fast-coffee-2021.appspot.com',
+    messagingSenderId: '319088293595',
+  };
+
+  if (firebase.apps.length === 0) {
+    firebase.initializeApp(firebaseConfig);
   }
 }
