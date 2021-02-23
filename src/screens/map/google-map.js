@@ -1,25 +1,28 @@
 import * as Location from "expo-location";
 
+import {Card, CardItem, Left, Right} from 'native-base'
 import {
   Dimensions,
+  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
+import { KEY_GOOGLE_MAP, MESSAGES } from "../../constants/index";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import React, { useCallback, useEffect, useState } from "react";
 
 import GoogleMatrix from "../map/google-matrix";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { KEY_GOOGLE_MAP } from "../../constants/index";
 import MapViewDirections from "react-native-maps-directions";
+import OrderButton from '../../components/atoms/order-button/index';
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
-const MapScreen = () => {
+const MapScreen = (props) => {
   const screenWidth = Dimensions.get("window").width;
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -29,6 +32,31 @@ const MapScreen = () => {
   const [directionReturn, setDirectionReturn] = useState(null);
   const [storeSuggestion, setStoreSuggestion] = useState(null);
 
+  const [distanceTravel, setDistanceTravel] = useState(0);
+
+  const getDistance = (location2) => {
+    const lat1 = location.coords.latitude;
+    const lon1 = location.coords.longitude;
+    const lat2 = location2.coords.latitude;
+    const lon2 = location2.coords.longitude;
+
+    const R = 6371e3;
+    const o1 = (lat1 * Math.PI) / 180;
+    const o2 = (lat2 * Math.PI) / 180;
+    const deltaO = ((lat2 - lat1) * Math.PI) / 180;
+    const deltaL = ((lon2 - lon1) * Math.PI) / 180;
+
+    const a =
+      Math.sin(deltaO / 2) * Math.sin(deltaO / 2) +
+      Math.cos(o1) * Math.cos(o2) * Math.sin(deltaL / 2) * Math.sin(deltaL / 2); //Haversine formula
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c; //in metres
+
+    setDistanceTravel(distanceTravel + d);
+    setLocation(location2);
+    console.log(`Distance: ${distanceTravel} `);
+  };
+
   const getSuggestionStores = (plainText) => {
     fetch("https://api-fca.xyz/api/partner/suggestion", {
       method: "POST",
@@ -36,14 +64,21 @@ const MapScreen = () => {
     })
       .then((response) => response.json())
       .then((suggestedStores) => {
-        if (suggestedStores.status=="OK")
-        setStoreSuggestion(suggestedStores);
-        else console.log("get Stores failed!")
+        if (suggestedStores.meta.status == "SUCCESS")
+          setStoreSuggestion(suggestedStores);
+        else console.log(suggestedStores);
       })
       .catch((error) => {
         console.error(error);
       });
   };
+
+  const handleShowPopup = useCallback(
+    (store) => {
+      setPopUpMarker(store);
+    },
+    [popUpMarker]
+  );
 
   const getDirectionApi = async () => {
     await fetch(
@@ -79,7 +114,7 @@ const MapScreen = () => {
     //   ToastAndroid.show(`${initialRegion.description} + ${initialRegion.latitude}`, ToastAndroid.SHORT);
     // };
     return (
-      <View>
+      <View style={{ flex: 1 }}>
         <GooglePlacesAutocomplete
           // style={styles.searchBar}
           placeholder="Search location"
@@ -153,6 +188,9 @@ const MapScreen = () => {
           // onMapReady={getLocation}
           // onUserLocationChange={(coordinate) => {console.log(coordinate)}}
           showsUserLocation={true}
+          // onUserLocationChange={async ()=> {
+          //   getDistance(await Location.getCurrentPositionAsync({}));
+          // }}
           showsScale
           showsCompass
           toolbarEnabled
@@ -181,6 +219,8 @@ const MapScreen = () => {
               // }}
             />
           ) : null}
+          {/* //onPress={() => handleShowPopup(stores)} */}
+
           {detailsGeometry ? (
             <Marker
               coordinate={{
@@ -189,30 +229,6 @@ const MapScreen = () => {
               }}
             />
           ) : null}
-          {/* {restaurantData.map((restaurant) => (
-            <Marker
-              key={restaurant.id}
-              coordinate={{
-                latitude: restaurant.location.latitude,
-                longitude: restaurant.location.longitude,
-              }}
-              onPress={() => setPopUpMarker(restaurant)}
-            />
-          ))} */}
-          {/* {storeSuggestion
-            ? storeSuggestion.data.partners.map((stores) => (
-                <Marker
-                  key={stores.id}
-                  title={stores.name}
-                  destination={stores.address.description}
-                  coordinate={{
-                    latitude: parseFloat(stores.address.latitude),
-                    longitude: parseFloat(stores.address.longitude),
-                  }}
-                  onPress={() => setPopUpMarker(stores)}
-                />
-              ))
-            : null} */}
 
           {storeSuggestion
             ? storeSuggestion.data.partners.map((stores) =>
@@ -226,7 +242,7 @@ const MapScreen = () => {
                       latitude: parseFloat(stores.address.latitude),
                       longitude: parseFloat(stores.address.longitude),
                     }}
-                    onPress={() => setPopUpMarker(stores)}
+                    onPress={() => handleShowPopup(stores)}
                   />
                 ) : (
                   <Marker
@@ -237,7 +253,7 @@ const MapScreen = () => {
                       latitude: parseFloat(stores.address.latitude),
                       longitude: parseFloat(stores.address.longitude),
                     }}
-                    onPress={() => setPopUpMarker(stores)}
+                    onPress={() => handleShowPopup(stores)}
                   />
                 )
               )
@@ -253,12 +269,30 @@ const MapScreen = () => {
         {popUpMarker ? (
           <View
             style={{
-              height: 200,
-              width: screenWidth,
-              flex: 1,
+              height: '25%',
+              width: "100%",
             }}
           >
-            <Text>{popUpMarker.name}</Text>
+            <Card style={{flex: 1}}>
+              <CardItem >
+              <Left style={{flex: 1}}>
+              <Image
+            source={{
+              uri: popUpMarker.imageLink,
+            }}
+            style={{ height: 100, width: "100%" }}
+          />
+              </Left>
+              <Right style={{flex: 2, justifyContent: 'flex-end'}}>
+                <Text style={{fontWeight: 'bold', textAlign: 'left', width: '95%'}}>{popUpMarker.name}</Text>
+                <Text></Text>
+                <Text style={{textAlign: 'left', width: '95%'}}>{popUpMarker.address.description}</Text>
+              </Right>
+              </CardItem>
+              <OrderButton block full
+              name={MESSAGES.NEXT}
+              disable={false} onPress={() => props.navigation.navigate("STORE_DETAIL", {partnerId: popUpMarker.id})} />
+            </Card>
           </View>
         ) : null}
       </>

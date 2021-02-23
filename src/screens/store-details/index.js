@@ -1,24 +1,27 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getPartnerInformation } from "../../redux/actions/partner";
-import { Content, Card, List, Toast, Root, Footer, Header } from "native-base";
-import { styles } from "./styles";
-import StoreProfile from "../../components/molecules/store-profile/index";
-import DrinkCard from "../../components/atoms/drink-card/index";
-import StoreCart from "../../components/molecules/store-cart/index";
-import { MENU_DRINK, CART_MENU_DRINK } from "../../constants/seeding";
+import { CART_MENU_DRINK, MENU_DRINK } from "../../constants/seeding";
+import { Card, Content, Footer, Header, List, Root, Toast } from "native-base";
+import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
-  MAX_ORDER_ITEM,
   LANGUAGE,
+  MAX_ORDER_ITEM,
   NOTICE_DURATION,
 } from "../../constants/index.js";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
-import { IMLocalized, init } from "../../i18n/IMLocalized";
+import DrinkCard from "../../components/atoms/drink-card/index";
+import StoreCart from "../../components/molecules/store-cart/index";
+import StoreProfile from "../../components/molecules/store-profile/index";
+import { getPartnerInformation } from "../../redux/actions/partner";
+import { styles } from "./styles";
+import { withNavigation } from "@react-navigation/compat";
 
 const StoreDetails = (props) => {
-  init(LANGUAGE.VI);
 
-  const store = useSelector((state) => state.store.store);
+  // ================================= GET DATA FROM NAVIGATOR =================================
+  const partnerId = props.route.params.partnerId;
+  console.log('partnerId', partnerId);
+  init(LANGUAGE.VI);
   // ================================= HANDLE CALL API =================================
   const partner = useSelector((state) => {
     return state.partner.partner;
@@ -31,7 +34,8 @@ const StoreDetails = (props) => {
     setIsLoading(true);
     try {
       await dispatch(
-        getPartnerInformation("1ceee651-7dea-4a0f-b517-b49166cb6cfb")
+        // getPartnerInformation("1ceee651-7dea-4a0f-b517-b49166cb6cfb")
+        getPartnerInformation(partnerId)
       );
     } catch (error) {
       setError(error);
@@ -114,4 +118,4 @@ const StoreDetails = (props) => {
   );
 };
 
-export default StoreDetails;
+export default withNavigation(StoreDetails);
