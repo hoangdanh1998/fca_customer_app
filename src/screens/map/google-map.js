@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
-import { KEY_GOOGLE_MAP, MESSAGES } from "../../constants/index";
+import { KEY_GOOGLE_MAP, MESSAGES, ResponseStatus } from "../../constants/index";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import React, { useCallback, useEffect, useState } from "react";
 
@@ -64,7 +64,7 @@ const MapScreen = (props) => {
     })
       .then((response) => response.json())
       .then((suggestedStores) => {
-        if (suggestedStores.meta.status == "SUCCESS")
+        if (suggestedStores.meta.status == ResponseStatus.SUCCESS)
           setStoreSuggestion(suggestedStores);
         else console.log(suggestedStores);
       })
