@@ -1,11 +1,10 @@
-
-import CreateOrder from "./src/screens/create-order/index";
+import OrderDetails from "./src/screens/order-details/index";
 import React from "react";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 import Navigation from "./src/navigations/Navigation";
-import { createStore, applyMiddleware } from 'redux';
-import ReduxThunk from 'redux-thunk';
+import { createStore, applyMiddleware } from "redux";
+import ReduxThunk from "redux-thunk";
 import { Provider } from "react-redux";
 import rootReducer from './src/redux/reducers/root-reducer'
 import * as firebase from 'firebase';
@@ -22,7 +21,6 @@ export default class App extends React.Component {
     };
   }
 
-
   async componentDidMount() {
     await Font.loadAsync({
       Roboto: require("native-base/Fonts/Roboto.ttf"),
@@ -38,10 +36,9 @@ export default class App extends React.Component {
   render() {
     if (this.state.isReady) {
       return (
-        <Provider store={store} styles={{flex:1}}>
+        <Provider store={store} styles={{ flex: 1 }}>
           <Navigation />
         </Provider>
-
       );
     } else {
       return null;

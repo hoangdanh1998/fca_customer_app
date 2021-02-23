@@ -1,6 +1,9 @@
 // API KEY
 export const KEY_GOOGLE_MAP = "AIzaSyCbsRxuA3NGxpOMeC0UkmJTi0V2bvSyAJo";
 
+// API CONFIG
+export const SUCCESS = "SUCCESS";
+
 // APP CONFIG
 export const IMAGE_1 = require("../assets/1.png");
 export const IMAGE_2 = require("../assets/2.png");
@@ -15,6 +18,7 @@ export const LANGUAGE = {
   EN: "en",
 };
 export const MAX_ORDER_ITEM = 2;
+export const WAITING_DURATION = 15000;
 
 // APP MESSAGE
 export const MESSAGES = {
@@ -23,6 +27,8 @@ export const MESSAGES = {
   REJECTED: "rejected",
   NEXT: "next",
   ORDER: "order",
+  HOME: "home",
+  // DIRECTION: 'direction',
 };
 
 // APP STATUS
