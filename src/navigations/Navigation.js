@@ -6,6 +6,7 @@ import {
 } from "@react-navigation/stack";
 import StoreDetails from "../screens/store-details";
 import CreateOrder from "../screens/create-order";
+import OrderDetails from "../screens/order-details";
 import { DARK_COLOR, LANGUAGE } from "../constants/index";
 
 import { IMLocalized, init } from "../i18n/IMLocalized";
@@ -31,6 +32,18 @@ export default function Navigation() {
         <Stack.Screen
           name="CREATE_ORDER"
           component={CreateOrder}
+          options={{
+            title: IMLocalized("title-order-information"),
+            headerTintColor: "#ffff",
+            headerStyle: {
+              backgroundColor: DARK_COLOR,
+            },
+            headerLeft: HeaderBackButton,
+          }}
+        />
+        <Stack.Screen
+          name="ORDER_DETAIL"
+          component={OrderDetails}
           options={{
             title: IMLocalized("title-order-information"),
             headerTintColor: "#ffff",

@@ -8,8 +8,8 @@ import OrderButton from "../../components/atoms/order-button/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import ProcessingModal from "../../components/molecules/processing-modal/index";
 import { LANGUAGE } from "../../constants/index";
-
 import { IMLocalized, init } from "../../i18n/IMLocalized";
+import { withNavigation } from "@react-navigation/compat";
 
 const CreateOrder = (props) => {
   // ================================= GET DATA FROM NAVIGATOR =================================
@@ -19,7 +19,6 @@ const CreateOrder = (props) => {
   // ================================= HANDLE CALL API =================================
   const dispatch = useDispatch();
   const submitOrder = useCallback(async () => {
-    // setIsLoading(true);
     try {
       const { status } = await Permissions.getAsync(Permissions.LOCATION);
       if (status !== "granted") {
@@ -55,11 +54,12 @@ const CreateOrder = (props) => {
   const [visibleTimer, setVisibleTimer] = useState(false);
   const [timeout, handleTimeout] = useState();
   const handlePressOrderButton = async () => {
-    setVisibleTimer(true);
     submitOrder();
+    setVisibleTimer(true);
     handleTimeout(
       setTimeout(() => {
         setVisibleTimer(false);
+        props.navigation.navigate("ORDER_DETAIL");
       }, 15000)
     );
   };
@@ -67,6 +67,7 @@ const CreateOrder = (props) => {
   const handleHideProcessingModal = () => {
     clearTimeout(timeout);
     setVisibleTimer(false);
+    props.navigation.navigate("ORDER_DETAIL");
   };
 
   return (
@@ -99,4 +100,4 @@ const CreateOrder = (props) => {
   );
 };
 
-export default CreateOrder;
+export default withNavigation(CreateOrder);

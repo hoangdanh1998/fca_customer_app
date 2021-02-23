@@ -4,4 +4,5 @@ export const PARTNER_ACTIONS = {
 
 export const ORDER_ACTIONS = {
   CREATE_ORDER: "CREATE_ORDER",
+  GET_ORDER: "GET_ORDER",
 };
