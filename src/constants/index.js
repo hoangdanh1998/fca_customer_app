@@ -18,6 +18,7 @@ export const LANGUAGE = {
   EN: "en",
 };
 export const MAX_ORDER_ITEM = 2;
+export const WAITING_DURATION = 15000;
 
 // APP MESSAGE
 export const MESSAGES = {
@@ -26,6 +27,8 @@ export const MESSAGES = {
   REJECTED: "rejected",
   NEXT: "next",
   ORDER: "order",
+  HOME: "home",
+  // DIRECTION: 'direction',
 };
 
 // APP STATUS
