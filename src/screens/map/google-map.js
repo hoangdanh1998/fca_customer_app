@@ -1,25 +1,28 @@
 import * as Location from "expo-location";
 
+import {Card, CardItem, Left, Right} from 'native-base'
 import {
   Dimensions,
+  Image,
   SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
+import { KEY_GOOGLE_MAP, MESSAGES } from "../../constants/index";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import React, { useCallback, useEffect, useState } from "react";
 
 import GoogleMatrix from "../map/google-matrix";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { KEY_GOOGLE_MAP } from "../../constants/index";
 import MapViewDirections from "react-native-maps-directions";
+import OrderButton from '../../components/atoms/order-button/index';
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
-const MapScreen = () => {
+const MapScreen = (props) => {
   const screenWidth = Dimensions.get("window").width;
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -70,9 +73,12 @@ const MapScreen = () => {
       });
   };
 
-  const handleShowPopup = useCallback(store => {
-      setPopUpMarker(store)
-  }, [popUpMarker])
+  const handleShowPopup = useCallback(
+    (store) => {
+      setPopUpMarker(store);
+    },
+    [popUpMarker]
+  );
 
   const getDirectionApi = async () => {
     await fetch(
@@ -108,7 +114,7 @@ const MapScreen = () => {
     //   ToastAndroid.show(`${initialRegion.description} + ${initialRegion.latitude}`, ToastAndroid.SHORT);
     // };
     return (
-      <View style={{flex:1}}>
+      <View style={{ flex: 1 }}>
         <GooglePlacesAutocomplete
           // style={styles.searchBar}
           placeholder="Search location"
@@ -213,6 +219,8 @@ const MapScreen = () => {
               // }}
             />
           ) : null}
+          {/* //onPress={() => handleShowPopup(stores)} */}
+
           {detailsGeometry ? (
             <Marker
               coordinate={{
@@ -220,22 +228,35 @@ const MapScreen = () => {
                 longitude: detailsGeometry.longitude,
               }}
             />
-          ) : null}      
+          ) : null}
 
           {storeSuggestion
-            ? storeSuggestion.data.partners.map((stores) => (
-                <Marker
-                  key={stores.id}
-                  pinColor="blue"
-                  title={stores.name}
-                  destination={stores.address.description}
-                  coordinate={{
-                    latitude: parseFloat(stores.address.latitude),
-                    longitude: parseFloat(stores.address.longitude),
-                  }}
-                  onPress={() => handleShowPopup(stores)}
-                />
-              ))
+            ? storeSuggestion.data.partners.map((stores) =>
+                stores.id == storeSuggestion.data.suggestion.id ? (
+                  <Marker
+                    pinColor="blue"
+                    key={stores.id}
+                    title={stores.name}
+                    destination={stores.address.description}
+                    coordinate={{
+                      latitude: parseFloat(stores.address.latitude),
+                      longitude: parseFloat(stores.address.longitude),
+                    }}
+                    onPress={() => handleShowPopup(stores)}
+                  />
+                ) : (
+                  <Marker
+                    key={stores.id}
+                    title={stores.name}
+                    destination={stores.address.description}
+                    coordinate={{
+                      latitude: parseFloat(stores.address.latitude),
+                      longitude: parseFloat(stores.address.longitude),
+                    }}
+                    onPress={() => handleShowPopup(stores)}
+                  />
+                )
+              )
             : null}
         </MapView>
       </View>
@@ -243,17 +264,35 @@ const MapScreen = () => {
   };
 
   const popUpView = () => {
-    console.log(popUpMarker);
     return (
       <>
         {popUpMarker ? (
           <View
             style={{
-              height: 200,
-              backgroundColor:"red",
-              width:"100%"}}
+              height: '25%',
+              width: "100%",
+            }}
           >
-            <Text>{popUpMarker.name}</Text>
+            <Card style={{flex: 1}}>
+              <CardItem >
+              <Left style={{flex: 1}}>
+              <Image
+            source={{
+              uri: popUpMarker.imageLink,
+            }}
+            style={{ height: 100, width: "100%" }}
+          />
+              </Left>
+              <Right style={{flex: 2, justifyContent: 'flex-end'}}>
+                <Text style={{fontWeight: 'bold', textAlign: 'left', width: '95%'}}>{popUpMarker.name}</Text>
+                <Text></Text>
+                <Text style={{textAlign: 'left', width: '95%'}}>{popUpMarker.address.description}</Text>
+              </Right>
+              </CardItem>
+              <OrderButton block full
+              name={MESSAGES.NEXT}
+              disable={false} onPress={() => props.navigation.navigate("STORE_DETAIL", {partnerId: popUpMarker.id})} />
+            </Card>
           </View>
         ) : null}
       </>

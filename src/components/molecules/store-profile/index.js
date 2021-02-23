@@ -1,6 +1,7 @@
+import { Card, CardItem, Content } from "native-base";
 import React, { useState } from "react";
+
 import { Image } from "react-native";
-import { Content, Card, CardItem } from "native-base";
 import StoreCard from "../../atoms/store-card/index";
 // import { styles } from "./styles";
 import { useSelector } from "react-redux";
@@ -13,7 +14,7 @@ const StoreProfile = (props) => {
         <CardItem cardBody>
           <Image
             source={{
-              uri: store.image,
+              uri: store.imageLink,
             }}
             style={{ height: 300, width: "100%" }}
           />

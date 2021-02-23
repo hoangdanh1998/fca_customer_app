@@ -6,6 +6,7 @@ import {
 import { IMLocalized, init } from "../i18n/IMLocalized";
 
 import CreateOrder from "../screens/create-order";
+import MapScreen from "../screens/map/google-map";
 import { NavigationContainer } from "@react-navigation/native";
 import OrderDetails from "../screens/order-details";
 import React from "react";
@@ -17,6 +18,18 @@ export default function Navigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+      <Stack.Screen
+          name="MAP_VIEW"
+          component={MapScreen}
+          options={{
+            title: IMLocalized("title-store-information"),
+            headerTintColor: "#ffff",
+            headerStyle: {
+              backgroundColor: DARK_COLOR,
+            },
+            headerLeft: HeaderBackButton,
+          }}
+        />
         <Stack.Screen
           name="STORE_DETAIL"
           component={StoreDetails}
