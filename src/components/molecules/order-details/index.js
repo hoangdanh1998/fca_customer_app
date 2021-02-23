@@ -11,7 +11,6 @@ import { IMLocalized, init } from "../../../i18n/IMLocalized";
 
 const PreparingOrder = (props) => {
   init(LANGUAGE.VI);
-  // var orderDetails = props.orderDetails;
   const orderDetails = props.orderDetails;
   const store = props.store;
 
