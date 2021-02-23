@@ -7,9 +7,9 @@ import { Content, Footer, View } from "native-base";
 import OrderButton from "../../components/atoms/order-button/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import ProcessingModal from "../../components/molecules/processing-modal/index";
-import { LANGUAGE } from "../../constants/index";
-
+import { LANGUAGE, WAITING_DURATION, MESSAGES } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
+import { withNavigation } from "@react-navigation/compat";
 
 const CreateOrder = (props) => {
   // ================================= GET DATA FROM NAVIGATOR =================================
@@ -17,15 +17,15 @@ const CreateOrder = (props) => {
   const store = props.route.params.store;
 
   // ================================= HANDLE CALL API =================================
+  var createdOrder = useSelector((state) => {
+    return state.order.createdOrder;
+  });
   const dispatch = useDispatch();
   const submitOrder = useCallback(async () => {
-    // setIsLoading(true);
     try {
       const { status } = await Permissions.getAsync(Permissions.LOCATION);
       if (status !== "granted") {
-        alert(
-          "Hey! You might want to enable notifications for my app, they are good."
-        );
+        alert(IMLocalized("wording-error-location"));
         return;
       }
       var location = await Location.getCurrentPositionAsync({});
@@ -48,6 +48,8 @@ const CreateOrder = (props) => {
       );
     } catch (error) {
       console.log("error", error);
+      handleHideProcessingModal();
+      alert("Submit order fail");
     }
   }, [dispatch]);
   // ================================= HANDLE UI =================================
@@ -55,12 +57,16 @@ const CreateOrder = (props) => {
   const [visibleTimer, setVisibleTimer] = useState(false);
   const [timeout, handleTimeout] = useState();
   const handlePressOrderButton = async () => {
-    setVisibleTimer(true);
     submitOrder();
+    setVisibleTimer(true);
     handleTimeout(
       setTimeout(() => {
         setVisibleTimer(false);
-      }, 15000)
+        props.navigation.navigate("ORDER_DETAIL", {
+          order: createdOrder,
+          isAfterCreate: true,
+        });
+      }, WAITING_DURATION)
     );
   };
 
@@ -87,7 +93,7 @@ const CreateOrder = (props) => {
         <View style={{ flex: 1 }}>
           <OrderButton
             block
-            name="order"
+            name={MESSAGES.ORDER}
             disable={false}
             onPress={() => {
               handlePressOrderButton();
@@ -99,4 +105,4 @@ const CreateOrder = (props) => {
   );
 };
 
-export default CreateOrder;
+export default withNavigation(CreateOrder);
