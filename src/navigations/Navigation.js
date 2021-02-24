@@ -11,6 +11,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import OrderDetails from "../screens/order-details";
 import React from "react";
 import StoreDetails from "../screens/store-details";
+import googleMapNavigation from "../screens/map/google-map-navigation";
 
 const Stack = createStackNavigator();
 export default function Navigation() {
@@ -18,16 +19,26 @@ export default function Navigation() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+      {/* <Stack.Screen
+          name="MAP_NAVIGATION"
+          component={googleMapNavigation}
+          options={{
+            title: "DAWEA",
+            headerTintColor: "#ffff",
+            headerStyle: {
+              backgroundColor: DARK_COLOR,
+            }
+          }}
+        /> */}
       <Stack.Screen
           name="MAP_VIEW"
           component={MapScreen}
           options={{
-            title: IMLocalized("title-store-information"),
+            title: "FAST COFFEE",
             headerTintColor: "#ffff",
             headerStyle: {
               backgroundColor: DARK_COLOR,
-            },
-            headerLeft: HeaderBackButton,
+            }
           }}
         />
         <Stack.Screen
