@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getOrder } from "../../redux/actions/order";
 import { Content, Footer, FooterTab, View } from "native-base";
 import OrderButton from "../../components/atoms/order-button/index";
+import CancelButton from "../../components/atoms/cancel-button/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import { LANGUAGE, MESSAGES } from "../../constants/index";
 
@@ -41,13 +42,17 @@ const OrderDetails = (props) => {
           <OrderDetail store={order.partner} orderDetails={order} />
         </View>
       </Content>
-      <Footer
-        style={{ backgroundColor: "white", justifyContent: "space-around" }}
-      >
+      <Footer style={{ backgroundColor: null, justifyContent: "space-around" }}>
         {isAfterCreate ? (
-          <View style={{ flex: 1 }}>
-            <OrderButton
-              light
+          <View
+            style={{
+              width: "100%",
+              flexDirection: "row",
+              justifyContent: "space-around",
+            }}
+          >
+            <CancelButton
+              bordered
               name={MESSAGES.HOME}
               disable={false}
               onPress={() => {

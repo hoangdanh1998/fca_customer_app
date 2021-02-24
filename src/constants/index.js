@@ -27,7 +27,7 @@ export const MESSAGES = {
   NEXT: "next",
   ORDER: "order",
   HOME: "home",
-  // DIRECTION: 'direction',
+  DIRECTION: "direction",
 };
 
 // APP STATUS

@@ -14,7 +14,6 @@ export const createOrder = (param) => {
         payload: response,
       });
     } catch (error) {
-      console.log("error123", error);
       throw error;
     }
   };
@@ -22,10 +21,8 @@ export const createOrder = (param) => {
 
 export const getOrder = (param) => {
   return async (dispatch) => {
-    console.log("request");
     try {
       const response = await api.get(`/order/${param}`);
-      console.log("response", response);
       if (response.data.meta.status !== SUCCESS) {
         throw new Error("Something went wrong");
       }
