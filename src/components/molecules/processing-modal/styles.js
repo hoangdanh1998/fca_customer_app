@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     marginLeft: "12.5%",
     marginTop: "40%",
   },
-  image: { width: "100%", height: "80%" },
+  image: { width: "100%", height: "75%" },
   text: {
     width: "100%",
     textAlign: "center",

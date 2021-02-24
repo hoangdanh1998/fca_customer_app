@@ -43,7 +43,7 @@ const DrinkCard = (props) => {
                   style={styles.icon}
                   button
                   onPress={props.removeItem}
-                  android={"remove-circle-outline"}
+                  // android={"remove-circle-outline"}
                   name="remove-circle-outline"
                 />
               </View>
@@ -56,7 +56,7 @@ const DrinkCard = (props) => {
                   button
                   onPress={props.addItem}
                   // android={"add-circle-outline"}
-                  // name="add-circle-outline"
+                  name="add-circle-outline"
                 />
               </View>
             </>
@@ -67,7 +67,7 @@ const DrinkCard = (props) => {
                 button
                 onPress={props.addItem}
                 // android={"add-circle-outline"}
-                // name="add-circle-outline"
+                name="add-circle-outline"
               />
             </View>
           )}
