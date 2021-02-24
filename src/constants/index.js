@@ -1,9 +1,6 @@
 // API KEY
 export const KEY_GOOGLE_MAP = "AIzaSyCbsRxuA3NGxpOMeC0UkmJTi0V2bvSyAJo";
 
-// API CONFIG
-export const SUCCESS = "SUCCESS";
-
 // APP CONFIG
 export const APP_NAME = "FAST COFFEE";
 export const IMAGE_1 = require("../assets/1.png");
@@ -67,4 +64,9 @@ export const RequestItemStatus = {
   PROCESS: "PROCESS",
   APPROVED: "APPROVED",
   REJECTED: "REJECTED",
+};
+
+export const ResponseStatus = {
+  SUCCESS: "SUCCESS",
+  INVALID: "INVALID",
 };
