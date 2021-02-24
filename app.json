@@ -4,11 +4,11 @@
     "slug": "FCA_Customer",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/fast-coffee-img-logo.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/fast-coffee-img-logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#e6d7ab"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
