@@ -17,9 +17,6 @@ const CreateOrder = (props) => {
   const store = props.route.params.store;
 
   // ================================= HANDLE CALL API =================================
-  const createdOrder = useSelector((state) => {
-    return state.order.createdOrder;
-  });
   const dispatch = useDispatch();
   const submitOrder = useCallback(async () => {
     try {
@@ -61,13 +58,7 @@ const CreateOrder = (props) => {
     handleTimeout(
       setTimeout(() => {
         setVisibleTimer(false);
-        const responseOrder = createdOrder
-          ? createdOrder
-          : useSelector((state) => {
-              return state.order.createdOrder;
-            });
         props.navigation.navigate("ORDER_DETAIL", {
-          order: responseOrder,
           isAfterCreate: true,
         });
       }, WAITING_DURATION)
