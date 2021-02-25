@@ -14,6 +14,7 @@ import {
 import { KEY_GOOGLE_MAP, MESSAGES } from "../../constants/index";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import React, { useCallback, useEffect, useState } from "react";
+import {useSelector} from 'react-redux'
 
 import GoogleMatrix from "../map/google-matrix";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
@@ -22,14 +23,21 @@ import OrderButton from "../../components/atoms/order-button/index";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
-const googleMapNavigation = () => {
+
+
+const googleMapNavigation = (props) => {
+  console.log("google map navigation props:", props);
   const [distanceTravel, setDistanceTravel] = useState(0);
   const [location, setLocation] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
 
+  const coffeCoord = useSelector(state => state.map.partnerLocation);
+  const destinationCoord = useSelector(state => state.map.detailsGeometry); 
+  console.log("partner location: ",coffeCoord );
+
   const startCoord = "10.8276193,106.6770863";
-  const coffeCoord = "10.8592975,106.7872838";
-  const destinationCoord = "10.8414899,106.8078577";
+  // const coffeCoord = "10.8592975,106.7872838";
+  // const destinationCoord = "10.8414899,106.8078577";
 
   const getDistance = (location2) => {
     const lat1 = location.coords.latitude;
