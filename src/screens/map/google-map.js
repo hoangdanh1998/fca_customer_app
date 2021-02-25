@@ -75,7 +75,7 @@ const MapScreen = (props) => {
           // });
           // setsuppliedMarker(arrayOfPoints.map(suppliedMarker => arrayOfPoints));
           // console.log(suppliedMarker);
-          
+
           // storeSuggestion?.data.partners.map((partner) => {
           //   return {
           //       latitude: partner.address.latitude,
@@ -128,12 +128,12 @@ const MapScreen = (props) => {
       });
   };
 
-  const arrayOfPoints = storeSuggestion?.data.partners.map((partner) => {
-    return {
-      latitude: partner.address.latitude,
-      longitude: partner.address.longitude,
-    };
-  });
+  // const arrayOfPoints = storeSuggestion?.data.partners.map((partner) => {
+  //   return {
+  //     latitude: partner.address.latitude,
+  //     longitude: partner.address.longitude,
+  //   };
+  // });
   const openSearchModal = () => {
     // const showToast = () => {
     //   ToastAndroid.show(`${initialRegion.description} + ${initialRegion.latitude}`, ToastAndroid.SHORT);
@@ -203,6 +203,8 @@ const MapScreen = (props) => {
       </View>
     );
   };
+
+
   const mapView = () => {
     // console.log("userRegion", userRegion);
     return (
@@ -212,26 +214,31 @@ const MapScreen = (props) => {
           // followsUserLocation={true} //work on ios only
           // onMapReady={getLocation}
           // onUserLocationChange={(coordinate) => {console.log(coordinate)}}
-          ref={userRegion && detailsGeometry ? (mapRef) => {
-            {userRegion && detailsGeometry ? (
-              mapRef.fitToCoordinates({
-                coordinates:[
-                  {
-                    latitude: location.coords.latitude,
-                    longitude: location.coords.longitude,
-                  },
-                  {
-                    latitude: detailsGeometry.latitude,
-                    longitude: detailsGeometry.longitude,
-                  }]
-                }
-                )
-            ) : null}
-            // suppliedMarker
-            //   ? mapRef.fitToCoordinates(suppliedMarker)
-            //     // console.log(arrayOfPoints)
-            //   : null;
-          }:null}
+          // ref={userRegion && detailsGeometry ? ((mapRef) => {
+          //    (
+          //      console.log(location.coords),
+          //      console.log(detailsGeometry),
+          //     mapRef.fitToCoordinates({
+          //       coordinates:[
+          //         {
+          //           latitude: parseFloat(location.coords.latitude),
+          //           longitude: parseFloat(location.coords.longitude),
+          //         },
+          //         {
+          //           latitude: parseFloat(detailsGeometry.latitude),
+          //           longitude: parseFloat(detailsGeometry.longitude),
+          //         }],
+          //         options:{
+          //           animated:true
+          //         }
+          //       },
+          //       )
+          //   )
+          //   // suppliedMarker
+          //   //   ? mapRef.fitToCoordinates(suppliedMarker)
+          //   //     // console.log(arrayOfPoints)
+          //   //   : null;
+          // }) : null}
           showsUserLocation={true}
           // onUserLocationChange={async ()=> {
           //   getDistance(await Location.getCurrentPositionAsync({}));
@@ -258,10 +265,10 @@ const MapScreen = (props) => {
               strokeWidth={4}
               strokeColor="blue"
               onReady={() => getDirectionApi()}
-              // onReady={result => {
-              //   setDirectionReturn(result);
-              //   console.log(result.routes);
-              // }}
+            // onReady={result => {
+            //   setDirectionReturn(result);
+            //   console.log(result.routes);
+            // }}
             />
           ) : null}
           {/* //onPress={() => handleShowPopup(stores)} */}
@@ -277,19 +284,19 @@ const MapScreen = (props) => {
 
           {storeSuggestion
             ? storeSuggestion.data.partners.map((stores) =>
-                stores.id == storeSuggestion.data.suggestion.id ? (
-                  <Marker
-                    pinColor="blue"
-                    key={stores.id}
-                    title={stores.name}
-                    destination={stores.address.description}
-                    coordinate={{
-                      latitude: parseFloat(stores.address.latitude),
-                      longitude: parseFloat(stores.address.longitude),
-                    }}
-                    onPress={() => handleShowPopup(stores)}
-                  />
-                ) : (
+              stores.id == storeSuggestion.data.suggestion.id ? (
+                <Marker
+                  pinColor="blue"
+                  key={stores.id}
+                  title={stores.name}
+                  destination={stores.address.description}
+                  coordinate={{
+                    latitude: parseFloat(stores.address.latitude),
+                    longitude: parseFloat(stores.address.longitude),
+                  }}
+                  onPress={() => handleShowPopup(stores)}
+                />
+              ) : (
                   <Marker
                     key={stores.id}
                     title={stores.name}
@@ -301,7 +308,7 @@ const MapScreen = (props) => {
                     onPress={() => handleShowPopup(stores)}
                   />
                 )
-              )
+            )
             : null}
         </MapView>
       </View>

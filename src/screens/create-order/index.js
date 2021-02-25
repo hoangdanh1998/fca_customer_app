@@ -17,9 +17,6 @@ const CreateOrder = (props) => {
   const store = props.route.params.store;
 
   // ================================= HANDLE CALL API =================================
-  var createdOrder = useSelector((state) => {
-    return state.order.createdOrder;
-  });
   const dispatch = useDispatch();
   const submitOrder = useCallback(async () => {
     try {
@@ -31,7 +28,7 @@ const CreateOrder = (props) => {
       var location = await Location.getCurrentPositionAsync({});
 
       await dispatch(
-        createOrder({
+        await createOrder({
           customerId: "76babaeb-3a80-4c35-8695-0305083e88fd",
           partnerId: store.id,
           currentLocation: {
@@ -47,7 +44,6 @@ const CreateOrder = (props) => {
         })
       );
     } catch (error) {
-      console.log("error", error);
       handleHideProcessingModal();
       alert("Submit order fail");
     }
@@ -57,13 +53,12 @@ const CreateOrder = (props) => {
   const [visibleTimer, setVisibleTimer] = useState(false);
   const [timeout, handleTimeout] = useState();
   const handlePressOrderButton = async () => {
-    submitOrder();
     setVisibleTimer(true);
+    await submitOrder();
     handleTimeout(
       setTimeout(() => {
         setVisibleTimer(false);
         props.navigation.navigate("ORDER_DETAIL", {
-          order: createdOrder,
           isAfterCreate: true,
         });
       }, WAITING_DURATION)

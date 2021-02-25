@@ -14,6 +14,7 @@
 
     "title-store-information": "Thông tin cửa hàng",
     "title-order-information": "Chi tiết đơn hàng",
+    "title-history-order": "Đơn hàng của tôi",
 
     "wording-item": "món",
     "wording-my-orders": "Đơn hàng của tôi",
@@ -29,7 +30,7 @@
     "wording-order-information": "Thông tin đơn hàng",
     "wording-total-price": "Tổng cộng",
     "wording-processing": "Đang xử lí",
-    "wording-home": "Quay lại trang chủ",
+    "wording-home": "Trang chủ",
     "wording-direction": "Chỉ đường",
     "wording-error-location": "Bạn chưa cấp quyền truy cập vị trí"
 }

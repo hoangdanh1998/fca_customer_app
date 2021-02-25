@@ -1,4 +1,4 @@
-import { SUCCESS } from "../../constants/index";
+import { ResponseStatus } from "../../constants/index";
 import { PARTNER_ACTIONS } from "../action-types/actions";
 import api from "../../service/fca-api/fca-api";
 
@@ -7,7 +7,7 @@ export const getPartnerInformation = (param) => {
     try {
       const response = await api.get(`/partner/${param}`);
 
-      if (response.data.meta.status !== SUCCESS) {
+      if (response.data.meta.status !== ResponseStatus.SUCCESS) {
         throw new Error("Something went wrong");
       }
 
