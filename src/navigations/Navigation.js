@@ -117,7 +117,20 @@ export default function Navigation() {
             },
           }}
         />
+        <Stack.Screen
+          name="MAP_NAVIGATION"
+          component={googleMapNavigation}
+          options={{
+            title: IMLocalized("title-history-order"),
+            headerTintColor: LIGHT_COLOR,
+            headerStyle: {
+              backgroundColor: DARK_COLOR,
+            },
+            headerLeft: HeaderBackButton,
+          }}
+        />
       </Stack.Navigator>
+
     </NavigationContainer>
   );
 }

@@ -9,6 +9,7 @@ import { MESSAGES } from "../../../constants/index";
 const OrderButton = (props) => {
   var name = props.name;
   var disable = props.disable;
+  const { onPress } = props;
   init(LANGUAGE.VI);
   return (
     <Button
@@ -16,7 +17,7 @@ const OrderButton = (props) => {
       light
       disabled={disable}
       style={styles.button}
-      // onPress={props.onPress}
+      onPress={onPress}
     >
       <Text style={styles.text}>{IMLocalized(`wording-${name}`)}</Text>
     </Button>

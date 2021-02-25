@@ -8,7 +8,6 @@ import { LANGUAGE, MESSAGES } from "../../constants/index";
 
 import { init } from "../../i18n/IMLocalized";
 import { withNavigation } from "@react-navigation/compat";
-import * as Notifications from 'expo-notifications';
 const OrderDetails = (props) => {
   init(LANGUAGE.VI);
   const isAfterCreate = props.route.params.isAfterCreate;
@@ -19,7 +18,10 @@ const OrderDetails = (props) => {
 
   const notificationListener = useRef();
   const responseListener = useRef();
-
+  const navigateToNavigationPage = () => {
+    console.log('hello navigate')
+    props.navigation.navigate("MAP_NAVIGATION", { store: order.partner })
+  }
   return (
     <>
       <Content>
@@ -37,7 +39,15 @@ const OrderDetails = (props) => {
             }}
           >
             <CancelButton bordered name={MESSAGES.HOME} disable={false} />
-            <OrderButton block name={MESSAGES.DIRECTION} disable={false} />
+            <OrderButton
+              block
+              name={MESSAGES.DIRECTION}
+              disable={false}
+              onPress={() => {
+                console.log('hello')
+                navigateToNavigationPage();
+              }}
+            />
           </View>
         ) : null}
       </Footer>

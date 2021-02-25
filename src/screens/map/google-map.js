@@ -15,10 +15,13 @@ import { KEY_GOOGLE_MAP, MESSAGES } from "../../constants/index";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import React, { useCallback, useEffect, useState } from "react";
 
+import { useDispatch, useSelector } from 'react-redux';
+
 import GoogleMatrix from "../map/google-matrix";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapViewDirections from "react-native-maps-directions";
 import OrderButton from "../../components/atoms/order-button/index";
+import { setDestination, setPartnerLocation } from "../../redux/actions/map";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -27,12 +30,13 @@ const MapScreen = (props) => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
-  const [detailsGeometry, setDetailsGeometry] = useState(null);
+  // const [detailsGeometry, setDetailsGeometry] = useState(null);
   const [popUpMarker, setPopUpMarker] = useState(null);
   const [directionReturn, setDirectionReturn] = useState(null);
   const [storeSuggestion, setStoreSuggestion] = useState(null);
   const [suppliedMarker, setsuppliedMarker] = useState(null);
   const [distanceTravel, setDistanceTravel] = useState(0);
+  const dispatch = useDispatch();
 
   const getDistance = (location2) => {
     const lat1 = location.coords.latitude;
@@ -56,6 +60,8 @@ const MapScreen = (props) => {
     setLocation(location2);
     console.log(`Distance: ${distanceTravel} `);
   };
+
+  const detailsGeometry = useSelector(state => state.map.detailsGeometry);
 
   const getSuggestionStores = (plainText) => {
     fetch("https://api-fca.xyz/api/partner/suggestion", {
@@ -91,13 +97,27 @@ const MapScreen = (props) => {
   const handleShowPopup = useCallback(
     (store) => {
       setPopUpMarker(store);
-      setUserRegion({
+      dispatch(setPartnerLocation({
         latitude: parseFloat(store.address.latitude),
         longitude: parseFloat(store.address.longitude),
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      }))
+      setUserRegion({
+        latitude: parseFloat(store.address.latitude),
+
+        longitude: parseFloat(store.address.longitude),
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421, 
       });
     },
     [popUpMarker]
   );
+
+  const handleSetDetailsGeometry = useCallback((details) => {
+    console.log("details: ", details);
+    dispatch(setDestination(details));
+  })
 
   const getDirectionApi = async () => {
     await fetch(
@@ -148,7 +168,14 @@ const MapScreen = (props) => {
           autoCorrect={false}
           listViewDisplayed="auto" // true/false/undefined
           fetchDetails={true}
-          onPress={(data, details = null) => {
+          onPress={
+            (data, details = null) => {
+              console.log("data details", data);
+              handleSetDetailsGeometry({
+                description: data.description,
+                latitude: details.geometry.location.lat,
+                longitude: details.geometry.location.lng,
+              })
             // 'details' is provided when fetchDetails = true
             // console.log(data, details);
             // console.log(data,details.description);
@@ -160,13 +187,14 @@ const MapScreen = (props) => {
             //   latitude:details.geometry.location.lat,
             //   longitude: details.geometry.location.lng,
             // })
-            setDetailsGeometry({
-              description: data.description,
-              latitude: details.geometry.location.lat,
-              longitude: details.geometry.location.lng,
-            });
+            // setDetailsGeometry({
+            //   description: data.description,
+            //   latitude: details.geometry.location.lat,
+            //   longitude: details.geometry.location.lng,
+            // });
             // getDirectionApi();
-          }}
+            }
+          }
           query={{
             key: KEY_GOOGLE_MAP,
             components: "country:vn", //limit country
@@ -359,6 +387,7 @@ const MapScreen = (props) => {
                 onPress={() =>
                   props.navigation.navigate("STORE_DETAIL", {
                     partnerId: popUpMarker.id,
+                    partner: popUpMarker,
                   })
                 }
               />
