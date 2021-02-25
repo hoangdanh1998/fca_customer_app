@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { Content, Footer, View } from "native-base";
 import OrderButton from "../../components/atoms/order-button/index";
@@ -6,18 +6,20 @@ import CancelButton from "../../components/atoms/cancel-button/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import { LANGUAGE, MESSAGES } from "../../constants/index";
 
-import { IMLocalized, init } from "../../i18n/IMLocalized";
-
+import { init } from "../../i18n/IMLocalized";
+import { withNavigation } from "@react-navigation/compat";
+import * as Notifications from 'expo-notifications';
 const OrderDetails = (props) => {
-  // ================================= GET DATA FROM NAVIGATOR =================================
+  init(LANGUAGE.VI);
   const isAfterCreate = props.route.params.isAfterCreate;
 
-  // ================================= HANDLE CALL API =================================
   const order = useSelector((state) => {
     return state.order.createdOrder;
   });
-  // ================================= HANDLE UI =================================
-  init(LANGUAGE.VI);
+
+  const notificationListener = useRef();
+  const responseListener = useRef();
+
   return (
     <>
       <Content>
@@ -43,4 +45,4 @@ const OrderDetails = (props) => {
   );
 };
 
-export default OrderDetails;
+export default withNavigation(OrderDetails);

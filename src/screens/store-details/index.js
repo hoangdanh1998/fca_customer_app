@@ -1,12 +1,13 @@
 import { CART_MENU_DRINK, MENU_DRINK } from "../../constants/seeding";
-import { Card, Content, Footer, Header, List, Root, Toast } from "native-base";
+import { Card, Content, Footer, Header, Text, List, Root, Toast } from "native-base";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
   LANGUAGE,
   MAX_ORDER_ITEM,
   NOTICE_DURATION,
 } from "../../constants/index.js";
-import React, { useCallback, useEffect, useState } from "react";
+
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import DrinkCard from "../../components/atoms/drink-card/index";
@@ -16,19 +17,25 @@ import { getPartnerInformation } from "../../redux/actions/partner";
 import { styles } from "./styles";
 import { withNavigation } from "@react-navigation/compat";
 
-const StoreDetails = (props) => {
 
-  // ================================= GET DATA FROM NAVIGATOR =================================
-  const partnerId = props.route.params.partnerId;
-  console.log('partnerId', partnerId);
+
+const StoreDetails = (props) => {
   init(LANGUAGE.VI);
-  // ================================= HANDLE CALL API =================================
+
+  const partnerId = props.route.params.partnerId;
   const partner = useSelector((state) => {
     return state.partner.partner;
   });
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+  const [notificationId, setNotificationId] = useState();
+  const [cart, setCart] = useState({
+    items: [],
+    quantity: 0,
+    total: 0,
+  });
+
   const dispatch = useDispatch();
   const loadPartner = useCallback(async () => {
     setIsLoading(true);
@@ -46,11 +53,7 @@ const StoreDetails = (props) => {
   }, [dispatch, loadPartner]);
 
   // ================================= HANDLE UI =================================
-  const [cart, setCart] = useState({
-    items: [],
-    quantity: 0,
-    total: 0,
-  });
+
 
   const updateCart = (item, quantity) => {
     var newCart = { ...cart };
@@ -87,6 +90,24 @@ const StoreDetails = (props) => {
     setCart({ ...cart, ...newCart });
   };
 
+  // Notifications.setNotificationHandler({
+  //   handleNotification: async () => ({
+  //     shouldShowAlert: false,
+  //     shouldPlaySound: true,
+  //     shouldSetBadge: true,
+  //   }),
+  //   handleSuccess: async (notificationId) => {
+  //     Notifications.
+  //       console.log(notificationId)
+  //   },
+  //   handleError: async (error) => {
+  //     console.log(error)
+  //   }
+  // })
+
+
+  
+  
   return (
     <Root>
       <Content style={styles.content}>
@@ -105,6 +126,7 @@ const StoreDetails = (props) => {
                 drink={item}
                 cart={cart.quantity}
               />
+
             )}
           />
         </Card>
