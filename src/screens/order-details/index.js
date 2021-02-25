@@ -1,9 +1,6 @@
-import * as Location from "expo-location";
-import * as Permissions from "expo-permissions";
-import React, { useEffect, useState, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getOrder } from "../../redux/actions/order";
-import { Content, Footer, FooterTab, View } from "native-base";
+import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { Content, Footer, View } from "native-base";
 import OrderButton from "../../components/atoms/order-button/index";
 import CancelButton from "../../components/atoms/cancel-button/index";
 import OrderDetail from "../../components/molecules/order-details/index";
@@ -13,28 +10,14 @@ import { IMLocalized, init } from "../../i18n/IMLocalized";
 
 const OrderDetails = (props) => {
   // ================================= GET DATA FROM NAVIGATOR =================================
-  const order = props.route.params.order;
   const isAfterCreate = props.route.params.isAfterCreate;
 
   // ================================= HANDLE CALL API =================================
-
+  const order = useSelector((state) => {
+    return state.order.createdOrder;
+  });
   // ================================= HANDLE UI =================================
   init(LANGUAGE.VI);
-  const [timeout, handleTimeout] = useState();
-  const handlePressOrderButton = async () => {
-    setVisibleTimer(true);
-    handleTimeout(
-      setTimeout(() => {
-        setVisibleTimer(false);
-      }, 15000)
-    );
-  };
-
-  const handleHideProcessingModal = () => {
-    clearTimeout(timeout);
-    setVisibleTimer(false);
-  };
-
   return (
     <>
       <Content>
@@ -51,22 +34,8 @@ const OrderDetails = (props) => {
               justifyContent: "space-around",
             }}
           >
-            <CancelButton
-              bordered
-              name={MESSAGES.HOME}
-              disable={false}
-              onPress={() => {
-                handlePressOrderButton();
-              }}
-            />
-            <OrderButton
-              block
-              name={MESSAGES.DIRECTION}
-              disable={false}
-              onPress={() => {
-                handlePressOrderButton();
-              }}
-            />
+            <CancelButton bordered name={MESSAGES.HOME} disable={false} />
+            <OrderButton block name={MESSAGES.DIRECTION} disable={false} />
           </View>
         ) : null}
       </Footer>
