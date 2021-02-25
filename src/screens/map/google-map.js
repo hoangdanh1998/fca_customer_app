@@ -66,14 +66,16 @@ const MapScreen = (props) => {
       .then((suggestedStores) => {
         if (suggestedStores.meta.status == "SUCCESS") {
           setStoreSuggestion(suggestedStores);
-          const arrayOfPoints = [];
-          storeSuggestion.data.partners.map((partner) => {
-            arrayOfPoints.push({
-              latitude: partner.address.latitude,
-              longitude: partner.address.longitude,
-            });
-          });
-          setsuppliedMarker(arrayOfPoints);
+          // const arrayOfPoints = [];
+          // suggestedStores.data.partners.map((partner) => {
+          //   arrayOfPoints.push({
+          //     latitude: partner.address.latitude,
+          //     longitude: partner.address.longitude,
+          //   });
+          // });
+          // setsuppliedMarker(arrayOfPoints.map(suppliedMarker => arrayOfPoints));
+          // console.log(suppliedMarker);
+          
           // storeSuggestion?.data.partners.map((partner) => {
           //   return {
           //       latitude: partner.address.latitude,
@@ -210,12 +212,26 @@ const MapScreen = (props) => {
           // followsUserLocation={true} //work on ios only
           // onMapReady={getLocation}
           // onUserLocationChange={(coordinate) => {console.log(coordinate)}}
-          ref={(mapRef) => {
-            suppliedMarker
-              ? mapRef.fitToSuppliedMarkers(suppliedMarker)
-                // console.log(arrayOfPoints)
-              : null;
-          }}
+          ref={userRegion && detailsGeometry ? (mapRef) => {
+            {userRegion && detailsGeometry ? (
+              mapRef.fitToCoordinates({
+                coordinates:[
+                  {
+                    latitude: location.coords.latitude,
+                    longitude: location.coords.longitude,
+                  },
+                  {
+                    latitude: detailsGeometry.latitude,
+                    longitude: detailsGeometry.longitude,
+                  }]
+                }
+                )
+            ) : null}
+            // suppliedMarker
+            //   ? mapRef.fitToCoordinates(suppliedMarker)
+            //     // console.log(arrayOfPoints)
+            //   : null;
+          }:null}
           showsUserLocation={true}
           // onUserLocationChange={async ()=> {
           //   getDistance(await Location.getCurrentPositionAsync({}));
