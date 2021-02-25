@@ -5,7 +5,6 @@ import OrderButton from "../../components/atoms/order-button/index";
 import CancelButton from "../../components/atoms/cancel-button/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import { LANGUAGE, MESSAGES } from "../../constants/index";
-import {withNavigation} from '@react-navigation/compat'
 
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 
@@ -36,9 +35,7 @@ const OrderDetails = (props) => {
             }}
           >
             <CancelButton bordered name={MESSAGES.HOME} disable={false} />
-            <OrderButton onPress = {props.navigation.navigate("MAP_NAVIGATION"), {store: order.partner}} 
-              block name={MESSAGES.DIRECTION} 
-              disable={false} />
+            <OrderButton block name={MESSAGES.DIRECTION} disable={false} />
           </View>
         ) : null}
       </Footer>
@@ -46,4 +43,4 @@ const OrderDetails = (props) => {
   );
 };
 
-export default withNavigation(OrderDetails);
+export default OrderDetails;
