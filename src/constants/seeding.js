@@ -274,3 +274,33 @@ export const TIMELINE = [
   { time: "14:00", title: "Event 4", description: "Event 4 Description" },
   { time: "16:30", title: "Event 5", description: "Event 5 Description" },
 ];
+
+export const ORDER_TRANSACTIONS = [
+  {
+    id: "912eceae-2420-439b-b969-8927aed84127",
+    createdAt: "2021-02-25T16:00:48.770Z",
+    updatedAt: "2021-02-25T16:00:48.770Z",
+    deletedAt: null,
+    fromStatus: "READINESS",
+    toStatus: "READINESS",
+    fault: null,
+  },
+  {
+    id: "11164f63-c1fc-4d9a-bc20-3a9a1d560921",
+    createdAt: "2021-02-25T15:59:17.528Z",
+    updatedAt: "2021-02-25T15:59:17.528Z",
+    deletedAt: null,
+    fromStatus: "PREPARATION",
+    toStatus: "PREPARATION",
+    fault: null,
+  },
+  {
+    id: "c20553e5-f9a3-4ea8-a0d5-afeb89aa823c",
+    createdAt: "2021-02-25T15:46:03.327Z",
+    updatedAt: "2021-02-25T15:46:03.327Z",
+    deletedAt: null,
+    fromStatus: "INITIALIZATION",
+    toStatus: "ACCEPTANCE",
+    fault: null,
+  },
+];
