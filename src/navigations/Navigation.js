@@ -1,23 +1,24 @@
 import {
+  APP_NAME,
   DARK_COLOR,
   LANGUAGE,
-  APP_NAME,
   LIGHT_COLOR,
 } from "../constants/index";
 import {
   HeaderBackButton,
   createStackNavigator,
 } from "@react-navigation/stack";
-import { View, Icon } from "native-base";
 import { IMLocalized, init } from "../i18n/IMLocalized";
+import { Icon, View } from "native-base";
 
 import CreateOrder from "../screens/create-order";
+import HistoryOrder from "../screens/history-order";
 import MapScreen from "../screens/map/google-map";
 import { NavigationContainer } from "@react-navigation/native";
 import OrderDetails from "../screens/order-details";
 import React from "react";
 import StoreDetails from "../screens/store-details";
-import HistoryOrder from "../screens/history-order";
+import googleMapNavigation from "../screens/map/google-map-navigation";
 
 const Stack = createStackNavigator();
 export default function Navigation() {

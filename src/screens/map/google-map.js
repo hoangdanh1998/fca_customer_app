@@ -1,6 +1,6 @@
 import * as Location from "expo-location";
 
-import {Card, CardItem, Left, Right} from 'native-base'
+import { Card, CardItem, Left, Right } from "native-base";
 import {
   Dimensions,
   Image,
@@ -9,16 +9,16 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
-import { KEY_GOOGLE_MAP, MESSAGES, ResponseStatus } from "../../constants/index";
+import { KEY_GOOGLE_MAP, MESSAGES } from "../../constants/index";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import React, { useCallback, useEffect, useState } from "react";
 
 import GoogleMatrix from "../map/google-matrix";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapViewDirections from "react-native-maps-directions";
-import OrderButton from '../../components/atoms/order-button/index';
+import OrderButton from "../../components/atoms/order-button/index";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -31,7 +31,7 @@ const MapScreen = (props) => {
   const [popUpMarker, setPopUpMarker] = useState(null);
   const [directionReturn, setDirectionReturn] = useState(null);
   const [storeSuggestion, setStoreSuggestion] = useState(null);
-
+  const [suppliedMarker, setsuppliedMarker] = useState(null);
   const [distanceTravel, setDistanceTravel] = useState(0);
 
   const getDistance = (location2) => {
@@ -64,9 +64,24 @@ const MapScreen = (props) => {
     })
       .then((response) => response.json())
       .then((suggestedStores) => {
-        if (suggestedStores.meta.status == ResponseStatus.SUCCESS)
+        if (suggestedStores.meta.status == "SUCCESS") {
           setStoreSuggestion(suggestedStores);
-        else console.log(suggestedStores);
+          // const arrayOfPoints = [];
+          // suggestedStores.data.partners.map((partner) => {
+          //   arrayOfPoints.push({
+          //     latitude: partner.address.latitude,
+          //     longitude: partner.address.longitude,
+          //   });
+          // });
+          // setsuppliedMarker(arrayOfPoints.map(suppliedMarker => arrayOfPoints));
+          // console.log(suppliedMarker);
+
+          // storeSuggestion?.data.partners.map((partner) => {
+          //   return {
+          //       latitude: partner.address.latitude,
+          //       longitude: partner.address.longitude,
+          //   };
+        } else console.log(suggestedStores);
       })
       .catch((error) => {
         console.error(error);
@@ -76,6 +91,10 @@ const MapScreen = (props) => {
   const handleShowPopup = useCallback(
     (store) => {
       setPopUpMarker(store);
+      setUserRegion({
+        latitude: parseFloat(store.address.latitude),
+        longitude: parseFloat(store.address.longitude),
+      });
     },
     [popUpMarker]
   );
@@ -109,6 +128,12 @@ const MapScreen = (props) => {
       });
   };
 
+  // const arrayOfPoints = storeSuggestion?.data.partners.map((partner) => {
+  //   return {
+  //     latitude: partner.address.latitude,
+  //     longitude: partner.address.longitude,
+  //   };
+  // });
   const openSearchModal = () => {
     // const showToast = () => {
     //   ToastAndroid.show(`${initialRegion.description} + ${initialRegion.latitude}`, ToastAndroid.SHORT);
@@ -178,6 +203,8 @@ const MapScreen = (props) => {
       </View>
     );
   };
+
+
   const mapView = () => {
     // console.log("userRegion", userRegion);
     return (
@@ -187,6 +214,31 @@ const MapScreen = (props) => {
           // followsUserLocation={true} //work on ios only
           // onMapReady={getLocation}
           // onUserLocationChange={(coordinate) => {console.log(coordinate)}}
+          // ref={userRegion && detailsGeometry ? ((mapRef) => {
+          //    (
+          //      console.log(location.coords),
+          //      console.log(detailsGeometry),
+          //     mapRef.fitToCoordinates({
+          //       coordinates:[
+          //         {
+          //           latitude: parseFloat(location.coords.latitude),
+          //           longitude: parseFloat(location.coords.longitude),
+          //         },
+          //         {
+          //           latitude: parseFloat(detailsGeometry.latitude),
+          //           longitude: parseFloat(detailsGeometry.longitude),
+          //         }],
+          //         options:{
+          //           animated:true
+          //         }
+          //       },
+          //       )
+          //   )
+          //   // suppliedMarker
+          //   //   ? mapRef.fitToCoordinates(suppliedMarker)
+          //   //     // console.log(arrayOfPoints)
+          //   //   : null;
+          // }) : null}
           showsUserLocation={true}
           // onUserLocationChange={async ()=> {
           //   getDistance(await Location.getCurrentPositionAsync({}));
@@ -202,8 +254,8 @@ const MapScreen = (props) => {
           {userRegion && detailsGeometry ? (
             <MapViewDirections
               origin={{
-                latitude: userRegion.latitude,
-                longitude: userRegion.longitude,
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
               }}
               destination={{
                 latitude: detailsGeometry.latitude,
@@ -213,10 +265,10 @@ const MapScreen = (props) => {
               strokeWidth={4}
               strokeColor="blue"
               onReady={() => getDirectionApi()}
-              // onReady={result => {
-              //   setDirectionReturn(result);
-              //   console.log(result.routes);
-              // }}
+            // onReady={result => {
+            //   setDirectionReturn(result);
+            //   console.log(result.routes);
+            // }}
             />
           ) : null}
           {/* //onPress={() => handleShowPopup(stores)} */}
@@ -232,19 +284,19 @@ const MapScreen = (props) => {
 
           {storeSuggestion
             ? storeSuggestion.data.partners.map((stores) =>
-                stores.id == storeSuggestion.data.suggestion.id ? (
-                  <Marker
-                    pinColor="blue"
-                    key={stores.id}
-                    title={stores.name}
-                    destination={stores.address.description}
-                    coordinate={{
-                      latitude: parseFloat(stores.address.latitude),
-                      longitude: parseFloat(stores.address.longitude),
-                    }}
-                    onPress={() => handleShowPopup(stores)}
-                  />
-                ) : (
+              stores.id == storeSuggestion.data.suggestion.id ? (
+                <Marker
+                  pinColor="blue"
+                  key={stores.id}
+                  title={stores.name}
+                  destination={stores.address.description}
+                  coordinate={{
+                    latitude: parseFloat(stores.address.latitude),
+                    longitude: parseFloat(stores.address.longitude),
+                  }}
+                  onPress={() => handleShowPopup(stores)}
+                />
+              ) : (
                   <Marker
                     key={stores.id}
                     title={stores.name}
@@ -256,7 +308,7 @@ const MapScreen = (props) => {
                     onPress={() => handleShowPopup(stores)}
                   />
                 )
-              )
+            )
             : null}
         </MapView>
       </View>
@@ -269,29 +321,47 @@ const MapScreen = (props) => {
         {popUpMarker ? (
           <View
             style={{
-              height: '25%',
+              height: "25%",
               width: "100%",
             }}
           >
-            <Card style={{flex: 1}}>
-              <CardItem >
-              <Left style={{flex: 1}}>
-              <Image
-            source={{
-              uri: popUpMarker.imageLink,
-            }}
-            style={{ height: 100, width: "100%" }}
-          />
-              </Left>
-              <Right style={{flex: 2, justifyContent: 'flex-end'}}>
-                <Text style={{fontWeight: 'bold', textAlign: 'left', width: '95%'}}>{popUpMarker.name}</Text>
-                <Text></Text>
-                <Text style={{textAlign: 'left', width: '95%'}}>{popUpMarker.address.description}</Text>
-              </Right>
+            <Card style={{ flex: 1 }}>
+              <CardItem>
+                <Left style={{ flex: 1 }}>
+                  <Image
+                    source={{
+                      uri: popUpMarker.imageLink,
+                    }}
+                    style={{ height: 100, width: "100%" }}
+                  />
+                </Left>
+                <Right style={{ flex: 2, justifyContent: "flex-end" }}>
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      textAlign: "left",
+                      width: "95%",
+                    }}
+                  >
+                    {popUpMarker.name}
+                  </Text>
+                  <Text></Text>
+                  <Text style={{ textAlign: "left", width: "95%" }}>
+                    {popUpMarker.address.description}
+                  </Text>
+                </Right>
               </CardItem>
-              <OrderButton block full
-              name={MESSAGES.NEXT}
-              disable={false} onPress={() => props.navigation.navigate("STORE_DETAIL", {partnerId: popUpMarker.id})} />
+              <OrderButton
+                block
+                full
+                name={MESSAGES.NEXT}
+                disable={false}
+                onPress={() =>
+                  props.navigation.navigate("STORE_DETAIL", {
+                    partnerId: popUpMarker.id,
+                  })
+                }
+              />
             </Card>
           </View>
         ) : null}
