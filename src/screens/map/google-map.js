@@ -1,6 +1,6 @@
 import * as Location from "expo-location";
 
-import {Card, CardItem, Left, Right} from 'native-base'
+import { Card, CardItem, Left, Right } from "native-base";
 import {
   Dimensions,
   Image,
@@ -9,20 +9,27 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
-import { KEY_GOOGLE_MAP, MESSAGES, ResponseStatus } from "../../constants/index";
+import {
+  KEY_GOOGLE_MAP,
+  MESSAGES,
+  ResponseStatus,
+} from "../../constants/index";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import React, { useCallback, useEffect, useState } from "react";
 
 import GoogleMatrix from "../map/google-matrix";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapViewDirections from "react-native-maps-directions";
-import OrderButton from '../../components/atoms/order-button/index';
+import OrderButton from "../../components/atoms/order-button/index";
+import { IMLocalized, init } from "../../i18n/IMLocalized";
+import { LANGUAGE } from "../../constants/index";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 const MapScreen = (props) => {
+  init(LANGUAGE.VI);
   const screenWidth = Dimensions.get("window").width;
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
@@ -117,7 +124,7 @@ const MapScreen = (props) => {
       <View style={{ flex: 1 }}>
         <GooglePlacesAutocomplete
           // style={styles.searchBar}
-          placeholder="Search location"
+          placeholder={IMLocalized("wording-search-destination")}
           minLength={2}
           autoFocus={false}
           autoCorrect={false}
@@ -269,29 +276,47 @@ const MapScreen = (props) => {
         {popUpMarker ? (
           <View
             style={{
-              height: '25%',
+              height: "25%",
               width: "100%",
             }}
           >
-            <Card style={{flex: 1}}>
-              <CardItem >
-              <Left style={{flex: 1}}>
-              <Image
-            source={{
-              uri: popUpMarker.imageLink,
-            }}
-            style={{ height: 100, width: "100%" }}
-          />
-              </Left>
-              <Right style={{flex: 2, justifyContent: 'flex-end'}}>
-                <Text style={{fontWeight: 'bold', textAlign: 'left', width: '95%'}}>{popUpMarker.name}</Text>
-                <Text></Text>
-                <Text style={{textAlign: 'left', width: '95%'}}>{popUpMarker.address.description}</Text>
-              </Right>
+            <Card style={{ flex: 1 }}>
+              <CardItem>
+                <Left style={{ flex: 1 }}>
+                  <Image
+                    source={{
+                      uri: popUpMarker.imageLink,
+                    }}
+                    style={{ height: 100, width: "100%" }}
+                  />
+                </Left>
+                <Right style={{ flex: 2, justifyContent: "flex-end" }}>
+                  <Text
+                    style={{
+                      fontWeight: "bold",
+                      textAlign: "left",
+                      width: "95%",
+                    }}
+                  >
+                    {popUpMarker.name}
+                  </Text>
+                  <Text></Text>
+                  <Text style={{ textAlign: "left", width: "95%" }}>
+                    {popUpMarker.address.description}
+                  </Text>
+                </Right>
               </CardItem>
-              <OrderButton block full
-              name={MESSAGES.NEXT}
-              disable={false} onPress={() => props.navigation.navigate("STORE_DETAIL", {partnerId: popUpMarker.id})} />
+              <OrderButton
+                block
+                full
+                name={MESSAGES.NEXT}
+                disable={false}
+                onPress={() =>
+                  props.navigation.navigate("STORE_DETAIL", {
+                    partnerId: popUpMarker.id,
+                  })
+                }
+              />
             </Card>
           </View>
         ) : null}

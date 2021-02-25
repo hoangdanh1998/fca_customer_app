@@ -32,5 +32,6 @@
     "wording-processing": "Processing",
     "wording-home": "Back to home",
     "wording-direction": "Direction",
-    "wording-error-location": "We don't have permission to access your location"
+    "wording-error-location": "We don't have permission to access your location",
+    "wording-search-destination": "Where do you want to go?"
 }
