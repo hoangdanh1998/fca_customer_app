@@ -52,9 +52,7 @@ const OrderDetails = (props) => {
       <Footer style={{ backgroundColor: null, justifyContent: "space-around" }}>
           <View
             style={{
-              width: "100%",
-              flexDirection: "row",
-              justifyContent: "space-around",
+            flex: 1
             }}
           >
           {/* <CancelButton bordered name={MESSAGES.HOME} disable={false} /> */}

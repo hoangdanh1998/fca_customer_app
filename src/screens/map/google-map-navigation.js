@@ -19,6 +19,7 @@ const height = Dimensions.get("window").height;
 const googleMapNavigation = () => {
 
   const [distanceTravel, setDistanceTravel] = useState(0);
+  const [originDistance2Partner, setOriginDistance2Partner] = useState(0);
   const [location, setLocation] = useState(null);
   // const [originLocation, setOriginLocation] = useState(null)
   const [userRegion, setUserRegion] = useState(null);
@@ -30,11 +31,11 @@ const googleMapNavigation = () => {
   console.log('partnerLocation: ' + partnerLocation.latitude + ',' + partnerLocation.longitude)
   console.log('destination: ' + destinationCoord.latitude + ',' + destinationCoord.longitude)
   
-  const getDistance = (location2) => {
+  const getDistance = async (currentLocation) => {
     const lat1 = location.coords.latitude;
     const lon1 = location.coords.longitude;
-    const lat2 = location2.coords.latitude;
-    const lon2 = location2.coords.longitude;
+    const lat2 = currentLocation.coords.latitude;
+    const lon2 = currentLocation.coords.longitude;
 
     const R = 6371e3;
     const o1 = (lat1 * Math.PI) / 180;
@@ -49,9 +50,31 @@ const googleMapNavigation = () => {
     const d = R * c; //in metres
 
     setDistanceTravel(distanceTravel + d);
-    setLocation(location2);
+    setLocation(currentLocation);
     console.log(`Distance: ${distanceTravel} `);
-    setTrackingOrder(createdOrder.id, distanceTravel)
+    console.log('distance origin ' + originDistance2Partner)
+    if (distanceTravel > originDistance2Partner / 10) {
+      await fetch(
+        `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${currentLocation.coords.latitude},${currentLocation.coords.longitude}&destinations=${partnerLocation.latitude},${partnerLocation.longitude}&key=${KEY_GOOGLE_MAP}`,
+        {
+          method: "GET",
+          headers: {
+            'Accept': 'application/json, text/ plain, */*',
+            "Content-Type": "application/json",
+          },
+        }
+      ).then((response) => { console.log({ response }); return response.json() })
+        .then((responseJson) => {
+          setTrackingOrder(createdOrder.id, responseJson.rows[0].elements[0].duration.text)
+        })
+    }
+
+    setUserRegion({
+      latitude: currentLocation.coords.latitude,
+      longitude: currentLocation.coords.longitude,
+      latitudeDelta: 0.0822,
+      longitudeDelta: 0.0421,
+    });
   };
 
   useEffect(() => {
@@ -62,13 +85,27 @@ const googleMapNavigation = () => {
         return;
       }
 
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-      
+      let currentLocation = await Location.getCurrentPositionAsync({});
+      setLocation(currentLocation);
+
+      await fetch(
+        `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${currentLocation.coords.latitude},${currentLocation.coords.longitude}&destinations=${partnerLocation.latitude},${partnerLocation.longitude}&key=${KEY_GOOGLE_MAP}`,
+        {
+          method: "GET",
+          headers: {
+            'Accept': 'application/json, text/ plain, */*',
+            "Content-Type": "application/json",
+          },
+        }
+      ).then((response) => { console.log({ response }); return response.json() })
+        .then((responseJson) => {
+          setOriginDistance2Partner(responseJson.rows[0].elements[0].distance.value)
+        })
+
       setUserRegion({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        latitudeDelta: 0.0922,
+        latitude: currentLocation.coords.latitude,
+        longitude: currentLocation.coords.longitude,
+        latitudeDelta: 0.0822,
         longitudeDelta: 0.0421,
       });
     })();
@@ -112,14 +149,19 @@ const googleMapNavigation = () => {
               latitude: location.coords.latitude,
               longitude: location.coords.longitude,
             }}
+            waypoints={[{
+              latitude: partnerLocation.latitude,
+              longitude: partnerLocation.longitude,
+            },
+              {
+                latitude: destinationCoord.latitude,
+                longitude: destinationCoord.longitude,
+            }]}
             destination={{
               latitude: destinationCoord.latitude,
               longitude: destinationCoord.longitude,
             }}
-            waypoints={[{
-              latitude: partnerLocation.latitude,
-              longitude: partnerLocation.longitude,
-            }]}
+
             apikey={KEY_GOOGLE_MAP}
             strokeWidth={4}
             strokeColor="blue"
@@ -136,8 +178,8 @@ const googleMapNavigation = () => {
           ) : null}
           {partnerLocation ? (<Marker
             coordinate={{
-              latitude: destinationCoord.latitude,
-              longitude: destinationCoord.longitude,
+              latitude: partnerLocation.latitude,
+              longitude: partnerLocation.longitude,
             }}
           />) : null}
         </MapView>

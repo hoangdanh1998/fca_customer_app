@@ -75,7 +75,6 @@ const MapScreen = (props) => {
   );
 
   const handleSetDetailsGeometry = useCallback((details) => {
-    console.log("details: ", details);
     dispatch(setDestination(details));
   })
 
@@ -92,7 +91,6 @@ const MapScreen = (props) => {
     )
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson)
         if (responseJson.status == "OK") {
           getSuggestionStores(responseJson.routes[0].legs[0].steps);
         } else {
@@ -117,7 +115,7 @@ const MapScreen = (props) => {
           fetchDetails={true}
           onPress={
             (data, details = null) => {
-              console.log("data details", data);
+
               handleSetDetailsGeometry({
                 description: data.description,
                 latitude: details.geometry.location.lat,

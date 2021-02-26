@@ -21,12 +21,9 @@ Notifications.setNotificationHandler({
   }),
 });
 const CreateOrder = (props) => {
-  // ================================= GET DATA FROM NAVIGATOR =================================
   const order = props.route.params.cart;
   const store = props.route.params.store;
 
-
-  // ================================= HANDLE CALL API =================================
   const dispatch = useDispatch();
   const submitOrder = useCallback(async () => {
     try {
