@@ -16,6 +16,8 @@ import {
   TIME_FORMAT,
 } from "../../constants/index";
 import { ORDER_TRANSACTIONS } from "../../constants/seeding";
+import { LANGUAGE, MESSAGES } from "../../constants/index";
+import {withNavigation} from '@react-navigation/compat'
 
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { convertTransaction } from "../../utils/utils";
@@ -56,14 +58,20 @@ const OrderDetails = (props) => {
         </View>
       </Content>
       <Footer style={{ backgroundColor: null, justifyContent: "space-around" }}>
-        <View style={{ flex: 1 }}>
-          <OrderButton
-            block
-            name={MESSAGES.DIRECTION}
-            onPress={() => {}}
-            disable={false}
-          />
-        </View>
+        {isAfterCreate ? (
+          <View
+            style={{
+              width: "100%",
+              flexDirection: "row",
+              justifyContent: "space-around",
+            }}
+          >
+            <CancelButton bordered name={MESSAGES.HOME} disable={false} />
+            <OrderButton onPress = {props.navigation.navigate("MAP_NAVIGATION"), {store: order.partner}} 
+              block name={MESSAGES.DIRECTION} 
+              disable={false} />
+          </View>
+        ) : null}
       </Footer>
     </>
   );
