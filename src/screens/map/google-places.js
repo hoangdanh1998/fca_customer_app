@@ -1,5 +1,5 @@
-import { Dimensions, ToastAndroid, View } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import { Dimensions, View } from "react-native";
+import React, { } from "react";
 
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import { KEY_GOOGLE_MAP } from "../../constants/index";
