@@ -1,44 +1,35 @@
 import * as Location from "expo-location";
 
-import { Button, Card, CardItem, Left, Right } from "native-base";
 import {
   Dimensions,
-  Image,
-  SafeAreaView,
-  ScrollView,
   StyleSheet,
-  Text,
-  TouchableOpacity,
+
   View,
 } from "react-native";
-import { KEY_GOOGLE_MAP, MESSAGES } from "../../constants/index";
+import { KEY_GOOGLE_MAP } from "../../constants/index";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import React, { useCallback, useEffect, useState } from "react";
-import {useSelector} from 'react-redux'
+import React, { useEffect, useState } from "react";
+import { useSelector } from 'react-redux'
+import { setTrackingOrder } from '../../service/firebase/firebase-realtime'
 
-import GoogleMatrix from "../map/google-matrix";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapViewDirections from "react-native-maps-directions";
-import OrderButton from "../../components/atoms/order-button/index";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
+const googleMapNavigation = () => {
 
-
-const googleMapNavigation = (props) => {
-  console.log("google map navigation props:", props);
   const [distanceTravel, setDistanceTravel] = useState(0);
   const [location, setLocation] = useState(null);
+  // const [originLocation, setOriginLocation] = useState(null)
   const [userRegion, setUserRegion] = useState(null);
 
-  const coffeCoord = useSelector(state => state.map.partnerLocation);
-  const destinationCoord = useSelector(state => state.map.detailsGeometry); 
-  console.log("partner location: ",coffeCoord );
+  const partnerLocation = useSelector(state => state.map.partnerLocation);
+  const destinationCoord = useSelector(state => state.map.detailsGeometry);
+  const createdOrder = useSelector(state => state.order.createdOrder);
 
-  const startCoord = "10.8276193,106.6770863";
-  // const coffeCoord = "10.8592975,106.7872838";
-  // const destinationCoord = "10.8414899,106.8078577";
-
+  console.log('partnerLocation: ' + partnerLocation.latitude + ',' + partnerLocation.longitude)
+  console.log('destination: ' + destinationCoord.latitude + ',' + destinationCoord.longitude)
+  
   const getDistance = (location2) => {
     const lat1 = location.coords.latitude;
     const lon1 = location.coords.longitude;
@@ -60,23 +51,20 @@ const googleMapNavigation = (props) => {
     setDistanceTravel(distanceTravel + d);
     setLocation(location2);
     console.log(`Distance: ${distanceTravel} `);
-  };
-
-  const openUrl = () => {
-    const url = `https://www.google.com/maps/dir/${startCoord}/${coffeCoord}/${destinationCoord}`;
-    return Linking.canOpenURL(url);
+    setTrackingOrder(createdOrder.id, distanceTravel)
   };
 
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
       if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
+        // setErrorMsg("Permission to access location was denied");
         return;
       }
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
+      
       setUserRegion({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
@@ -85,26 +73,9 @@ const googleMapNavigation = (props) => {
       });
     })();
   }, []);
-  const MapView = () => {
-    return(
-      <MapView
-      style={styles.map}
-      showsUserLocation={true}
-      onUserLocationChange={async () => {
-        getDistance(await Location.getCurrentPositionAsync({}));
-      }}
-      showsScale
-      showsCompass
-      toolbarEnabled
-      zoomEnabled
-      rotateEnabled
-      provider={PROVIDER_GOOGLE}
-      region={userRegion}
-    ></MapView>
-    );
-  
-  };
+
   return (
+
     <View
       style={{
         flex: 1,
@@ -112,7 +83,7 @@ const googleMapNavigation = (props) => {
         height: "100%",
         // justifyContent: "center",
       }}
-    >
+    > 
       <View
         style={{
           width: "100%",
@@ -121,22 +92,56 @@ const googleMapNavigation = (props) => {
           justifyContent: "center",
         }}
       >
-        <View
-          style={{
-            width: "100%",
-            // height: "100%",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "absolute",
-            left: 0,
-            top: 0,
-          }}
+        <MapView
+          style={styles.map}
+          showsUserLocation={true}
+          onUserLocationChange={async () => {
+            getDistance(await Location.getCurrentPositionAsync({}));
+            }}
+          showsScale
+          showsCompass
+          toolbarEnabled
+          zoomEnabled
+          rotateEnabled
+          provider={PROVIDER_GOOGLE}
+          region={userRegion}
         >
-          {MapView()}
-        </View>
-        <Button onPress={openUrl}>Click me</Button>
+
+          {location ? (<MapViewDirections
+            origin={{
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+            }}
+            destination={{
+              latitude: destinationCoord.latitude,
+              longitude: destinationCoord.longitude,
+            }}
+            waypoints={[{
+              latitude: partnerLocation.latitude,
+              longitude: partnerLocation.longitude,
+            }]}
+            apikey={KEY_GOOGLE_MAP}
+            strokeWidth={4}
+            strokeColor="blue"
+          />) : null}
+
+          {destinationCoord ? (
+            <Marker
+              coordinate={{
+                latitude: destinationCoord.latitude,
+                longitude: destinationCoord.longitude,
+              }}
+            />
+
+          ) : null}
+          {partnerLocation ? (<Marker
+            coordinate={{
+              latitude: destinationCoord.latitude,
+              longitude: destinationCoord.longitude,
+            }}
+          />) : null}
+        </MapView>
       </View>
-      {/* <GoogleMatrix /> */}
     </View>
   );
 };
@@ -161,3 +166,4 @@ const styles = StyleSheet.create({
   },
 });
 export default googleMapNavigation;
+

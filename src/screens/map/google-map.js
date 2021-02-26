@@ -4,30 +4,25 @@ import { Card, CardItem, Left, Right } from "native-base";
 import {
   Dimensions,
   Image,
-  SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 import {
   KEY_GOOGLE_MAP,
   MESSAGES,
-  ResponseStatus,
   LANGUAGE,
 } from "../../constants/index";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import React, { useCallback, useEffect, useState } from "react";
 import {useDispatch, useSelector} from 'react-redux';
 
-
-import GoogleMatrix from "../map/google-matrix";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapViewDirections from "react-native-maps-directions";
 import OrderButton from "../../components/atoms/order-button/index";
-import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { setDestination, setPartnerLocation } from "../../redux/actions/map";
+import { IMLocalized, init } from '../../i18n/IMLocalized'
+
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -35,38 +30,11 @@ init(LANGUAGE.VI);
 const MapScreen = (props) => {
   const screenWidth = Dimensions.get("window").width;
   const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
   // const [detailsGeometry, setDetailsGeometry] = useState(null);
   const [popUpMarker, setPopUpMarker] = useState(null);
-  const [directionReturn, setDirectionReturn] = useState(null);
   const [storeSuggestion, setStoreSuggestion] = useState(null);
-  const [suppliedMarker, setsuppliedMarker] = useState(null);
-  const [distanceTravel, setDistanceTravel] = useState(0);
   const dispatch = useDispatch();
-
-  const getDistance = (location2) => {
-    const lat1 = location.coords.latitude;
-    const lon1 = location.coords.longitude;
-    const lat2 = location2.coords.latitude;
-    const lon2 = location2.coords.longitude;
-
-    const R = 6371e3;
-    const o1 = (lat1 * Math.PI) / 180;
-    const o2 = (lat2 * Math.PI) / 180;
-    const deltaO = ((lat2 - lat1) * Math.PI) / 180;
-    const deltaL = ((lon2 - lon1) * Math.PI) / 180;
-
-    const a =
-      Math.sin(deltaO / 2) * Math.sin(deltaO / 2) +
-      Math.cos(o1) * Math.cos(o2) * Math.sin(deltaL / 2) * Math.sin(deltaL / 2); //Haversine formula
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const d = R * c; //in metres
-
-    setDistanceTravel(distanceTravel + d);
-    setLocation(location2);
-    console.log(`Distance: ${distanceTravel} `);
-  };
 
   const detailsGeometry = useSelector(state => state.map.detailsGeometry);
 
@@ -79,21 +47,6 @@ const MapScreen = (props) => {
       .then((suggestedStores) => {
         if (suggestedStores.meta.status == "SUCCESS") {
           setStoreSuggestion(suggestedStores);
-          // const arrayOfPoints = [];
-          // suggestedStores.data.partners.map((partner) => {
-          //   arrayOfPoints.push({
-          //     latitude: partner.address.latitude,
-          //     longitude: partner.address.longitude,
-          //   });
-          // });
-          // setsuppliedMarker(arrayOfPoints.map(suppliedMarker => arrayOfPoints));
-          // console.log(suppliedMarker);
-
-          // storeSuggestion?.data.partners.map((partner) => {
-          //   return {
-          //       latitude: partner.address.latitude,
-          //       longitude: partner.address.longitude,
-          //   };
         } else console.log(suggestedStores);
       })
       .catch((error) => {
@@ -106,17 +59,22 @@ const MapScreen = (props) => {
       setPopUpMarker(store);
       dispatch(setPartnerLocation({
         latitude: parseFloat(store.address.latitude),
-        longitude: parseFloat(store.address.longitude)
+        longitude: parseFloat(store.address.longitude),
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
       }))
       setUserRegion({
         latitude: parseFloat(store.address.latitude),
+
         longitude: parseFloat(store.address.longitude),
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421, 
       });
     },
     [popUpMarker]
   );
 
-  const handleSetDetailsGeometry = useCallback ((details) => {
+  const handleSetDetailsGeometry = useCallback((details) => {
     console.log("details: ", details);
     dispatch(setDestination(details));
   })
@@ -134,13 +92,9 @@ const MapScreen = (props) => {
     )
       .then((response) => response.json())
       .then((responseJson) => {
+        console.log(responseJson)
         if (responseJson.status == "OK") {
-          // console.log(responseJson.rows[0].elements[0].distance.text)
-          // console.log("DiretionAPI");
-          //console.log(responseJson.routes[0].legs[0].steps);
           getSuggestionStores(responseJson.routes[0].legs[0].steps);
-          // getSuggestionStores(JSON.stringify(responseJson.routes.legs.steps));
-          // setDirectionReturn(JSON.stringify(responseJson.routes.legs.steps));
         } else {
           console.log("Not OK");
         }
@@ -150,16 +104,7 @@ const MapScreen = (props) => {
       });
   };
 
-  // const arrayOfPoints = storeSuggestion?.data.partners.map((partner) => {
-  //   return {
-  //     latitude: partner.address.latitude,
-  //     longitude: partner.address.longitude,
-  //   };
-  // });
   const openSearchModal = () => {
-    // const showToast = () => {
-    //   ToastAndroid.show(`${initialRegion.description} + ${initialRegion.latitude}`, ToastAndroid.SHORT);
-    // };
     return (
       <View style={{ flex: 1 }}>
         <GooglePlacesAutocomplete
@@ -178,33 +123,12 @@ const MapScreen = (props) => {
                 latitude: details.geometry.location.lat,
                 longitude: details.geometry.location.lng,
               })
-            // 'details' is provided when fetchDetails = true
-            // console.log(data, details);
-            // console.log(data,details.description);
-            // console.log(data.description);
-            // console.log(details.geometry.location.lat);
-            // console.log(details.geometry.location.lng);
-            // setInitialRegion({
-            //   description: details.description,
-            //   latitude:details.geometry.location.lat,
-            //   longitude: details.geometry.location.lng,
-            // })
-            // setDetailsGeometry({
-            //   description: data.description,
-            //   latitude: details.geometry.location.lat,
-            //   longitude: details.geometry.location.lng,
-            // });
-            // getDirectionApi();
-            
             }
-            
-        }
+          }
           query={{
             key: KEY_GOOGLE_MAP,
             components: "country:vn", //limit country
           }}
-          // currentLocation={true}
-          // currentLocationLabel="Current location"
           styles={{
             description: {
               fontWeight: "bold",
@@ -243,38 +167,7 @@ const MapScreen = (props) => {
       <View style={{ flex: 1 }}>
         <MapView
           style={styles.map}
-          // followsUserLocation={true} //work on ios only
-          // onMapReady={getLocation}
-          // onUserLocationChange={(coordinate) => {console.log(coordinate)}}
-          // ref={userRegion && detailsGeometry ? ((mapRef) => {
-          //    (
-          //      console.log(location.coords),
-          //      console.log(detailsGeometry),
-          //     mapRef.fitToCoordinates({
-          //       coordinates:[
-          //         {
-          //           latitude: parseFloat(location.coords.latitude),
-          //           longitude: parseFloat(location.coords.longitude),
-          //         },
-          //         {
-          //           latitude: parseFloat(detailsGeometry.latitude),
-          //           longitude: parseFloat(detailsGeometry.longitude),
-          //         }],
-          //         options:{
-          //           animated:true
-          //         }
-          //       },
-          //       )
-          //   )
-          //   // suppliedMarker
-          //   //   ? mapRef.fitToCoordinates(suppliedMarker)
-          //   //     // console.log(arrayOfPoints)
-          //   //   : null;
-          // }) : null}
           showsUserLocation={true}
-          // onUserLocationChange={async ()=> {
-          //   getDistance(await Location.getCurrentPositionAsync({}));
-          // }}
           showsScale
           showsCompass
           toolbarEnabled
@@ -297,10 +190,6 @@ const MapScreen = (props) => {
               strokeWidth={4}
               strokeColor="blue"
               onReady={() => getDirectionApi()}
-            // onReady={result => {
-            //   setDirectionReturn(result);
-            //   console.log(result.routes);
-            // }}
             />
           ) : null}
           {/* //onPress={() => handleShowPopup(stores)} */}
@@ -389,8 +278,10 @@ const MapScreen = (props) => {
                 name={MESSAGES.NEXT}
                 disable={false}
                 onPress={() =>
+                  // eslint-disable-next-line react/prop-types
                   props.navigation.navigate("STORE_DETAIL", {
                     partnerId: popUpMarker.id,
+                    partner: popUpMarker,
                   })
                 }
               />
@@ -405,7 +296,7 @@ const MapScreen = (props) => {
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
       if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
+        console.log("Permission to access location was denied");
         return;
       }
 
@@ -424,9 +315,7 @@ const MapScreen = (props) => {
     <View
       style={{
         flex: 1,
-        // alignItems: "center",
         height: "100%",
-        // justifyContent: "center",
       }}
     >
       <View
@@ -450,11 +339,9 @@ const MapScreen = (props) => {
         >
           {mapView()}
         </View>
-        {/* <GGPlaces /> */}
         {openSearchModal()}
         {popUpView()}
       </View>
-      {/* <GoogleMatrix /> */}
     </View>
   );
 };

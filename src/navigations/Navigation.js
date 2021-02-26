@@ -18,11 +18,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import OrderDetails from "../screens/order-details";
 import React from "react";
 import StoreDetails from "../screens/store-details";
+import DeliveryOrder from '../screens/delivery-order';
 import googleMapNavigation from "../screens/map/google-map-navigation";
+
 
 const Stack = createStackNavigator();
 export default function Navigation() {
   init(LANGUAGE.VI);
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -36,6 +39,7 @@ export default function Navigation() {
               backgroundColor: DARK_COLOR,
             },
             headerLeft: null,
+
             headerRight: ({ navigate }) => (
               <View
                 style={{
@@ -102,10 +106,21 @@ export default function Navigation() {
           }}
         />
         <Stack.Screen
+          name="QR_CODE"
+          component={DeliveryOrder}
+          options={{
+            title: IMLocalized("title-qrcode-information"),
+            headerTintColor: LIGHT_COLOR,
+            headerStyle: {
+              backgroundColor: DARK_COLOR,
+            },
+          }}
+        />
+        <Stack.Screen
           name="MAP_NAVIGATION"
           component={googleMapNavigation}
           options={{
-            title: IMLocalized("title-history-order"),
+            title: IMLocalized("navigation-tracking"),
             headerTintColor: LIGHT_COLOR,
             headerStyle: {
               backgroundColor: DARK_COLOR,
@@ -114,6 +129,7 @@ export default function Navigation() {
           }}
         />
       </Stack.Navigator>
+
     </NavigationContainer>
   );
 }

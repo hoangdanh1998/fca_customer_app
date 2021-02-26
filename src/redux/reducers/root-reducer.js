@@ -4,9 +4,11 @@ import mapReducer from "./map";
 import orderReducer from "./order";
 import partnerReducer from "./partner";
 
-export default rootReducer = combineReducers({
+const rootReducer = combineReducers({
   store: storeReducer,
   order: orderReducer,
   map: mapReducer,
   partner: partnerReducer,
 });
+
+export default rootReducer;

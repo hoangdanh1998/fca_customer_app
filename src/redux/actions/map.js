@@ -13,4 +13,4 @@ export const setPartnerLocation = (location) => {
         type: SET_PARTNER_LOCATION,
         payload: location
     })
-}
+} 
