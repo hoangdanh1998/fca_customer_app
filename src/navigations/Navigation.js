@@ -86,7 +86,7 @@ export default function Navigation() {
             headerStyle: {
               backgroundColor: DARK_COLOR,
             },
-            headerLeft: HeaderBackButton,
+            headerLeft: null,
           }}
         />
         <Stack.Screen

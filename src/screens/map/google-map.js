@@ -11,7 +11,12 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { KEY_GOOGLE_MAP, MESSAGES } from "../../constants/index";
+import {
+  KEY_GOOGLE_MAP,
+  MESSAGES,
+  ResponseStatus,
+  LANGUAGE,
+} from "../../constants/index";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import React, { useCallback, useEffect, useState } from "react";
 import {useDispatch, useSelector} from 'react-redux';
@@ -21,10 +26,12 @@ import GoogleMatrix from "../map/google-matrix";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapViewDirections from "react-native-maps-directions";
 import OrderButton from "../../components/atoms/order-button/index";
+import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { setDestination, setPartnerLocation } from "../../redux/actions/map";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
+init(LANGUAGE.VI);
 const MapScreen = (props) => {
   const screenWidth = Dimensions.get("window").width;
   const [location, setLocation] = useState(null);
@@ -157,7 +164,7 @@ const MapScreen = (props) => {
       <View style={{ flex: 1 }}>
         <GooglePlacesAutocomplete
           // style={styles.searchBar}
-          placeholder="Search location"
+          placeholder={IMLocalized("wording-search-destination")}
           minLength={2}
           autoFocus={false}
           autoCorrect={false}
@@ -382,9 +389,8 @@ const MapScreen = (props) => {
                 name={MESSAGES.NEXT}
                 disable={false}
                 onPress={() =>
-                  props.navigation.navigate("MAP_NAVIGATION", {
+                  props.navigation.navigate("STORE_DETAIL", {
                     partnerId: popUpMarker.id,
-                    partner: popUpMarker
                   })
                 }
               />

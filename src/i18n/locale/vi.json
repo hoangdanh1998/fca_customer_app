@@ -12,6 +12,16 @@
 
     "currency": "đ",
 
+    "status-initialization-message": "Đơn hàng của bạn đã được tạo thành công",
+    "status-acceptance-message": "Cửa hàng đã nhận được đơn hàng của bạn",
+    "status-preparation-message": "Cửa hàng đang pha chế",
+    "status-wait-message": "Đợi xíu nha! Chúng tôi sẽ pha chế xong nhanh thôi",
+    "status-readiness-message": "Tada! Đơn hàng của bạn đã sẵn sàng",
+    "status-arrival-message": "Tada! Bạn đã đến cửa hàng",
+    "status-reception-message": "Bạn đã nhận được thức uống rồi chứ. Thưởng thức thôi!",
+    "status-closure-message": "Cảm ơn bạn đã đóng góp ý kiến cho chúng tôi",
+    "status-cancellation-message": "Tiếc thật! Đơn hàng của bạn đã bị huỷ",
+
     "title-store-information": "Thông tin cửa hàng",
     "title-order-information": "Chi tiết đơn hàng",
     "title-history-order": "Đơn hàng của tôi",
@@ -32,5 +42,7 @@
     "wording-processing": "Đang xử lí",
     "wording-home": "Trang chủ",
     "wording-direction": "Chỉ đường",
-    "wording-error-location": "Bạn chưa cấp quyền truy cập vị trí"
+    "wording-error-location": "Bạn chưa cấp quyền truy cập vị trí",
+    "wording-timeline": "Dòng thời gian",
+    "wording-search-destination": "Bạn muốn đi đâu?"
 }

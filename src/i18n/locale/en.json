@@ -10,6 +10,16 @@
     "closure": "Closure",
     "cancellation": "Cancellation",
 
+    "status-initialization-message": "Your order is submitted successfully",
+    "status-acceptance-message": "Coffee Shop is received your order",
+    "status-preparation-message": "Coffee Shop is preparing your order",
+    "status-wait-message": "Wait a minute! It will be done soon",
+    "status-readiness-message": "Tada! Your order is ready to delivery",
+    "status-arrival-message": "Tada! You arrived",
+    "status-reception-message": "You received your drink, didn't it? Enjoy!",
+    "status-closure-message": "Thanks for your feedback",
+    "status-cancellation-message": "Sorry! Your order is cancelled",
+
     "currency": "$",
 
     "title-store-information": "Store information",
@@ -32,5 +42,7 @@
     "wording-processing": "Processing",
     "wording-home": "Back to home",
     "wording-direction": "Direction",
-    "wording-error-location": "We don't have permission to access your location"
+    "wording-error-location": "We don't have permission to access your location",
+    "wording-timeline": "Timeline",
+    "wording-search-destination": "Where do you want to go?"
 }

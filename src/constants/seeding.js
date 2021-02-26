@@ -18,8 +18,6 @@ export const STORE = {
     "https://upload.wikimedia.org/wikipedia/commons/a/a3/R%C3%B6e_g%C3%A5rd_caf%C3%A9_2.jpg",
 };
 
-
-
 export const DRINK = {
   id: 1,
   name: "Cà phê sữa",
@@ -202,8 +200,7 @@ export const CART_MENU_DRINK = [
   },
 ];
 
-
-//store api 
+//store api
 export const STORE_DETAILS = {
   id: 1,
   name: "Coffee Go CAGO",
@@ -211,7 +208,7 @@ export const STORE_DETAILS = {
   address: {
     description: "123 Nguyễn Oanh, phường 7, quận Gò Vấp, TPHCM",
   },
-  items:[
+  items: [
     {
       id: 1,
       name: "Cà phê sữa",
@@ -264,3 +261,46 @@ export const STORE_DETAILS = {
   image:
     "https://upload.wikimedia.org/wikipedia/commons/a/a3/R%C3%B6e_g%C3%A5rd_caf%C3%A9_2.jpg",
 };
+
+export const TIMELINE = [
+  { time: "09:00", title: "Event 1", description: "Event 1 Description" },
+  { time: "10:45", title: "Event 2", description: "Event 2 Description" },
+  { time: "12:00", title: "Event 3", description: "Event 3 Description" },
+  { time: "14:00", title: "Event 4", description: "Event 4 Description" },
+  { time: "16:30", title: "Event 5", description: "Event 5 Description" },
+  { time: "09:00", title: "Event 1", description: "Event 1 Description" },
+  { time: "10:45", title: "Event 2", description: "Event 2 Description" },
+  { time: "12:00", title: "Event 3", description: "Event 3 Description" },
+  { time: "14:00", title: "Event 4", description: "Event 4 Description" },
+  { time: "16:30", title: "Event 5", description: "Event 5 Description" },
+];
+
+export const ORDER_TRANSACTIONS = [
+  {
+    id: "912eceae-2420-439b-b969-8927aed84127",
+    createdAt: "2021-02-25T16:00:48.770Z",
+    updatedAt: "2021-02-25T16:00:48.770Z",
+    deletedAt: null,
+    fromStatus: "READINESS",
+    toStatus: "READINESS",
+    fault: null,
+  },
+  {
+    id: "11164f63-c1fc-4d9a-bc20-3a9a1d560921",
+    createdAt: "2021-02-25T15:59:17.528Z",
+    updatedAt: "2021-02-25T15:59:17.528Z",
+    deletedAt: null,
+    fromStatus: "PREPARATION",
+    toStatus: "PREPARATION",
+    fault: null,
+  },
+  {
+    id: "c20553e5-f9a3-4ea8-a0d5-afeb89aa823c",
+    createdAt: "2021-02-25T15:46:03.327Z",
+    updatedAt: "2021-02-25T15:46:03.327Z",
+    deletedAt: null,
+    fromStatus: "INITIALIZATION",
+    toStatus: "ACCEPTANCE",
+    fault: null,
+  },
+];
