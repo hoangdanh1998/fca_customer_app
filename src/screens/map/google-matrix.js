@@ -4,12 +4,6 @@ import React, { useEffect, useState } from "react";
 import { KEY_GOOGLE_MAP } from "../../constants/index";
 
 const GoogleMatrix = () => {
-  // const dumData=[{
-  //   lat_destination: 10.8414899,
-  //   lng_destination: 106.8078577,
-  // }]
-  // const [isLoading, setLoading] = useState(true);
-  // const [data, setData] = useState([]);
     const [matrix,setMatrix]=useState(null)
   const google_APIUrl =
     `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=10.8277609,106.6793874&destinations=10.8224989,106.6880843&key=${KEY_GOOGLE_MAP}`;

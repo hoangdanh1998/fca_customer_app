@@ -1,6 +1,6 @@
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { createOrder } from "../../redux/actions/order";
 import { Content, Footer, View } from "native-base";
@@ -11,12 +11,19 @@ import { LANGUAGE, WAITING_DURATION, MESSAGES } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { withNavigation } from "@react-navigation/compat";
 
+import * as Notifications from 'expo-notifications';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
+  }),
+});
 const CreateOrder = (props) => {
-  // ================================= GET DATA FROM NAVIGATOR =================================
   const order = props.route.params.cart;
   const store = props.route.params.store;
 
-  // ================================= HANDLE CALL API =================================
   const dispatch = useDispatch();
   const submitOrder = useCallback(async () => {
     try {
@@ -52,24 +59,56 @@ const CreateOrder = (props) => {
   init(LANGUAGE.VI);
   const [visibleTimer, setVisibleTimer] = useState(false);
   const [timeout, handleTimeout] = useState();
+
   const handlePressOrderButton = async () => {
     setVisibleTimer(true);
     await submitOrder();
-    handleTimeout(
-      setTimeout(() => {
-        setVisibleTimer(false);
-        props.navigation.navigate("ORDER_DETAIL", {
-          isAfterCreate: true,
-        });
-      }, WAITING_DURATION)
-    );
   };
 
   const handleHideProcessingModal = () => {
     clearTimeout(timeout);
     setVisibleTimer(false);
+    props.navigation.navigate("ORDER_DETAIL", {
+      isAfterCreate: true,
+    });
   };
 
+  const cancelOrder = () => {
+    clearTimeout(timeout);
+    setVisibleTimer(false);
+    //Unclear biz
+  }
+
+  const notificationListener = useRef();
+  const responseListener = useRef();
+  useEffect(() => {
+
+    notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+
+      if (notification.request.content.title === 'Confirmation') {
+        handleHideProcessingModal();
+      }
+      if (notification.request.content.title === 'Confirm order') {
+        console.log(notification.request.content.data.qrCode)
+        linkToQRCodeScreen(notification.request.content.data.qrCode)
+      }
+    });
+
+    const linkToQRCodeScreen = (qrCode) => {
+      props.navigation.navigate("QR_CODE", {
+        qrCode,
+      });
+    };
+
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+      console.log({ response });
+    });
+
+    return () => {
+      Notifications.removeNotificationSubscription(notificationListener);
+      Notifications.removeNotificationSubscription(responseListener);
+    };
+  }, []);
   return (
     <>
       <Content>
@@ -78,9 +117,9 @@ const CreateOrder = (props) => {
         </View>
         {visibleTimer ? (
           <ProcessingModal
-            onHide={() => {
-              handleHideProcessingModal();
-            }}
+            visible={visibleTimer}
+            onCancel={cancelOrder}
+            onHide={handleHideProcessingModal}
           />
         ) : null}
       </Content>

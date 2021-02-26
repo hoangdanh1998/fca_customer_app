@@ -24,6 +24,7 @@
 
     "title-store-information": "Store information",
     "title-order-information": "Order Details",
+    "title-qrcode-information":"Confirm receive order",
     "title-history-order": "My orders",
 
     "wording-item": "item(s)",

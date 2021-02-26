@@ -6,6 +6,8 @@
     "build:a": "expo build:android",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "lint": "eslint app/",
+    "lint:fix": "eslint app/ --fix",
     "eject": "expo eject"
   },
   "dependencies": {
@@ -50,7 +52,10 @@
     "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
-    "@babel/core": "~7.9.0"
+    "@babel/core": "~7.9.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^7.20.0",
+    "eslint-plugin-react": "^7.22.0"
   },
   "private": true
 }

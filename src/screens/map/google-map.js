@@ -4,27 +4,25 @@ import { Card, CardItem, Left, Right } from "native-base";
 import {
   Dimensions,
   Image,
-  SafeAreaView,
-  ScrollView,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from "react-native";
 import {
   KEY_GOOGLE_MAP,
   MESSAGES,
-  ResponseStatus,
   LANGUAGE,
 } from "../../constants/index";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import React, { useCallback, useEffect, useState } from "react";
+import {useDispatch, useSelector} from 'react-redux';
 
-import GoogleMatrix from "../map/google-matrix";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapViewDirections from "react-native-maps-directions";
 import OrderButton from "../../components/atoms/order-button/index";
-import { IMLocalized, init } from "../../i18n/IMLocalized";
+import { setDestination, setPartnerLocation } from "../../redux/actions/map";
+import { IMLocalized, init } from '../../i18n/IMLocalized'
+
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -32,37 +30,13 @@ init(LANGUAGE.VI);
 const MapScreen = (props) => {
   const screenWidth = Dimensions.get("window").width;
   const [location, setLocation] = useState(null);
-  const [errorMsg, setErrorMsg] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
-  const [detailsGeometry, setDetailsGeometry] = useState(null);
+  // const [detailsGeometry, setDetailsGeometry] = useState(null);
   const [popUpMarker, setPopUpMarker] = useState(null);
-  const [directionReturn, setDirectionReturn] = useState(null);
   const [storeSuggestion, setStoreSuggestion] = useState(null);
+  const dispatch = useDispatch();
 
-  const [distanceTravel, setDistanceTravel] = useState(0);
-
-  const getDistance = (location2) => {
-    const lat1 = location.coords.latitude;
-    const lon1 = location.coords.longitude;
-    const lat2 = location2.coords.latitude;
-    const lon2 = location2.coords.longitude;
-
-    const R = 6371e3;
-    const o1 = (lat1 * Math.PI) / 180;
-    const o2 = (lat2 * Math.PI) / 180;
-    const deltaO = ((lat2 - lat1) * Math.PI) / 180;
-    const deltaL = ((lon2 - lon1) * Math.PI) / 180;
-
-    const a =
-      Math.sin(deltaO / 2) * Math.sin(deltaO / 2) +
-      Math.cos(o1) * Math.cos(o2) * Math.sin(deltaL / 2) * Math.sin(deltaL / 2); //Haversine formula
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const d = R * c; //in metres
-
-    setDistanceTravel(distanceTravel + d);
-    setLocation(location2);
-    console.log(`Distance: ${distanceTravel} `);
-  };
+  const detailsGeometry = useSelector(state => state.map.detailsGeometry);
 
   const getSuggestionStores = (plainText) => {
     fetch("https://api-fca.xyz/api/partner/suggestion", {
@@ -71,9 +45,9 @@ const MapScreen = (props) => {
     })
       .then((response) => response.json())
       .then((suggestedStores) => {
-        if (suggestedStores.meta.status == ResponseStatus.SUCCESS)
+        if (suggestedStores.meta.status == "SUCCESS") {
           setStoreSuggestion(suggestedStores);
-        else console.log(suggestedStores);
+        } else console.log(suggestedStores);
       })
       .catch((error) => {
         console.error(error);
@@ -83,9 +57,26 @@ const MapScreen = (props) => {
   const handleShowPopup = useCallback(
     (store) => {
       setPopUpMarker(store);
+      dispatch(setPartnerLocation({
+        latitude: parseFloat(store.address.latitude),
+        longitude: parseFloat(store.address.longitude),
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      }))
+      setUserRegion({
+        latitude: parseFloat(store.address.latitude),
+
+        longitude: parseFloat(store.address.longitude),
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421, 
+      });
     },
     [popUpMarker]
   );
+
+  const handleSetDetailsGeometry = useCallback((details) => {
+    dispatch(setDestination(details));
+  })
 
   const getDirectionApi = async () => {
     await fetch(
@@ -101,12 +92,7 @@ const MapScreen = (props) => {
       .then((response) => response.json())
       .then((responseJson) => {
         if (responseJson.status == "OK") {
-          // console.log(responseJson.rows[0].elements[0].distance.text)
-          // console.log("DiretionAPI");
-          //console.log(responseJson.routes[0].legs[0].steps);
           getSuggestionStores(responseJson.routes[0].legs[0].steps);
-          // getSuggestionStores(JSON.stringify(responseJson.routes.legs.steps));
-          // setDirectionReturn(JSON.stringify(responseJson.routes.legs.steps));
         } else {
           console.log("Not OK");
         }
@@ -117,9 +103,6 @@ const MapScreen = (props) => {
   };
 
   const openSearchModal = () => {
-    // const showToast = () => {
-    //   ToastAndroid.show(`${initialRegion.description} + ${initialRegion.latitude}`, ToastAndroid.SHORT);
-    // };
     return (
       <View style={{ flex: 1 }}>
         <GooglePlacesAutocomplete
@@ -130,31 +113,20 @@ const MapScreen = (props) => {
           autoCorrect={false}
           listViewDisplayed="auto" // true/false/undefined
           fetchDetails={true}
-          onPress={(data, details = null) => {
-            // 'details' is provided when fetchDetails = true
-            // console.log(data, details);
-            // console.log(data,details.description);
-            // console.log(data.description);
-            // console.log(details.geometry.location.lat);
-            // console.log(details.geometry.location.lng);
-            // setInitialRegion({
-            //   description: details.description,
-            //   latitude:details.geometry.location.lat,
-            //   longitude: details.geometry.location.lng,
-            // })
-            setDetailsGeometry({
-              description: data.description,
-              latitude: details.geometry.location.lat,
-              longitude: details.geometry.location.lng,
-            });
-            // getDirectionApi();
-          }}
+          onPress={
+            (data, details = null) => {
+
+              handleSetDetailsGeometry({
+                description: data.description,
+                latitude: details.geometry.location.lat,
+                longitude: details.geometry.location.lng,
+              })
+            }
+          }
           query={{
             key: KEY_GOOGLE_MAP,
             components: "country:vn", //limit country
           }}
-          // currentLocation={true}
-          // currentLocationLabel="Current location"
           styles={{
             description: {
               fontWeight: "bold",
@@ -185,19 +157,15 @@ const MapScreen = (props) => {
       </View>
     );
   };
+
+
   const mapView = () => {
     // console.log("userRegion", userRegion);
     return (
       <View style={{ flex: 1 }}>
         <MapView
           style={styles.map}
-          // followsUserLocation={true} //work on ios only
-          // onMapReady={getLocation}
-          // onUserLocationChange={(coordinate) => {console.log(coordinate)}}
           showsUserLocation={true}
-          // onUserLocationChange={async ()=> {
-          //   getDistance(await Location.getCurrentPositionAsync({}));
-          // }}
           showsScale
           showsCompass
           toolbarEnabled
@@ -209,8 +177,8 @@ const MapScreen = (props) => {
           {userRegion && detailsGeometry ? (
             <MapViewDirections
               origin={{
-                latitude: userRegion.latitude,
-                longitude: userRegion.longitude,
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
               }}
               destination={{
                 latitude: detailsGeometry.latitude,
@@ -220,10 +188,6 @@ const MapScreen = (props) => {
               strokeWidth={4}
               strokeColor="blue"
               onReady={() => getDirectionApi()}
-              // onReady={result => {
-              //   setDirectionReturn(result);
-              //   console.log(result.routes);
-              // }}
             />
           ) : null}
           {/* //onPress={() => handleShowPopup(stores)} */}
@@ -239,19 +203,19 @@ const MapScreen = (props) => {
 
           {storeSuggestion
             ? storeSuggestion.data.partners.map((stores) =>
-                stores.id == storeSuggestion.data.suggestion.id ? (
-                  <Marker
-                    pinColor="blue"
-                    key={stores.id}
-                    title={stores.name}
-                    destination={stores.address.description}
-                    coordinate={{
-                      latitude: parseFloat(stores.address.latitude),
-                      longitude: parseFloat(stores.address.longitude),
-                    }}
-                    onPress={() => handleShowPopup(stores)}
-                  />
-                ) : (
+              stores.id == storeSuggestion.data.suggestion.id ? (
+                <Marker
+                  pinColor="blue"
+                  key={stores.id}
+                  title={stores.name}
+                  destination={stores.address.description}
+                  coordinate={{
+                    latitude: parseFloat(stores.address.latitude),
+                    longitude: parseFloat(stores.address.longitude),
+                  }}
+                  onPress={() => handleShowPopup(stores)}
+                />
+              ) : (
                   <Marker
                     key={stores.id}
                     title={stores.name}
@@ -263,7 +227,7 @@ const MapScreen = (props) => {
                     onPress={() => handleShowPopup(stores)}
                   />
                 )
-              )
+            )
             : null}
         </MapView>
       </View>
@@ -312,8 +276,10 @@ const MapScreen = (props) => {
                 name={MESSAGES.NEXT}
                 disable={false}
                 onPress={() =>
+                  // eslint-disable-next-line react/prop-types
                   props.navigation.navigate("STORE_DETAIL", {
                     partnerId: popUpMarker.id,
+                    partner: popUpMarker,
                   })
                 }
               />
@@ -328,7 +294,7 @@ const MapScreen = (props) => {
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
       if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
+        console.log("Permission to access location was denied");
         return;
       }
 
@@ -347,9 +313,7 @@ const MapScreen = (props) => {
     <View
       style={{
         flex: 1,
-        // alignItems: "center",
         height: "100%",
-        // justifyContent: "center",
       }}
     >
       <View
@@ -373,11 +337,9 @@ const MapScreen = (props) => {
         >
           {mapView()}
         </View>
-        {/* <GGPlaces /> */}
         {openSearchModal()}
         {popUpView()}
       </View>
-      {/* <GoogleMatrix /> */}
     </View>
   );
 };
