@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useRef } from "react";
 import { useSelector } from "react-redux";
 import { Content, Footer, View } from "native-base";
@@ -15,12 +16,8 @@ const OrderDetails = (props) => {
   const order = useSelector((state) => {
     return state.order.createdOrder;
   });
-
-  const notificationListener = useRef();
-  const responseListener = useRef();
   const navigateToNavigationPage = () => {
-    console.log('hello navigate')
-    props.navigation.navigate("MAP_NAVIGATION", { store: order.partner })
+    props.navigation.navigate("MAP_NAVIGATION", { order })
   }
   return (
     <>

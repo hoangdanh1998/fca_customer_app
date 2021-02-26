@@ -20,7 +20,6 @@ import React from "react";
 import StoreDetails from "../screens/store-details";
 import DeliveryOrder from '../screens/delivery-order';
 import googleMapNavigation from "../screens/map/google-map-navigation";
-import * as Notifications from 'expo-notifications';
 
 
 const Stack = createStackNavigator();
@@ -121,7 +120,7 @@ export default function Navigation() {
           name="MAP_NAVIGATION"
           component={googleMapNavigation}
           options={{
-            title: IMLocalized("title-history-order"),
+            title: IMLocalized("navigation-tracking"),
             headerTintColor: LIGHT_COLOR,
             headerStyle: {
               backgroundColor: DARK_COLOR,
