@@ -4,9 +4,8 @@ export const SET_PARTNER_LOCATION = "SET_PARTNER_LOCATION ";
 import api from "../../service/fca-api/fca-api";
 import { getDirection } from '../../service/google-api/google-map-api'
 
-export const setStoreSuggestion = (location, destination) => {
+export const getStoreSuggestion = (location, destination) => {
     console.log('dispatch setStoreSuggestion')
-    console.log({ 'dispatch location': location })
     return async (dispatch) => {
         console.log('dispatch')
         const direction = await getDirection(location, destination);
@@ -20,6 +19,7 @@ export const setStoreSuggestion = (location, destination) => {
         if (response.data.meta.status !== ResponseStatus.SUCCESS) {
             throw new Error("Something went wrong");
         }
+
         dispatch({
             type: STORE_ACTIONS.SET_SUGGESTION_STORES,
             payload: {
@@ -27,5 +27,17 @@ export const setStoreSuggestion = (location, destination) => {
                 bestSuggestion: response.data.data.suggestion,
             },
         });
+
     };
+}
+export const setStoreSuggestion = (bestSuggestion, suggestionStores) => {
+    return async (dispatch) => {
+        dispatch({
+            type: STORE_ACTIONS.SET_SUGGESTION_STORES,
+            payload: {
+                suggestionStores: suggestionStores,
+                bestSuggestion: bestSuggestion,
+            },
+        });
+    }
 }

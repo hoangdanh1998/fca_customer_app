@@ -2,17 +2,19 @@
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import { useDispatch } from "react-redux";
-import { createOrder } from "../../redux/actions/order";
+import { useDispatch, useSelector } from "react-redux";
 import { Content, Footer, View } from "native-base";
+import * as Notifications from 'expo-notifications';
+import { withNavigation } from "@react-navigation/compat";
+
+import { createOrder } from "../../redux/actions/order";
 import OrderButton from "../../components/atoms/order-button/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import ProcessingModal from "../../components/molecules/processing-modal/index";
 import { LANGUAGE, MESSAGES } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
-import { withNavigation } from "@react-navigation/compat";
 import { OrderStatus } from '../../constants/index'
-import * as Notifications from 'expo-notifications';
+import { setStoreSuggestion } from '../../redux/actions/store';
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -22,10 +24,18 @@ Notifications.setNotificationHandler({
   }),
 });
 const CreateOrder = (props) => {
-  const order = props.route.params.cart;
-  const store = props.route.params.store;
-
+  init(LANGUAGE.VI);
   const dispatch = useDispatch();
+
+  const store = props.route.params.store;
+  const order = props.route.params.cart;
+
+  const suggestionStores = useSelector(state => state.store.suggestionStores);
+  const bestSuggestion = useSelector(state => state.store.bestSuggestion);
+  console.log('Before' + bestSuggestion.name, suggestionStores.length)
+  const [visibleTimer, setVisibleTimer] = useState(false);
+
+
   const submitOrder = useCallback(async () => {
     try {
       const { status } = await Permissions.getAsync(Permissions.LOCATION);
@@ -57,10 +67,6 @@ const CreateOrder = (props) => {
       alert("Submit order fail");
     }
   }, [dispatch]);
-  // ================================= HANDLE UI =================================
-  init(LANGUAGE.VI);
-  const [visibleTimer, setVisibleTimer] = useState(false);
-  const [timeout, handleTimeout] = useState();
 
   const handlePressOrderButton = async () => {
     setVisibleTimer(true);
@@ -68,17 +74,21 @@ const CreateOrder = (props) => {
   };
 
   const cancelOrder = () => {
-    clearTimeout(timeout);
     setVisibleTimer(false);
     //Unclear biz
   }
 
   const handleRejectedOrder = () => {
     setVisibleTimer(false);
+    const length = suggestionStores.length;
+    if (length > 1) {
+      const newSuggestion = suggestionStores[length - 2];
+      const newSuggestList = suggestionStores.filter((store) => store.id !== bestSuggestion.id)
+      dispatch(setStoreSuggestion(newSuggestion, newSuggestList))
+    }
     props.navigation.navigate("MAP_VIEW");
   }
   const handleAcceptedOrder = () => {
-    clearTimeout(timeout);
     setVisibleTimer(false);
     props.navigation.navigate("ORDER_DETAIL", {
       isAfterCreate: true,
@@ -90,13 +100,12 @@ const CreateOrder = (props) => {
   useEffect(() => {
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-      console.log(notification)
       if (notification.request.content.title === 'Confirmation') {
-        // if (notification.request.content.data.data.status === OrderStatus.ACCEPTANCE) {
-        //   handleAcceptedOrder();
-        // } else {
-        //   handleRejectedOrder();
-        // } 
+        if (notification.request.content.data.status === OrderStatus.ACCEPTANCE) {
+          handleAcceptedOrder();
+        } else {
+          handleRejectedOrder();
+        } 
       }
       if (notification.request.content.title === 'Confirm order') {
         console.log(notification.request.content.data.qrCode)

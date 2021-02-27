@@ -17,7 +17,6 @@ import { withNavigation } from '@react-navigation/compat';
 const PopupStore = (props) => {
     init(LANGUAGE.VI);
     const { store } = props;
-    console.log(store)
     return (<View
         style={{
             height: "25%",

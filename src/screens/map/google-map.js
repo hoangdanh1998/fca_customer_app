@@ -12,7 +12,7 @@ import MapViewDirections from "react-native-maps-directions";
 
 import { setDestination, setPartnerLocation } from "../../redux/actions/map";
 import { setPartner } from '../../redux/actions/partner';
-import { setStoreSuggestion } from '../../redux/actions/store';
+import { getStoreSuggestion } from '../../redux/actions/store';
 import { IMLocalized, init } from '../../i18n/IMLocalized'
 
 
@@ -27,21 +27,20 @@ const MapScreen = () => {
   const suggestionStores = useSelector(state => state.store.suggestionStores);
   const bestSuggestion = useSelector(state => state.store.bestSuggestion);
   const partner = useSelector(state => state.partner.partner);
-  console.log({ suggestionStores })
-  console.log({ detailsGeometry })
+  // console.log({ suggestionStores })
+  // console.log({ detailsGeometry })
   const mapRef = useRef(null);
 
   const [location, setLocation] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
   const [isShowPopup, setIsShowPopup] = useState(false);
-  console.log({ location })
 
   const handleSetDetailsGeometry = useCallback((details) => {
     dispatch(setDestination(details));
   })
 
   const getSuggestionStore = async (destination) => {
-    await dispatch(setStoreSuggestion(location.coords, destination));
+    await dispatch(getStoreSuggestion(location.coords, destination));
   };
 
   const setSelectedStore = (store) => {
@@ -174,7 +173,8 @@ const MapScreen = () => {
           ) : null}
           {suggestionStores
             ? suggestionStores.map((store) => {
-              return (
+              if (store.id == bestSuggestion.id) {
+                return (
                 <Marker
                   pinColor="blue"
                   key={store.id}
@@ -186,8 +186,20 @@ const MapScreen = () => {
                   }}
                   moveOnMarkerPress
                   onPress={() => setSelectedStore(store)}
-              />
-              )
+                  />)
+              } else {
+                return (<Marker
+                  key={store.id}
+                  title={store.name}
+                  destination={store.address.description}
+                  coordinate={{
+                    latitude: +store.address.latitude,
+                    longitude: +store.address.longitude,
+                  }}
+                  moveOnMarkerPress
+                  onPress={() => setSelectedStore(store)}
+                />)
+              }
             }
             ) : null}
         </MapView>
@@ -205,7 +217,6 @@ const MapScreen = () => {
       }
 
       let location = await Location.getCurrentPositionAsync({});
-      console.log({ location })
       setLocation(location);
       if (bestSuggestion) {
         setUserRegion({
