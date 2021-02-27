@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import NumberFormat from "react-number-format";
-import { Text, H3, View, List, Card, CardItem, Left, Right } from "native-base";
+import { Card, CardItem, H3, Left, List, Right, Text, View } from "native-base";
 // import { styles } from "./styles";
 import StoreCard from "../../atoms/store-card/index";
 import OrderDetailCard from "../../atoms/order-detail-card/index";
 import { ORDER_DETAILS } from "../../../constants/seeding";
-import { LANGUAGE, DARK_COLOR } from "../../../constants/index";
+import { DARK_COLOR, LANGUAGE } from "../../../constants/index";
 
 import { IMLocalized, init } from "../../../i18n/IMLocalized";
 

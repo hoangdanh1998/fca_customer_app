@@ -4,9 +4,7 @@ import api from "../../service/fca-api/fca-api";
 
 export const getPartnerInformation = (param) => {
   return async (dispatch) => {
-    try {
-      const response = await api.get(`/partner/${param}`);
-
+    const response = await api.get(`/partner/${param}`);
       if (response.data.meta.status !== ResponseStatus.SUCCESS) {
         throw new Error("Something went wrong");
       }
@@ -15,8 +13,13 @@ export const getPartnerInformation = (param) => {
         type: PARTNER_ACTIONS.GET_PARTNER_INFORMATION,
         payload: response,
       });
-    } catch (error) {
-      throw error;
-    }
   };
 };
+export const setPartner = (partner) => {
+  return (dispatch) => {
+    dispatch({
+      type: PARTNER_ACTIONS.SET_PARTNER,
+      payload: { partner },
+    })
+  }
+}

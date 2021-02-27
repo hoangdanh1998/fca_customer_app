@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { Image, View, Text } from "react-native";
-import { Body, Left, Right, Icon, CardItem } from "native-base";
+import { Image, Text, View } from "react-native";
+import { Body, CardItem, Icon, Left, Right } from "native-base";
 import NumberFormat from "react-number-format";
 import { styles } from "./styles";
 import { DRINK } from "../../../constants/seeding";
-import { LANGUAGE, IMAGE_2, IMAGE_1 } from "../../../constants/index";
+import { IMAGE_1, IMAGE_2, LANGUAGE } from "../../../constants/index";
 import { IMLocalized, init } from "../../../i18n/IMLocalized";
 
 const OrderDetailCard = (props) => {

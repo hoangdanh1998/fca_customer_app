@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Modal, Text, View, Image } from "react-native";
-import CancelButton from "../../atoms/cancel-button/index";
+import { Image, Modal, Text, View } from "react-native";
+import UnFocusedButton from "../../atoms/unfocused-button/index";
 import { styles } from "./styles";
 import { LANGUAGE, PROCESSING_MODAL_IMAGE } from "../../../constants/index";
 import { IMLocalized, init } from "../../../i18n/IMLocalized";
@@ -8,7 +8,7 @@ import { IMLocalized, init } from "../../../i18n/IMLocalized";
 import { Toast } from "native-base";
 const ProcessingModal = (props) => {
   init(LANGUAGE.VI);
-  const { visible, onCancel, onHide } = props;
+  const { visible, onCancel } = props;
 
   return (
     <Modal animationType="slide" transparent visible={visible}>
@@ -16,7 +16,7 @@ const ProcessingModal = (props) => {
         <Image source={PROCESSING_MODAL_IMAGE} style={styles.image} />
         <Text style={styles.text}>{IMLocalized("wording-processing")}</Text>
         <View style={styles.button}>
-          <CancelButton name="cancel-order" onPress={onCancel} />
+          <UnFocusedButton name="cancel-order" onPress={onCancel} />
         </View>
       </View>
     </Modal>

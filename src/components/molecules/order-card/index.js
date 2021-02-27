@@ -1,48 +1,78 @@
 import React, { useState } from "react";
 import {
-  Content,
   Card,
   CardItem,
-  Text,
+  Content,
   H3,
+  Icon,
   Left,
   Right,
-  Icon,
+  Text,
 } from "native-base";
 import NumberFormat from "react-number-format";
+import moment from "moment";
 import { styles } from "./styles";
 import { ORDER } from "../../../constants/seeding.js";
 import { IMLocalized, init } from "../../../i18n/IMLocalized";
-import { LANGUAGE } from "../../../constants/index.js";
+import {
+  LANGUAGE,
+  DATE_TIME_FORMAT_CALL_API,
+  DATE_TIME_FORMAT,
+  OrderStatus,
+  DARK_COLOR,
+} from "../../../constants/index.js";
 
 const OrderCard = (props) => {
   var order = props.order;
   // var order = ORDER;
   init(LANGUAGE.VI);
+  const statusTextColor = () => {
+    switch (order.status) {
+      case OrderStatus.CANCELLATION:
+        return "grey";
+      case OrderStatus.REJECTION:
+        return "grey";
+      case OrderStatus.CLOSURE:
+        return PRIMARY_LIGHT_COLOR;
+      default:
+        return "black";
+    }
+  };
   return (
     <Content>
-      <Card style={styles.card}>
+      <Card
+        onPress={() => {
+          props.onNext(order);
+        }}
+        style={styles.card}
+      >
         <CardItem style={styles.card1st}>
           <Left style={styles.orderStatus}>
-            <Text>{IMLocalized(order.orderStatus.toLowerCase())}</Text>
+            <Text note style={{ color: statusTextColor() }}>
+              {IMLocalized(order.status.toLowerCase())}
+            </Text>
           </Left>
           <Right>
-            <Text>{order.createdAt}</Text>
+            <Text>
+              {moment(order.createdAt, DATE_TIME_FORMAT_CALL_API).format(
+                DATE_TIME_FORMAT
+              )}
+            </Text>
           </Right>
         </CardItem>
         <CardItem style={styles.card2nd}>
           <Left>
             <Content style={styles.orderContent}>
-              <H3 style={styles.storeName}>{order.storeName}</H3>
+              <H3 style={styles.storeName}>{order.partner.name}</H3>
               <Text>
                 <NumberFormat
-                  value={order.orderAmount}
+                  value={order.total}
                   displayType={"text"}
                   thousandSeparator={true}
                   renderText={(formattedValue) => (
                     <Text>
                       {formattedValue} {IMLocalized("currency")} -{" "}
-                      {order.orderItems} {IMLocalized("wording-item")}
+                      {order.items.length} {IMLocalized("wording-item")}
                     </Text>
                   )}
                 />
@@ -52,7 +82,9 @@ const OrderCard = (props) => {
           <Right>
             <Icon
               button
-              onPress={() => alert("This is Card Header")}
+              onPress={() => {
+                props.onNext(order);
+              }}
               android={"chevron-forward"}
               name="arrow-forward"
               style={styles.icon}
