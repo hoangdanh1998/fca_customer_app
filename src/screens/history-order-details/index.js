@@ -22,24 +22,19 @@ import { convertTransaction } from "../../utils/utils";
 init(LANGUAGE.VI);
 const HistoryOrderDetails = (props) => {
   const order = props.route.params.order;
-  const [transactions, setTransactions] = useState(ORDER_TRANSACTIONS);
-  const [convertedTransactions, setConvertedTransactions] = useState(
-    convertTransaction(ORDER_TRANSACTIONS)
-  );
-  useEffect(() => {
-    setConvertedTransactions(convertTransaction(transactions));
-  }, []);
   return (
     <>
       <Content>
         <View style={{ width: "95%", marginLeft: "2.5%" }}>
           <OrderDetail store={order.partner} orderDetails={order} />
-          <TimelineTransaction
-            date={moment(order.createdAt, DATE_FORMAT_CALL_API).format(
-              DATE_FORMAT
-            )}
-            transactions={convertedTransactions}
-          />
+          {order.transaction ? (
+            <TimelineTransaction
+              date={moment(order.createdAt, DATE_FORMAT_CALL_API).format(
+                DATE_FORMAT
+              )}
+              transactions={convertTransaction(order.transaction)}
+            />
+          ) : null}
         </View>
       </Content>
 
