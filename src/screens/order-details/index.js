@@ -1,21 +1,21 @@
 /* eslint-disable react/prop-types */
-import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { withNavigation } from '@react-navigation/compat';
 import moment from "moment";
 import { Content, Footer, View } from "native-base";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 import OrderButton from "../../components/atoms/order-button/index";
-import OrderDetail from "../../components/molecules/order-details/index";
 import TimelineTransaction from "../../components/atoms/timeline-transaction/index";
+import OrderDetail from "../../components/molecules/order-details/index";
 import {
-  LANGUAGE,
-  MESSAGES,
   DATE_FORMAT,
   DATE_FORMAT_CALL_API,
+  LANGUAGE,
+  MESSAGES
 } from "../../constants/index";
-import {withNavigation} from '@react-navigation/compat'
-import { convertTransaction } from "../../utils/utils"; 
-import { init } from "../../i18n/IMLocalized";
 import { ORDER_TRANSACTIONS } from "../../constants/seeding";
+import { init } from "../../i18n/IMLocalized";
+import { convertTransaction } from "../../utils/utils";
 
 init(LANGUAGE.VI);
 const OrderDetails = (props) => {

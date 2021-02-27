@@ -28,8 +28,8 @@ const MapScreen = () => {
             setUserRegion({
                 latitude: location.coords.latitude,
                 longitude: location.coords.longitude,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
+                latitudeDelta: 0.05,
+                longitudeDelta: 0.05,
             });
             setUserRegion(null);
         })();

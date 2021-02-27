@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Modal, Text } from "react-native";
-import { Icon, Card, CardItem } from "native-base";
+import { Card, CardItem, Icon } from "native-base";
 
 import { styles } from "./styles";
 import { IMLocalized, init } from "../../../i18n/IMLocalized";

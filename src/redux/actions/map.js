@@ -14,3 +14,4 @@ export const setPartnerLocation = (location) => {
         payload: location
     })
 } 
+

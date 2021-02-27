@@ -1,18 +1,18 @@
 import * as Location from "expo-location";
-
+import React, { useEffect, useState } from "react";
 import {
   Dimensions,
   StyleSheet,
 
-  View,
+  View
 } from "react-native";
-import { KEY_GOOGLE_MAP } from "../../constants/index";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import React, { useEffect, useState } from "react";
-import { useSelector } from 'react-redux'
-import { setTrackingOrder } from '../../service/firebase/firebase-realtime'
-
 import MapViewDirections from "react-native-maps-directions";
+import { useSelector } from 'react-redux';
+import { KEY_GOOGLE_MAP } from "../../constants/index";
+import { setTrackingOrder } from '../../service/firebase/firebase-realtime';
+
+
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -51,8 +51,6 @@ const googleMapNavigation = () => {
 
     setDistanceTravel(distanceTravel + d);
     setLocation(currentLocation);
-    console.log(`Distance: ${distanceTravel} `);
-    console.log('distance origin ' + originDistance2Partner)
     if (distanceTravel > originDistance2Partner / 10) {
       await fetch(
         `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${currentLocation.coords.latitude},${currentLocation.coords.longitude}&destinations=${partnerLocation.latitude},${partnerLocation.longitude}&key=${KEY_GOOGLE_MAP}`,
@@ -73,7 +71,7 @@ const googleMapNavigation = () => {
       latitude: currentLocation.coords.latitude,
       longitude: currentLocation.coords.longitude,
       latitudeDelta: 0.0822,
-      longitudeDelta: 0.0421,
+      longitudeDelta: 0.05,
     });
   };
 
@@ -106,7 +104,7 @@ const googleMapNavigation = () => {
         latitude: currentLocation.coords.latitude,
         longitude: currentLocation.coords.longitude,
         latitudeDelta: 0.0822,
-        longitudeDelta: 0.0421,
+        longitudeDelta: 0.05,
       });
     })();
   }, []);
