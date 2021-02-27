@@ -2,10 +2,8 @@
 import { withNavigation } from "@react-navigation/compat";
 import moment from "moment";
 import { Content, Footer, View } from "native-base";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import React from "react";
 import FocusedButton from "../../components/atoms/focused-button/index";
-import UnFocusedButton from "../../components/atoms/unfocused-button/index";
 import TimelineTransaction from "../../components/atoms/timeline-transaction/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import {
