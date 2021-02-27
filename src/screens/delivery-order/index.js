@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { View, Image } from "react-native";
-import { Content, Button } from "native-base";
+import { Image, View } from "react-native";
+import { Button, Content } from "native-base";
 
 import { styles } from "./styles";
 import NotificationModal from "../../components/atoms/notification-modal/index";

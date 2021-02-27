@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { Card, CardItem, Right, Left, Body, Text } from "native-base";
+import { Body, Card, CardItem, Left, Right, Text } from "native-base";
 import NumberFormat from "react-number-format";
 import { styles } from "./styles";
 import OrderButton from "../../../components/atoms/order-button/index";
-import { MESSAGES, LANGUAGE } from "../../../constants/index";
+import { LANGUAGE, MESSAGES } from "../../../constants/index";
 import { IMLocalized, init } from "../../../i18n/IMLocalized";
 import {withNavigation} from '@react-navigation/compat'
 

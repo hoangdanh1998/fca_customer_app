@@ -1,10 +1,8 @@
-import React, { useState } from "react";
-import { Text, Button } from "native-base";
-
-import { IMLocalized, init } from "../../../i18n/IMLocalized";
+import { Button, Text } from "native-base";
+import React from "react";
 import { LANGUAGE } from "../../../constants/index.js";
+import { IMLocalized, init } from "../../../i18n/IMLocalized";
 import { styles } from "./styles";
-import { MESSAGES } from "../../../constants/index";
 
 const CancelButton = (props) => {
   var name = props.name;

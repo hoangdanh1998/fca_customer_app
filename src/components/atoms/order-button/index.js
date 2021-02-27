@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, Button } from "native-base";
+import { Button, Text } from "native-base";
 
 import { IMLocalized, init } from "../../../i18n/IMLocalized";
 import { LANGUAGE } from "../../../constants/index.js";

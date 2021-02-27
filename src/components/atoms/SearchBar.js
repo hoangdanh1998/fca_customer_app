@@ -1,5 +1,5 @@
 import React, {} from 'react';
-import { View, TextInput, StyleSheet } from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 
 const SearchBar = (props) => {

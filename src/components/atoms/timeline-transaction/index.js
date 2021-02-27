@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import Timeline from "react-native-timeline-flatlist";
 import moment from "moment";
-import { Card, CardItem, Text, Left, Right, View } from "native-base";
+import { Card, CardItem, Left, Right, Text, View } from "native-base";
 import { IMLocalized, init } from "../../../i18n/IMLocalized";
 import { TIMELINE } from "../../../constants/seeding";
 import {
   DARK_COLOR,
-  LIGHT_COLOR,
-  LANGUAGE,
   DATE_TIME_FORMAT_CALL_API,
+  LANGUAGE,
+  LIGHT_COLOR,
   TIME_FORMAT,
 } from "../../../constants/index";
 

@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Content, Footer, View } from "native-base";
 import * as Notifications from 'expo-notifications';

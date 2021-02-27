@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import { Card, CardItem, Text, H3, Left, Body } from "native-base";
+import { Body, Card, CardItem, H3, Left, Text } from "native-base";
+import React from "react";
 import { Rating } from "react-native-elements";
-import { STORE } from "../../../constants/seeding";
 
 const StoreCard = (props) => {
   var store = props.store;

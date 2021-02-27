@@ -1,10 +1,10 @@
 import moment from "moment";
-import { IMLocalized, init } from "../i18n/IMLocalized";
 import {
-  LANGUAGE,
   DATE_TIME_FORMAT_CALL_API,
-  TIME_FORMAT,
+  LANGUAGE,
+  TIME_FORMAT
 } from "../constants/index";
+import { IMLocalized, init } from "../i18n/IMLocalized";
 
 export const convertStringToCamel = (str) => {
   return str.substr(0, 1).toUpperCase() + str.substr(1).toLowerCase();

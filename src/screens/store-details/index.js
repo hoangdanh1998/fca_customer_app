@@ -1,5 +1,5 @@
 import { CART_MENU_DRINK, MENU_DRINK } from "../../constants/seeding";
-import { Card, Content, Footer, Header, Text, List, Root, Toast } from "native-base";
+import { Card, Content, Footer, Header, List, Root, Text, Toast } from "native-base";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
   LANGUAGE,
@@ -7,7 +7,7 @@ import {
   NOTICE_DURATION,
 } from "../../constants/index.js";
 
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import DrinkCard from "../../components/atoms/drink-card/index";

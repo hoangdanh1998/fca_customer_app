@@ -1,19 +1,19 @@
 /* eslint-disable react/prop-types */
 
+import { withNavigation } from '@react-navigation/compat';
+import { Card, CardItem, Left, Right } from "native-base";
 import React from "react";
 import {
-    View, Image,
-    Text,
-} from "react-native"
-import { Card, CardItem, Left, Right } from "native-base";
-import {
-    MESSAGES,
-    LANGUAGE,
-} from "../../constants/index";
-import { init } from '../../i18n/IMLocalized'
+    Image, Text,
+    View
+} from "react-native";
 import OrderButton from "../../components/atoms/order-button/index";
+import {
+    LANGUAGE,
+    MESSAGES
+} from "../../constants/index";
+import { init } from '../../i18n/IMLocalized';
 
-import { withNavigation } from '@react-navigation/compat';
 const PopupStore = (props) => {
     init(LANGUAGE.VI);
     const { store } = props;
