@@ -13,6 +13,7 @@ import { Icon, View } from "native-base";
 
 import CreateOrder from "../screens/create-order";
 import HistoryOrder from "../screens/history-order";
+import HistoryOrderDetails from "../screens/history-order-details";
 import MapScreen from "../screens/map/google-map";
 import { NavigationContainer } from "@react-navigation/native";
 import OrderDetails from "../screens/order-details";
@@ -101,6 +102,18 @@ export default function Navigation() {
         <Stack.Screen
           name="HISTORY_ORDERS"
           component={HistoryOrder}
+          options={{
+            title: IMLocalized("title-history-order"),
+            headerTintColor: LIGHT_COLOR,
+            headerStyle: {
+              backgroundColor: DARK_COLOR,
+            },
+            headerLeft: HeaderBackButton,
+          }}
+        />
+        <Stack.Screen
+          name="HISTORY_ORDER_DETAILS"
+          component={HistoryOrderDetails}
           options={{
             title: IMLocalized("title-history-order"),
             headerTintColor: LIGHT_COLOR,

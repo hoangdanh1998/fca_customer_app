@@ -8,7 +8,7 @@ import * as Notifications from "expo-notifications";
 import { withNavigation } from "@react-navigation/compat";
 
 import { createOrder } from "../../redux/actions/order";
-import OrderButton from "../../components/atoms/order-button/index";
+import FocusedButton from "../../components/atoms/focused-button/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import ProcessingModal from "../../components/molecules/processing-modal/index";
 import { LANGUAGE, MESSAGES } from "../../constants/index";
@@ -67,7 +67,7 @@ const CreateOrder = (props) => {
     }
   }, [dispatch]);
 
-  const handlePressOrderButton = async () => {
+  const handlePressFocusedButton = async () => {
     setVisibleTimer(true);
     await submitOrder();
   };
@@ -146,12 +146,12 @@ const CreateOrder = (props) => {
       </Content>
       <Footer style={{ backgroundColor: "white" }}>
         <View style={{ flex: 1 }}>
-          <OrderButton
+          <FocusedButton
             block
             name={MESSAGES.ORDER}
             disable={false}
             onPress={() => {
-              handlePressOrderButton();
+              handlePressFocusedButton();
             }}
           />
         </View>

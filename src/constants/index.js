@@ -13,6 +13,7 @@ export const LIGHT_COLOR = "#fcf7e1";
 export const NOTICE_DURATION = 3000;
 export const DATE_FORMAT = "DD/MM/YYYY";
 export const TIME_FORMAT = "HH:mm";
+export const DATE_TIME_FORMAT = "DD/MM/YYYY HH:mm";
 export const DATE_FORMAT_CALL_API = "YYYY-MM-DD";
 export const DATE_TIME_FORMAT_CALL_API = "YYYY-MM-DD HH:mm";
 export const LANGUAGE = {
