@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import ResultsDetail from '../atoms/ResultsDetail';
 import {withNavigation} from '@react-navigation/compat';
 

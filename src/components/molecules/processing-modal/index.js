@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal, Text, View, Image } from "react-native";
+import { Image, Modal, Text, View } from "react-native";
 import CancelButton from "../../atoms/cancel-button/index";
 import { styles } from "./styles";
 import { LANGUAGE, PROCESSING_MODAL_IMAGE } from "../../../constants/index";

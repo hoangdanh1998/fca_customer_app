@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import {
+  Body,
+  Button,
   Content,
   Header,
-  List,
-  Body,
-  Title,
-  Button,
   Icon,
   Left,
+  List,
+  Title,
 } from "native-base";
 import OrderCard from "../../components/molecules/order-card/index";
 // import { styles } from "./styles";

@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import {
-  Content,
   Card,
   CardItem,
-  Text,
+  Content,
   H3,
+  Icon,
   Left,
   Right,
-  Icon,
+  Text,
 } from "native-base";
 import NumberFormat from "react-number-format";
 import { styles } from "./styles";

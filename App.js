@@ -3,7 +3,7 @@ import React from "react";
 import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
 import Navigation from "./src/navigations/Navigation";
-import { createStore, applyMiddleware } from "redux";
+import { applyMiddleware, createStore } from "redux";
 import ReduxThunk from "redux-thunk";
 import { Provider } from "react-redux";
 import rootReducer from './src/redux/reducers/root-reducer'

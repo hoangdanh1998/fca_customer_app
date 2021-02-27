@@ -1,19 +1,19 @@
 import * as Location from "expo-location";
-
-import PopupStore from './popup-store'
-import { Dimensions, StyleSheet, View, } from "react-native";
-import { KEY_GOOGLE_MAP, LANGUAGE, } from "../../constants/index";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import { Dimensions, StyleSheet, View } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
-
+import { useDispatch, useSelector } from 'react-redux';
+import { KEY_GOOGLE_MAP, LANGUAGE } from "../../constants/index";
+import { IMLocalized, init } from '../../i18n/IMLocalized';
 import { setDestination, setPartnerLocation } from "../../redux/actions/map";
 import { setPartner } from '../../redux/actions/partner';
 import { getStoreSuggestion } from '../../redux/actions/store';
-import { IMLocalized, init } from '../../i18n/IMLocalized'
+import PopupStore from './popup-store';
+
+
+
 
 
 const width = Dimensions.get("window").width;
@@ -22,14 +22,12 @@ const screenWidth = Dimensions.get("window").width;
 init(LANGUAGE.VI);
 const MapScreen = () => {
   const dispatch = useDispatch();
-
+  const mapRef = useRef(null);
+  
   const detailsGeometry = useSelector(state => state.map.detailsGeometry);
   const suggestionStores = useSelector(state => state.store.suggestionStores);
   const bestSuggestion = useSelector(state => state.store.bestSuggestion);
   const partner = useSelector(state => state.partner.partner);
-  // console.log({ suggestionStores })
-  // console.log({ detailsGeometry })
-  const mapRef = useRef(null);
 
   const [location, setLocation] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
@@ -52,9 +50,10 @@ const MapScreen = () => {
       latitudeDelta: 0.05,
       longitudeDelta: 0.05,
     }))
+
     setUserRegion({
-      latitude: parseFloat(store.address.latitude),
-      longitude: parseFloat(store.address.longitude),
+      latitude: +store.address.latitude,
+      longitude: +store.address.longitude,
     });
 
   }
