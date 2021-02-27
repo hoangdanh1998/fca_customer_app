@@ -8,7 +8,7 @@ import { IMLocalized, init } from "../../../i18n/IMLocalized";
 import { Toast } from "native-base";
 const ProcessingModal = (props) => {
   init(LANGUAGE.VI);
-  const { visible, onCancel, onHide } = props;
+  const { visible, onCancel } = props;
 
   return (
     <Modal animationType="slide" transparent visible={visible}>

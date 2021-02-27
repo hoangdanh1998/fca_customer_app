@@ -9,8 +9,8 @@ var screenWidth = Dimensions.get("window").width;
 //   description: "empty",
 //   latitude: 10.8274174,
 //   longitude: 106.6793407 ,
-//   latitudeDelta: 0.0922,
-//   longitudeDelta: 0.0421,
+//   latitudeDelta: 0.05,
+//   longitudeDelta: 0.05,
 // });
 
 const openSearchModal = () => {

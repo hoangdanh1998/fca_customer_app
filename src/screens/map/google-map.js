@@ -1,120 +1,88 @@
 import * as Location from "expo-location";
 
-import { Card, CardItem, Left, Right } from "native-base";
-import {
-  Dimensions,
-  Image,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
-import {
-  KEY_GOOGLE_MAP,
-  MESSAGES,
-  LANGUAGE,
-} from "../../constants/index";
+import PopupStore from './popup-store'
+import { Dimensions, StyleSheet, View, } from "react-native";
+import { KEY_GOOGLE_MAP, LANGUAGE, } from "../../constants/index";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import React, { useCallback, useEffect, useState } from "react";
-import {useDispatch, useSelector} from 'react-redux';
-
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+
 import MapViewDirections from "react-native-maps-directions";
-import OrderButton from "../../components/atoms/order-button/index";
+
 import { setDestination, setPartnerLocation } from "../../redux/actions/map";
+import { setPartner } from '../../redux/actions/partner';
+import { getStoreSuggestion } from '../../redux/actions/store';
 import { IMLocalized, init } from '../../i18n/IMLocalized'
 
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
+const screenWidth = Dimensions.get("window").width;
 init(LANGUAGE.VI);
-const MapScreen = (props) => {
-  const screenWidth = Dimensions.get("window").width;
-  const [location, setLocation] = useState(null);
-  const [userRegion, setUserRegion] = useState(null);
-  // const [detailsGeometry, setDetailsGeometry] = useState(null);
-  const [popUpMarker, setPopUpMarker] = useState(null);
-  const [storeSuggestion, setStoreSuggestion] = useState(null);
+const MapScreen = () => {
   const dispatch = useDispatch();
 
   const detailsGeometry = useSelector(state => state.map.detailsGeometry);
+  const suggestionStores = useSelector(state => state.store.suggestionStores);
+  const bestSuggestion = useSelector(state => state.store.bestSuggestion);
+  const partner = useSelector(state => state.partner.partner);
+  // console.log({ suggestionStores })
+  // console.log({ detailsGeometry })
+  const mapRef = useRef(null);
 
-  const getSuggestionStores = (plainText) => {
-    fetch("https://api-fca.xyz/api/partner/suggestion", {
-      method: "POST",
-      body: JSON.stringify(plainText),
-    })
-      .then((response) => response.json())
-      .then((suggestedStores) => {
-        if (suggestedStores.meta.status == "SUCCESS") {
-          setStoreSuggestion(suggestedStores);
-        } else console.log(suggestedStores);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  const handleShowPopup = useCallback(
-    (store) => {
-      setPopUpMarker(store);
-      dispatch(setPartnerLocation({
-        latitude: parseFloat(store.address.latitude),
-        longitude: parseFloat(store.address.longitude),
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      }))
-      setUserRegion({
-        latitude: parseFloat(store.address.latitude),
-
-        longitude: parseFloat(store.address.longitude),
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421, 
-      });
-    },
-    [popUpMarker]
-  );
+  const [location, setLocation] = useState(null);
+  const [userRegion, setUserRegion] = useState(null);
+  const [isShowPopup, setIsShowPopup] = useState(false);
 
   const handleSetDetailsGeometry = useCallback((details) => {
     dispatch(setDestination(details));
   })
 
-  const getDirectionApi = async () => {
-    await fetch(
-      `https://maps.googleapis.com/maps/api/directions/json?origin=${location.coords.latitude},${location.coords.longitude}&destination=${detailsGeometry.latitude},${detailsGeometry.longitude}&key=${KEY_GOOGLE_MAP}`,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((responseJson) => {
-        if (responseJson.status == "OK") {
-          getSuggestionStores(responseJson.routes[0].legs[0].steps);
-        } else {
-          console.log("Not OK");
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  const getSuggestionStore = async (destination) => {
+    await dispatch(getStoreSuggestion(location.coords, destination));
   };
 
+  const setSelectedStore = (store) => {
+    setIsShowPopup(true)
+    dispatch(setPartner(store));
+    dispatch(setPartnerLocation({
+      latitude: +store.address.latitude,
+      longitude: +store.address.longitude,
+      latitudeDelta: 0.05,
+      longitudeDelta: 0.05,
+    }))
+    setUserRegion({
+      latitude: parseFloat(store.address.latitude),
+      longitude: parseFloat(store.address.longitude),
+    });
+
+  }
   const openSearchModal = () => {
     return (
       <View style={{ flex: 1 }}>
         <GooglePlacesAutocomplete
           // style={styles.searchBar}
+
           placeholder={IMLocalized("wording-search-destination")}
           minLength={2}
+          predefinedPlaces={[{
+            description: 'ĐH FPT',
+            geometry: { location: { lat: 10.8414846, lng: 106.8100464 } },
+          }]}
           autoFocus={false}
           autoCorrect={false}
           listViewDisplayed="auto" // true/false/undefined
           fetchDetails={true}
+          textInputProps={{
+          }}
           onPress={
-            (data, details = null) => {
+            async (data, details = null) => {
+              setIsShowPopup(true)
+              getSuggestionStore({
+                latitude: details.geometry.location.lat,
+                longitude: details.geometry.location.lng,
+              })
 
               handleSetDetailsGeometry({
                 description: data.description,
@@ -170,10 +138,12 @@ const MapScreen = (props) => {
           showsCompass
           toolbarEnabled
           zoomEnabled
+          showsMyLocationButton
           rotateEnabled
           provider={PROVIDER_GOOGLE}
           region={userRegion}
-        >
+          ref={mapRef}
+        > 
           {userRegion && detailsGeometry ? (
             <MapViewDirections
               origin={{
@@ -187,10 +157,9 @@ const MapScreen = (props) => {
               apikey={KEY_GOOGLE_MAP}
               strokeWidth={4}
               strokeColor="blue"
-              onReady={() => getDirectionApi()}
+              onReady={() => { }}
             />
           ) : null}
-          {/* //onPress={() => handleShowPopup(stores)} */}
 
           {detailsGeometry ? (
             <Marker
@@ -198,100 +167,49 @@ const MapScreen = (props) => {
                 latitude: detailsGeometry.latitude,
                 longitude: detailsGeometry.longitude,
               }}
-            />
-          ) : null}
+            >
 
-          {storeSuggestion
-            ? storeSuggestion.data.partners.map((stores) =>
-              stores.id == storeSuggestion.data.suggestion.id ? (
+            </Marker>
+          ) : null}
+          {suggestionStores
+            ? suggestionStores.map((store) => {
+              if (store.id == bestSuggestion.id) {
+                return (
                 <Marker
                   pinColor="blue"
-                  key={stores.id}
-                  title={stores.name}
-                  destination={stores.address.description}
+                  key={store.id}
+                  title={store.name}
+                  destination={store.address.description}
                   coordinate={{
-                    latitude: parseFloat(stores.address.latitude),
-                    longitude: parseFloat(stores.address.longitude),
+                    latitude: +store.address.latitude,
+                    longitude: +store.address.longitude,
                   }}
-                  onPress={() => handleShowPopup(stores)}
-                />
-              ) : (
-                  <Marker
-                    key={stores.id}
-                    title={stores.name}
-                    destination={stores.address.description}
-                    coordinate={{
-                      latitude: parseFloat(stores.address.latitude),
-                      longitude: parseFloat(stores.address.longitude),
-                    }}
-                    onPress={() => handleShowPopup(stores)}
-                  />
-                )
-            )
-            : null}
+                  moveOnMarkerPress
+                  onPress={() => setSelectedStore(store)}
+                  />)
+              } else {
+                return (<Marker
+                  key={store.id}
+                  title={store.name}
+                  destination={store.address.description}
+                  coordinate={{
+                    latitude: +store.address.latitude,
+                    longitude: +store.address.longitude,
+                  }}
+                  moveOnMarkerPress
+                  onPress={() => setSelectedStore(store)}
+                />)
+              }
+            }
+            ) : null}
         </MapView>
       </View>
     );
   };
 
-  const popUpView = () => {
-    return (
-      <>
-        {popUpMarker ? (
-          <View
-            style={{
-              height: "25%",
-              width: "100%",
-            }}
-          >
-            <Card style={{ flex: 1 }}>
-              <CardItem>
-                <Left style={{ flex: 1 }}>
-                  <Image
-                    source={{
-                      uri: popUpMarker.imageLink,
-                    }}
-                    style={{ height: 100, width: "100%" }}
-                  />
-                </Left>
-                <Right style={{ flex: 2, justifyContent: "flex-end" }}>
-                  <Text
-                    style={{
-                      fontWeight: "bold",
-                      textAlign: "left",
-                      width: "95%",
-                    }}
-                  >
-                    {popUpMarker.name}
-                  </Text>
-                  <Text></Text>
-                  <Text style={{ textAlign: "left", width: "95%" }}>
-                    {popUpMarker.address.description}
-                  </Text>
-                </Right>
-              </CardItem>
-              <OrderButton
-                block
-                full
-                name={MESSAGES.NEXT}
-                disable={false}
-                onPress={() =>
-                  // eslint-disable-next-line react/prop-types
-                  props.navigation.navigate("STORE_DETAIL", {
-                    partnerId: popUpMarker.id,
-                    partner: popUpMarker,
-                  })
-                }
-              />
-            </Card>
-          </View>
-        ) : null}
-      </>
-    );
-  };
-
   useEffect(() => {
     (async () => {
+      console.log('useEffect')
       let { status } = await Location.requestPermissionsAsync();
       if (status !== "granted") {
         console.log("Permission to access location was denied");
@@ -300,14 +218,25 @@ const MapScreen = (props) => {
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
-      setUserRegion({
-        latitude: location.coords.latitude,
-        longitude: location.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      });
+      if (bestSuggestion) {
+        setUserRegion({
+          latitude: +bestSuggestion.address.latitude,
+          longitude: +bestSuggestion.address.longitude,
+          latitudeDelta: 0.05,
+          longitudeDelta: 0.05,
+        });
+        dispatch(setPartner(bestSuggestion))
+      } else {
+        setUserRegion({
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+          latitudeDelta: 0.05,
+          longitudeDelta: 0.05,
+        }); 
+      }
+
     })();
-  }, []);
+  }, [bestSuggestion]);
 
   return (
     <View
@@ -338,7 +267,9 @@ const MapScreen = (props) => {
           {mapView()}
         </View>
         {openSearchModal()}
-        {popUpView()}
+        {partner && isShowPopup ?
+          <PopupStore store={partner} />
+          : null}
       </View>
     </View>
   );
