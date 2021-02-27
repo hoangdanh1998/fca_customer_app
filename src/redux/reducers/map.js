@@ -2,7 +2,7 @@ import { SET_DETAILS_GEOMETRY, SET_PARTNER_LOCATION } from "../actions/map";
 
 const initialState = {
     detailsGeometry: null,
-    partnerLocation: {}
+    partnerLocation: {},
 }
 const mapReducer = (state = initialState, action) => {
     switch (action.type) {

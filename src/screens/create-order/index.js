@@ -1,16 +1,17 @@
+/* eslint-disable react/prop-types */
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { createOrder } from "../../redux/actions/order";
 import { Content, Footer, View } from "native-base";
 import OrderButton from "../../components/atoms/order-button/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import ProcessingModal from "../../components/molecules/processing-modal/index";
-import { LANGUAGE, WAITING_DURATION, MESSAGES } from "../../constants/index";
+import { LANGUAGE, MESSAGES } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { withNavigation } from "@react-navigation/compat";
-
+import { OrderStatus } from '../../constants/index'
 import * as Notifications from 'expo-notifications';
 
 Notifications.setNotificationHandler({
@@ -51,7 +52,8 @@ const CreateOrder = (props) => {
         })
       );
     } catch (error) {
-      handleHideProcessingModal();
+      // handleHideProcessingModal();
+      setVisibleTimer(false);
       alert("Submit order fail");
     }
   }, [dispatch]);
@@ -65,18 +67,22 @@ const CreateOrder = (props) => {
     await submitOrder();
   };
 
-  const handleHideProcessingModal = () => {
+  const cancelOrder = () => {
+    clearTimeout(timeout);
+    setVisibleTimer(false);
+    //Unclear biz
+  }
+
+  const handleRejectedOrder = () => {
+    setVisibleTimer(false);
+    props.navigation.navigate("MAP_VIEW");
+  }
+  const handleAcceptedOrder = () => {
     clearTimeout(timeout);
     setVisibleTimer(false);
     props.navigation.navigate("ORDER_DETAIL", {
       isAfterCreate: true,
     });
-  };
-
-  const cancelOrder = () => {
-    clearTimeout(timeout);
-    setVisibleTimer(false);
-    //Unclear biz
   }
 
   const notificationListener = useRef();
@@ -84,9 +90,13 @@ const CreateOrder = (props) => {
   useEffect(() => {
 
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
-
+      console.log(notification)
       if (notification.request.content.title === 'Confirmation') {
-        handleHideProcessingModal();
+        // if (notification.request.content.data.data.status === OrderStatus.ACCEPTANCE) {
+        //   handleAcceptedOrder();
+        // } else {
+        //   handleRejectedOrder();
+        // } 
       }
       if (notification.request.content.title === 'Confirm order') {
         console.log(notification.request.content.data.qrCode)
@@ -119,7 +129,6 @@ const CreateOrder = (props) => {
           <ProcessingModal
             visible={visibleTimer}
             onCancel={cancelOrder}
-            onHide={handleHideProcessingModal}
           />
         ) : null}
       </Content>

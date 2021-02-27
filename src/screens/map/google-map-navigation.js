@@ -73,7 +73,7 @@ const googleMapNavigation = () => {
       latitude: currentLocation.coords.latitude,
       longitude: currentLocation.coords.longitude,
       latitudeDelta: 0.0822,
-      longitudeDelta: 0.0421,
+      longitudeDelta: 0.05,
     });
   };
 
@@ -106,7 +106,7 @@ const googleMapNavigation = () => {
         latitude: currentLocation.coords.latitude,
         longitude: currentLocation.coords.longitude,
         latitudeDelta: 0.0822,
-        longitudeDelta: 0.0421,
+        longitudeDelta: 0.05,
       });
     })();
   }, []);

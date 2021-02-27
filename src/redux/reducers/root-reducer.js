@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import storeReducer from "../actions/store";
+import storeReducer from "./store";
 import mapReducer from "./map";
 import orderReducer from "./order";
 import partnerReducer from "./partner";

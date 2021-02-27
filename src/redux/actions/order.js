@@ -4,7 +4,6 @@ import api from "../../service/fca-api/fca-api";
 
 export const createOrder = (param) => {
   return async (dispatch) => {
-    try {
       const response = await api.post("/order", param);
       if (response.data.meta.status !== ResponseStatus.SUCCESS) {
         throw new Error("Something went wrong");
@@ -13,17 +12,13 @@ export const createOrder = (param) => {
         type: ORDER_ACTIONS.CREATE_ORDER,
         payload: response,
       });
-    } catch (error) {
-      throw error;
-    }
   };
 };
 
 export const getOrder = (param) => {
   return async (dispatch) => {
-    try {
       const response = await api.get(`/order/${param}`);
-      if (response.data.meta.status !== SUCCESS) {
+    if (response.data.meta.status !== 'SUCCESS') {
         throw new Error("Something went wrong");
       }
 
@@ -31,8 +26,5 @@ export const getOrder = (param) => {
         type: ORDER_ACTIONS.GET_ORDER,
         payload: response,
       });
-    } catch (error) {
-      throw error;
-    }
   };
 };
