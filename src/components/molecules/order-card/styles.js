@@ -13,14 +13,14 @@ export const styles = StyleSheet.create({
     paddingTop: "1%",
   },
   card1st: {
-    backgroundColor: "#e6d7ab",
+    // backgroundColor: "#e6d7ab",
   },
   orderStatus: {
     marginLeft: "-5%",
   },
   card2nd: {
     paddingTop: "0%",
-    backgroundColor: "#e6d7ab",
+    // backgroundColor: "#e6d7ab",
   },
   orderContent: {
     marginLeft: "-5%",

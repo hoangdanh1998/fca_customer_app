@@ -31,7 +31,7 @@ export default function Navigation() {
         <Stack.Screen
           name="MAP_VIEW"
           component={MapScreen}
-          options={{
+          options={({ navigation, route }) => ({
             title: APP_NAME,
             headerTintColor: LIGHT_COLOR,
             headerStyle: {
@@ -39,7 +39,7 @@ export default function Navigation() {
             },
             headerLeft: null,
 
-            headerRight: ({ navigate }) => (
+            headerRight: () => (
               <View
                 style={{
                   flexDirection: "row",
@@ -47,14 +47,20 @@ export default function Navigation() {
                   width: "120%",
                 }}
               >
-                <Icon name="cafe-outline" style={{ color: LIGHT_COLOR }} />
+                <Icon
+                  name="cafe-outline"
+                  style={{ color: LIGHT_COLOR }}
+                  onPress={() => {
+                    navigation.navigate("HISTORY_ORDERS");
+                  }}
+                />
                 <Icon
                   name="person-circle-outline"
                   style={{ color: LIGHT_COLOR }}
                 />
               </View>
             ),
-          }}
+          })}
         />
         <Stack.Screen
           name="STORE_DETAIL"

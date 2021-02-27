@@ -31,6 +31,8 @@ export const MESSAGES = {
   ORDER: "order",
   HOME: "home",
   DIRECTION: "direction",
+  FEEDBACK: "feedback",
+  HOME: "home",
 };
 
 // APP STATUS

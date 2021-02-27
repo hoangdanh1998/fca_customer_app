@@ -21,22 +21,6 @@ const HistoryOrder = (props) => {
   init(LANGUAGE.VI);
   return (
     <Content>
-      <Header
-        style={{
-          flex: 1,
-          backgroundColor: "#603a18",
-        }}
-      >
-        <Left style={{ flex: 1 }}>
-          <Button transparent>
-            <Icon name="arrow-back" />
-          </Button>
-        </Left>
-        <Body style={{ flex: 9 }}>
-          <Title>{IMLocalized("wording-my-orders")}</Title>
-        </Body>
-      </Header>
-
       <List
         dataArray={orderList}
         renderRow={(item) => <OrderCard order={item} />}
