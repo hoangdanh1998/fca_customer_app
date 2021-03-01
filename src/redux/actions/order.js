@@ -18,14 +18,28 @@ export const createOrder = (param) => {
 
 export const getOrder = (param) => {
   return async (dispatch) => {
-      const response = await api.get(`/order/${param}`);
-    if (response.data.meta.status !== 'SUCCESS') {
-        throw new Error("Something went wrong");
-      }
+    const response = await api.get(`/order/${param}`);
+    if (response.data.meta.status !== "SUCCESS") {
+      throw new Error("Something went wrong");
+    }
 
-      dispatch({
-        type: ORDER_ACTIONS.GET_ORDER,
-        payload: response,
-      });
+    dispatch({
+      type: ORDER_ACTIONS.GET_ORDER,
+      payload: response,
+    });
+  };
+};
+
+export const getHistory = (param) => {
+  return async (dispatch) => {
+    const response = await api.get(`/order?customerPhone=${param}`);
+    if (response.data.meta.status !== "SUCCESS") {
+      throw new Error("Something went wrong");
+    }
+
+    dispatch({
+      type: ORDER_ACTIONS.GET_HISTORY,
+      payload: response,
+    });
   };
 };

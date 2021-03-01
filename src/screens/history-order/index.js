@@ -1,48 +1,46 @@
-import React, { useState } from "react";
-import {
-  Body,
-  Button,
-  Content,
-  Header,
-  Icon,
-  Left,
-  List,
-  Title,
-} from "native-base";
+import React, { useCallback, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Content, List } from "native-base";
+import { withNavigation } from "@react-navigation/compat";
 import OrderCard from "../../components/molecules/order-card/index";
-// import { styles } from "./styles";
+import { getHistory } from "../../redux/actions/order";
 import { HISTORY_ORDER } from "../../constants/seeding";
-import { IMLocalized, init } from "../../i18n/IMLocalized";
-import { LANGUAGE } from "../../constants/index.js";
 
 const HistoryOrder = (props) => {
   //   var orderList = props.orderList;
-  var orderList = HISTORY_ORDER;
-  init(LANGUAGE.VI);
+  // var orderList = HISTORY_ORDER;
+  const history = useSelector((state) => {
+    return state.order.history;
+  });
+
+  const dispatch = useDispatch();
+  const loadHistory = useCallback(async () => {
+    try {
+      await dispatch(getHistory("0394422439"));
+    } catch (error) {
+      setError(error);
+    }
+  }, [dispatch]);
+  useEffect(() => {
+    loadHistory();
+  }, [dispatch, loadHistory]);
   return (
     <Content>
-      <Header
-        style={{
-          flex: 1,
-          backgroundColor: "#603a18",
-        }}
-      >
-        <Left style={{ flex: 1 }}>
-          <Button transparent>
-            <Icon name="arrow-back" />
-          </Button>
-        </Left>
-        <Body style={{ flex: 9 }}>
-          <Title>{IMLocalized("wording-my-orders")}</Title>
-        </Body>
-      </Header>
-
       <List
-        dataArray={orderList}
-        renderRow={(item) => <OrderCard order={item} />}
+        dataArray={history}
+        renderRow={(item) => (
+          <OrderCard
+            order={item}
+            onNext={(order) => {
+              props.navigation.navigate("HISTORY_ORDER_DETAILS", {
+                order: order,
+              });
+            }}
+          />
+        )}
       />
     </Content>
   );
 };
 
-export default HistoryOrder;
+export default withNavigation(HistoryOrder);

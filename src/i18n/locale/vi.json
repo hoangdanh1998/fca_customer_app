@@ -26,7 +26,7 @@
     "title-order-information": "Chi tiết đơn hàng",
     "title-history-order": "Đơn hàng của tôi",
     "title-qrcode-information": "Xác thực nhận hàng",
-    "navigation-tracking": "Tìm đường",
+    "title-navigation-tracking": "Tìm đường",
 
     "wording-item": "món",
     "wording-my-orders": "Đơn hàng của tôi",
@@ -35,6 +35,7 @@
     "wording-done": "Hoàn tất",
     "wording-next": "Tiếp theo",
     "wording-order": "Đặt hàng",
+    "wording-feedback": "Đánh giá",
     "wording-cancel-order": "Huỷ đơn hàng",
     "wording-too-much-item": "Bạn chỉ có thể đặt tối đa 2 món trong một đơn hàng",
     "wording-cart": "Giỏ hàng",

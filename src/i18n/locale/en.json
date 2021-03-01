@@ -35,6 +35,7 @@
     "wording-next": "Next",
     "wording-order": "Order",
     "wording-cancel-order": "Cancel",
+    "wording-feedback": "Feedback",
     "wording-too-much-item": "You can only order up to 2 items in an order",
     "wording-cart": "Your Cart",
     "wording-take-order-at": "Take order at",
@@ -45,5 +46,5 @@
     "wording-direction": "Direction",
     "wording-error-location": "We don't have permission to access your location",
     "wording-timeline": "Timeline",
-    "wording-search-destination": "Where do you want to go?"
+    "wording-search-destination": "Where do you want to go?",
 }
