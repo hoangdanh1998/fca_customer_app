@@ -1,24 +1,22 @@
-/* eslint-disable react/prop-types */
+import { withNavigation } from "@react-navigation/compat";
 import * as Location from "expo-location";
+import * as Notifications from 'expo-notifications';
 import * as Permissions from "expo-permissions";
+import { Content, Footer, View } from "native-base";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Content, Footer, View } from "native-base";
-import * as Notifications from 'expo-notifications';
-import { withNavigation } from "@react-navigation/compat";
-
-import { createOrder } from "../../redux/actions/order";
 import OrderButton from "../../components/atoms/order-button/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import ProcessingModal from "../../components/molecules/processing-modal/index";
-import { LANGUAGE, MESSAGES } from "../../constants/index";
+import { LANGUAGE, MESSAGES, OrderStatus } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
-import { OrderStatus } from '../../constants/index'
+import { createOrder } from "../../redux/actions/order";
 import { setStoreSuggestion } from '../../redux/actions/store';
+
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
+    shouldShowAlert: false,
     shouldPlaySound: true,
     shouldSetBadge: true,
   }),
@@ -32,7 +30,7 @@ const CreateOrder = (props) => {
 
   const suggestionStores = useSelector(state => state.store.suggestionStores);
   const bestSuggestion = useSelector(state => state.store.bestSuggestion);
-  console.log('Before' + bestSuggestion.name, suggestionStores.length)
+  console.log('Before ' + bestSuggestion.name, suggestionStores.length)
   const [visibleTimer, setVisibleTimer] = useState(false);
 
 
@@ -98,7 +96,6 @@ const CreateOrder = (props) => {
   const notificationListener = useRef();
   const responseListener = useRef();
   useEffect(() => {
-
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       if (notification.request.content.title === 'Confirmation') {
         if (notification.request.content.data.status === OrderStatus.ACCEPTANCE) {

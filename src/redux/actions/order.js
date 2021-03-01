@@ -1,6 +1,6 @@
 import { ResponseStatus } from "../../constants/index";
-import { ORDER_ACTIONS } from "../action-types/actions";
 import api from "../../service/fca-api/fca-api";
+import { ORDER_ACTIONS } from "../action-types/actions";
 
 export const createOrder = (param) => {
   return async (dispatch) => {
@@ -8,6 +8,7 @@ export const createOrder = (param) => {
       if (response.data.meta.status !== ResponseStatus.SUCCESS) {
         throw new Error("Something went wrong");
       }
+    console.log('orderId: ' + response.data.data.order.id)
       dispatch({
         type: ORDER_ACTIONS.CREATE_ORDER,
         payload: response,

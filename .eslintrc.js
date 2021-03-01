@@ -14,13 +14,11 @@ module.exports = {
         "ecmaVersion": 12,
         "sourceType": "module"
     },
-
-    "rules": {
-
-    },
     // .eslintrc.js
     "plugins": ['eslint-plugin-import-helpers'],
     "rules": {
+        'no-unused-vars': 1,
+        'no-use-before-define': 1,
         'import-helpers/order-imports': [
             'warn',
             { // example configuration
