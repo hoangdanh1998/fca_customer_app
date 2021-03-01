@@ -2,7 +2,7 @@ import { SET_DESTINATION_LOCATION, SET_PARTNER_LOCATION } from "../actions/map";
 
 const initialState = {
     destinationLocation: null,
-    partnerLocation: {},
+    partnerLocation: null,
 }
 const mapReducer = (state = initialState, action) => {
     switch (action.type) {

@@ -5,6 +5,7 @@ import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { useSelector } from 'react-redux';
 import { KEY_GOOGLE_MAP } from "../../constants/index";
+import { setTrackingOrder } from "../../service/firebase/firebase-realtime";
 import { getDistance } from "../../service/google-api/google-map-api";
 
 const width = Dimensions.get("window").width;
@@ -16,17 +17,19 @@ const googleMapNavigation = () => {
   const createdOrder = useSelector(state => state.order.createdOrder);
 
   const [originDistance2Partner, setOriginDistance2Partner] = useState(0);
-  const [location, setLocation] = useState(null);
+  const [startLocation, setStartLocation] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
   const [totalTravel, setTotalTravel] = useState(0);
   // const [originLocation, setOriginLocation] = useState(null)
 
-  console.log('partnerLocation: ' + partnerLocation.latitude + ',' + partnerLocation.longitude)
-  console.log('destination: ' + destinationLocation.latitude + ',' + destinationLocation.longitude)
+  // console.log('partnerLocation: ' + partnerLocation.latitude + ',' + partnerLocation.longitude)
+  // console.log('destination: ' + destinationLocation.latitude + ',' + destinationLocation.longitude)
 
   const calculateDistance = async (currentLocation) => {
-    const lat1 = location.coords.latitude;
-    const lon1 = location.coords.longitude;
+    // console.log({ startLocation })
+    // console.log({ currentLocation })
+    const lat1 = startLocation.coords.latitude;
+    const lon1 = startLocation.coords.longitude;
     const lat2 = currentLocation.coords.latitude;
     const lon2 = currentLocation.coords.longitude;
 
@@ -41,8 +44,19 @@ const googleMapNavigation = () => {
       Math.cos(o1) * Math.cos(o2) * Math.sin(deltaL / 2) * Math.sin(deltaL / 2); //Haversine formula
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const d = R * c; //in metres
+    const travel = +(totalTravel + d);
+    console.log('my Distance: ' + travel)
+    setTotalTravel(travel);
+    if (totalTravel > originDistance2Partner / 10) {
+      const distance = await getDistance(currentLocation.coords, partnerLocation);
+      setTrackingOrder(createdOrder.id, distance.duration.text);
+    }
     return d;
   };
+
+  const updateTimeRemain = (currentLocation) => {
+
+  }
 
   useEffect(() => {
     (async () => {
@@ -51,7 +65,7 @@ const googleMapNavigation = () => {
         return;
       }
       let currentLocation = await Location.getCurrentPositionAsync({});
-      setLocation(currentLocation);
+      setStartLocation(currentLocation);
 
       setUserRegion({
         latitude: +currentLocation.coords.latitude,
@@ -61,7 +75,8 @@ const googleMapNavigation = () => {
       });
 
 
-      const distance = await getDistance(currentLocation.coords, partnerLocation)
+      const distance = await getDistance(currentLocation.coords, partnerLocation);
+      console.log({ distance })
       setOriginDistance2Partner(distance.distance.value)
 
     })();
@@ -87,16 +102,17 @@ const googleMapNavigation = () => {
       >
         <MapView
           style={styles.map}
+          showsTraffic
           showsUserLocation={true}
           onUserLocationChange={async () => {
             try {
-              const currentLocation = await Location.getCurrentPositionAsync({ accuracy: Location.Accuracy.High });
-              console.log(currentLocation)
+              const distance = calculateDistance(await Location.getCurrentPositionAsync({}));
+              // console.log('duration1 ' + await distance.json())
             } catch (err) {
-              console.log('Hello')
+              console.log(err)
+              console.log('Check connection')
             }
-            // const distance = calculateDistance(currentLocation);
-            // console.log(distance)
+
           }
           }
           showsScale
@@ -108,10 +124,10 @@ const googleMapNavigation = () => {
           region={userRegion}
         >
 
-          {location ? (<MapViewDirections
+          {startLocation ? (<MapViewDirections
             origin={{
-              latitude: +location.coords.latitude,
-              longitude: +location.coords.longitude,
+              latitude: +startLocation.coords.latitude,
+              longitude: +startLocation.coords.longitude,
             }}
             waypoints={[{
               latitude: +partnerLocation.latitude,
@@ -151,6 +167,7 @@ const googleMapNavigation = () => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     // position: "absolute",

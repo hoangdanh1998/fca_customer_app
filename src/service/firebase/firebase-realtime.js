@@ -1,9 +1,9 @@
-import * as firebase from 'firebase'
-export const setTrackingOrder = (orderId, timeRemain) => {
+import * as firebase from 'firebase';
+export const setTrackingOrder = (orderId, status, timeRemain) => {
     firebase.database().ref(orderId)
         .set({
             id: orderId,
-            timeRemain: timeRemain,
+            timeRemain,
         });
     return;
 }
