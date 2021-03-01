@@ -16,6 +16,8 @@ export const getDirection = async (originLocation, destination) => {
 };
 
 export const getDistance = async (originLocation, destination) => {
+    console.log({ originLocation })
+    console.log({ destination })
     const response = await fetch(
         `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=${originLocation.latitude},${originLocation.longitude}&destinations=${destination.latitude},${destination.longitude}&key=${KEY_GOOGLE_MAP}`,
         {
@@ -26,6 +28,7 @@ export const getDistance = async (originLocation, destination) => {
             },
         }
     )
-    return response.json().rows[0].elements[0];
+    const responseJson = await response.json();
+    return responseJson.rows[0].elements[0];
 }
 
