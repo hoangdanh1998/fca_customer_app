@@ -27,6 +27,7 @@
     "title-history-order": "Đơn hàng của tôi",
     "title-qrcode-information": "Xác thực nhận hàng",
     "title-navigation-tracking": "Tìm đường",
+    "title-notification": "Thông báo",
 
     "wording-item": "món",
     "wording-my-orders": "Đơn hàng của tôi",
@@ -35,6 +36,8 @@
     "wording-done": "Hoàn tất",
     "wording-next": "Tiếp theo",
     "wording-order": "Đặt hàng",
+    "wording-success": "Success",
+    "wording-fail": "Thất bại",
     "wording-feedback": "Đánh giá",
     "wording-cancel-order": "Huỷ đơn hàng",
     "wording-too-much-item": "Bạn chỉ có thể đặt tối đa 2 món trong một đơn hàng",
@@ -47,5 +50,6 @@
     "wording-direction": "Chỉ đường",
     "wording-error-location": "Bạn chưa cấp quyền truy cập vị trí",
     "wording-timeline": "Dòng thời gian",
-    "wording-search-destination": "Bạn muốn đi đâu?"
+    "wording-search-destination": "Bạn muốn đi đâu?",
+    "wording-order-fail": "Đặt hàng thất bại"
 }

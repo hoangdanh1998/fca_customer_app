@@ -11,9 +11,10 @@ import { createOrder } from "../../redux/actions/order";
 import FocusedButton from "../../components/atoms/focused-button/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import ProcessingModal from "../../components/molecules/processing-modal/index";
+import NotificationModal from "../../components/atoms/notification-modal/index";
 import { LANGUAGE, MESSAGES } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
-import { OrderStatus } from "../../constants/index";
+import { OrderStatus, NOTICE_DURATION } from "../../constants/index";
 import { setStoreSuggestion } from "../../redux/actions/store";
 
 Notifications.setNotificationHandler({
@@ -34,6 +35,9 @@ const CreateOrder = (props) => {
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
   console.log("Before" + bestSuggestion.name, suggestionStores.length);
   const [visibleTimer, setVisibleTimer] = useState(false);
+  const [visibleNotificationModal, setVisibleNotificationModal] = useState(
+    false
+  );
 
   const submitOrder = useCallback(async () => {
     try {
@@ -61,9 +65,12 @@ const CreateOrder = (props) => {
         })
       );
     } catch (error) {
-      // handleHideProcessingModal();
+      console.log("SubmitOrderError", error);
       setVisibleTimer(false);
-      alert("Submit order fail");
+      setVisibleNotificationModal(true);
+      setTimeout(() => {
+        setVisibleNotificationModal(false);
+      }, NOTICE_DURATION);
     }
   }, [dispatch]);
 
@@ -156,6 +163,10 @@ const CreateOrder = (props) => {
           />
         </View>
       </Footer>
+      <NotificationModal
+        message={MESSAGES.FAIL}
+        visible={visibleNotificationModal}
+      />
     </>
   );
 };
