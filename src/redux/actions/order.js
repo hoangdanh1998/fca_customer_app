@@ -18,7 +18,7 @@ export const createOrder = (param) => {
 export const getOrder = (param) => {
   return async (dispatch) => {
     const response = await api.get(`/order/${param}`);
-    if (response.data.meta.status !== "SUCCESS") {
+    if (response.data.meta.status !== ResponseStatus.SUCCESS) {
       throw new Error("Something went wrong");
     }
 
@@ -32,7 +32,7 @@ export const getOrder = (param) => {
 export const getHistory = (param) => {
   return async (dispatch) => {
     const response = await api.get(`/order?customerPhone=${param}`);
-    if (response.data.meta.status !== "SUCCESS") {
+    if (response.data.meta.status !== ResponseStatus.SUCCESS) {
       throw new Error("Something went wrong");
     }
 

@@ -1,11 +1,11 @@
 import * as Location from "expo-location";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View, ActivityIndicator } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { useDispatch, useSelector } from 'react-redux';
-import { KEY_GOOGLE_MAP, LANGUAGE } from "../../constants/index";
+import { KEY_GOOGLE_MAP, LANGUAGE, PRIMARY_LIGHT_COLOR } from "../../constants/index";
 import { IMLocalized, init } from '../../i18n/IMLocalized';
 import { setDestination, setPartnerLocation } from "../../redux/actions/map";
 import { setPartner } from '../../redux/actions/partner';
@@ -23,22 +23,32 @@ init(LANGUAGE.VI);
 const MapScreen = () => {
   const dispatch = useDispatch();
   const mapRef = useRef(null);
-  
+
   const detailsGeometry = useSelector(state => state.map.detailsGeometry);
   const suggestionStores = useSelector(state => state.store.suggestionStores);
   const bestSuggestion = useSelector(state => state.store.bestSuggestion);
   const partner = useSelector(state => state.partner.partner);
 
+
   const [location, setLocation] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
   const [isShowPopup, setIsShowPopup] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
 
   const handleSetDetailsGeometry = useCallback((details) => {
     dispatch(setDestination(details));
   })
 
   const getSuggestionStore = async (destination) => {
-    await dispatch(getStoreSuggestion(location.coords, destination));
+    try {
+      setError();
+      setIsLoading(true);
+      await dispatch(getStoreSuggestion(location.coords, destination));
+    } catch (error) {
+      setError(error.message);
+    }
+    setIsLoading(false);
   };
 
   const setSelectedStore = (store) => {
@@ -142,7 +152,7 @@ const MapScreen = () => {
           provider={PROVIDER_GOOGLE}
           region={userRegion}
           ref={mapRef}
-        > 
+        >
           {userRegion && detailsGeometry ? (
             <MapViewDirections
               origin={{
@@ -174,17 +184,17 @@ const MapScreen = () => {
             ? suggestionStores.map((store) => {
               if (store.id == bestSuggestion.id) {
                 return (
-                <Marker
-                  pinColor="blue"
-                  key={store.id}
-                  title={store.name}
-                  destination={store.address.description}
-                  coordinate={{
-                    latitude: +store.address.latitude,
-                    longitude: +store.address.longitude,
-                  }}
-                  moveOnMarkerPress
-                  onPress={() => setSelectedStore(store)}
+                  <Marker
+                    pinColor="blue"
+                    key={store.id}
+                    title={store.name}
+                    destination={store.address.description}
+                    coordinate={{
+                      latitude: +store.address.latitude,
+                      longitude: +store.address.longitude,
+                    }}
+                    moveOnMarkerPress
+                    onPress={() => setSelectedStore(store)}
                   />)
               } else {
                 return (<Marker
@@ -209,33 +219,50 @@ const MapScreen = () => {
   useEffect(() => {
     (async () => {
       console.log('useEffect')
-      let { status } = await Location.requestPermissionsAsync();
-      if (status !== "granted") {
-        console.log("Permission to access location was denied");
-        return;
-      }
+      
 
-      let location = await Location.getCurrentPositionAsync({});
-      setLocation(location);
-      if (bestSuggestion) {
-        setUserRegion({
-          latitude: +bestSuggestion.address.latitude,
-          longitude: +bestSuggestion.address.longitude,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.05,
-        });
-        dispatch(setPartner(bestSuggestion))
-      } else {
-        setUserRegion({
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.05,
-        }); 
-      }
+      try {
+        setError();
+        setIsLoading(true);
+        let { status } = await Location.requestPermissionsAsync();
+        if (status !== "granted") {
+          console.log("Permission to access location was denied");
+          return;
+        }
 
+        let location = await Location.getCurrentPositionAsync({});
+        setLocation(location);
+        if (bestSuggestion) {
+          setUserRegion({
+            latitude: +bestSuggestion.address.latitude,
+            longitude: +bestSuggestion.address.longitude,
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05,
+          });
+          dispatch(setPartner(bestSuggestion))
+        } else {
+          setUserRegion({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.05,
+            longitudeDelta: 0.05,
+          });
+        }
+
+      } catch (error) {
+        setError(error.message);
+      }
+      setIsLoading(false);
     })();
   }, [bestSuggestion]);
+
+  if (isLoading) {
+    return (
+      <View style={styles.centered}>
+        <ActivityIndicator size="large" color={PRIMARY_LIGHT_COLOR} />
+      </View>
+    )
+  };
 
   return (
     <View
@@ -291,6 +318,11 @@ const styles = StyleSheet.create({
     width,
     height,
     position: "relative",
+  },
+  centered: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center"
   },
 });
 export default MapScreen;
