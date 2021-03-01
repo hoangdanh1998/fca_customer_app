@@ -7,13 +7,13 @@ export const setTrackingOrder = (orderId, timeRemain) => {
   return;
 };
 
-export const getOrderOnChange = (orderId, orderStatus) => {
+export const getOrderOnChange = (orderId, order) => {
   if (orderId) {
     firebase
       .database()
       .ref(orderId)
       .on("value", (snapshot) => {
-        orderStatus(snapshot.val().status);
+        order(snapshot.val());
       });
   }
 };

@@ -21,11 +21,15 @@ const NotificationModal = (props) => {
             //     : "checkmark-circle-outline"
             // }
             name={
-              message === MESSAGES.FAIL
+              message === MESSAGES.FAIL || message === MESSAGES.REJECTED
                 ? "close-circle-outline"
                 : "checkmark-circle-outline"
             }
-            style={message === MESSAGES.FAIL ? styles.fail : styles.success}
+            style={
+              message === MESSAGES.FAIL || message === MESSAGES.REJECTED
+                ? styles.fail
+                : styles.success
+            }
           />
         </CardItem>
         <CardItem style={{ flex: 1 }}>
