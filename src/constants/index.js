@@ -78,3 +78,5 @@ export const ResponseStatus = {
   SUCCESS: "SUCCESS",
   INVALID: "INVALID",
 };
+
+export const ID_ACCOUNT = "67babaeb-3a80-4c35-8695-0305083e88fd";

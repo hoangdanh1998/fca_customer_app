@@ -1,5 +1,7 @@
 import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
+import { updateExpoToken } from '../account/account';
+import {ID_ACCOUNT} from '../../constants/index'
 
 export const registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
@@ -14,6 +16,12 @@ export const registerForPushNotificationsAsync = async () => {
             return;
         }
         const token = (await Notifications.getExpoPushTokenAsync()).data;
+        try {
+            await updateExpoToken(token, ID_ACCOUNT);
+        } catch (error) {
+            console.error(error);
+        }
+        
         console.log(token);
     } else {
         alert('Must use physical device for Push Notifications');

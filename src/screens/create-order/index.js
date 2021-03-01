@@ -1,13 +1,10 @@
-/* eslint-disable react/prop-types */
+import { withNavigation } from "@react-navigation/compat";
 import * as Location from "expo-location";
+import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
+import { Content, Footer, View } from "native-base";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Content, Footer, View } from "native-base";
-import * as Notifications from "expo-notifications";
-import { withNavigation } from "@react-navigation/compat";
-
-import { createOrder } from "../../redux/actions/order";
 import FocusedButton from "../../components/atoms/focused-button/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import ProcessingModal from "../../components/molecules/processing-modal/index";
@@ -20,7 +17,7 @@ import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
-    shouldShowAlert: true,
+    shouldShowAlert: false,
     shouldPlaySound: true,
     shouldSetBadge: true,
   }),
