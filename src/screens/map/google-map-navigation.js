@@ -47,16 +47,14 @@ const googleMapNavigation = () => {
     const travel = +(totalTravel + d);
     console.log('my Distance: ' + travel)
     setTotalTravel(travel);
-    if (totalTravel > originDistance2Partner / 10) {
+    if (totalTravel > originDistance2Partner / 10000) {
       const distance = await getDistance(currentLocation.coords, partnerLocation);
       setTrackingOrder(createdOrder.id, distance.duration.text);
     }
     return d;
   };
 
-  const updateTimeRemain = (currentLocation) => {
-
-  }
+  
 
   useEffect(() => {
     (async () => {
