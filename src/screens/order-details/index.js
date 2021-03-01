@@ -63,7 +63,6 @@ const OrderDetails = (props) => {
               name={MESSAGES.DIRECTION}
               disable={false}
               onPress={() => {
-                console.log("hello");
                 navigateToNavigationPage();
               }}
             />

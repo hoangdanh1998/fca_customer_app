@@ -1,20 +1,16 @@
 import * as Location from "expo-location";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Dimensions, StyleSheet, View, ActivityIndicator } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { ActivityIndicator, Dimensions, StyleSheet, View } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { useDispatch, useSelector } from 'react-redux';
 import { KEY_GOOGLE_MAP, LANGUAGE, PRIMARY_LIGHT_COLOR } from "../../constants/index";
 import { IMLocalized, init } from '../../i18n/IMLocalized';
-import { setDestination, setPartnerLocation } from "../../redux/actions/map";
+import { setDestinationLocation, setPartnerLocation } from "../../redux/actions/map";
 import { setPartner } from '../../redux/actions/partner';
 import { getStoreSuggestion } from '../../redux/actions/store';
 import PopupStore from './popup-store';
-
-
-
-
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -23,8 +19,8 @@ init(LANGUAGE.VI);
 const MapScreen = () => {
   const dispatch = useDispatch();
   const mapRef = useRef(null);
-
-  const detailsGeometry = useSelector(state => state.map.detailsGeometry);
+  
+  const destinationLocation = useSelector(state => state.map.destinationLocation);
   const suggestionStores = useSelector(state => state.store.suggestionStores);
   const bestSuggestion = useSelector(state => state.store.bestSuggestion);
   const partner = useSelector(state => state.partner.partner);
@@ -36,9 +32,9 @@ const MapScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
 
-  const handleSetDetailsGeometry = useCallback((details) => {
-    dispatch(setDestination(details));
-  })
+  const handleSetDetailsGeometry = (location) => {
+    dispatch(setDestinationLocation(location));
+  }
 
   const getSuggestionStore = async (destination) => {
     try {
@@ -135,10 +131,10 @@ const MapScreen = () => {
     );
   };
 
-
   const mapView = () => {
     // console.log("userRegion", userRegion);
     return (
+
       <View style={{ flex: 1 }}>
         <MapView
           style={styles.map}
@@ -152,16 +148,16 @@ const MapScreen = () => {
           provider={PROVIDER_GOOGLE}
           region={userRegion}
           ref={mapRef}
-        >
-          {userRegion && detailsGeometry ? (
+        > 
+          {userRegion && destinationLocation ? (
             <MapViewDirections
               origin={{
                 latitude: location.coords.latitude,
                 longitude: location.coords.longitude,
               }}
               destination={{
-                latitude: detailsGeometry.latitude,
-                longitude: detailsGeometry.longitude,
+                latitude: destinationLocation.latitude,
+                longitude: destinationLocation.longitude,
               }}
               apikey={KEY_GOOGLE_MAP}
               strokeWidth={4}
@@ -170,14 +166,13 @@ const MapScreen = () => {
             />
           ) : null}
 
-          {detailsGeometry ? (
+          {destinationLocation ? (
             <Marker
               coordinate={{
-                latitude: detailsGeometry.latitude,
-                longitude: detailsGeometry.longitude,
+                latitude: destinationLocation.latitude,
+                longitude: destinationLocation.longitude,
               }}
             >
-
             </Marker>
           ) : null}
           {suggestionStores
@@ -211,12 +206,12 @@ const MapScreen = () => {
               }
             }
             ) : null}
-        </MapView>
+        </ MapView>
       </View>
     );
   };
 
-  useEffect(() => {
+  useEffect(() => { 
     (async () => {
       console.log('useEffect')
       
@@ -240,6 +235,7 @@ const MapScreen = () => {
             longitudeDelta: 0.05,
           });
           dispatch(setPartner(bestSuggestion))
+          dispatch(setPartnerLocation(bestSuggestion.address)) 
         } else {
           setUserRegion({
             latitude: location.coords.latitude,

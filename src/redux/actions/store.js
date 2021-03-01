@@ -1,6 +1,6 @@
 import { STORE_ACTIONS } from "../action-types/actions";
 import { ResponseStatus } from "../../constants/index";
-export const SET_PARTNER_LOCATION = "SET_PARTNER_LOCATION ";
+
 import api from "../../service/fca-api/fca-api";
 import { getDirection } from '../../service/google-api/google-map-api'
 
