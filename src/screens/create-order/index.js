@@ -16,6 +16,7 @@ import { LANGUAGE, MESSAGES } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { OrderStatus, NOTICE_DURATION } from "../../constants/index";
 import { setStoreSuggestion } from "../../redux/actions/store";
+import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -33,6 +34,7 @@ const CreateOrder = (props) => {
 
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
+  const createdOrder = useSelector((state) => state.order.createdOrder);
   console.log("Before" + bestSuggestion.name, suggestionStores.length);
   const [visibleTimer, setVisibleTimer] = useState(false);
   const [visibleNotificationModal, setVisibleNotificationModal] = useState(
@@ -96,6 +98,7 @@ const CreateOrder = (props) => {
     }
     props.navigation.navigate("MAP_VIEW", { isAfterCreate: true });
   };
+
   const handleAcceptedOrder = () => {
     setVisibleTimer(false);
     props.navigation.navigate("ORDER_DETAIL", {
@@ -108,15 +111,6 @@ const CreateOrder = (props) => {
   useEffect(() => {
     notificationListener.current = Notifications.addNotificationReceivedListener(
       (notification) => {
-        if (notification.request.content.title === "Confirmation") {
-          if (
-            notification.request.content.data.status === OrderStatus.ACCEPTANCE
-          ) {
-            handleAcceptedOrder();
-          } else {
-            handleRejectedOrder();
-          }
-        }
         if (notification.request.content.title === "Confirm order") {
           console.log(notification.request.content.data.qrCode);
           linkToQRCodeScreen(notification.request.content.data.qrCode);
@@ -136,11 +130,23 @@ const CreateOrder = (props) => {
       }
     );
 
+    if (createdOrder.id) {
+      console.log("createdOrder", createdOrder.id);
+      getOrderOnChange(createdOrder.id, (status) => {
+        if (status === OrderStatus.ACCEPTANCE) {
+          handleAcceptedOrder();
+        }
+        if (status === OrderStatus.REJECTION) {
+          handleRejectedOrder();
+        }
+      });
+    }
+
     return () => {
       Notifications.removeNotificationSubscription(notificationListener);
       Notifications.removeNotificationSubscription(responseListener);
     };
-  }, []);
+  }, [dispatch, createdOrder]);
   return (
     <>
       <Content>
