@@ -13,6 +13,7 @@ import { LANGUAGE, MESSAGES } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { OrderStatus, NOTICE_DURATION } from "../../constants/index";
 import { setStoreSuggestion } from "../../redux/actions/store";
+import { createOrder } from "../../redux/actions/order";
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 
 Notifications.setNotificationHandler({
@@ -107,40 +108,10 @@ const CreateOrder = (props) => {
     });
   };
 
-  const handleReceiveQRCode = (qrCode, orderId) => {
-    console.log("handleReceiveQRCode", qrCode);
-    props.navigation.navigate("QR_CODE", {
-      qrCode: qrCode,
-      orderId: orderId,
-    });
-  };
-
   const notificationListener = useRef();
   const responseListener = useRef();
   useEffect(() => {
-    // notificationListener.current = Notifications.addNotificationReceivedListener(
-    //   (notification) => {
-    //     if (notification.request.content.title === "Confirm order") {
-    //       console.log(notification.request.content.data.qrCode);
-    //       linkToQRCodeScreen(notification.request.content.data.qrCode);
-    //     }
-    //   }
-    // );
-
-    // const linkToQRCodeScreen = (qrCode) => {
-    //   props.navigation.navigate("QR_CODE", {
-    //     qrCode,
-    //   });
-    // };
-
-    // responseListener.current = Notifications.addNotificationResponseReceivedListener(
-    //   (response) => {
-    //     console.log({ response });
-    //   }
-    // );
-
     if (createdOrder.id) {
-      console.log("createdOrder", createdOrder.id);
       getOrderOnChange(createdOrder.id, (order) => {
         if (order.status === OrderStatus.ACCEPTANCE) {
           handleAcceptedOrder();
@@ -148,16 +119,8 @@ const CreateOrder = (props) => {
         if (order.status === OrderStatus.REJECTION) {
           handleRejectedOrder();
         }
-        if (order.qrcode && order.qrcode != "") {
-          handleReceiveQRCode(order.qrCode, createdOrder.id);
-        }
       });
     }
-
-    // return () => {
-    //   Notifications.removeNotificationSubscription(notificationListener);
-    //   Notifications.removeNotificationSubscription(responseListener);
-    // };
   }, [dispatch, createdOrder]);
 
   return (
