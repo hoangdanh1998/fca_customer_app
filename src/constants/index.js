@@ -34,6 +34,8 @@ export const MESSAGES = {
   DIRECTION: "direction",
   FEEDBACK: "feedback",
   HOME: "home",
+  SUCCESS: "success",
+  FAIL: "fail",
 };
 
 // APP STATUS

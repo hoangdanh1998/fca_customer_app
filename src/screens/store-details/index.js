@@ -1,5 +1,14 @@
 import { CART_MENU_DRINK, MENU_DRINK } from "../../constants/seeding";
-import { Card, Content, Footer, Header, List, Root, Text, Toast } from "native-base";
+import {
+  Card,
+  Content,
+  Footer,
+  Header,
+  List,
+  Root,
+  Text,
+  Toast,
+} from "native-base";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
   LANGUAGE,
@@ -16,8 +25,6 @@ import StoreProfile from "../../components/molecules/store-profile/index";
 import { getPartnerInformation } from "../../redux/actions/partner";
 import { styles } from "./styles";
 import { withNavigation } from "@react-navigation/compat";
-
-
 
 const StoreDetails = (props) => {
   init(LANGUAGE.VI);
@@ -53,7 +60,6 @@ const StoreDetails = (props) => {
   }, [dispatch, loadPartner]);
 
   // ================================= HANDLE UI =================================
-
 
   const updateCart = (item, quantity) => {
     var newCart = { ...cart };
@@ -105,9 +111,6 @@ const StoreDetails = (props) => {
   //   }
   // })
 
-
-  
-  
   return (
     <Root>
       <Content style={styles.content}>
@@ -126,7 +129,6 @@ const StoreDetails = (props) => {
                 drink={item}
                 cart={cart.quantity}
               />
-
             )}
           />
         </Card>

@@ -26,6 +26,7 @@
     "title-order-information": "Order Details",
     "title-qrcode-information":"Confirm receive order",
     "title-history-order": "My orders",
+    "title-notification": "Notification",
 
     "wording-item": "item(s)",
     "wording-my-orders": "My Orders",
@@ -34,6 +35,8 @@
     "wording-done": "Done",
     "wording-next": "Next",
     "wording-order": "Order",
+    "wording-success": "Success",
+    "wording-fail": "Fail",
     "wording-cancel-order": "Cancel",
     "wording-feedback": "Feedback",
     "wording-too-much-item": "You can only order up to 2 items in an order",
@@ -47,4 +50,6 @@
     "wording-error-location": "We don't have permission to access your location",
     "wording-timeline": "Timeline",
     "wording-search-destination": "Where do you want to go?",
+    "wording-order-fail": "Order failed"
+    
 }

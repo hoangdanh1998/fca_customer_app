@@ -9,22 +9,27 @@ import { LANGUAGE, MESSAGES } from "../../../constants/index";
 const NotificationModal = (props) => {
   init(LANGUAGE.VI);
   const message = props.message;
+  const visible = props.visible;
   return (
-    <Modal animationType="slide" transparent visible={true}>
+    <Modal animationType="slide" transparent visible={visible}>
       <Card style={styles.card}>
         <CardItem style={{ flex: 1 }}>
           <Icon
-            android={
-              message === MESSAGES.REJECTED
-                ? "close-circle-outline"
-                : "checkmark-circle-outline"
-            }
+            // android={
+            //   message === MESSAGES.REJECTED
+            //     ? "close-circle-outline"
+            //     : "checkmark-circle-outline"
+            // }
             name={
-              message === MESSAGES.REJECTED
+              message === MESSAGES.FAIL || message === MESSAGES.REJECTED
                 ? "close-circle-outline"
                 : "checkmark-circle-outline"
             }
-            style={message === MESSAGES.REJECTED ? styles.fail : styles.success}
+            style={
+              message === MESSAGES.FAIL || message === MESSAGES.REJECTED
+                ? styles.fail
+                : styles.success
+            }
           />
         </CardItem>
         <CardItem style={{ flex: 1 }}>
