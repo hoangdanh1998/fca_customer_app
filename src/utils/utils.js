@@ -12,7 +12,6 @@ export const convertStringToCamel = (str) => {
 
 init(LANGUAGE.VI);
 export const convertTransaction = (transactions) => {
-  console.log("input", transactions);
   const result = transactions.map((transaction) => {
     return {
       time: moment(transaction.createdAt, DATE_TIME_FORMAT_CALL_API).format(
@@ -24,6 +23,5 @@ export const convertTransaction = (transactions) => {
       ),
     };
   });
-  console.log("output", result);
   return result;
 };

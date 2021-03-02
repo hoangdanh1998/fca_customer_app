@@ -1,6 +1,6 @@
 import { withNavigation } from "@react-navigation/compat";
 import * as Location from "expo-location";
-import * as Notifications from 'expo-notifications';
+import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 import { Content, Footer, View } from "native-base";
 import React, { useCallback, useEffect, useRef, useState } from "react";
@@ -8,12 +8,13 @@ import { useDispatch, useSelector } from "react-redux";
 import FocusedButton from "../../components/atoms/focused-button/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import ProcessingModal from "../../components/molecules/processing-modal/index";
-import { LANGUAGE, MESSAGES, OrderStatus } from "../../constants/index";
+import NotificationModal from "../../components/atoms/notification-modal/index";
+import { LANGUAGE, MESSAGES } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
+import { OrderStatus, NOTICE_DURATION } from "../../constants/index";
+import { setStoreSuggestion } from "../../redux/actions/store";
 import { createOrder } from "../../redux/actions/order";
-import { setStoreSuggestion } from '../../redux/actions/store';
-
-
+import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -31,8 +32,12 @@ const CreateOrder = (props) => {
 
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
+  const createdOrder = useSelector((state) => state.order.createdOrder);
   console.log("Before" + bestSuggestion.name, suggestionStores.length);
   const [visibleTimer, setVisibleTimer] = useState(false);
+  const [visibleNotificationModal, setVisibleNotificationModal] = useState(
+    false
+  );
 
   const submitOrder = useCallback(async () => {
     try {
@@ -60,9 +65,12 @@ const CreateOrder = (props) => {
         })
       );
     } catch (error) {
-      // handleHideProcessingModal();
+      console.log("SubmitOrderError", error);
       setVisibleTimer(false);
-      alert("Submit order fail");
+      setVisibleNotificationModal(true);
+      setTimeout(() => {
+        setVisibleNotificationModal(false);
+      }, NOTICE_DURATION);
     }
   }, [dispatch]);
 
@@ -78,6 +86,10 @@ const CreateOrder = (props) => {
 
   const handleRejectedOrder = () => {
     setVisibleTimer(false);
+    setVisibleNotificationModal(true);
+    setTimeout(() => {
+      setVisibleNotificationModal(false);
+    }, NOTICE_DURATION);
     const length = suggestionStores.length;
     if (length > 1) {
       const newSuggestion = suggestionStores[length - 2];
@@ -88,6 +100,7 @@ const CreateOrder = (props) => {
     }
     props.navigation.navigate("MAP_VIEW", { isAfterCreate: true });
   };
+
   const handleAcceptedOrder = () => {
     setVisibleTimer(false);
     props.navigation.navigate("ORDER_DETAIL", {
@@ -98,41 +111,18 @@ const CreateOrder = (props) => {
   const notificationListener = useRef();
   const responseListener = useRef();
   useEffect(() => {
-    notificationListener.current = Notifications.addNotificationReceivedListener(
-      (notification) => {
-        if (notification.request.content.title === "Confirmation") {
-          if (
-            notification.request.content.data.status === OrderStatus.ACCEPTANCE
-          ) {
-            handleAcceptedOrder();
-          } else {
-            handleRejectedOrder();
-          }
+    if (createdOrder.id) {
+      getOrderOnChange(createdOrder.id, (order) => {
+        if (order.status === OrderStatus.ACCEPTANCE) {
+          handleAcceptedOrder();
         }
-        if (notification.request.content.title === "Confirm order") {
-          console.log(notification.request.content.data.qrCode);
-          linkToQRCodeScreen(notification.request.content.data.qrCode);
+        if (order.status === OrderStatus.REJECTION) {
+          handleRejectedOrder();
         }
-      }
-    );
-
-    const linkToQRCodeScreen = (qrCode) => {
-      props.navigation.navigate("QR_CODE", {
-        qrCode,
       });
-    };
+    }
+  }, [dispatch, createdOrder]);
 
-    responseListener.current = Notifications.addNotificationResponseReceivedListener(
-      (response) => {
-        console.log({ response });
-      }
-    );
-
-    return () => {
-      Notifications.removeNotificationSubscription(notificationListener);
-      Notifications.removeNotificationSubscription(responseListener);
-    };
-  }, []);
   return (
     <>
       <Content>
@@ -155,6 +145,10 @@ const CreateOrder = (props) => {
           />
         </View>
       </Footer>
+      <NotificationModal
+        message={MESSAGES.REJECTED}
+        visible={visibleNotificationModal}
+      />
     </>
   );
 };

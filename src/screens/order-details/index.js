@@ -17,6 +17,7 @@ import {
 import { ORDER_TRANSACTIONS } from "../../constants/seeding";
 import { init } from "../../i18n/IMLocalized";
 import { convertTransaction } from "../../utils/utils";
+import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 
 init(LANGUAGE.VI);
 const OrderDetails = (props) => {
@@ -31,8 +32,23 @@ const OrderDetails = (props) => {
     convertTransaction(ORDER_TRANSACTIONS)
   );
 
+  const handleReceiveQRCode = (qrCode, orderId) => {
+    console.log("handleReceiveQRCode", qrCode);
+    props.navigation.navigate("QR_CODE", {
+      qrCode: qrCode,
+      orderId: orderId,
+    });
+  };
+
   useEffect(() => {
     setConvertedTransactions(convertTransaction(transactions));
+    if (order.id) {
+      getOrderOnChange(order.id, (order) => {
+        if (order.qrcode && order.qrcode != "") {
+          handleReceiveQRCode(order.qrcode, order.id);
+        }
+      });
+    }
   }, []);
 
   const navigateToNavigationPage = () => {
