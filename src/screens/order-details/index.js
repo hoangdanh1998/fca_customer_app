@@ -1,35 +1,39 @@
-/* eslint-disable react/prop-types */
-import { withNavigation } from "@react-navigation/compat";
-import moment from "moment";
 import { Content, Footer, View } from "native-base";
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import FocusedButton from "../../components/atoms/focused-button/index";
-import UnFocusedButton from "../../components/atoms/unfocused-button/index";
-import TimelineTransaction from "../../components/atoms/timeline-transaction/index";
-import OrderDetail from "../../components/molecules/order-details/index";
 import {
   DATE_FORMAT,
   DATE_FORMAT_CALL_API,
   LANGUAGE,
   MESSAGES,
 } from "../../constants/index";
-import { ORDER_TRANSACTIONS } from "../../constants/seeding";
-import { init } from "../../i18n/IMLocalized";
+import React, { useEffect, useState } from "react";
+
+import FocusedButton from "../../components/atoms/focused-button/index";
+import OrderDetail from "../../components/molecules/order-details/index";
+import TimelineTransaction from "../../components/atoms/timeline-transaction/index";
+import UnFocusedButton from "../../components/atoms/unfocused-button/index";
 import { convertTransaction } from "../../utils/utils";
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
+// import { ORDER_TRANSACTIONS } from "../../constants/seeding";
+import { init } from "../../i18n/IMLocalized";
+import moment from "moment";
+import { useSelector } from "react-redux";
+/* eslint-disable react/prop-types */
+import { withNavigation } from "@react-navigation/compat";
 
 init(LANGUAGE.VI);
 const OrderDetails = (props) => {
+  const [StatusOrder, setStatusOder] = useState("");
+  const transactionOrder=[];
+  const [TransactionState, setTransactionState] = useState(transactionOrder)
   const isAfterCreate = props.route.params.isAfterCreate;
 
   const order = useSelector((state) => {
     return state.order.createdOrder;
   });
 
-  const [transactions, setTransactions] = useState(ORDER_TRANSACTIONS);
+  // const [transactions, setTransactions] = useState(ORDER_TRANSACTIONS);
   const [convertedTransactions, setConvertedTransactions] = useState(
-    convertTransaction(ORDER_TRANSACTIONS)
+    convertTransaction(TransactionState)
   );
 
   const handleReceiveQRCode = (qrCode, orderId) => {
@@ -39,13 +43,22 @@ const OrderDetails = (props) => {
       orderId: orderId,
     });
   };
+  
+  const handleStatusChange=(status, moment) => {
+    transactionOrder.push({toStatus: status, createdAt: moment});
+    console.log("OderStatusArray: ",transactionOrder);
+  }
 
   useEffect(() => {
-    setConvertedTransactions(convertTransaction(transactions));
+    setConvertedTransactions(convertTransaction(TransactionState));
     if (order.id) {
       getOrderOnChange(order.id, (order) => {
         if (order.qrcode && order.qrcode != "") {
           handleReceiveQRCode(order.qrcode, order.id);
+        }
+        if (order.status != StatusOrder) {
+          setStatusOder(order.status);
+          handleStatusChange(order.status, moment());
         }
       });
     }
