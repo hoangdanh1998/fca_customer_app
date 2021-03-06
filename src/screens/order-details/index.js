@@ -27,11 +27,11 @@ const OrderDetails = (props) => {
   });
   const isAfterCreate = props.route.params.isAfterCreate;
   const firstTransaction = [
+    { createdAt: moment(), toStatus: OrderStatus.ACCEPTANCE },
     {
       createdAt: moment(order.createdAt),
       toStatus: OrderStatus.INITIALIZATION,
     },
-    { createdAt: moment(), toStatus: OrderStatus.ACCEPTANCE },
   ];
 
   const handleReceiveQRCode = (qrCode, orderId) => {
@@ -46,8 +46,7 @@ const OrderDetails = (props) => {
     const newTransaction = Array.from(transactionState, (transaction) => {
       return transaction;
     });
-    newTransaction.push({ createdAt: moment(), toStatus: newStatus });
-    console.log("handleAddTransaction", newTransaction);
+    newTransaction.unshift({ createdAt: moment(), toStatus: newStatus });
     setTransactionState(newTransaction);
   };
 
@@ -58,10 +57,7 @@ const OrderDetails = (props) => {
         if (order.qrcode && order.qrcode != "") {
           handleReceiveQRCode(order.qrcode, order.id);
         }
-        if (
-          transactionState[transactionState.length - 1].toStatus !==
-          order.status
-        ) {
+        if (transactionState[0].toStatus !== order.status) {
           handleAddTransaction(order.status);
         }
       });
