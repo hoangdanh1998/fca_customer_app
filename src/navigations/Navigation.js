@@ -20,6 +20,7 @@ import OrderDetails from "../screens/order-details";
 import React from "react";
 import StoreDetails from "../screens/store-details";
 import DeliveryOrder from "../screens/delivery-order";
+import MyProfile from "../screens/my-profile";
 import googleMapNavigation from "../screens/map/google-map-navigation";
 
 const Stack = createStackNavigator();
@@ -58,6 +59,9 @@ export default function Navigation() {
                 <Icon
                   name="person-circle-outline"
                   style={{ color: LIGHT_COLOR }}
+                  onPress={() => {
+                    navigation.navigate("MY_PROFILE");
+                  }}
                 />
               </View>
             ),
@@ -139,6 +143,18 @@ export default function Navigation() {
           component={googleMapNavigation}
           options={{
             title: IMLocalized("title-navigation-tracking"),
+            headerTintColor: LIGHT_COLOR,
+            headerStyle: {
+              backgroundColor: DARK_COLOR,
+            },
+            headerLeft: HeaderBackButton,
+          }}
+        />
+        <Stack.Screen
+          name="MY_PROFILE"
+          component={MyProfile}
+          options={{
+            title: IMLocalized("title-my-profile"),
             headerTintColor: LIGHT_COLOR,
             headerStyle: {
               backgroundColor: DARK_COLOR,

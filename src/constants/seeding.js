@@ -304,3 +304,36 @@ export const ORDER_TRANSACTIONS = [
     fault: null,
   },
 ];
+
+export const MY_PROFILE = {
+  id: "4ceee651-7dea-4a0f-b517-b49166cb6cfb",
+  createdAt: "2021-02-07T04:46:45.881Z",
+  updatedAt: "2021-02-07T04:46:45.881Z",
+  deletedAt: null,
+  name: "Phan Nguyễn Kim Anh",
+  status: "APPROVED",
+  phone: "0931794393",
+  imageLink:
+    "http://retaildesignblog.net/wp-content/uploads/2016/07/GENERAL-SUPPLY-store-and-cafe-Nagoya-Japan.jpg",
+  currentAmount: 445000,
+  address: {
+    id: "4ceee651-7dea-4a0f-b517-b49166cb6cfb",
+    createdAt: "2021-02-07T04:45:39.297Z",
+    updatedAt: "2021-02-07T04:45:39.297Z",
+    deletedAt: null,
+    description:
+      "7A Tổ1 KP2 NVQ, Tân Thới Hiệp, Quận 12, Thành phố Hồ Chí Minh, Việt Nam",
+    latitude: "10.8593771",
+    longitude: "106.6285259",
+  },
+  account: {
+    id: "76babaeb-3a80-4c35-8695-0305083e88fd",
+    createdAt: "2021-02-19T14:18:09.304Z",
+    updatedAt: "2021-02-19T14:22:22.160Z",
+    deletedAt: null,
+    phone: "0931794393",
+    password: "$2b$10$4ppSg5kT3sBl998Uv7VPze.YSyDxQS1PAh0.EfgstLal8Ma0iKNKy",
+    exponentPushToken: "ExponentPushToken[g7GRJfK7iUmeZUi5OinhPx]",
+    role: "CUSTOMER",
+  },
+};
