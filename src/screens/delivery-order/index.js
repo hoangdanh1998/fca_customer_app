@@ -1,17 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Image, View } from "react-native";
-import { Button, Content } from "native-base";
 import * as Notifications from "expo-notifications";
 
-import { styles } from "./styles";
-import NotificationModal from "../../components/atoms/notification-modal/index";
-import { QR_CODE_BASE64 } from "../../constants/seeding";
+import { Button, Content } from "native-base";
+import { Image, View } from "react-native";
 import {
   MESSAGES,
   NOTICE_DURATION,
   OrderStatus,
 } from "../../constants/index.js";
+import React, { useEffect, useRef, useState } from "react";
+
+import NotificationModal from "../../components/atoms/notification-modal/index";
+import { QR_CODE_BASE64 } from "../../constants/seeding";
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
+import { styles } from "./styles";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -51,9 +52,11 @@ const DeliveryOrder = (props) => {
     if (orderId) {
       console.log("createdOrder", orderId);
       getOrderOnChange(orderId, (order) => {
+        console.log('delivery-order');
         if (order.status === OrderStatus.RECEPTION) {
           handleScanSuccess();
         }
+        
         // else {
         //   handleScanFail();
         // }
