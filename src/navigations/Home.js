@@ -7,12 +7,12 @@ const HeaderStack = createStackNavigator();
 
 function HomeStack() {
   return (
-    <NavigationContainer>
+    // <NavigationContainer>
       <HeaderStack.Navigator>
         {/* <HeaderStack.Screen name="HEADER" component={MyHeader} /> */}
         <HeaderStack.Screen name="HISTORY_ORDERS" component={HistoryOrder} />
       </HeaderStack.Navigator>
-    </NavigationContainer>
+    // </NavigationContainer>
   );
 }
 

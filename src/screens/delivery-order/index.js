@@ -21,6 +21,7 @@ Notifications.setNotificationHandler({
   }),
 });
 const DeliveryOrder = (props) => {
+  console.log("props of delivery ",props);
   const qrCode = props.route.params.qrCode;
   const orderId = props.route.params.orderId;
   console.log("orderId", orderId);
@@ -29,7 +30,7 @@ const DeliveryOrder = (props) => {
   const [visible, setVisible] = useState(false);
   const [message, setMessage] = useState("");
 
-  handleScanSuccess = () => {
+  const handleScanSuccess = () => {
     setVisible(true);
     setMessage(MESSAGES.SUCCESS);
     setTimeout(() => {
@@ -38,7 +39,7 @@ const DeliveryOrder = (props) => {
     }, NOTICE_DURATION);
   };
 
-  handleScanFail = () => {
+  const handleScanFail = () => {
     setVisible(true);
     setMessage(MESSAGES.FAIL);
     setTimeout(() => {
