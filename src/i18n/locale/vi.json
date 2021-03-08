@@ -57,10 +57,12 @@
     "wording-phone": "Số điện thoại",
     "wording-wallet": "Số dư ví",
     "wording-logout": "Đăng xuất",
+    "wording-address": "Địa chỉ",
+    "wording-close": "Đóng",
     "wording-saved-address": "Địa chỉ đã lưu",
+    "wording-saved-address-label": "Nhãn",
     "wording-emergency-profile": "Hồ sơ đặt nhanh",
     "wording-search-store": "Tìm kiếm cửa hàng",
-    "wording-saved-address-label": "Điểm đến",
     "wording-edit": "Thay đổi",
     "wording-save": "Lưu"
 }

@@ -22,8 +22,8 @@ import StoreDetails from "../screens/store-details";
 import DeliveryOrder from "../screens/delivery-order";
 import MyProfile from "../screens/my-profile";
 import EmergencyProfile from "../screens/emergency-profile";
-import EmergencyStore from "../screens/edit-emergency-profile/emergency-store";
-import EmergencyItem from "../screens/edit-emergency-profile/emergency-item";
+import EmergencyProfileList from "../screens/emergency-profile-list";
+import EditEmergencyProfile from "../screens/edit-emergency-profile";
 import googleMapNavigation from "../screens/map/google-map-navigation";
 
 const Stack = createStackNavigator();
@@ -178,8 +178,8 @@ export default function Navigation() {
           })}
         />
         <Stack.Screen
-          name="EMERGENCY_STORE"
-          component={EmergencyStore}
+          name="EMERGENCY_PROFILE_LIST"
+          component={EmergencyProfileList}
           options={({ navigation, route }) => ({
             title: IMLocalized("title-emergency-profile"),
             headerTintColor: LIGHT_COLOR,
@@ -190,8 +190,8 @@ export default function Navigation() {
           })}
         />
         <Stack.Screen
-          name="EMERGENCY_ITEM"
-          component={EmergencyItem}
+          name="EDIT_EMERGENCY"
+          component={EditEmergencyProfile}
           options={({ navigation, route }) => ({
             title: IMLocalized("title-emergency-profile"),
             headerTintColor: LIGHT_COLOR,

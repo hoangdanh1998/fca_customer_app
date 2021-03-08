@@ -6,6 +6,11 @@ export const styles = StyleSheet.create({
   title: {
     color: DARK_COLOR,
     fontWeight: "bold",
+    fontSize: 30,
+    textAlign: "center",
+    flex: 1,
+    height: "50%",
+    paddingTop: "10%",
   },
   footer: {
     height: "auto",

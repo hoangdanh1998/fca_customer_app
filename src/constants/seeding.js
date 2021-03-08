@@ -359,6 +359,46 @@ export const EMERGENCY_PROFILE = {
       latitude: "10.8593771",
       longitude: "106.6285259",
     },
+    items: [
+      {
+        id: "6edaa4ab-5a9d-4e1d-a539-ce7203c36e69",
+        createdAt: "2021-02-22T15:43:49.913Z",
+        updatedAt: "2021-02-22T15:43:49.913Z",
+        deletedAt: null,
+        partner: null,
+        name: "Cacao đá",
+        price: "25000",
+        status: "ACTIVE",
+        imageLink: "https://en.starbucks.vn/media/meny_tcm89-11058_w1024_n.jpg",
+        fcaItem: {
+          id: "ce8487fb-7108-40d0-b71e-36b1703043dc",
+          createdAt: "2021-02-22T15:23:12.083Z",
+          updatedAt: "2021-02-22T15:23:12.083Z",
+          deletedAt: null,
+          name: "Cacao",
+          status: null,
+        },
+      },
+      {
+        id: "6edaa4ab-5a9d-4e1d-a539-ce7203c36e69",
+        createdAt: "2021-02-22T15:43:49.913Z",
+        updatedAt: "2021-02-22T15:43:49.913Z",
+        deletedAt: null,
+        partner: null,
+        name: "Cacao đá",
+        price: "25000",
+        status: "ACTIVE",
+        imageLink: "https://en.starbucks.vn/media/meny_tcm89-11058_w1024_n.jpg",
+        fcaItem: {
+          id: "ce8487fb-7108-40d0-b71e-36b1703043dc",
+          createdAt: "2021-02-22T15:23:12.083Z",
+          updatedAt: "2021-02-22T15:23:12.083Z",
+          deletedAt: null,
+          name: "Cacao",
+          status: null,
+        },
+      },
+    ],
   },
   selectedItem: [
     {
@@ -379,3 +419,200 @@ export const EMERGENCY_PROFILE = {
     },
   ],
 };
+
+export const EMERGENCY_LIST = [
+  {
+    partner: {
+      id: "4ceee651-7dea-4a0f-b517-b49166cb6cfb",
+      createdAt: "2021-02-07T04:46:45.881Z",
+      updatedAt: "2021-02-07T04:46:45.881Z",
+      deletedAt: null,
+      name: "Cafe sân vườn Mimosa",
+      status: "APPROVED",
+      phone: "0931794393",
+      imageLink:
+        "http://retaildesignblog.net/wp-content/uploads/2016/07/GENERAL-SUPPLY-store-and-cafe-Nagoya-Japan.jpg",
+      address: {
+        id: "4ceee651-7dea-4a0f-b517-b49166cb6cfb",
+        createdAt: "2021-02-07T04:45:39.297Z",
+        updatedAt: "2021-02-07T04:45:39.297Z",
+        deletedAt: null,
+        description:
+          "7A Tổ1 KP2 NVQ, Tân Thới Hiệp, Quận 12, Thành phố Hồ Chí Minh, Việt Nam",
+        latitude: "10.8593771",
+        longitude: "106.6285259",
+      },
+      items: [
+        {
+          id: "6edaa4ab-5a9d-4e1d-a539-ce7203c36e69",
+          createdAt: "2021-02-22T15:43:49.913Z",
+          updatedAt: "2021-02-22T15:43:49.913Z",
+          deletedAt: null,
+          partner: null,
+          name: "Cacao đá",
+          price: "25000",
+          status: "ACTIVE",
+          imageLink:
+            "https://en.starbucks.vn/media/meny_tcm89-11058_w1024_n.jpg",
+          fcaItem: {
+            id: "ce8487fb-7108-40d0-b71e-36b1703043dc",
+            createdAt: "2021-02-22T15:23:12.083Z",
+            updatedAt: "2021-02-22T15:23:12.083Z",
+            deletedAt: null,
+            name: "Cacao",
+            status: null,
+          },
+        },
+        {
+          id: "6edaa4ab-5a9d-4e1d-a539-ce7203c36e69",
+          createdAt: "2021-02-22T15:43:49.913Z",
+          updatedAt: "2021-02-22T15:43:49.913Z",
+          deletedAt: null,
+          partner: null,
+          name: "Cacao đá",
+          price: "25000",
+          status: "ACTIVE",
+          imageLink:
+            "https://en.starbucks.vn/media/meny_tcm89-11058_w1024_n.jpg",
+          fcaItem: {
+            id: "ce8487fb-7108-40d0-b71e-36b1703043dc",
+            createdAt: "2021-02-22T15:23:12.083Z",
+            updatedAt: "2021-02-22T15:23:12.083Z",
+            deletedAt: null,
+            name: "Cacao",
+            status: null,
+          },
+        },
+      ],
+    },
+    selectedItem: [
+      {
+        id: 1,
+        name: "Cà phê sữa",
+        price: "35000",
+        quantity: 1,
+        image:
+          "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+      },
+      {
+        id: 2,
+        name: "Cà phê",
+        price: "30000",
+        quantity: 1,
+        image:
+          "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+      },
+    ],
+    savedAddress: {
+      label: "Home",
+      isDefault: true,
+      address: {
+        id: "4ceee651-7dea-4a0f-b517-b49166cb6cfb",
+        createdAt: "2021-02-07T04:45:39.297Z",
+        updatedAt: "2021-02-07T04:45:39.297Z",
+        deletedAt: null,
+        description:
+          "7A Tổ1 KP2 NVQ, Tân Thới Hiệp, Quận 12, Thành phố Hồ Chí Minh, Việt Nam",
+        latitude: "10.8593771",
+        longitude: "106.6285259",
+      },
+    },
+  },
+  {
+    partner: {
+      id: "4ceee651-7dea-4a0f-b517-b49166cb6cfb",
+      createdAt: "2021-02-07T04:46:45.881Z",
+      updatedAt: "2021-02-07T04:46:45.881Z",
+      deletedAt: null,
+      name: "Cafe sân vườn Mimosa",
+      status: "APPROVED",
+      phone: "0931794393",
+      imageLink:
+        "http://retaildesignblog.net/wp-content/uploads/2016/07/GENERAL-SUPPLY-store-and-cafe-Nagoya-Japan.jpg",
+      address: {
+        id: "3ceee651-7dea-4a0f-b517-b49166cb6cfb",
+        createdAt: "2021-02-07T04:45:39.297Z",
+        updatedAt: "2021-02-07T04:45:39.297Z",
+        deletedAt: null,
+        description:
+          "7A Tổ1 KP2 NVQ, Tân Thới Hiệp, Quận 12, Thành phố Hồ Chí Minh, Việt Nam",
+        latitude: "10.8593771",
+        longitude: "106.6285259",
+      },
+      items: [
+        {
+          id: "3edaa4ab-5a9d-4e1d-a539-ce7203c36e69",
+          createdAt: "2021-02-22T15:43:49.913Z",
+          updatedAt: "2021-02-22T15:43:49.913Z",
+          deletedAt: null,
+          partner: null,
+          name: "Cacao đá",
+          price: "25000",
+          status: "ACTIVE",
+          imageLink:
+            "https://en.starbucks.vn/media/meny_tcm89-11058_w1024_n.jpg",
+          fcaItem: {
+            id: "ce8487fb-7108-40d0-b71e-36b1703043dc",
+            createdAt: "2021-02-22T15:23:12.083Z",
+            updatedAt: "2021-02-22T15:23:12.083Z",
+            deletedAt: null,
+            name: "Cacao",
+            status: null,
+          },
+        },
+        {
+          id: "3edaa4ab-5a9d-4e1d-a539-ce7203c36e69",
+          createdAt: "2021-02-22T15:43:49.913Z",
+          updatedAt: "2021-02-22T15:43:49.913Z",
+          deletedAt: null,
+          partner: null,
+          name: "Cacao đá",
+          price: "25000",
+          status: "ACTIVE",
+          imageLink:
+            "https://en.starbucks.vn/media/meny_tcm89-11058_w1024_n.jpg",
+          fcaItem: {
+            id: "ce8487fb-7108-40d0-b71e-36b1703043dc",
+            createdAt: "2021-02-22T15:23:12.083Z",
+            updatedAt: "2021-02-22T15:23:12.083Z",
+            deletedAt: null,
+            name: "Cacao",
+            status: null,
+          },
+        },
+      ],
+    },
+    selectedItem: [
+      {
+        id: 1,
+        name: "Cà phê sữa",
+        price: "35000",
+        quantity: 1,
+        image:
+          "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+      },
+      {
+        id: 2,
+        name: "Cà phê",
+        price: "30000",
+        quantity: 1,
+        image:
+          "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+      },
+    ],
+    savedAddress: {
+      label: "Home",
+      isDefault: false,
+      address: {
+        id: "3ceee651-7dea-4a0f-b517-b49166cb6cfb",
+        createdAt: "2021-02-07T04:45:39.297Z",
+        updatedAt: "2021-02-07T04:45:39.297Z",
+        deletedAt: null,
+        description:
+          "7A Tổ1 KP2 NVQ, Tân Thới Hiệp, Quận 12, Thành phố Hồ Chí Minh, Việt Nam",
+        latitude: "10.8593771",
+        longitude: "106.6285259",
+      },
+    },
+  },
+];

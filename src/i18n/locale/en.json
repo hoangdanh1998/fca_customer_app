@@ -56,10 +56,12 @@
     "wording-phone": "Phone",
     "wording-wallet": "Wallet Amount",
     "wording-logout": "Logout",
+    "wording-address": "Address",
+    "wording-close": "Close",
     "wording-saved-address": "Saved address",
+    "wording-saved-address-label": "Label",
     "wording-emergency-profile": "Favorite store",
     "wording-search-store": "Search store",
-    "wording-saved-address-label": "Address",
     "wording-edit": "Edit",
     "wording-save": "Save"
 }
