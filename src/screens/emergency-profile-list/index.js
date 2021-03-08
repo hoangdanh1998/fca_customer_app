@@ -2,6 +2,13 @@ import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TouchableWithoutFeedback } from "react-native";
 import {
+  Menu,
+  MenuOptions,
+  MenuOption,
+  MenuTrigger,
+  MenuProvider,
+} from "react-native-popup-menu";
+import {
   Content,
   List,
   Card,
@@ -39,7 +46,7 @@ const EmergencyProfileList = (props) => {
   //     loadHistory();
   //   }, [dispatch, loadHistory]);
   return (
-    <>
+    <MenuProvider>
       <Content style={{ flex: 1 }}>
         <List
           dataArray={emergencyList}
@@ -69,7 +76,32 @@ const EmergencyProfileList = (props) => {
                     ) : null}
                   </Body>
                   <Right style={{ flex: 1 }}>
-                    <Text note>Delete</Text>
+                    {/* <Text note>Delete</Text> */}
+                    <Menu>
+                      <MenuTrigger>
+                        <Icon
+                          name="arrow-forward"
+                          style={{ color: DARK_COLOR }}
+                          //   onPress={() => {
+                          //     props.navigation.navigate("EMERGENCY_PROFILE");
+                          //   }}
+                        />
+                      </MenuTrigger>
+                      <MenuOptions>
+                        <MenuOption
+                          onSelect={() => alert(`Save`)}
+                          text="Save"
+                        />
+                        <MenuOption onSelect={() => alert(`Delete`)}>
+                          <Text style={{ color: "red" }}>Delete</Text>
+                        </MenuOption>
+                        <MenuOption
+                          onSelect={() => alert(`Not called`)}
+                          disabled={true}
+                          text="Disabled"
+                        />
+                      </MenuOptions>
+                    </Menu>
                   </Right>
                 </CardItem>
                 <CardItem style={{ flex: 4 }}>
@@ -119,7 +151,7 @@ const EmergencyProfileList = (props) => {
           />
         </View>
       </Footer>
-    </>
+    </MenuProvider>
   );
 };
 
