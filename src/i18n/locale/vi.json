@@ -29,6 +29,7 @@
     "title-navigation-tracking": "Tìm đường",
     "title-notification": "Thông báo",
     "title-my-profile": "Thông tin cá nhân",
+    "title-emergency-profile": "Hồ sơ đặt nhanh",
 
     "wording-item": "món",
     "wording-my-orders": "Đơn hàng của tôi",
@@ -57,5 +58,6 @@
     "wording-wallet": "Số dư ví",
     "wording-logout": "Đăng xuất",
     "wording-saved-address": "Địa chỉ đã lưu",
-    "wording-favorite-store": "Cửa hàng yêu thích"
+    "wording-emergency-profile": "Hồ sơ đặt nhanh",
+    "wording-search-store": "Tìm kiếm cửa hàng"
 }

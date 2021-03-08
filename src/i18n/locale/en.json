@@ -28,6 +28,7 @@
     "title-history-order": "My orders",
     "title-notification": "Notification",
     "title-my-profile": "My Profile",
+    "title-emergency-profile": "Emergency profile",
 
     "wording-item": "item(s)",
     "wording-my-orders": "My Orders",
@@ -56,5 +57,6 @@
     "wording-wallet": "Wallet Amount",
     "wording-logout": "Logout",
     "wording-saved-address": "Saved address",
-    "wording-favorite-store": "Favorite store"
+    "wording-emergency-profile": "Favorite store",
+    "wording-search-store": "Search store"
 }

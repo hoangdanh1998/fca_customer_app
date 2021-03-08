@@ -86,13 +86,13 @@ const MyProfile = (props) => {
         </Card>
         <TouchableWithoutFeedback
           onPress={() => {
-            alert("press");
+            props.navigation.navigate("EMERGENCY_PROFILE");
           }}
         >
           <Card style={{ flex: 1 }}>
             <CardItem style={{ flex: 1 }}>
               <Left style={{ flex: 1 }}>
-                <Icon name="heart" type="font-awesome-5" color={DARK_COLOR} />
+                <Icon name="flash-outline" type="ionicon" color={DARK_COLOR} />
               </Left>
               <Body style={{ flex: 8 }}>
                 <Text
@@ -103,7 +103,7 @@ const MyProfile = (props) => {
                     fontWeight: "bold",
                   }}
                 >
-                  {IMLocalized("wording-favorite-store")}
+                  {IMLocalized("wording-emergency-profile")}
                 </Text>
               </Body>
               <Right style={{ flex: 1 }}>
