@@ -23,6 +23,7 @@ import DeliveryOrder from "../screens/delivery-order";
 import MyProfile from "../screens/my-profile";
 import EmergencyProfile from "../screens/emergency-profile";
 import EmergencyStore from "../screens/edit-emergency-profile/emergency-store";
+import EmergencyItem from "../screens/edit-emergency-profile/emergency-item";
 import googleMapNavigation from "../screens/map/google-map-navigation";
 
 const Stack = createStackNavigator();
@@ -174,20 +175,23 @@ export default function Navigation() {
               backgroundColor: DARK_COLOR,
             },
             headerLeft: HeaderBackButton,
-            headerRight: () => (
-              <Icon
-                name="create-outline"
-                style={{ color: LIGHT_COLOR }}
-                onPress={() => {
-                  navigation.navigate("EMERGENCY_STORE");
-                }}
-              />
-            ),
           })}
         />
         <Stack.Screen
           name="EMERGENCY_STORE"
           component={EmergencyStore}
+          options={({ navigation, route }) => ({
+            title: IMLocalized("title-emergency-profile"),
+            headerTintColor: LIGHT_COLOR,
+            headerStyle: {
+              backgroundColor: DARK_COLOR,
+            },
+            headerLeft: HeaderBackButton,
+          })}
+        />
+        <Stack.Screen
+          name="EMERGENCY_ITEM"
+          component={EmergencyItem}
           options={({ navigation, route }) => ({
             title: IMLocalized("title-emergency-profile"),
             headerTintColor: LIGHT_COLOR,

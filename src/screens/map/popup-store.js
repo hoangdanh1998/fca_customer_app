@@ -3,6 +3,7 @@
 import { withNavigation } from "@react-navigation/compat";
 import React from "react";
 import { View } from "react-native";
+import { Card } from "native-base";
 import FocusedButton from "../../components/atoms/focused-button/index";
 import StoreProfileWithAvatar from "../../components/molecules/store-profile-with-avatar/index";
 import { LANGUAGE, MESSAGES } from "../../constants/index";
@@ -18,7 +19,9 @@ const PopupStore = (props) => {
         width: "100%",
       }}
     >
-      <StoreProfileWithAvatar store={store} />
+      <Card>
+        <StoreProfileWithAvatar store={store} />
+      </Card>
       <FocusedButton
         block
         full

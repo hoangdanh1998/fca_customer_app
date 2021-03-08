@@ -37,6 +37,8 @@ export const MESSAGES = {
   SUCCESS: "success",
   FAIL: "fail",
   LOGOUT: "logout",
+  EDIT: "edit",
+  SAVE: "save",
 };
 
 // APP STATUS
