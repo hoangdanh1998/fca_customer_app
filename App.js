@@ -10,6 +10,7 @@ import rootReducer from './src/redux/reducers/root-reducer'
 import * as firebase from 'firebase';
 import { registerForPushNotificationsAsync } from './src/service/notification/expo-notification'
 import { LogBox } from 'react-native';
+import LoginNavigation from "./src/navigations/login-navigation";
 
 LogBox.ignoreAllLogs();
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
@@ -37,7 +38,7 @@ export default class App extends React.Component {
     if (this.state.isReady) {
       return (
         <Provider store={store} styles={{ flex: 1 }}>
-          <Navigation />
+          <LoginNavigation />
         </Provider>
       );
     } else {
