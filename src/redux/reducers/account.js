@@ -29,7 +29,8 @@ const removeToken = async () => {
 
 
     } catch (e) {
-        console.error("remove token error: ", e);
+        // console.error("remove token error: ", e);
+        throw new Error(error);
     }
 
     console.log('Done.')
@@ -46,7 +47,7 @@ const accountReducer = (state = initialState, action) => {
             return { ...state, token: action.payload.token, customer: action.payload.customer ,isLoading: false };
         case SIGN_OUT:
             removeToken();
-            return { ...state, isSignOut: true };
+            return { ...state, isSignOut: true, token: null, customer:null };
         case FINISH_LOADING:
             console.log("change isloading");
             return { ...state, isLoading: false };

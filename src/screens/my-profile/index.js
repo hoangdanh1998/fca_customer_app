@@ -33,13 +33,17 @@ import { signOut } from "../../redux/actions/account";
 init(LANGUAGE.VI);
 const MyProfile = (props) => {
   // const profile = this.props.profile;
+
+console.log("route logout: ", props.route.params.handleLogOut);
+const handleLogOut = props.route.params.handleLogOut;
+
   const profile = MY_PROFILE;
 
   const dispatch = useDispatch();
 
-  const handleLogOut = () => {
-    dispatch(signOut());
-  }
+  // const handleLogOut = () => {
+  //   dispatch(signOut());
+  // }
 
   return (
     <>
