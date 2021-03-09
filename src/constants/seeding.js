@@ -504,7 +504,7 @@ export const EMERGENCY_LIST = [
       },
     ],
     savedAddress: {
-      label: "Home",
+      label: "Công ty",
       isDefault: true,
       address: {
         id: "4ceee651-7dea-4a0f-b517-b49166cb6cfb",
@@ -601,7 +601,7 @@ export const EMERGENCY_LIST = [
       },
     ],
     savedAddress: {
-      label: "Home",
+      label: "Trường học",
       isDefault: false,
       address: {
         id: "3ceee651-7dea-4a0f-b517-b49166cb6cfb",

@@ -114,7 +114,7 @@ const MyProfile = (props) => {
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={() => {
-            alert("press");
+            props.navigation.navigate("SAVED_ADDRESS_LIST");
           }}
         >
           <Card style={{ flex: 1 }}>
