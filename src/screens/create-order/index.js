@@ -40,6 +40,9 @@ const CreateOrder = (props) => {
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
   const createdOrder = useSelector((state) => state.order.createdOrder);
+  const customer = useSelector(state => state.account.customer);
+  console.log("customer id from store:", customer.id);
+
   console.log("Before" + bestSuggestion.name, suggestionStores.length);
   const [visibleTimer, setVisibleTimer] = useState(false);
   const [visibleNotificationModal, setVisibleNotificationModal] = useState(
@@ -57,8 +60,8 @@ const CreateOrder = (props) => {
 
       dispatch(
         createOrder({
-          customerId: "68babaeb-3a80-4c35-8695-0305083e88fd",
-          partnerId: '0440ef59-6c90-4630-8be4-553533e45591',
+          customerId: customer.id,
+          partnerId: store.id,
           currentLocation: {
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
