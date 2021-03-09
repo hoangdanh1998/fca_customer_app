@@ -4,7 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Login from '../screens/login/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux'
-import { finishLoading, restoreToken } from '../redux/actions/account';
+import { finishLoading, restoreToken, signOut } from '../redux/actions/account';
 import LoadingPage from '../screens/loading-page/index';
 import Navigation from './Navigation';
 
@@ -43,6 +43,10 @@ function LoginNavigation() {
         
     }
 
+    const handleLogOut = () => {
+        dispatch(signOut());
+    }
+
     useEffect(() => {
         handleGetToken();
     }, []);
@@ -61,7 +65,9 @@ function LoginNavigation() {
                     }} /> 
                     : <LoginStack.Screen
                         name="HOME_STACK"
-                        component={Navigation} />}
+                        component={Navigation} 
+                        initialParams={{handleLogOut}}
+                    />}
 
             </LoginStack.Navigator>
         

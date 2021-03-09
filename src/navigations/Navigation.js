@@ -28,8 +28,9 @@ import SavedAddressList from "../screens/saved-address-list";
 import googleMapNavigation from "../screens/map/google-map-navigation";
 
 const Stack = createStackNavigator();
-export default function Navigation() {
+export default function Navigation(props) {
   init(LANGUAGE.VI);
+  const handleLogOut = props.route.params.handleLogOut;
 
   return (
     // <NavigationContainer>
@@ -157,6 +158,7 @@ export default function Navigation() {
       <Stack.Screen
         name="MY_PROFILE"
         component={MyProfile}
+        initialParams = {{handleLogOut}}
         options={{
           title: IMLocalized("title-my-profile"),
           headerTintColor: LIGHT_COLOR,
