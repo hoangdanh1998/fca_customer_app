@@ -31,7 +31,7 @@ export default function Navigation() {
   init(LANGUAGE.VI);
 
   return (
-    <NavigationContainer>
+    // <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
           name="MAP_VIEW"
@@ -228,6 +228,6 @@ export default function Navigation() {
           })}
         />
       </Stack.Navigator>
-    </NavigationContainer>
+    // </NavigationContainer>
   );
 }
