@@ -24,7 +24,9 @@ const storeToken = async (token, customer) => {
 const removeToken = async () => {
     try {
         await AsyncStorage.removeItem('@storage_Token');
+
         await AsyncStorage.removeItem('@storage_Customer');
+
 
     } catch (e) {
         console.error("remove token error: ", e);

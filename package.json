@@ -11,6 +11,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.14.1",
     "@react-native-community/geolocation": "^2.0.2",
     "@react-native-community/masked-view": "^0.1.10",
     "@react-navigation/compat": "^5.3.11",
@@ -40,10 +41,11 @@
     "react-native-job-queue": "^0.3.1",
     "react-native-maps": "0.27.1",
     "react-native-maps-directions": "^1.8.0",
+    "react-native-popup-menu": "^0.15.10",
     "react-native-reanimated": "^1.13.2",
     "react-native-screens": "^2.17.1",
     "react-native-timeline-flatlist": "^0.7.3",
-    "react-native-vector-icons": "^8.0.0",
+    "react-native-vector-icons": "^8.1.0",
     "react-native-web": "~0.13.12",
     "react-navigation": "^4.4.3",
     "react-navigation-tabs": "^2.10.1",

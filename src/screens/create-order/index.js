@@ -1,20 +1,27 @@
-import { withNavigation } from "@react-navigation/compat";
 import * as Location from "expo-location";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
+
 import { Content, Footer, View } from "native-base";
+import { IMLocalized, init } from "../../i18n/IMLocalized";
+import {
+  LANGUAGE,
+  MESSAGES,
+  NOTICE_DURATION,
+  OrderStatus,
+} from "../../constants/index";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
+import { CommonActions } from "@react-navigation/native";
 import FocusedButton from "../../components/atoms/focused-button/index";
+import NotificationModal from "../../components/atoms/notification-modal/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import ProcessingModal from "../../components/molecules/processing-modal/index";
-import NotificationModal from "../../components/atoms/notification-modal/index";
-import { LANGUAGE, MESSAGES } from "../../constants/index";
-import { IMLocalized, init } from "../../i18n/IMLocalized";
-import { OrderStatus, NOTICE_DURATION } from "../../constants/index";
-import { setStoreSuggestion } from "../../redux/actions/store";
 import { createOrder } from "../../redux/actions/order";
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
+import { setStoreSuggestion } from "../../redux/actions/store";
+import { withNavigation } from "@react-navigation/compat";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -48,10 +55,10 @@ const CreateOrder = (props) => {
       }
       var location = await Location.getCurrentPositionAsync({});
 
-      await dispatch(
-        await createOrder({
-          customerId: "76babaeb-3a80-4c35-8695-0305083e88fd",
-          partnerId: store.id,
+      dispatch(
+        createOrder({
+          customerId: "68babaeb-3a80-4c35-8695-0305083e88fd",
+          partnerId: '0440ef59-6c90-4630-8be4-553533e45591',
           currentLocation: {
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
@@ -103,21 +110,32 @@ const CreateOrder = (props) => {
 
   const handleAcceptedOrder = () => {
     setVisibleTimer(false);
-    props.navigation.navigate("ORDER_DETAIL", {
-      isAfterCreate: true,
-    });
+    props.navigation.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [
+          {
+            name: "ORDER_DETAIL",
+            params: {
+              isAfterCreate: true,
+            },
+          },
+        ],
+      })
+    );
+    // props.navigation.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'ORDER_DETAIL' })] });
   };
 
-  const notificationListener = useRef();
-  const responseListener = useRef();
   useEffect(() => {
     if (createdOrder.id) {
       getOrderOnChange(createdOrder.id, (order) => {
-        if (order.status === OrderStatus.ACCEPTANCE) {
-          handleAcceptedOrder();
-        }
-        if (order.status === OrderStatus.REJECTION) {
-          handleRejectedOrder();
+        if (order) {
+          if (order.status === OrderStatus.ACCEPTANCE) {
+            handleAcceptedOrder();
+          }
+          if (order.status === OrderStatus.REJECTION) {
+            handleRejectedOrder();
+          }
         }
       });
     }

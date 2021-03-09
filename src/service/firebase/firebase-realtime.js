@@ -10,9 +10,8 @@ export const setTrackingOrder = (orderId, timeRemain) => {
 
 export const getOrderOnChange = (orderId, order) => {
   if (orderId) {
-    firebase
-      .database()
-      .ref(orderId)
+    const ref = firebase.database().ref('order')
+    ref.child(orderId)
       .on("value", (snapshot) => {
         order(snapshot.val());
       });
