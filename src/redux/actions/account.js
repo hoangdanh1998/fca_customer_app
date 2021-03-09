@@ -36,9 +36,12 @@ export const signOut = () => {
     }
 }
 
-export const restoreToken = (token) => {
+export const restoreToken = (token, customer) => {
     return {
         type: RESTORE_TOKEN,
-        payload: token,
+        payload: {
+            token,
+            customer
+        }
     }
 }

@@ -27,9 +27,12 @@ function LoginNavigation() {
         try {
 
             let token = await AsyncStorage.getItem('@storage_Token');
+            let customer = await AsyncStorage.getItem('@storage_Customer');
+
             if (token !== null) {
                 token = JSON.parse(token);
-                await dispatch(restoreToken(token));
+                customer = JSON.parse(customer);
+                await dispatch(restoreToken(token, customer));
             } 
             dispatch(finishLoading());
             

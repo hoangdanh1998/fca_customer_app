@@ -12,13 +12,13 @@ export const styles = StyleSheet.create({
     },
 
     logo: {
-        width: 400,
+        width: 500,
         height: 400,
         resizeMode: "stretch"
     },
 
     form: {
-        marginTop: 15,
+        // marginTop: 15,
 
     },
     inputForm: {

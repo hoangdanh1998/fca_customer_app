@@ -116,10 +116,10 @@ const Login = (props) => {
                         <View style={styles.container}>
                             <Image
                                 style={styles.logo}
-                                source={require("../../assets/fast-coffee-img-logo.png")} />
+                                source= {require("../../assets/fca-logo-mobile.png")} />
                             <View style={styles.form}>
 
-                                <View style={{ ...styles.inputForm, marginTop: 25 }}>
+                                <View style={{ ...styles.inputForm }}>
                                     <Feather
                                         name="phone"
                                         color={DARK_COLOR}
