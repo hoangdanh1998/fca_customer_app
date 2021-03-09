@@ -14,7 +14,6 @@ import CreateOrder from "../screens/create-order";
 import DeliveryOrder from "../screens/delivery-order";
 import EditEmergencyProfile from "../screens/edit-emergency-profile";
 import EmergencyProfile from "../screens/emergency-profile";
-import EmergencyProfileList from "../screens/emergency-profile-list";
 import HistoryOrder from "../screens/history-order";
 import HistoryOrderDetails from "../screens/history-order-details";
 import MapScreen from "../screens/map/google-map";
@@ -203,67 +202,7 @@ export default function Navigation(props) {
           headerLeft: HeaderBackButton,
         }}
       />
-      <Stack.Screen
-        name="MY_PROFILE"
-        component={MyProfile}
-        options={{
-          title: IMLocalized("title-my-profile"),
-          headerTintColor: LIGHT_COLOR,
-          headerStyle: {
-            backgroundColor: DARK_COLOR,
-          },
-          headerLeft: HeaderBackButton,
-        }}
-      />
-      <Stack.Screen
-        name="EMERGENCY_PROFILE"
-        component={EmergencyProfile}
-        options={({ navigation, route }) => ({
-          title: IMLocalized("title-emergency-profile"),
-          headerTintColor: LIGHT_COLOR,
-          headerStyle: {
-            backgroundColor: DARK_COLOR,
-          },
-          headerLeft: HeaderBackButton,
-          headerRight: (selectedStore) => (
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "120%",
-              }}
-            >
-              <Icon
-                name="pencil-outline"
-                style={{ color: LIGHT_COLOR }}
-                onPress={() => {
-                  navigation.navigate("EDIT_EMERGENCY");
-                }}
-              />
-              <Icon
-                name="trash-outline"
-                style={{ color: LIGHT_COLOR }}
-                onPress={() => {
-                  // navigation.navigate("MY_PROFILE");
-                  alert("Delete profile");
-                }}
-              />
-            </View>
-          ),
-        })}
-      />
-      <Stack.Screen
-        name="EMERGENCY_PROFILE_LIST"
-        component={EmergencyProfileList}
-        options={({ navigation, route }) => ({
-          title: IMLocalized("title-emergency-profile"),
-          headerTintColor: LIGHT_COLOR,
-          headerStyle: {
-            backgroundColor: DARK_COLOR,
-          },
-          headerLeft: HeaderBackButton,
-        })}
-      />
+
       <Stack.Screen
         name="EDIT_EMERGENCY"
         component={EditEmergencyProfile}
