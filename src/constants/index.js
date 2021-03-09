@@ -40,6 +40,8 @@ export const MESSAGES = {
   EDIT: "edit",
   SAVE: "save",
   CLOSE: "close",
+  ADD: "add",
+  SET_DEFAULT: "set-default",
 };
 
 // APP STATUS

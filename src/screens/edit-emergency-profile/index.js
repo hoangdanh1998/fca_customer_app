@@ -19,9 +19,9 @@ import { init, IMLocalized } from "../../i18n/IMLocalized";
 
 const EditEmergencyProfile = (props) => {
   init(LANGUAGE.VI);
-  const currentStore = Object.assign({}, props.route.params.currentStore);
+  // const currentStore = Object.assign({}, props.route.params.currentStore);
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
-  const [selectedStore, setSelectedStore] = useState(currentStore);
+  const [selectedStore, setSelectedStore] = useState({});
   const [stores, setStores] = useState(() => {
     return Array.from(suggestionStores, (store) => {
       return {
@@ -88,7 +88,7 @@ const EditEmergencyProfile = (props) => {
         };
       })
     );
-    setSelectedStore(currentStore);
+    setSelectedStore({});
   };
 
   const handleSaveEmergencyProfile = (profile) => {
@@ -155,26 +155,21 @@ const EditEmergencyProfile = (props) => {
               }}
             >
               <Card>
-                <StoreProfileWithAvatar
-                  selectedColor={
-                    store.address.id === selectedStore.address.id
-                      ? LIGHT_COLOR
-                      : null
-                  }
-                  store={store}
-                />
+                <StoreProfileWithAvatar store={store} />
               </Card>
             </TouchableWithoutFeedback>
           )}
         />
-        <SelectItemModal
-          partner={selectedStore}
-          visible={visibleSelectItem}
-          cart={cart}
-          updateCart={(item, quantity) => updateCart(item, quantity)}
-          hideModal={handleHideSelectStore}
-          saveProfile={(profile) => handleSaveEmergencyProfile(profile)}
-        />
+        {selectedStore !== null ? (
+          <SelectItemModal
+            partner={selectedStore}
+            visible={visibleSelectItem}
+            cart={cart}
+            updateCart={(item, quantity) => updateCart(item, quantity)}
+            hideModal={handleHideSelectStore}
+            saveProfile={(profile) => handleSaveEmergencyProfile(profile)}
+          />
+        ) : null}
       </Content>
     </Root>
   );
