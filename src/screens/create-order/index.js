@@ -18,7 +18,7 @@ import FocusedButton from "../../components/atoms/focused-button/index";
 import NotificationModal from "../../components/atoms/notification-modal/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import ProcessingModal from "../../components/molecules/processing-modal/index";
-import { createOrder } from "../../redux/actions/order";
+import { createOrder, cancelOrder } from "../../redux/actions/order";
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 import { setStoreSuggestion } from "../../redux/actions/store";
 import { withNavigation } from "@react-navigation/compat";
@@ -69,6 +69,24 @@ const CreateOrder = (props) => {
               quantity: item.quantity,
             };
           }),
+        })
+      );
+    } catch (error) {
+      console.log("SubmitOrderError", error);
+      setVisibleTimer(false);
+      setVisibleNotificationModal(true);
+      setTimeout(() => {
+        setVisibleNotificationModal(false);
+      }, NOTICE_DURATION);
+    }
+  }, [dispatch]);
+
+  const destroyOrder = useCallback(async () => {
+    try {
+      dispatch(
+        cancelOrder({
+          id: createdOrder.id,
+          status: OrderStatus.CANCELLATION,
         })
       );
     } catch (error) {

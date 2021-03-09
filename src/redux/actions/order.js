@@ -4,15 +4,31 @@ import { ORDER_ACTIONS } from "../action-types/actions";
 
 export const createOrder = (param) => {
   return async (dispatch) => {
-      const response = await api.post("/order", param);
-      if (response.data.meta.status !== ResponseStatus.SUCCESS) {
-        throw new Error("Something went wrong");
-      }
-    console.log('orderId: ' + response.data.data.order.id)
-      dispatch({
-        type: ORDER_ACTIONS.CREATE_ORDER,
-        payload: response,
-      });
+    const response = await api.post("/order", param);
+    if (response.data.meta.status !== ResponseStatus.SUCCESS) {
+      throw new Error("Something went wrong");
+    }
+    console.log("orderId: " + response.data.data.order.id);
+    dispatch({
+      type: ORDER_ACTIONS.CREATE_ORDER,
+      payload: response,
+    });
+  };
+};
+
+export const cancelOrder = (param) => {
+  return async (dispatch) => {
+    const response = await api.put(`/order/${param.id}/status`, {
+      status: params.status,
+    });
+    if (response.data.meta.status !== ResponseStatus.SUCCESS) {
+      throw new Error("Something went wrong");
+    }
+    console.log("orderId: " + response.data.data.order.id);
+    dispatch({
+      type: ORDER_ACTIONS.CANCEL_ORDER,
+      payload: response,
+    });
   };
 };
 
