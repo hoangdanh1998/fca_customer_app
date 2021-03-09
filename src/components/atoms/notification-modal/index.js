@@ -15,11 +15,6 @@ const NotificationModal = (props) => {
       <Card style={styles.card}>
         <CardItem style={{ flex: 1 }}>
           <Icon
-            // android={
-            //   message === MESSAGES.REJECTED
-            //     ? "close-circle-outline"
-            //     : "checkmark-circle-outline"
-            // }
             name={
               message === MESSAGES.FAIL || message === MESSAGES.REJECTED
                 ? "close-circle-outline"

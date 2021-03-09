@@ -27,6 +27,8 @@
     "title-qrcode-information":"Confirm receive order",
     "title-history-order": "My orders",
     "title-notification": "Notification",
+    "title-my-profile": "My Profile",
+    "title-emergency-profile": "Emergency profile",
 
     "wording-item": "item(s)",
     "wording-my-orders": "My Orders",
@@ -50,6 +52,16 @@
     "wording-error-location": "We don't have permission to access your location",
     "wording-timeline": "Timeline",
     "wording-search-destination": "Where do you want to go?",
-    "wording-order-fail": "Order failed"
-    
+    "wording-order-fail": "Order failed",
+    "wording-phone": "Phone",
+    "wording-wallet": "Wallet Amount",
+    "wording-logout": "Logout",
+    "wording-address": "Address",
+    "wording-close": "Close",
+    "wording-saved-address": "Saved address",
+    "wording-saved-address-label": "Label",
+    "wording-emergency-profile": "Favorite store",
+    "wording-search-store": "Search store",
+    "wording-edit": "Edit",
+    "wording-save": "Save"
 }

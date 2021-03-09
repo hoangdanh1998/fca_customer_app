@@ -20,6 +20,10 @@ import OrderDetails from "../screens/order-details";
 import React from "react";
 import StoreDetails from "../screens/store-details";
 import DeliveryOrder from "../screens/delivery-order";
+import MyProfile from "../screens/my-profile";
+import EmergencyProfile from "../screens/emergency-profile";
+import EmergencyProfileList from "../screens/emergency-profile-list";
+import EditEmergencyProfile from "../screens/edit-emergency-profile";
 import googleMapNavigation from "../screens/map/google-map-navigation";
 
 const Stack = createStackNavigator();
@@ -58,6 +62,9 @@ export default function Navigation() {
                 <Icon
                   name="person-circle-outline"
                   style={{ color: LIGHT_COLOR }}
+                  onPress={() => {
+                    navigation.navigate("MY_PROFILE");
+                  }}
                 />
               </View>
             ),
@@ -145,6 +152,80 @@ export default function Navigation() {
             },
             headerLeft: HeaderBackButton,
           }}
+        />
+        <Stack.Screen
+          name="MY_PROFILE"
+          component={MyProfile}
+          options={{
+            title: IMLocalized("title-my-profile"),
+            headerTintColor: LIGHT_COLOR,
+            headerStyle: {
+              backgroundColor: DARK_COLOR,
+            },
+            headerLeft: HeaderBackButton,
+          }}
+        />
+        <Stack.Screen
+          name="EMERGENCY_PROFILE"
+          component={EmergencyProfile}
+          options={({ navigation, route }) => ({
+            title: IMLocalized("title-emergency-profile"),
+            headerTintColor: LIGHT_COLOR,
+            headerStyle: {
+              backgroundColor: DARK_COLOR,
+            },
+            headerLeft: HeaderBackButton,
+            headerRight: (selectedStore) => (
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  width: "120%",
+                }}
+              >
+                <Icon
+                  name="pencil-outline"
+                  style={{ color: LIGHT_COLOR }}
+                  // onPress={() => {
+                  //   navigation.navigate("EDIT_EMERGENCY", {
+                  //     currentStore: selectedStore,
+                  //   });
+                  // }}
+                />
+                <Icon
+                  name="trash-outline"
+                  style={{ color: LIGHT_COLOR }}
+                  onPress={() => {
+                    navigation.navigate("MY_PROFILE");
+                  }}
+                />
+              </View>
+            ),
+          })}
+        />
+        <Stack.Screen
+          name="EMERGENCY_PROFILE_LIST"
+          component={EmergencyProfileList}
+          options={({ navigation, route }) => ({
+            title: IMLocalized("title-emergency-profile"),
+            headerTintColor: LIGHT_COLOR,
+            headerStyle: {
+              backgroundColor: DARK_COLOR,
+            },
+            headerLeft: HeaderBackButton,
+          })}
+        />
+        <Stack.Screen
+          name="EDIT_EMERGENCY"
+          component={EditEmergencyProfile}
+          options={({ navigation, route }) => ({
+            title: IMLocalized("title-emergency-profile"),
+            headerTintColor: LIGHT_COLOR,
+            headerStyle: {
+              backgroundColor: DARK_COLOR,
+            },
+            headerLeft: HeaderBackButton,
+          })}
         />
       </Stack.Navigator>
     // </NavigationContainer>

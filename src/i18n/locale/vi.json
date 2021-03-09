@@ -28,6 +28,8 @@
     "title-qrcode-information": "Xác thực nhận hàng",
     "title-navigation-tracking": "Tìm đường",
     "title-notification": "Thông báo",
+    "title-my-profile": "Thông tin cá nhân",
+    "title-emergency-profile": "Thiết lập đặt hàng nhanh",
 
     "wording-item": "món",
     "wording-my-orders": "Đơn hàng của tôi",
@@ -51,5 +53,16 @@
     "wording-error-location": "Bạn chưa cấp quyền truy cập vị trí",
     "wording-timeline": "Dòng thời gian",
     "wording-search-destination": "Bạn muốn đi đâu?",
-    "wording-order-fail": "Đặt hàng thất bại"
+    "wording-order-fail": "Đặt hàng thất bại",
+    "wording-phone": "Số điện thoại",
+    "wording-wallet": "Số dư ví",
+    "wording-logout": "Đăng xuất",
+    "wording-address": "Địa chỉ",
+    "wording-close": "Đóng",
+    "wording-saved-address": "Địa chỉ đã lưu",
+    "wording-saved-address-label": "Nhãn",
+    "wording-emergency-profile": "Thiết lập đặt hàng nhanh",
+    "wording-search-store": "Tìm kiếm cửa hàng",
+    "wording-edit": "Thay đổi",
+    "wording-save": "Lưu"
 }

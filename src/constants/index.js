@@ -36,6 +36,10 @@ export const MESSAGES = {
   HOME: "home",
   SUCCESS: "success",
   FAIL: "fail",
+  LOGOUT: "logout",
+  EDIT: "edit",
+  SAVE: "save",
+  CLOSE: "close",
 };
 
 // APP STATUS
