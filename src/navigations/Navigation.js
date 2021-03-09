@@ -175,6 +175,32 @@ export default function Navigation() {
               backgroundColor: DARK_COLOR,
             },
             headerLeft: HeaderBackButton,
+            headerRight: (selectedStore) => (
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  width: "120%",
+                }}
+              >
+                <Icon
+                  name="pencil-outline"
+                  style={{ color: LIGHT_COLOR }}
+                  // onPress={() => {
+                  //   navigation.navigate("EDIT_EMERGENCY", {
+                  //     currentStore: selectedStore,
+                  //   });
+                  // }}
+                />
+                <Icon
+                  name="trash-outline"
+                  style={{ color: LIGHT_COLOR }}
+                  onPress={() => {
+                    navigation.navigate("MY_PROFILE");
+                  }}
+                />
+              </View>
+            ),
           })}
         />
         <Stack.Screen
