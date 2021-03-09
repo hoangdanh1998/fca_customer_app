@@ -30,6 +30,7 @@
     "title-notification": "Thông báo",
     "title-my-profile": "Thông tin cá nhân",
     "title-emergency-profile": "Thiết lập đặt hàng nhanh",
+    "title-saved-address": "Địa chỉ đã lưu",
 
     "wording-item": "món",
     "wording-my-orders": "Đơn hàng của tôi",
@@ -59,10 +60,14 @@
     "wording-logout": "Đăng xuất",
     "wording-address": "Địa chỉ",
     "wording-close": "Đóng",
+    "wording-add": "Thêm mới",
     "wording-saved-address": "Địa chỉ đã lưu",
     "wording-saved-address-label": "Nhãn",
     "wording-emergency-profile": "Thiết lập đặt hàng nhanh",
     "wording-search-store": "Tìm kiếm cửa hàng",
+    "wording-default-order": "Đơn hàng mặc định",
+    "wording-default-address": "Điểm đến mặc định",
     "wording-edit": "Thay đổi",
-    "wording-save": "Lưu"
+    "wording-save": "Lưu",
+    "wording-set-default": "Đặt làm mặc định"
 }

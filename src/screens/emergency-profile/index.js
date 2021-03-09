@@ -90,12 +90,13 @@ const EmergencyProfile = (props) => {
         <View style={{ flex: 1 }}>
           <FocusedButton
             block
-            name={MESSAGES.EDIT}
+            name={MESSAGES.SET_DEFAULT}
             disable={false}
             onPress={() => {
-              props.navigation.navigate("EDIT_EMERGENCY", {
-                currentStore: profile.partner,
-              });
+              // props.navigation.navigate("EDIT_EMERGENCY", {
+              //   currentStore: profile.partner,
+              // });
+              alert("Set as Default Order");
             }}
           />
         </View>

@@ -29,6 +29,7 @@
     "title-notification": "Notification",
     "title-my-profile": "My Profile",
     "title-emergency-profile": "Emergency profile",
+    "title-saved-address": "Saved Address",
 
     "wording-item": "item(s)",
     "wording-my-orders": "My Orders",
@@ -58,10 +59,14 @@
     "wording-logout": "Logout",
     "wording-address": "Address",
     "wording-close": "Close",
+    "wording-add": "Add",
     "wording-saved-address": "Saved address",
     "wording-saved-address-label": "Label",
     "wording-emergency-profile": "Favorite store",
     "wording-search-store": "Search store",
+    "wording-default-order": "Default Order",
+    "wording-default-address": "Default Address",
     "wording-edit": "Edit",
-    "wording-save": "Save"
+    "wording-save": "Save",
+    "wording-set-default": "Set as default"
 }
