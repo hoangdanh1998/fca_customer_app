@@ -1,13 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { TouchableWithoutFeedback } from "react-native";
-import {
-  Menu,
-  MenuOptions,
-  MenuOption,
-  MenuTrigger,
-  MenuProvider,
-} from "react-native-popup-menu";
+import { Icon } from "react-native-elements";
 import {
   Content,
   List,
@@ -17,17 +11,23 @@ import {
   Right,
   View,
   Text,
-  Icon,
   Footer,
   Body,
 } from "native-base";
 import { withNavigation } from "@react-navigation/compat";
 import FocusedButton from "../../components/atoms/focused-button/index";
 import { getHistory } from "../../redux/actions/order";
-import { DARK_COLOR, MESSAGES, LIGHT_COLOR } from "../../constants/index";
+import { init, IMLocalized } from "../../i18n/IMLocalized";
+import {
+  DARK_COLOR,
+  MESSAGES,
+  LIGHT_COLOR,
+  LANGUAGE,
+} from "../../constants/index";
 import { EMERGENCY_LIST } from "../../constants/seeding";
 
 const EmergencyProfileList = (props) => {
+  init(LANGUAGE.VI);
   //   var orderList = props.orderList;
   var emergencyList = EMERGENCY_LIST;
   //   const history = useSelector((state) => {
@@ -46,7 +46,7 @@ const EmergencyProfileList = (props) => {
   //     loadHistory();
   //   }, [dispatch, loadHistory]);
   return (
-    <MenuProvider>
+    <>
       <Content style={{ flex: 1 }}>
         <List
           dataArray={emergencyList}
@@ -57,74 +57,65 @@ const EmergencyProfileList = (props) => {
               }}
             >
               <Card style={{ flex: 1 }}>
-                <CardItem style={{ flex: 3 }}>
-                  <Left style={{ flex: 3 }}>
-                    <Text note>{item.savedAddress.label}</Text>
+                <CardItem style={{ flex: 1 }}>
+                  <Left style={{ flex: 1 }}>
+                    <Icon
+                      name="location-outline"
+                      type="ionicon"
+                      color={DARK_COLOR}
+                      size={15}
+                    />
                   </Left>
-                  <Body style={{ flex: 6 }}>
+                  <Body
+                    style={{
+                      flex: 7,
+                    }}
+                  >
+                    <Text
+                      note
+                      style={{
+                        flex: 1,
+                        justifyContent: "flex-start",
+                        color: DARK_COLOR,
+                      }}
+                    >
+                      {item.savedAddress.label}
+                    </Text>
+                  </Body>
+                  <Right style={{ flex: 7 }}>
                     {item.savedAddress.isDefault ? (
                       <Text
                         note
                         style={{
+                          flex: 1,
                           color: DARK_COLOR,
-                          textAlign: "right",
-                          width: "100%",
+                          borderColor: DARK_COLOR,
+                          borderWidth: 1,
+                          width: "90%",
+                          textAlign: "center",
                         }}
                       >
-                        Default Order
+                        {IMLocalized("wording-default-order")}
                       </Text>
                     ) : null}
-                  </Body>
-                  <Right style={{ flex: 1 }}>
-                    {/* <Text note>Delete</Text> */}
-                    <Menu>
-                      <MenuTrigger>
-                        <Icon
-                          name="arrow-forward"
-                          style={{ color: DARK_COLOR }}
-                          //   onPress={() => {
-                          //     props.navigation.navigate("EMERGENCY_PROFILE");
-                          //   }}
-                        />
-                      </MenuTrigger>
-                      <MenuOptions>
-                        <MenuOption
-                          onSelect={() => alert(`Save`)}
-                          text="Save"
-                        />
-                        <MenuOption onSelect={() => alert(`Delete`)}>
-                          <Text style={{ color: "red" }}>Delete</Text>
-                        </MenuOption>
-                        <MenuOption
-                          onSelect={() => alert(`Not called`)}
-                          disabled={true}
-                          text="Disabled"
-                        />
-                      </MenuOptions>
-                    </Menu>
                   </Right>
                 </CardItem>
-                <CardItem style={{ flex: 4 }}>
-                  <Left style={{ flex: 9 }}>
+                <CardItem style={{ flex: 1 }}>
+                  <Left style={{ flex: 1 }}>
+                    <Icon name="storefront" type="antd" color={DARK_COLOR} />
+                  </Left>
+                  <Body style={{ flex: 9 }}>
                     <Text
                       style={{
-                        color: DARK_COLOR,
-                        fontSize: 20,
+                        flex: 1,
                         fontWeight: "bold",
+                        fontSize: 20,
+                        color: DARK_COLOR,
                       }}
                     >
                       {item.partner.name}
                     </Text>
-                  </Left>
-                  <Right style={{ flex: 1 }}>
-                    <Icon
-                      name="arrow-forward"
-                      style={{ color: DARK_COLOR }}
-                      onPress={() => {
-                        props.navigation.navigate("EMERGENCY_PROFILE");
-                      }}
-                    />
-                  </Right>
+                  </Body>
                 </CardItem>
               </Card>
             </TouchableWithoutFeedback>
@@ -141,17 +132,18 @@ const EmergencyProfileList = (props) => {
         <View style={{ flex: 1 }}>
           <FocusedButton
             block
-            name={MESSAGES.EDIT}
+            name={MESSAGES.ADD}
             disable={false}
             onPress={() => {
-              props.navigation.navigate("EDIT_EMERGENCY", {
-                currentStore: profile.partner,
-              });
+              // props.navigation.navigate("EDIT_EMERGENCY", {
+              //   currentStore: profile.partner,
+              // });
+              alert("Add new emergency order");
             }}
           />
         </View>
       </Footer>
-    </MenuProvider>
+    </>
   );
 };
 
