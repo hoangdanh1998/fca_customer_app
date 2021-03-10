@@ -20,6 +20,11 @@ import { convertTransaction } from "../../utils/utils";
 init(LANGUAGE.VI);
 const HistoryOrderDetails = (props) => {
   const order = props.route.params.order;
+  const transaction = props.route.params.order.transaction.sort((a, b) => {
+    return (
+      new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime() < 0
+    );
+  });
   return (
     <>
       <Content>
@@ -30,7 +35,7 @@ const HistoryOrderDetails = (props) => {
               date={moment(order.createdAt, DATE_FORMAT_CALL_API).format(
                 DATE_FORMAT
               )}
-              transactions={convertTransaction(order.transaction)}
+              transactions={convertTransaction(transaction)}
             />
           ) : null}
         </View>

@@ -53,11 +53,7 @@ const OrderCard = (props) => {
             </Text>
           </Left>
           <Right>
-            <Text>
-              {moment(order.createdAt, DATE_TIME_FORMAT_CALL_API).format(
-                DATE_TIME_FORMAT
-              )}
-            </Text>
+            <Text>{moment(order.createdAt).format(DATE_TIME_FORMAT)}</Text>
           </Right>
         </CardItem>
         <CardItem style={styles.card2nd}>

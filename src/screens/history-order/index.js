@@ -12,13 +12,15 @@ const HistoryOrder = (props) => {
   const history = useSelector((state) => {
     return state.order.history;
   });
+  const customer = useSelector((state) => state.account.customer);
 
   const dispatch = useDispatch();
   const loadHistory = useCallback(async () => {
     try {
-      await dispatch(getHistory("0394422439"));
+      await dispatch(getHistory(customer.account.phone));
     } catch (error) {
-      setError(error);
+      // setError(error);
+      alert(error);
     }
   }, [dispatch]);
   useEffect(() => {
