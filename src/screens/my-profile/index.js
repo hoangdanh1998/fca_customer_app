@@ -26,12 +26,25 @@ import {
   DARK_COLOR,
 } from "../../constants/index";
 import { MY_PROFILE } from "../../constants/seeding";
+import {useDispatch} from 'react-redux'
+import { signOut } from "../../redux/actions/account";
 /* eslint-disable react/prop-types */
 
 init(LANGUAGE.VI);
 const MyProfile = (props) => {
   // const profile = this.props.profile;
+
+console.log("route logout: ", props.route.params.handleLogOut);
+const handleLogOut = props.route.params.handleLogOut;
+
   const profile = MY_PROFILE;
+
+  const dispatch = useDispatch();
+
+  // const handleLogOut = () => {
+  //   dispatch(signOut());
+  // }
+
   return (
     <>
       <Content style={{ backgroundColor: "white" }}>
@@ -152,7 +165,7 @@ const MyProfile = (props) => {
           name={MESSAGES.LOGOUT}
           disable={false}
           onPress={() => {
-            props.navigation.navigate("MAP_VIEW");
+            handleLogOut();
           }}
         />
       </Footer>
