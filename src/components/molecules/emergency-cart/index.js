@@ -44,7 +44,7 @@ const EmergencyCart = (props) => {
           // })
           alert('set emergency cart')
         }
-        name={MESSAGES.SET_DEFAULT}
+        name={MESSAGES.SAVE}
         block
       />
     </Card>

@@ -15,10 +15,12 @@ import CreateOrder from "../screens/create-order";
 import HistoryOrder from "../screens/history-order";
 import HistoryOrderDetails from "../screens/history-order-details";
 import MapScreen from "../screens/map/google-map";
+import MapScreenEmergency from "../screens/map/emergency-google-map";
 import { NavigationContainer } from "@react-navigation/native";
 import OrderDetails from "../screens/order-details";
 import React from "react";
 import StoreDetails from "../screens/store-details";
+import StoreDetailsEmergency from "../screens/store-details-emergency";
 import DeliveryOrder from "../screens/delivery-order";
 import MyProfile from "../screens/my-profile";
 import EmergencyProfile from "../screens/emergency-profile";
@@ -72,9 +74,9 @@ export default function Navigation(props) {
           ),
         })}
       />
-      {/* <Stack.Screen
+      <Stack.Screen
         name="SET_DEFAULT_VIEW"
-        component={MapScreen}
+        component={MapScreenEmergency}
         options={({ navigation, route }) => ({
           title: IMLocalized('set-default-emergency'),
           headerTintColor: LIGHT_COLOR,
@@ -84,12 +86,24 @@ export default function Navigation(props) {
           headerLeft: HeaderBackButton,
 
         })}
-      /> */}
+      />
       <Stack.Screen
         name="STORE_DETAIL"
         component={StoreDetails}
         options={{
           title: IMLocalized("title-store-information"),
+          headerTintColor: LIGHT_COLOR,
+          headerStyle: {
+            backgroundColor: DARK_COLOR,
+          },
+          headerLeft: HeaderBackButton,
+        }}
+      />
+       <Stack.Screen
+        name="STORE_DETAIL_EMERGENCY"
+        component={StoreDetailsEmergency}
+        options={{
+          title: IMLocalized("wording-set-default"),
           headerTintColor: LIGHT_COLOR,
           headerStyle: {
             backgroundColor: DARK_COLOR,

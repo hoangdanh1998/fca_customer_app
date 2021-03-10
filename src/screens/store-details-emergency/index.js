@@ -26,7 +26,7 @@ import { getPartnerInformation } from "../../redux/actions/partner";
 import { styles } from "./styles";
 import { withNavigation } from "@react-navigation/compat";
 
-const StoreDefault = (props) => {
+const StoreDetailsEmergency = (props) => {
   init(LANGUAGE.VI);
 
   const partnerId = props.route.params.partnerId;
@@ -127,4 +127,4 @@ const StoreDefault = (props) => {
   );
 };
 
-export default withNavigation(StoreDefault);
+export default withNavigation(StoreDetailsEmergency);
