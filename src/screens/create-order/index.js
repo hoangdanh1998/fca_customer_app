@@ -14,7 +14,7 @@ import {
   LANGUAGE,
   MESSAGES,
   NOTICE_DURATION,
-  OrderStatus,
+  OrderStatus
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { ORDER_ACTIONS } from "../../redux/action-types/actions";
@@ -153,7 +153,7 @@ const CreateOrder = (props) => {
     if (createdOrder.id) {
       getOrderOnChange(createdOrder.id, (order) => {
         if (order) {
-          if (order.status === OrderStatus.ACCEPTANCE) {
+          if (!order.timeRemain && order.status === OrderStatus.ACCEPTANCE) {
             handleAcceptedOrder();
           }
           if (order.status === OrderStatus.REJECTION) {
