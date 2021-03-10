@@ -18,7 +18,7 @@ import FocusedButton from "../../components/atoms/focused-button/index";
 import NotificationModal from "../../components/atoms/notification-modal/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import ProcessingModal from "../../components/molecules/processing-modal/index";
-import { createOrder } from "../../redux/actions/order";
+import { createOrder, cancelOrder } from "../../redux/actions/order";
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 import { setStoreSuggestion } from "../../redux/actions/store";
 import { withNavigation } from "@react-navigation/compat";
@@ -40,7 +40,7 @@ const CreateOrder = (props) => {
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
   const createdOrder = useSelector((state) => state.order.createdOrder);
-  const customer = useSelector(state => state.account.customer);
+  const customer = useSelector((state) => state.account.customer);
   console.log("customer id from store:", customer.id);
 
   console.log("Before" + bestSuggestion.name, suggestionStores.length);
@@ -58,6 +58,7 @@ const CreateOrder = (props) => {
       }
       var location = await Location.getCurrentPositionAsync({});
 
+      console.log("storeId", store.id);
       dispatch(
         createOrder({
           customerId: customer.id,
@@ -84,14 +85,30 @@ const CreateOrder = (props) => {
     }
   }, [dispatch]);
 
+  const destroyOrder = async (orderId) => {
+    try {
+      dispatch(
+        cancelOrder({
+          id: orderId,
+          status: OrderStatus.CANCELLATION,
+        })
+      );
+    } catch (error) {
+      console.log("CancelOrderError", error);
+      setVisibleTimer(false);
+      alert("Can not cancel order");
+    }
+  };
+
   const handlePressFocusedButton = async () => {
     setVisibleTimer(true);
     await submitOrder();
   };
 
-  const cancelOrder = () => {
+  const handlePressCancelOrder = async () => {
     setVisibleTimer(false);
-    //Unclear biz
+    await destroyOrder(createdOrder.id);
+    alert("Cancel order success");
   };
 
   const handleRejectedOrder = () => {
@@ -151,7 +168,10 @@ const CreateOrder = (props) => {
           <OrderDetail store={store} orderDetails={order} />
         </View>
         {visibleTimer ? (
-          <ProcessingModal visible={visibleTimer} onCancel={cancelOrder} />
+          <ProcessingModal
+            visible={visibleTimer}
+            onCancel={handlePressCancelOrder}
+          />
         ) : null}
       </Content>
       <Footer style={{ backgroundColor: "white" }}>
