@@ -90,12 +90,9 @@ const CreateOrder = (props) => {
         })
       );
     } catch (error) {
-      console.log("SubmitOrderError", error);
+      console.log("CancelOrderError", error);
       setVisibleTimer(false);
-      setVisibleNotificationModal(true);
-      setTimeout(() => {
-        setVisibleNotificationModal(false);
-      }, NOTICE_DURATION);
+      alert("Can not cancel order");
     }
   }, [dispatch]);
 
@@ -104,8 +101,11 @@ const CreateOrder = (props) => {
     await submitOrder();
   };
 
-  const cancelOrder = () => {
+  const cancelOrder = async () => {
     setVisibleTimer(false);
+    await destroyOrder();
+    setVisibleTimer(false);
+    alert("Cancel order success");
     //Unclear biz
   };
 
