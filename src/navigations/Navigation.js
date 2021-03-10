@@ -72,6 +72,19 @@ export default function Navigation(props) {
           ),
         })}
       />
+      {/* <Stack.Screen
+        name="SET_DEFAULT_VIEW"
+        component={MapScreen}
+        options={({ navigation, route }) => ({
+          title: IMLocalized('set-default-emergency'),
+          headerTintColor: LIGHT_COLOR,
+          headerStyle: {
+            backgroundColor: DARK_COLOR,
+          },
+          headerLeft: HeaderBackButton,
+
+        })}
+      /> */}
       <Stack.Screen
         name="STORE_DETAIL"
         component={StoreDetails}
