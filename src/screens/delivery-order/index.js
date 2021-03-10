@@ -22,7 +22,6 @@ Notifications.setNotificationHandler({
   }),
 });
 const DeliveryOrder = (props) => {
-  console.log("props of delivery ",props);
   const qrCode = props.route.params.qrCode;
   const orderId = props.route.params.orderId;
   console.log("orderId", orderId);
@@ -53,11 +52,11 @@ const DeliveryOrder = (props) => {
     if (orderId) {
       console.log("createdOrder", orderId);
       getOrderOnChange(orderId, (order) => {
-        console.log('delivery-order');
+        console.log("delivery-order");
         if (order.status === OrderStatus.RECEPTION) {
           handleScanSuccess();
         }
-        
+
         // else {
         //   handleScanFail();
         // }

@@ -40,7 +40,7 @@ const CreateOrder = (props) => {
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
   const createdOrder = useSelector((state) => state.order.createdOrder);
-  const customer = useSelector(state => state.account.customer);
+  const customer = useSelector((state) => state.account.customer);
   console.log("customer id from store:", customer.id);
 
   console.log("Before" + bestSuggestion.name, suggestionStores.length);
@@ -58,6 +58,7 @@ const CreateOrder = (props) => {
       }
       var location = await Location.getCurrentPositionAsync({});
 
+      console.log("storeId", store.id);
       dispatch(
         createOrder({
           customerId: customer.id,
@@ -84,11 +85,11 @@ const CreateOrder = (props) => {
     }
   }, [dispatch]);
 
-  const destroyOrder = useCallback(async () => {
+  const destroyOrder = async (orderId) => {
     try {
       dispatch(
         cancelOrder({
-          id: createdOrder.id,
+          id: orderId,
           status: OrderStatus.CANCELLATION,
         })
       );
@@ -97,19 +98,17 @@ const CreateOrder = (props) => {
       setVisibleTimer(false);
       alert("Can not cancel order");
     }
-  }, [dispatch]);
+  };
 
   const handlePressFocusedButton = async () => {
     setVisibleTimer(true);
     await submitOrder();
   };
 
-  const cancelOrder = async () => {
+  const handlePressCancelOrder = async () => {
     setVisibleTimer(false);
-    await destroyOrder();
-    setVisibleTimer(false);
+    await destroyOrder(createdOrder.id);
     alert("Cancel order success");
-    //Unclear biz
   };
 
   const handleRejectedOrder = () => {
@@ -169,7 +168,10 @@ const CreateOrder = (props) => {
           <OrderDetail store={store} orderDetails={order} />
         </View>
         {visibleTimer ? (
-          <ProcessingModal visible={visibleTimer} onCancel={cancelOrder} />
+          <ProcessingModal
+            visible={visibleTimer}
+            onCancel={handlePressCancelOrder}
+          />
         ) : null}
       </Content>
       <Footer style={{ backgroundColor: "white" }}>

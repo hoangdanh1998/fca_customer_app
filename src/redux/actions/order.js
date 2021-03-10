@@ -19,12 +19,11 @@ export const createOrder = (param) => {
 export const cancelOrder = (param) => {
   return async (dispatch) => {
     const response = await api.put(`/order/${param.id}/status`, {
-      status: params.status,
+      status: param.status,
     });
     if (response.data.meta.status !== ResponseStatus.SUCCESS) {
       throw new Error("Something went wrong");
     }
-    console.log("orderId: " + response.data.data.order.id);
     dispatch({
       type: ORDER_ACTIONS.CANCEL_ORDER,
       payload: response,
