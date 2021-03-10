@@ -1,32 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import moment from "moment";
 import { withNavigation } from "@react-navigation/compat";
-import { Icon } from "react-native-elements";
-import { TouchableWithoutFeedback, Image } from "react-native";
 import {
-  Content,
+  Body, Card,
+  CardItem, Content,
   Footer,
-  Card,
-  CardItem,
-  Body,
+
+
+
   Left,
   Right,
-  Text,
+  Text
 } from "native-base";
+import React from "react";
+import { TouchableWithoutFeedback } from "react-native";
+import { Icon } from "react-native-elements";
 import NumberFormat from "react-number-format";
+import { useDispatch, useSelector } from "react-redux";
 import UnFocusedButton from "../../components/atoms/unfocused-button/index";
-import { init, IMLocalized } from "../../i18n/IMLocalized";
 import {
-  LANGUAGE,
-  MESSAGES,
-  LIGHT_COLOR,
-  DARK_COLOR,
-  AVATAR_IMAGE,
+  DARK_COLOR, LANGUAGE,
+
+  LIGHT_COLOR, MESSAGES
 } from "../../constants/index";
-import { MY_PROFILE } from "../../constants/seeding";
-import { useDispatch } from "react-redux";
-import { signOut } from "../../redux/actions/account";
+import { IMLocalized, init } from "../../i18n/IMLocalized";
 /* eslint-disable react/prop-types */
 
 init(LANGUAGE.VI);
@@ -54,7 +49,7 @@ const MyProfile = (props) => {
                   fontWeight: "bold",
                 }}
               >
-                {profile.name}
+                {profile?.name}
               </Text>
             </Left>
           </CardItem>
@@ -66,7 +61,7 @@ const MyProfile = (props) => {
             </Left>
             <Right>
               <Text style={{ color: DARK_COLOR, fontWeight: "bold" }}>
-                {profile.phone}
+                {profile?.phone}
               </Text>
             </Right>
           </CardItem>
@@ -78,7 +73,7 @@ const MyProfile = (props) => {
             </Left>
             <Right>
               <NumberFormat
-                value={profile.currentAmount ? profile.currentAmount : 0}
+                value={profile?.currentAmount ? profile?.currentAmount : 0}
                 displayType={"text"}
                 thousandSeparator={true}
                 renderText={(formattedValue) => (
@@ -92,7 +87,7 @@ const MyProfile = (props) => {
         </Card>
         <TouchableWithoutFeedback
           onPress={() => {
-            props.navigation.navigate("EMERGENCY_PROFILE_LIST");
+            props.navigation.navigate("EMERGENCY_PROFILE?_LIST");
           }}
         >
           <Card style={{ flex: 1 }}>

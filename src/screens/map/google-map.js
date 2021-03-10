@@ -5,22 +5,22 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { useDispatch, useSelector } from "react-redux";
+import NotificationModal from "../../components/atoms/notification-modal/index";
 import {
   KEY_GOOGLE_MAP,
   LANGUAGE,
-  PRIMARY_LIGHT_COLOR,
-  NOTICE_DURATION,
-  MESSAGES,
+
+
+  MESSAGES, PRIMARY_LIGHT_COLOR
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
   setDestinationLocation,
-  setPartnerLocation,
+  setPartnerLocation
 } from "../../redux/actions/map";
 import { setPartner } from "../../redux/actions/partner";
 import { getStoreSuggestion } from "../../redux/actions/store";
 import PopupStore from "./popup-store";
-import NotificationModal from "../../components/atoms/notification-modal/index";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -299,7 +299,7 @@ const MapScreen = () => {
           {mapView()}
         </View>
         {openSearchModal()}
-        {partner && isShowPopup ? <PopupStore store={partner} /> : null}
+        {bestSuggestion && partner && isShowPopup ? <PopupStore store={partner} /> : null}
       </View>
       {suggestionStores && suggestionStores.length === 0 ? (
         <NotificationModal
