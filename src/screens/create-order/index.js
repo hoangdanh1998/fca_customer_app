@@ -14,14 +14,13 @@ import {
   LANGUAGE,
   MESSAGES,
   NOTICE_DURATION,
-  OrderStatus
+  OrderStatus,
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
-import { ORDER_ACTIONS } from '../../redux/action-types/actions';
+import { ORDER_ACTIONS } from "../../redux/action-types/actions";
 import { cancelOrder, createOrder } from "../../redux/actions/order";
 import { setStoreSuggestion } from "../../redux/actions/store";
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
-
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -111,12 +110,16 @@ const CreateOrder = (props) => {
     alert("Cancel order success");
   };
 
-  const handleRejectedOrder = () => {
+  const handleRejectedOrder = async () => {
     setVisibleTimer(false);
     setVisibleNotificationModal(true);
-    setTimeout(() => {
-      setVisibleNotificationModal(false);
-    }, NOTICE_DURATION);
+    await new Promise((resolve, reject) => {
+      setTimeout(() => {
+        setVisibleNotificationModal(false);
+        resolve();
+      }, NOTICE_DURATION);
+    });
+
     const length = suggestionStores.length;
     if (length > 1) {
       const newSuggestion = suggestionStores[length - 2];
@@ -191,6 +194,7 @@ const CreateOrder = (props) => {
       </Footer>
       <NotificationModal
         message={MESSAGES.REJECTED}
+        title={MESSAGES.TITLE_NOTIFICATION}
         visible={visibleNotificationModal}
       />
     </>

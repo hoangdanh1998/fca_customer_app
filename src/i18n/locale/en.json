@@ -61,6 +61,7 @@
     "wording-address": "Address",
     "wording-close": "Close",
     "wording-add": "Add",
+    "wording-no-suggestion": "Sorry! All stores in our system is close",
     "wording-saved-address": "Saved address",
     "wording-saved-address-label": "Label",
     "wording-emergency-profile": "Favorite store",
@@ -69,5 +70,6 @@
     "wording-default-address": "Default Address",
     "wording-edit": "Edit",
     "wording-save": "Save",
-    "wording-set-default": "Set as default"
+    "wording-set-default": "Set as default",
+    "wording-title-notification": "Notification"
 }

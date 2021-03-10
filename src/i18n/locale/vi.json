@@ -40,7 +40,7 @@
     "wording-done": "Hoàn tất",
     "wording-next": "Tiếp theo",
     "wording-order": "Đặt hàng",
-    "wording-success": "Success",
+    "wording-success": "Thành công",
     "wording-fail": "Thất bại",
     "wording-feedback": "Đánh giá",
     "wording-cancel-order": "Huỷ đơn hàng",
@@ -62,6 +62,7 @@
     "wording-address": "Địa chỉ",
     "wording-close": "Đóng",
     "wording-add": "Thêm mới",
+    "wording-no-suggestion": "Không tìm thấy cửa hàng nào đang mở cửa trên tuyến đường này",
     "wording-saved-address": "Địa chỉ đã lưu",
     "wording-saved-address-label": "Nhãn",
     "wording-emergency-profile": "Thiết lập đặt hàng nhanh",
@@ -70,5 +71,6 @@
     "wording-default-address": "Điểm đến mặc định",
     "wording-edit": "Thay đổi",
     "wording-save": "Lưu",
-    "wording-set-default": "Đặt làm mặc định"
+    "wording-set-default": "Đặt làm mặc định",
+    "wording-title-notification": "Thông báo"
 }
