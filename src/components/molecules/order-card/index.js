@@ -9,6 +9,7 @@ import {
   Right,
   Text,
 } from "native-base";
+import { TouchableWithoutFeedback } from "react-native";
 import NumberFormat from "react-number-format";
 import moment from "moment";
 import { styles } from "./styles";
@@ -20,6 +21,7 @@ import {
   DATE_TIME_FORMAT,
   OrderStatus,
   DARK_COLOR,
+  PRIMARY_LIGHT_COLOR,
 } from "../../../constants/index.js";
 
 const OrderCard = (props) => {
@@ -39,7 +41,7 @@ const OrderCard = (props) => {
     }
   };
   return (
-    <Content>
+    <TouchableWithoutFeedback onPress={() => props.onNext(order)}>
       <Card
         onPress={() => {
           props.onNext(order);
@@ -81,14 +83,13 @@ const OrderCard = (props) => {
               onPress={() => {
                 props.onNext(order);
               }}
-              android={"chevron-forward"}
-              name="arrow-forward"
+              name="chevron-forward"
               style={styles.icon}
             />
           </Right>
         </CardItem>
       </Card>
-    </Content>
+    </TouchableWithoutFeedback>
   );
 };
 

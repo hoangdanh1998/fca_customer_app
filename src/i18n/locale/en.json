@@ -13,6 +13,7 @@
     "status-initialization-message": "Your order is submitted successfully",
     "status-acceptance-message": "Coffee Shop is received your order",
     "status-preparation-message": "Coffee Shop is preparing your order",
+    "status-rejection-message": "Coffee Shop rejected your order",
     "status-wait-message": "Wait a minute! It will be done soon",
     "status-readiness-message": "Tada! Your order is ready to delivery",
     "status-arrival-message": "Tada! You arrived",
