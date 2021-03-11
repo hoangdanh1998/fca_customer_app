@@ -1,31 +1,29 @@
 import {
+  createStackNavigator, HeaderBackButton
+} from "@react-navigation/stack";
+import { Icon, View } from "native-base";
+import React from "react";
+import {
   APP_NAME,
   DARK_COLOR,
   LANGUAGE,
-  LIGHT_COLOR,
+  LIGHT_COLOR
 } from "../constants/index";
-import {
-  HeaderBackButton,
-  createStackNavigator,
-} from "@react-navigation/stack";
 import { IMLocalized, init } from "../i18n/IMLocalized";
-import { Icon, View } from "native-base";
-
 import CreateOrder from "../screens/create-order";
+import DeliveryOrder from "../screens/delivery-order";
+import EditEmergencyProfile from "../screens/edit-emergency-profile";
+import EmergencyProfile from "../screens/emergency-profile";
+import EmergencyProfileList from "../screens/emergency-profile-list";
 import HistoryOrder from "../screens/history-order";
 import HistoryOrderDetails from "../screens/history-order-details";
 import MapScreen from "../screens/map/google-map";
-import { NavigationContainer } from "@react-navigation/native";
-import OrderDetails from "../screens/order-details";
-import React from "react";
-import StoreDetails from "../screens/store-details";
-import DeliveryOrder from "../screens/delivery-order";
-import MyProfile from "../screens/my-profile";
-import EmergencyProfile from "../screens/emergency-profile";
-import EmergencyProfileList from "../screens/emergency-profile-list";
-import EditEmergencyProfile from "../screens/edit-emergency-profile";
-import SavedAddressList from "../screens/saved-address-list";
 import googleMapNavigation from "../screens/map/google-map-navigation";
+import MyProfile from "../screens/my-profile";
+import OrderDetails from "../screens/order-details";
+import SavedAddressList from "../screens/saved-address-list";
+import StoreDetails from "../screens/store-details";
+
 
 const Stack = createStackNavigator();
 export default function Navigation(props) {
@@ -190,7 +188,9 @@ export default function Navigation(props) {
                 name="pencil-outline"
                 style={{ color: LIGHT_COLOR }}
                 onPress={() => {
-                  navigation.navigate("EDIT_EMERGENCY");
+                  alert("Edit profile");
+
+                  // navigation.navigate("EDIT_EMERGENCY");
                 }}
               />
               <Icon

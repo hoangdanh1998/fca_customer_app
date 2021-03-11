@@ -178,6 +178,7 @@ const MapScreen = () => {
 
           {destinationLocation ? (
             <Marker
+              title={destinationLocation.description}
               coordinate={{
                 latitude: destinationLocation.latitude,
                 longitude: destinationLocation.longitude,

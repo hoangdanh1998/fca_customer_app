@@ -87,7 +87,7 @@ const MyProfile = (props) => {
         </Card>
         <TouchableWithoutFeedback
           onPress={() => {
-            props.navigation.navigate("EMERGENCY_PROFILE?_LIST");
+            props.navigation.navigate("EMERGENCY_PROFILE_LIST");
           }}
         >
           <Card style={{ flex: 1 }}>
