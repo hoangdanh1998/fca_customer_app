@@ -28,6 +28,7 @@ import EmergencyProfileList from "../screens/emergency-profile-list";
 import EditEmergencyProfile from "../screens/edit-emergency-profile";
 import SavedAddressList from "../screens/saved-address-list";
 import googleMapNavigation from "../screens/map/google-map-navigation";
+import AddressScreen from "../screens/saved-address-list/google-map-address";
 
 const Stack = createStackNavigator();
 export default function Navigation(props) {
@@ -104,6 +105,18 @@ export default function Navigation(props) {
         component={StoreDetailsEmergency}
         options={{
           title: IMLocalized("wording-set-default"),
+          headerTintColor: LIGHT_COLOR,
+          headerStyle: {
+            backgroundColor: DARK_COLOR,
+          },
+          headerLeft: HeaderBackButton,
+        }}
+      />
+       <Stack.Screen
+        name="ADD_ADDRESS"
+        component={AddressScreen}
+        options={{
+          title: IMLocalized("wording-add"),
           headerTintColor: LIGHT_COLOR,
           headerStyle: {
             backgroundColor: DARK_COLOR,

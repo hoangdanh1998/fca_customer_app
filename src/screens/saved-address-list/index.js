@@ -130,10 +130,7 @@ const SavedAddressList = (props) => {
             name={MESSAGES.ADD}
             disable={false}
             onPress={() => {
-              // props.navigation.navigate("EDIT_EMERGENCY", {
-              //   currentStore: profile.partner,
-              // });
-              alert("Add new address");
+              props.navigation.navigate("ADD_ADDRESS");
             }}
           />
         </View>
