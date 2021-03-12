@@ -135,10 +135,7 @@ const EmergencyProfileList = (props) => {
             name={MESSAGES.ADD}
             disable={false}
             onPress={() => {
-              // props.navigation.navigate("EDIT_EMERGENCY", {
-              //   currentStore: profile.partner,
-              // });
-              alert("Add new emergency order");
+              props.navigation.navigate("SET_DEFAULT_VIEW")
             }}
           />
         </View>

@@ -33,6 +33,8 @@
     "title-emergency-profile": "Thiết lập đặt hàng nhanh",
     "title-saved-address": "Địa chỉ đã lưu",
 
+    "set-default-emergency":"Chọn đặt hàng nhanh",
+
     "wording-item": "món",
     "wording-my-orders": "Đơn hàng của tôi",
     "wording-accepted": "Đặt hàng thành công",
@@ -72,5 +74,7 @@
     "wording-edit": "Thay đổi",
     "wording-save": "Lưu",
     "wording-set-default": "Đặt làm mặc định",
+    "wording-set-saved-address": "Đặt tên cho địa chỉ",
+    "wording-choose-saved-address": "Chọn địa chỉ để lưu",
     "wording-title-notification": "Thông báo"
 }

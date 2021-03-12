@@ -18,11 +18,17 @@ import EmergencyProfileList from "../screens/emergency-profile-list";
 import HistoryOrder from "../screens/history-order";
 import HistoryOrderDetails from "../screens/history-order-details";
 import MapScreen from "../screens/map/google-map";
-import googleMapNavigation from "../screens/map/google-map-navigation";
-import MyProfile from "../screens/my-profile";
+import MapScreenEmergency from "../screens/map/emergency-google-map";
+import { NavigationContainer } from "@react-navigation/native";
 import OrderDetails from "../screens/order-details";
-import SavedAddressList from "../screens/saved-address-list";
 import StoreDetails from "../screens/store-details";
+import StoreDetailsEmergency from "../screens/store-details-emergency";
+import DeliveryOrder from "../screens/delivery-order";
+
+import MyProfile from "../screens/my-profile";
+import SavedAddressList from "../screens/saved-address-list";
+import googleMapNavigation from "../screens/map/google-map-navigation";
+import AddressScreen from "../screens/saved-address-list/google-map-address";
 
 
 const Stack = createStackNavigator();
@@ -71,10 +77,47 @@ export default function Navigation(props) {
         })}
       />
       <Stack.Screen
+        name="SET_DEFAULT_VIEW"
+        component={MapScreenEmergency}
+        options={({ navigation, route }) => ({
+          title: IMLocalized('set-default-emergency'),
+          headerTintColor: LIGHT_COLOR,
+          headerStyle: {
+            backgroundColor: DARK_COLOR,
+          },
+          headerLeft: HeaderBackButton,
+
+        })}
+      />
+      <Stack.Screen
         name="STORE_DETAIL"
         component={StoreDetails}
         options={{
           title: IMLocalized("title-store-information"),
+          headerTintColor: LIGHT_COLOR,
+          headerStyle: {
+            backgroundColor: DARK_COLOR,
+          },
+          headerLeft: HeaderBackButton,
+        }}
+      />
+       <Stack.Screen
+        name="STORE_DETAIL_EMERGENCY"
+        component={StoreDetailsEmergency}
+        options={{
+          title: IMLocalized("wording-set-default"),
+          headerTintColor: LIGHT_COLOR,
+          headerStyle: {
+            backgroundColor: DARK_COLOR,
+          },
+          headerLeft: HeaderBackButton,
+        }}
+      />
+       <Stack.Screen
+        name="ADD_ADDRESS"
+        component={AddressScreen}
+        options={{
+          title: IMLocalized("wording-add"),
           headerTintColor: LIGHT_COLOR,
           headerStyle: {
             backgroundColor: DARK_COLOR,
