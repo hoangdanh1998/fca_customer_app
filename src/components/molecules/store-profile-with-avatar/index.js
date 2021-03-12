@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 
 import { withNavigation } from "@react-navigation/compat";
-import { Card, CardItem, Left, Right } from "native-base";
+import { CardItem, Left, Right } from "native-base";
 import React from "react";
 import { Image, Text, View } from "react-native";
 import { LANGUAGE } from "../../../constants/index";

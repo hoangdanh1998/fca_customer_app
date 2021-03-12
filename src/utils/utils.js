@@ -14,9 +14,7 @@ init(LANGUAGE.VI);
 export const convertTransaction = (transactions) => {
   const result = transactions.map((transaction) => {
     return {
-      time: moment(transaction.createdAt, DATE_TIME_FORMAT_CALL_API).format(
-        TIME_FORMAT
-      ),
+      time: moment(transaction.createdAt).format(TIME_FORMAT),
       title: IMLocalized(transaction.toStatus.toLowerCase()),
       description: IMLocalized(
         `status-${transaction.toStatus.toLowerCase()}-message`

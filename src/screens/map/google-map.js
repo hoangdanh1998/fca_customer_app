@@ -1,16 +1,26 @@
 import * as Location from "expo-location";
+import { Icon } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Dimensions, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
-import { useDispatch, useSelector } from 'react-redux';
-import { KEY_GOOGLE_MAP, LANGUAGE, PRIMARY_LIGHT_COLOR } from "../../constants/index";
-import { IMLocalized, init } from '../../i18n/IMLocalized';
-import { setDestinationLocation, setPartnerLocation } from "../../redux/actions/map";
-import { setPartner } from '../../redux/actions/partner';
-import { getStoreSuggestion } from '../../redux/actions/store';
-import PopupStore from './popup-store';
+import { useDispatch, useSelector } from "react-redux";
+import NotificationModal from "../../components/atoms/notification-modal/index";
+import {
+  KEY_GOOGLE_MAP,
+  LANGUAGE, MESSAGES, PRIMARY_LIGHT_COLOR
+} from "../../constants/index";
+import { IMLocalized, init } from "../../i18n/IMLocalized";
+import {
+  setDestinationLocation,
+  setPartnerLocation
+} from "../../redux/actions/map";
+import { setPartner } from "../../redux/actions/partner";
+import { getStoreSuggestion } from "../../redux/actions/store";
+import PopupStore from "./popup-store";
+
+
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -19,12 +29,13 @@ init(LANGUAGE.VI);
 const MapScreen = () => {
   const dispatch = useDispatch();
   const mapRef = useRef(null);
-  
-  const destinationLocation = useSelector(state => state.map.destinationLocation);
-  const suggestionStores = useSelector(state => state.store.suggestionStores);
-  const bestSuggestion = useSelector(state => state.store.bestSuggestion);
-  const partner = useSelector(state => state.partner.partner);
 
+  const destinationLocation = useSelector(
+    (state) => state.map.destinationLocation
+  );
+  const suggestionStores = useSelector((state) => state.store.suggestionStores);
+  const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
+  const partner = useSelector((state) => state.partner.partner);
 
   const [location, setLocation] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
@@ -34,7 +45,7 @@ const MapScreen = () => {
 
   const handleSetDetailsGeometry = (location) => {
     dispatch(setDestinationLocation(location));
-  }
+  };
 
   const getSuggestionStore = async (destination) => {
     try {
@@ -48,21 +59,22 @@ const MapScreen = () => {
   };
 
   const setSelectedStore = (store) => {
-    setIsShowPopup(true)
+    setIsShowPopup(true);
     dispatch(setPartner(store));
-    dispatch(setPartnerLocation({
-      latitude: +store.address.latitude,
-      longitude: +store.address.longitude,
-      latitudeDelta: 0.05,
-      longitudeDelta: 0.05,
-    }))
+    dispatch(
+      setPartnerLocation({
+        latitude: +store.address.latitude,
+        longitude: +store.address.longitude,
+        latitudeDelta: 0.05,
+        longitudeDelta: 0.05,
+      })
+    );
 
     setUserRegion({
       latitude: +store.address.latitude,
       longitude: +store.address.longitude,
     });
-
-  }
+  };
   const openSearchModal = () => {
     return (
       <View style={{ flex: 1 }}>
@@ -71,31 +83,30 @@ const MapScreen = () => {
 
           placeholder={IMLocalized("wording-search-destination")}
           minLength={2}
-          predefinedPlaces={[{
-            description: 'ĐH FPT',
-            geometry: { location: { lat: 10.8414846, lng: 106.8100464 } },
-          }]}
+          predefinedPlaces={[
+            {
+              description: "ĐH FPT",
+              geometry: { location: { lat: 10.8414846, lng: 106.8100464 } },
+            },
+          ]}
           autoFocus={false}
           autoCorrect={false}
           listViewDisplayed="auto" // true/false/undefined
           fetchDetails={true}
-          textInputProps={{
-          }}
-          onPress={
-            async (data, details = null) => {
-              setIsShowPopup(true)
-              getSuggestionStore({
-                latitude: details.geometry.location.lat,
-                longitude: details.geometry.location.lng,
-              })
+          textInputProps={{}}
+          onPress={async (data, details = null) => {
+            setIsShowPopup(true);
+            getSuggestionStore({
+              latitude: details.geometry.location.lat,
+              longitude: details.geometry.location.lng,
+            });
 
-              handleSetDetailsGeometry({
-                description: data.description,
-                latitude: details.geometry.location.lat,
-                longitude: details.geometry.location.lng,
-              })
-            }
-          }
+            handleSetDetailsGeometry({
+              description: data.description,
+              latitude: details.geometry.location.lat,
+              longitude: details.geometry.location.lng,
+            });
+          }}
           query={{
             key: KEY_GOOGLE_MAP,
             components: "country:vn", //limit country
@@ -134,7 +145,6 @@ const MapScreen = () => {
   const mapView = () => {
     // console.log("userRegion", userRegion);
     return (
-
       <View style={{ flex: 1 }}>
         <MapView
           style={styles.map}
@@ -148,7 +158,7 @@ const MapScreen = () => {
           provider={PROVIDER_GOOGLE}
           region={userRegion}
           ref={mapRef}
-        > 
+        >
           {userRegion && destinationLocation ? (
             <MapViewDirections
               origin={{
@@ -162,60 +172,60 @@ const MapScreen = () => {
               apikey={KEY_GOOGLE_MAP}
               strokeWidth={4}
               strokeColor="blue"
-              onReady={() => { }}
+              onReady={() => {}}
             />
           ) : null}
 
           {destinationLocation ? (
             <Marker
+              title={destinationLocation.description}
               coordinate={{
                 latitude: destinationLocation.latitude,
                 longitude: destinationLocation.longitude,
               }}
-            >
-            </Marker>
+            ></Marker>
           ) : null}
           {suggestionStores
             ? suggestionStores.map((store) => {
-              if (store.id == bestSuggestion.id) {
-                return (
-                  <Marker
-                    pinColor="blue"
-                    key={store.id}
-                    title={store.name}
-                    destination={store.address.description}
-                    coordinate={{
-                      latitude: +store.address.latitude,
-                      longitude: +store.address.longitude,
-                    }}
-                    moveOnMarkerPress
-                    onPress={() => setSelectedStore(store)}
-                  />)
-              } else {
-                return (<Marker
-                  key={store.id}
-                  title={store.name}
-                  destination={store.address.description}
-                  coordinate={{
-                    latitude: +store.address.latitude,
-                    longitude: +store.address.longitude,
-                  }}
-                  moveOnMarkerPress
-                  onPress={() => setSelectedStore(store)}
-                />)
-              }
-            }
-            ) : null}
-        </ MapView>
+                if (store.id == bestSuggestion.id) {
+                  return (
+                    <Marker
+                      pinColor="blue"
+                      key={store.id}
+                      title={store.name}
+                      destination={store.address.description}
+                      coordinate={{
+                        latitude: +store.address.latitude,
+                        longitude: +store.address.longitude,
+                      }}
+                      moveOnMarkerPress
+                      onPress={() => setSelectedStore(store)}
+                    />
+                  );
+                } else {
+                  return (
+                    <Marker
+                      key={store.id}
+                      title={store.name}
+                      destination={store.address.description}
+                      coordinate={{
+                        latitude: +store.address.latitude,
+                        longitude: +store.address.longitude,
+                      }}
+                      moveOnMarkerPress
+                      onPress={() => setSelectedStore(store)}
+                    />
+                  );
+                }
+              })
+            : null}
+        </MapView>
       </View>
     );
   };
 
-  useEffect(() => { 
+  useEffect(() => {
     (async () => {
-      console.log('useEffect')
-      
-
       try {
         setError();
         setIsLoading(true);
@@ -234,8 +244,8 @@ const MapScreen = () => {
             latitudeDelta: 0.05,
             longitudeDelta: 0.05,
           });
-          dispatch(setPartner(bestSuggestion))
-          dispatch(setPartnerLocation(bestSuggestion.address)) 
+          dispatch(setPartner(bestSuggestion));
+          dispatch(setPartnerLocation(bestSuggestion.address));
         } else {
           setUserRegion({
             latitude: location.coords.latitude,
@@ -244,7 +254,6 @@ const MapScreen = () => {
             longitudeDelta: 0.05,
           });
         }
-
       } catch (error) {
         setError(error.message);
       }
@@ -257,8 +266,8 @@ const MapScreen = () => {
       <View style={styles.centered}>
         <ActivityIndicator size="large" color={PRIMARY_LIGHT_COLOR} />
       </View>
-    )
-  };
+    );
+  }
 
   return (
     <View
@@ -288,11 +297,41 @@ const MapScreen = () => {
         >
           {mapView()}
         </View>
+        <TouchableOpacity
+          style={{
+            borderWidth: 2,
+            borderColor:"#603a18",
+            alignItems: "center",
+            justifyContent: "center",
+            width: 70,
+            position: "absolute",
+            bottom: 10,
+            right: 10,
+            height: 70,
+            backgroundColor: "#fcf7e1",
+            borderRadius: 100,
+          }}
+        >
+          <Icon
+            name="flash"
+            size={30}
+            style={{color:'#603a18'}} 
+            
+            onPress={() => {
+              alert("press");
+            }}
+          />
+        </TouchableOpacity>
         {openSearchModal()}
-        {partner && isShowPopup ?
-          <PopupStore store={partner} />
-          : null}
+        {bestSuggestion && partner && isShowPopup ? <PopupStore store={partner} /> : null}
       </View>
+      {suggestionStores && suggestionStores.length === 0 ? (
+        <NotificationModal
+          message={MESSAGES.NO_SUGGESTION}
+          title={MESSAGES.TITLE_NOTIFICATION}
+          visible={true}
+        />
+      ) : null}
     </View>
   );
 };
@@ -318,7 +357,7 @@ const styles = StyleSheet.create({
   centered: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center"
+    justifyContent: "center",
   },
 });
 export default MapScreen;

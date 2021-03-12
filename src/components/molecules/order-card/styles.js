@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { DARK_COLOR } from "../../../constants/index";
 export const styles = StyleSheet.create({
   card: {
     flex: 1,
@@ -7,6 +8,7 @@ export const styles = StyleSheet.create({
   },
   storeName: {
     fontWeight: "bold",
+    // color: DARK_COLOR,
   },
   orderInformation: {
     flex: 1,
@@ -20,13 +22,14 @@ export const styles = StyleSheet.create({
   },
   card2nd: {
     paddingTop: "0%",
+    color: DARK_COLOR,
     // backgroundColor: "#e6d7ab",
   },
   orderContent: {
     marginLeft: "-5%",
   },
   icon: {
-    color: "#000000",
+    // color: DARK_COLOR,
     fontSize: 30,
   },
 });

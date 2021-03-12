@@ -103,7 +103,8 @@ const OrderDetails = (props) => {
             style={{
               width: "100%",
               flexDirection: "row",
-              justifyContent: "space-between",
+              justifyContent: "center",
+              flex: 1,
             }}
           >
             <UnFocusedButton

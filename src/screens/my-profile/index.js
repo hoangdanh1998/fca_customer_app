@@ -1,49 +1,40 @@
-import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import moment from "moment";
 import { withNavigation } from "@react-navigation/compat";
-import { Icon } from "react-native-elements";
-import { TouchableWithoutFeedback } from "react-native";
 import {
-  Content,
+  Body, Card,
+  CardItem, Content,
   Footer,
-  Card,
-  CardItem,
-  Body,
+
+
+
   Left,
   Right,
-  Text,
-  Thumbnail,
-  View,
+  Text
 } from "native-base";
+import React from "react";
+import { TouchableWithoutFeedback } from "react-native";
+import { Icon } from "react-native-elements";
 import NumberFormat from "react-number-format";
+import { useDispatch, useSelector } from "react-redux";
 import UnFocusedButton from "../../components/atoms/unfocused-button/index";
-import { init, IMLocalized } from "../../i18n/IMLocalized";
 import {
-  LANGUAGE,
-  MESSAGES,
-  LIGHT_COLOR,
-  DARK_COLOR,
+  DARK_COLOR, LANGUAGE,
+
+  LIGHT_COLOR, MESSAGES
 } from "../../constants/index";
-import { MY_PROFILE } from "../../constants/seeding";
-import {useDispatch} from 'react-redux'
-import { signOut } from "../../redux/actions/account";
+import { IMLocalized, init } from "../../i18n/IMLocalized";
 /* eslint-disable react/prop-types */
 
 init(LANGUAGE.VI);
 const MyProfile = (props) => {
   // const profile = this.props.profile;
 
-console.log("route logout: ", props.route.params.handleLogOut);
-const handleLogOut = props.route.params.handleLogOut;
+  console.log("route logout: ", props.route.params.handleLogOut);
+  const handleLogOut = props.route.params.handleLogOut;
 
-  const profile = MY_PROFILE;
+  // const profile = MY_PROFILE;
+  const profile = useSelector((state) => state.account.customer);
 
   const dispatch = useDispatch();
-
-  // const handleLogOut = () => {
-  //   dispatch(signOut());
-  // }
 
   return (
     <>
@@ -51,18 +42,15 @@ const handleLogOut = props.route.params.handleLogOut;
         <Card style={{ flex: 1, backgroundColor: LIGHT_COLOR }}>
           <CardItem style={{ backgroundColor: LIGHT_COLOR }}>
             <Left>
-              <Thumbnail source={{ uri: profile.imageLink }} />
-              <Body>
-                <Text
-                  style={{
-                    fontSize: 30,
-                    color: DARK_COLOR,
-                    fontWeight: "bold",
-                  }}
-                >
-                  {profile.name}
-                </Text>
-              </Body>
+              <Text
+                style={{
+                  fontSize: 30,
+                  color: DARK_COLOR,
+                  fontWeight: "bold",
+                }}
+              >
+                {profile?.name}
+              </Text>
             </Left>
           </CardItem>
           <CardItem style={{ backgroundColor: LIGHT_COLOR }}>
@@ -73,7 +61,7 @@ const handleLogOut = props.route.params.handleLogOut;
             </Left>
             <Right>
               <Text style={{ color: DARK_COLOR, fontWeight: "bold" }}>
-                {profile.phone}
+                {profile?.phone}
               </Text>
             </Right>
           </CardItem>
@@ -85,7 +73,7 @@ const handleLogOut = props.route.params.handleLogOut;
             </Left>
             <Right>
               <NumberFormat
-                value={profile.currentAmount}
+                value={profile?.currentAmount ? profile?.currentAmount : 0}
                 displayType={"text"}
                 thousandSeparator={true}
                 renderText={(formattedValue) => (

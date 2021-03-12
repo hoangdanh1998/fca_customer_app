@@ -14,8 +14,7 @@ export const convertToCartItem = (item) => {
     id: item.id,
     name: item.name,
     price: item.price,
-    image:
-      "https://i.pinimg.com/736x/06/89/d6/0689d6de5fccf22e3bb6dc17e8b6e475.jpg",
+    image: item.imageLink,
     quantity: item.quantity ? item.quantity : 0,
   };
 };

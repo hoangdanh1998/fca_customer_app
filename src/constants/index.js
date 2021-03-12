@@ -6,6 +6,7 @@ export const APP_NAME = "FAST COFFEE";
 export const IMAGE_1 = require("../assets/1.png");
 export const IMAGE_2 = require("../assets/2.png");
 export const PROCESSING_MODAL_IMAGE = require("../assets/preparetakeawaycoffee.gif");
+export const AVATAR_IMAGE = require("../assets/avatar.png");
 export const PROCESSING_MODAL_COLOR = "#f0eada";
 export const DARK_COLOR = "#603a18";
 export const PRIMARY_LIGHT_COLOR = "#e6d7ab";
@@ -42,6 +43,8 @@ export const MESSAGES = {
   CLOSE: "close",
   ADD: "add",
   SET_DEFAULT: "set-default",
+  NO_SUGGESTION: "no-suggestion",
+  TITLE_NOTIFICATION: "title-notification",
 };
 
 // APP STATUS
