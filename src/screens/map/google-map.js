@@ -1,6 +1,7 @@
 import * as Location from "expo-location";
+import { Icon } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Dimensions, StyleSheet, View } from "react-native";
+import { ActivityIndicator, Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
@@ -8,10 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import NotificationModal from "../../components/atoms/notification-modal/index";
 import {
   KEY_GOOGLE_MAP,
-  LANGUAGE,
-
-
-  MESSAGES, PRIMARY_LIGHT_COLOR
+  LANGUAGE, MESSAGES, PRIMARY_LIGHT_COLOR
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
@@ -21,6 +19,8 @@ import {
 import { setPartner } from "../../redux/actions/partner";
 import { getStoreSuggestion } from "../../redux/actions/store";
 import PopupStore from "./popup-store";
+
+
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -226,8 +226,6 @@ const MapScreen = () => {
 
   useEffect(() => {
     (async () => {
-      console.log("useEffect");
-
       try {
         setError();
         setIsLoading(true);
@@ -299,6 +297,31 @@ const MapScreen = () => {
         >
           {mapView()}
         </View>
+        <TouchableOpacity
+          style={{
+            borderWidth: 2,
+            borderColor:"#603a18",
+            alignItems: "center",
+            justifyContent: "center",
+            width: 70,
+            position: "absolute",
+            bottom: 10,
+            right: 10,
+            height: 70,
+            backgroundColor: "#fcf7e1",
+            borderRadius: 100,
+          }}
+        >
+          <Icon
+            name="flash"
+            size={30}
+            style={{color:'#603a18'}} 
+            
+            onPress={() => {
+              alert("press");
+            }}
+          />
+        </TouchableOpacity>
         {openSearchModal()}
         {bestSuggestion && partner && isShowPopup ? <PopupStore store={partner} /> : null}
       </View>
