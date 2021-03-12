@@ -13,6 +13,7 @@
     "status-initialization-message": "Your order is submitted successfully",
     "status-acceptance-message": "Coffee Shop is received your order",
     "status-preparation-message": "Coffee Shop is preparing your order",
+    "status-rejection-message": "Coffee Shop rejected your order",
     "status-wait-message": "Wait a minute! It will be done soon",
     "status-readiness-message": "Tada! Your order is ready to delivery",
     "status-arrival-message": "Tada! You arrived",
@@ -27,6 +28,9 @@
     "title-qrcode-information":"Confirm receive order",
     "title-history-order": "My orders",
     "title-notification": "Notification",
+    "title-my-profile": "My Profile",
+    "title-emergency-profile": "Emergency profile",
+    "title-saved-address": "Saved Address",
 
     "wording-item": "item(s)",
     "wording-my-orders": "My Orders",
@@ -50,6 +54,22 @@
     "wording-error-location": "We don't have permission to access your location",
     "wording-timeline": "Timeline",
     "wording-search-destination": "Where do you want to go?",
-    "wording-order-fail": "Order failed"
-    
+    "wording-order-fail": "Order failed",
+    "wording-phone": "Phone",
+    "wording-wallet": "Wallet Amount",
+    "wording-logout": "Logout",
+    "wording-address": "Address",
+    "wording-close": "Close",
+    "wording-add": "Add",
+    "wording-no-suggestion": "Sorry! All stores in our system is close",
+    "wording-saved-address": "Saved address",
+    "wording-saved-address-label": "Label",
+    "wording-emergency-profile": "Favorite store",
+    "wording-search-store": "Search store",
+    "wording-default-order": "Default Order",
+    "wording-default-address": "Default Address",
+    "wording-edit": "Edit",
+    "wording-save": "Save",
+    "wording-set-default": "Set as default",
+    "wording-title-notification": "Notification"
 }

@@ -1,27 +1,26 @@
 import * as Location from "expo-location";
-
+import { Icon } from "native-base";
+import React, { useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
-import { IMLocalized, init } from "../../i18n/IMLocalized";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import MapViewDirections from "react-native-maps-directions";
+import { useDispatch, useSelector } from "react-redux";
+import NotificationModal from "../../components/atoms/notification-modal/index";
 import {
   KEY_GOOGLE_MAP,
-  LANGUAGE,
-  PRIMARY_LIGHT_COLOR,
+  LANGUAGE, MESSAGES, PRIMARY_LIGHT_COLOR
 } from "../../constants/index";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import React, { useEffect, useRef, useState } from "react";
+import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
   setDestinationLocation,
-  setPartnerLocation,
+  setPartnerLocation
 } from "../../redux/actions/map";
-import { useDispatch, useSelector } from "react-redux";
-
-import { FloatingAction } from "react-native-floating-action";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { Icon } from "native-base";
-import MapViewDirections from "react-native-maps-directions";
-import PopupStore from "./popup-store";
-import { getStoreSuggestion } from "../../redux/actions/store";
 import { setPartner } from "../../redux/actions/partner";
+import { getStoreSuggestion } from "../../redux/actions/store";
+import PopupStore from "./popup-store";
+
+
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -179,6 +178,7 @@ const MapScreen = () => {
 
           {destinationLocation ? (
             <Marker
+              title={destinationLocation.description}
               coordinate={{
                 latitude: destinationLocation.latitude,
                 longitude: destinationLocation.longitude,
@@ -323,8 +323,15 @@ const MapScreen = () => {
           />
         </TouchableOpacity>
         {openSearchModal()}
-        {partner && isShowPopup ? <PopupStore store={partner} /> : null}
+        {bestSuggestion && partner && isShowPopup ? <PopupStore store={partner} /> : null}
       </View>
+      {suggestionStores && suggestionStores.length === 0 ? (
+        <NotificationModal
+          message={MESSAGES.NO_SUGGESTION}
+          title={MESSAGES.TITLE_NOTIFICATION}
+          visible={true}
+        />
+      ) : null}
     </View>
   );
 };

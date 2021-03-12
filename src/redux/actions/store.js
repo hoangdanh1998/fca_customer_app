@@ -1,8 +1,8 @@
-import { STORE_ACTIONS } from "../action-types/actions";
 import { ResponseStatus } from "../../constants/index";
-
 import api from "../../service/fca-api/fca-api";
-import { getDirection } from '../../service/google-api/google-map-api'
+import { getDirection } from '../../service/google-api/google-map-api';
+import { STORE_ACTIONS } from "../action-types/actions";
+
 
 export const getStoreSuggestion = (location, destination) => {
     console.log('dispatch setStoreSuggestion')

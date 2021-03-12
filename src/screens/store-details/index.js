@@ -96,21 +96,6 @@ const StoreDetails = (props) => {
     setCart({ ...cart, ...newCart });
   };
 
-  // Notifications.setNotificationHandler({
-  //   handleNotification: async () => ({
-  //     shouldShowAlert: false,
-  //     shouldPlaySound: true,
-  //     shouldSetBadge: true,
-  //   }),
-  //   handleSuccess: async (notificationId) => {
-  //     Notifications.
-  //       console.log(notificationId)
-  //   },
-  //   handleError: async (error) => {
-  //     console.log(error)
-  //   }
-  // })
-
   return (
     <Root>
       <Content style={styles.content}>

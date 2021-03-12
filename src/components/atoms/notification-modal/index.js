@@ -1,44 +1,30 @@
 import React, { useState } from "react";
-import { Modal, Text } from "react-native";
-import { Card, CardItem, Icon } from "native-base";
-
-import { styles } from "./styles";
+import AwesomeAlert from "react-native-awesome-alerts";
 import { IMLocalized, init } from "../../../i18n/IMLocalized";
-import { LANGUAGE, MESSAGES } from "../../../constants/index";
+import { LANGUAGE, MESSAGES, LIGHT_COLOR } from "../../../constants/index";
 
 const NotificationModal = (props) => {
   init(LANGUAGE.VI);
   const message = props.message;
   const visible = props.visible;
+  const title = props.title;
   return (
-    <Modal animationType="slide" transparent visible={visible}>
-      <Card style={styles.card}>
-        <CardItem style={{ flex: 1 }}>
-          <Icon
-            // android={
-            //   message === MESSAGES.REJECTED
-            //     ? "close-circle-outline"
-            //     : "checkmark-circle-outline"
-            // }
-            name={
-              message === MESSAGES.FAIL || message === MESSAGES.REJECTED
-                ? "close-circle-outline"
-                : "checkmark-circle-outline"
-            }
-            style={
-              message === MESSAGES.FAIL || message === MESSAGES.REJECTED
-                ? styles.fail
-                : styles.success
-            }
-          />
-        </CardItem>
-        <CardItem style={{ flex: 1 }}>
-          <Text style={styles.message}>
-            {IMLocalized(`wording-${message}`)}
-          </Text>
-        </CardItem>
-      </Card>
-    </Modal>
+    <AwesomeAlert
+      show={visible}
+      showProgress={false}
+      title={title ? IMLocalized(`wording-${title}`) : null}
+      message={IMLocalized(`wording-${message}`)}
+      closeOnTouchOutside={true}
+      closeOnHardwareBackPress={false}
+      titleStyle={
+        message === MESSAGES.DONE ? { color: "green" } : { color: "black" }
+      }
+      messageStyle={
+        message === MESSAGES.DONE ? { color: "green" } : { color: "black" }
+      }
+      contentStyle={{ backgroundColor: LIGHT_COLOR }}
+      contentContainerStyle={{ backgroundColor: LIGHT_COLOR }}
+    />
   );
 };
 
