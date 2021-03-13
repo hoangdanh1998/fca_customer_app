@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
+  Image,
 } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
@@ -177,7 +178,7 @@ const MapScreen = () => {
               }}
               apikey={KEY_GOOGLE_MAP}
               strokeWidth={4}
-              strokeColor="blue"
+              strokeColor={DARK_COLOR}
               onReady={() => {}}
             />
           ) : null}
@@ -196,7 +197,7 @@ const MapScreen = () => {
                 if (store.id == bestSuggestion.id) {
                   return (
                     <Marker
-                      pinColor="blue"
+                      image={require("../../assets/suggested-coffee.png")}
                       key={store.id}
                       title={store.name}
                       destination={store.address.description}
@@ -206,11 +207,12 @@ const MapScreen = () => {
                       }}
                       moveOnMarkerPress
                       onPress={() => setSelectedStore(store)}
-                    />
+                    ></Marker>
                   );
                 } else {
                   return (
                     <Marker
+                      image={require("../../assets/takeaway-coffee.png")}
                       key={store.id}
                       title={store.name}
                       destination={store.address.description}
