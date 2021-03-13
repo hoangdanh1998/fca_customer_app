@@ -12,6 +12,9 @@ import {
   Text,
   Footer,
   View,
+  SwipeRow,
+  Button,
+  // Icon,
 } from "native-base";
 import { Icon } from "react-native-elements";
 import { withNavigation } from "@react-navigation/compat";
@@ -51,69 +54,116 @@ const SavedAddressList = (props) => {
         <List
           dataArray={emergencyList}
           renderRow={(item) => (
-            <TouchableWithoutFeedback
-              onPress={() => {
-                alert("Handle set as default");
+            <Card
+              style={{
+                flex: 1,
+                width: "95%",
+                marginLeft: "2.5%",
+                backgroundColor: LIGHT_COLOR,
               }}
             >
-              <Card style={{ flex: 1 }}>
-                <CardItem style={{ flex: 1 }}>
-                  <Left style={{ flex: 1 }}>
-                    <Icon
-                      name="pricetag-outline"
-                      type="ionicon"
-                      color={DARK_COLOR}
-                      size={15}
-                    />
-                  </Left>
-                  <Body
-                    style={{
-                      flex: 7,
+              <SwipeRow
+                style={{
+                  backgroundColor: "white",
+                  flex: 1,
+                  width: "100%",
+                  justifyContent: "center",
+                }}
+                leftOpenValue={50}
+                rightOpenValue={-50}
+                left={
+                  <TouchableWithoutFeedback
+                    onPress={() => {
+                      alert("set default");
                     }}
                   >
-                    <Text
-                      note
+                    <View
                       style={{
                         flex: 1,
-                        justifyContent: "flex-start",
-                        color: DARK_COLOR,
+                        justifyContent: "center",
+                        backgroundColor: LIGHT_COLOR,
                       }}
                     >
-                      {item.savedAddress.label}
-                    </Text>
-                  </Body>
-                  <Right style={{ flex: 7 }}>
-                    {item.savedAddress.isDefault ? (
-                      <Text
-                        note
+                      <Icon
+                        name="flag-outline"
+                        type="ionicon"
+                        color={DARK_COLOR}
+                      />
+                    </View>
+                  </TouchableWithoutFeedback>
+                }
+                body={
+                  <View
+                    style={{
+                      flex: 1,
+                      width: "100%",
+                      backgroundColor: LIGHT_COLOR,
+                      height: "100%",
+                    }}
+                  >
+                    <CardItem style={{ flex: 1, width: "100%" }}>
+                      <Left style={{ flex: 1 }}>
+                        <Icon
+                          name={
+                            item.savedAddress.isDefault
+                              ? "flag"
+                              : "bookmark-outline"
+                          }
+                          type="ionicon"
+                          color={DARK_COLOR}
+                          size={15}
+                        />
+                      </Left>
+                      <Body
                         style={{
-                          flex: 1,
-                          color: DARK_COLOR,
-                          borderColor: DARK_COLOR,
-                          borderWidth: 1,
-                          width: "90%",
-                          textAlign: "center",
+                          flex: 9,
                         }}
                       >
-                        {IMLocalized("wording-default-address")}
-                      </Text>
-                    ) : null}
-                  </Right>
-                </CardItem>
-                <CardItem style={{ flex: 1 }}>
-                  <Body style={{ flex: 1 }}>
-                    <Text
+                        <Text
+                          note
+                          style={{
+                            flex: 1,
+                            justifyContent: "flex-start",
+                            color: DARK_COLOR,
+                            fontWeight: "bold",
+                          }}
+                        >
+                          {item.savedAddress.label}
+                        </Text>
+                      </Body>
+                    </CardItem>
+                    <CardItem style={{ flex: 1, width: "100%" }}>
+                      <Body style={{ flex: 1 }}>
+                        <Text
+                          style={{
+                            flex: 1,
+                          }}
+                        >
+                          {item.savedAddress.address.description}
+                        </Text>
+                      </Body>
+                    </CardItem>
+                  </View>
+                }
+                right={
+                  <TouchableWithoutFeedback
+                    onPress={() => {
+                      alert("set default");
+                    }}
+                  >
+                    <View
                       style={{
                         flex: 1,
-                        color: DARK_COLOR,
+                        justifyContent: "center",
+                        backgroundColor: LIGHT_COLOR,
                       }}
                     >
-                      {item.savedAddress.address.description}
-                    </Text>
-                  </Body>
-                </CardItem>
-              </Card>
-            </TouchableWithoutFeedback>
+                      <Icon name="trash-outline" type="ionicon" color="red" />
+                    </View>
+                  </TouchableWithoutFeedback>
+                }
+              />
+            </Card>
           )}
         />
       </Content>
