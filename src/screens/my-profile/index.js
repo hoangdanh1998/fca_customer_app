@@ -61,7 +61,7 @@ const MyProfile = (props) => {
             </Left>
             <Right>
               <Text style={{ color: DARK_COLOR, fontWeight: "bold" }}>
-                {profile?.phone}
+                {profile?.account.phone}
               </Text>
             </Right>
           </CardItem>
