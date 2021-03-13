@@ -23,7 +23,6 @@ import { NavigationContainer } from "@react-navigation/native";
 import OrderDetails from "../screens/order-details";
 import StoreDetails from "../screens/store-details";
 import StoreDetailsEmergency from "../screens/store-details-emergency";
-import DeliveryOrder from "../screens/delivery-order";
 
 import MyProfile from "../screens/my-profile";
 import SavedAddressList from "../screens/saved-address-list";
