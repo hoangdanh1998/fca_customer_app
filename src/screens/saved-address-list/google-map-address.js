@@ -213,8 +213,7 @@ const AddressScreen = () => {
               name={MESSAGES.SAVE}
               disable={false}
               onPress={() => {
-                //  props.navigation.navigate("ADD_ADDRESS");
-                alert("Pressed")
+                props.navigation.navigate("ADD_ADDRESS");
               }}
             />
           </View>
