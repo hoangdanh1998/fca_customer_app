@@ -45,6 +45,7 @@ const MapScreen = () => {
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
   const partner = useSelector((state) => state.partner.partner);
+  const profile = useSelector((state) => state.account.customer);
 
   const [location, setLocation] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
@@ -90,12 +91,21 @@ const MapScreen = () => {
         <GooglePlacesAutocomplete
           placeholder={IMLocalized("wording-search-destination")}
           minLength={2}
-          predefinedPlaces={[
-            {
-              description: "ĐH FPT",
-              geometry: { location: { lat: 10.8414846, lng: 106.8100464 } },
-            },
-          ]}
+          predefinedPlaces={
+            profile && profile.address && profile.address.length > 0
+              ? profile.address.map((a) => {
+                  return {
+                    description: a.label,
+                    geometry: {
+                      location: {
+                        lat: +a.latitude,
+                        lng: +a.longitude,
+                      },
+                    },
+                  };
+                })
+              : []
+          }
           autoFocus={false}
           autoCorrect={false}
           listViewDisplayed="auto" // true/false/undefined
