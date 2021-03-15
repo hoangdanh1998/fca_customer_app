@@ -29,22 +29,29 @@ import { EMERGENCY_LIST } from "../../constants/seeding";
 const SavedAddressList = (props) => {
   init(LANGUAGE.VI);
   //   var orderList = props.orderList;
-  var emergencyList = EMERGENCY_LIST;
-  //   const history = useSelector((state) => {
-  //     return state.order.history;
-  //   });
+  var customerAccount = useSelector((state) => Object.assign({}, state.account));
+  var emergencyList = customerAccount.customer.address;
+  console.log('emergencyList',emergencyList);
+  // var emergencyList = null;
 
-  //   const dispatch = useDispatch();
-  //   const loadHistory = useCallback(async () => {
-  //     try {
-  //       await dispatch(getHistory("0394422439"));
-  //     } catch (error) {
-  //       setError(error);
-  //     }
-  //   }, [dispatch]);
-  //   useEffect(() => {
-  //     loadHistory();
-  //   }, [dispatch, loadHistory]);
+  
+  const profile = useSelector((state) => state.account.customer);
+
+    // const history = useSelector((state) => {
+    //   return state.order.history;
+    // });
+
+    // const dispatch = useDispatch();
+    // const loadHistory = useCallback(async () => {
+    //   try {
+    //     await dispatch(getHistory("0394422439"));
+    //   } catch (error) {
+    //     setError(error);
+    //   }
+    // }, [dispatch]);
+    // useEffect(() => {
+    //   loadHistory();
+    // }, [dispatch, loadHistory]);
   return (
     <>
       <Content>
@@ -79,10 +86,10 @@ const SavedAddressList = (props) => {
                         color: DARK_COLOR,
                       }}
                     >
-                      {item.savedAddress.label}
+                      {item.label}
                     </Text>
                   </Body>
-                  <Right style={{ flex: 7 }}>
+                  {/* <Right style={{ flex: 7 }}>
                     {item.savedAddress.isDefault ? (
                       <Text
                         note
@@ -98,7 +105,7 @@ const SavedAddressList = (props) => {
                         {IMLocalized("wording-default-address")}
                       </Text>
                     ) : null}
-                  </Right>
+                  </Right> */}
                 </CardItem>
                 <CardItem style={{ flex: 1 }}>
                   <Body style={{ flex: 1 }}>
@@ -108,13 +115,15 @@ const SavedAddressList = (props) => {
                         color: DARK_COLOR,
                       }}
                     >
-                      {item.savedAddress.address.description}
+                      {/* {item.description} */}
                     </Text>
                   </Body>
                 </CardItem>
               </Card>
             </TouchableWithoutFeedback>
-          )}
+         
+         
+         )}
         />
       </Content>
       <Footer
