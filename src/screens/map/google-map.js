@@ -183,12 +183,18 @@ const MapScreen = () => {
                 latitude: destinationLocation.latitude,
                 longitude: destinationLocation.longitude,
               }}
+              image={require('../../assets/destination.png')}
+              onPress={()=>
+                { setIsShowPopup(false), 
+                  setUserRegion({  
+                  latitude: destinationLocation.latitude,
+                  longitude: destinationLocation.longitude,})}}
             ></Marker>
           ) : null}
           {suggestionStores
             ? suggestionStores.map((store) => {
                 if (store.id == bestSuggestion.id) {
-                  return (
+                  return ( 
                     <Marker
                       pinColor="blue"
                       key={store.id}
@@ -198,6 +204,7 @@ const MapScreen = () => {
                         latitude: +store.address.latitude,
                         longitude: +store.address.longitude,
                       }}
+                      image={require('../../assets/coffee-shop-favorite.png')}
                       moveOnMarkerPress
                       onPress={() => setSelectedStore(store)}
                     />
@@ -213,6 +220,7 @@ const MapScreen = () => {
                         longitude: +store.address.longitude,
                       }}
                       moveOnMarkerPress
+                      image={require('../../assets/coffee-shop.png')}
                       onPress={() => setSelectedStore(store)}
                     />
                   );
