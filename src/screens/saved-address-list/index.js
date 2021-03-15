@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { TouchableWithoutFeedback } from "react-native";
+import { TouchableWithoutFeedback, TouchableHighlight } from "react-native";
 import {
   Content,
   List,
@@ -17,6 +17,7 @@ import {
   // Icon,
 } from "native-base";
 import { Icon } from "react-native-elements";
+import Swipeable from "react-native-swipeable";
 import { withNavigation } from "@react-navigation/compat";
 import FocusedButton from "../../components/atoms/focused-button/index";
 import { getHistory } from "../../redux/actions/order";
@@ -26,6 +27,7 @@ import {
   LIGHT_COLOR,
   MESSAGES,
   LANGUAGE,
+  PRIMARY_LIGHT_COLOR,
 } from "../../constants/index";
 import { EMERGENCY_LIST } from "../../constants/seeding";
 
@@ -37,80 +39,72 @@ const SavedAddressList = (props) => {
   );
   const emergencyList = customerAccount.customer.address;
   console.log("emergencyList", emergencyList);
-  // var emergencyList = null;
-
-  const profile = useSelector((state) => state.account.customer);
-
-  // const history = useSelector((state) => {
-  //   return state.order.history;
-  // });
-
-  // const dispatch = useDispatch();
-  // const loadHistory = useCallback(async () => {
-  //   try {
-  //     await dispatch(getHistory("0394422439"));
-  //   } catch (error) {
-  //     setError(error);
-  //   }
-  // }, [dispatch]);
-  // useEffect(() => {
-  //   loadHistory();
-  // }, [dispatch, loadHistory]);
+  const rightButtons = [
+    <Button
+      onPress={() => {
+        alert("Press button");
+      }}
+      style={{
+        backgroundColor: DARK_COLOR,
+        flex: 1,
+        width: "100%",
+      }}
+    >
+      <Icon
+        style={{ flex: 1, justifyContent: "center", paddingLeft: "10%" }}
+        size={30}
+        name="pencil-outline"
+        type="ionicon"
+        color="white"
+      />
+    </Button>,
+    <Button
+      onPress={() => {
+        alert("Press button");
+      }}
+      style={{
+        backgroundColor: "#ff4747",
+        flex: 1,
+        width: "100%",
+      }}
+    >
+      <Icon
+        style={{ flex: 1, justifyContent: "center", paddingLeft: "10%" }}
+        size={30}
+        name="trash-outline"
+        type="ionicon"
+        color="white"
+      />
+    </Button>,
+  ];
   return (
     <>
       <Content>
         <List
           dataArray={emergencyList}
           renderRow={(item) => (
-            <Card
+            <Swipeable
+              rightButtons={rightButtons}
               style={{
                 flex: 1,
-                width: "95%",
-                marginLeft: "2.5%",
-                backgroundColor: LIGHT_COLOR,
+
+                height: "95%",
+                marginTop: "2.5%",
               }}
             >
-              <SwipeRow
+              <View
                 style={{
-                  backgroundColor: "white",
                   flex: 1,
-                  width: "100%",
-                  justifyContent: "center",
+                  width: "95%",
+                  marginLeft: "2.5%",
+                  shadowColor: "grey",
+                  shadowOffset: { height: 1, width: 1 },
+                  shadowOpacity: 1,
+                  shadowRadius: 1,
                 }}
-                leftOpenValue={50}
-                rightOpenValue={-50}
-                // left={
-                //   <TouchableWithoutFeedback
-                //     onPress={() => {
-                //       alert("set default");
-                //     }}
-                //   >
-                //     <View
-                //       style={{
-                //         flex: 1,
-                //         justifyContent: "center",
-                //         backgroundColor: LIGHT_COLOR,
-                //       }}
-                //     >
-                //       <Icon
-                //         name="flag-outline"
-                //         type="ionicon"
-                //         color={DARK_COLOR}
-                //       />
-                //     </View>
-                //   </TouchableWithoutFeedback>
-                // }
-                body={
-                  <View
-                    style={{
-                      flex: 1,
-                      width: "100%",
-                      backgroundColor: LIGHT_COLOR,
-                      height: "100%",
-                    }}
-                  >
-                    <CardItem style={{ flex: 1, width: "100%" }}>
-                      {/* <Left style={{ flex: 1 }}>
+              >
+                <CardItem style={{ flex: 1, width: "100%" }}>
+                  {/* <Left style={{ flex: 1 }}>
                         <Icon
                           name={
                             item.savedAddress.isDefault
@@ -122,64 +116,45 @@ const SavedAddressList = (props) => {
                           size={15}
                         />
                       </Left> */}
-                      <Left style={{ flex: 1 }}>
-                        <Icon
-                          name="bookmark-outline"
-                          type="ionicon"
-                          color={DARK_COLOR}
-                          size={15}
-                        />
-                      </Left>
-                      <Body
-                        style={{
-                          flex: 9,
-                        }}
-                      >
-                        <Text
-                          note
-                          style={{
-                            flex: 1,
-                            justifyContent: "flex-start",
-                            color: DARK_COLOR,
-                            fontWeight: "bold",
-                          }}
-                        >
-                          {item.label}
-                        </Text>
-                      </Body>
-                    </CardItem>
-                    <CardItem style={{ flex: 1, width: "100%" }}>
-                      <Body style={{ flex: 1 }}>
-                        <Text
-                          style={{
-                            flex: 1,
-                          }}
-                        >
-                          {item.description}
-                        </Text>
-                      </Body>
-                    </CardItem>
-                  </View>
-                }
-                right={
-                  <TouchableWithoutFeedback
-                    onPress={() => {
-                      alert("set default");
+                  <Left style={{ flex: 1 }}>
+                    <Icon
+                      name="bookmark-outline"
+                      type="ionicon"
+                      color={DARK_COLOR}
+                      size={15}
+                    />
+                  </Left>
+                  <Body
+                    style={{
+                      flex: 9,
                     }}
                   >
-                    <View
+                    <Text
+                      note
                       style={{
                         flex: 1,
-                        justifyContent: "center",
-                        backgroundColor: LIGHT_COLOR,
+                        justifyContent: "flex-start",
+                        color: DARK_COLOR,
+                        fontWeight: "bold",
                       }}
                     >
-                      <Icon name="trash-outline" type="ionicon" color="red" />
-                    </View>
-                  </TouchableWithoutFeedback>
-                }
-              />
-            </Card>
+                      {item.label}
+                    </Text>
+                  </Body>
+                </CardItem>
+                <CardItem style={{ flex: 1, width: "100%" }}>
+                  <Body style={{ flex: 1 }}>
+                    <Text
+                      style={{
+                        flex: 1,
+                      }}
+                    >
+                      {item.description}
+                    </Text>
+                  </Body>
+                </CardItem>
+              </View>
+            </Swipeable>
           )}
         />
       </Content>
