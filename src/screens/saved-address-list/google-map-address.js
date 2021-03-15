@@ -35,7 +35,7 @@ const AddressScreen = () => {
       <View style={{ flex: 1 }}>
         <GooglePlacesAutocomplete
           // style={styles.searchBar}
-
+          keyboardShouldPersistTaps="handled"
           placeholder={IMLocalized("wording-choose-saved-address")}
           minLength={2}
           predefinedPlaces={[
