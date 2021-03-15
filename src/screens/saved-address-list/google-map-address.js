@@ -1,13 +1,7 @@
 import * as Location from "expo-location";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  ActivityIndicator,
-  Dimensions,
-  Modal,
-  Pressable,
-  StyleSheet,
-  View,
-} from "react-native";
+import { ActivityIndicator, Dimensions, StyleSheet, View } from "react-native";
+import { Footer, Card, CardItem, Left, Right } from "native-base";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
@@ -16,6 +10,7 @@ import {
   LANGUAGE,
   PRIMARY_LIGHT_COLOR,
   MESSAGES,
+  DARK_COLOR,
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import FocusedButton from "../../components/atoms/focused-button/index";
@@ -33,8 +28,8 @@ const AddressScreen = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [marked, setmarked] = useState(null);
-  const [text, setText] = useState('');
-  const [addressDetail, setaddress] = useState(null)
+  const [text, setText] = useState("");
+  const [addressDetail, setaddress] = useState(null);
   const openSearchModal = () => {
     return (
       <View style={{ flex: 1 }}>
@@ -199,24 +194,56 @@ const AddressScreen = () => {
         </View>
         {openSearchModal()}
         {marked ? (
-          <View style={{ width: "100%", height: "25%", backgroundColor: "white" }}>
-             <Text>{addressDetail?.Name}</Text>
-             <Text>{addressDetail?.Address}</Text>
-             <TextInput style = {{height: "30%", backgroundColor:"lightgrey", }}
-               underlineColorAndroid = "transparent"
-               placeholder = {IMLocalized("wording-set-saved-address")}
-               placeholderTextColor = "#9a73ef"
-               autoCapitalize = "none"
-               onChangeText={text => setText(text)}/>
-            <FocusedButton
-              block
-              name={MESSAGES.SAVE}
-              disable={false}
-              onPress={() => {
-                props.navigation.navigate("ADD_ADDRESS");
-              }}
-            />
-          </View>
+          <Footer
+            style={{ width: "100%", height: "auto", backgroundColor: null }}
+          >
+            <View style={{ height: "25%", width: "100%" }}>
+              <Card
+                bordered
+                style={{
+                  width: "100%",
+                  height: "auto",
+                  backgroundColor: "white",
+                }}
+              >
+                <CardItem bordered>
+                  <TextInput
+                    style={{ height: "100%", width: "100%" }}
+                    underlineColorAndroid="transparent"
+                    placeholder={IMLocalized("wording-set-saved-address")}
+                    placeholderTextColor={DARK_COLOR}
+                    autoCapitalize="none"
+                    onChangeText={(text) => setText(text)}
+                  />
+                </CardItem>
+
+                {/* <Text>{addressDetail?.Name}</Text> */}
+                <CardItem bordered>
+                  <Text
+                    style={{
+                      height: "100%",
+                      width: "100%",
+                      color: DARK_COLOR,
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {addressDetail?.Address}
+                  </Text>
+                </CardItem>
+              </Card>
+              <FocusedButton
+                block
+                name={MESSAGES.SAVE}
+                disable={false}
+                onPress={() => {
+                  //  props.navigation.navigate("ADD_ADDRESS");
+                  alert(
+                    JSON.stringify({ label: text, address: addressDetail })
+                  );
+                }}
+              />
+            </View>
+          </Footer>
         ) : null}
       </View>
     </View>
@@ -245,6 +272,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
-  }
+  },
 });
 export default AddressScreen;

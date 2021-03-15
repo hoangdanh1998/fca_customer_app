@@ -1,26 +1,35 @@
 import * as Location from "expo-location";
-import { Icon } from "native-base";
+import { Icon, Footer } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Dimensions,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Image,
+} from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { useDispatch, useSelector } from "react-redux";
 import NotificationModal from "../../components/atoms/notification-modal/index";
+import PopupStore from "./popup-store";
 import {
   KEY_GOOGLE_MAP,
-  LANGUAGE, MESSAGES, PRIMARY_LIGHT_COLOR
+  LANGUAGE,
+  MESSAGES,
+  PRIMARY_LIGHT_COLOR,
+  LIGHT_COLOR,
+  DARK_COLOR,
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
   setDestinationLocation,
-  setPartnerLocation
+  setPartnerLocation,
 } from "../../redux/actions/map";
 import { setPartner } from "../../redux/actions/partner";
 import { getStoreSuggestion } from "../../redux/actions/store";
-import PopupStore from "./popup-store";
-
-
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -36,6 +45,7 @@ const MapScreen = () => {
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
   const partner = useSelector((state) => state.partner.partner);
+  const profile = useSelector((state) => state.account.customer);
 
   const [location, setLocation] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
@@ -79,16 +89,23 @@ const MapScreen = () => {
     return (
       <View style={{ flex: 1 }}>
         <GooglePlacesAutocomplete
-          // style={styles.searchBar}
-
           placeholder={IMLocalized("wording-search-destination")}
           minLength={2}
-          predefinedPlaces={[
-            {
-              description: "ĐH FPT",
-              geometry: { location: { lat: 10.8414846, lng: 106.8100464 } },
-            },
-          ]}
+          predefinedPlaces={
+            profile && profile.address && profile.address.length > 0
+              ? profile.address.map((a) => {
+                  return {
+                    description: a.label,
+                    geometry: {
+                      location: {
+                        lat: +a.latitude,
+                        lng: +a.longitude,
+                      },
+                    },
+                  };
+                })
+              : []
+          }
           autoFocus={false}
           autoCorrect={false}
           listViewDisplayed="auto" // true/false/undefined
@@ -171,7 +188,7 @@ const MapScreen = () => {
               }}
               apikey={KEY_GOOGLE_MAP}
               strokeWidth={4}
-              strokeColor="blue"
+              strokeColor={DARK_COLOR}
               onReady={() => {}}
             />
           ) : null}
@@ -196,7 +213,7 @@ const MapScreen = () => {
                 if (store.id == bestSuggestion.id) {
                   return ( 
                     <Marker
-                      pinColor="blue"
+                      image={require("../../assets/suggested-coffee.png")}
                       key={store.id}
                       title={store.name}
                       destination={store.address.description}
@@ -207,11 +224,12 @@ const MapScreen = () => {
                       image={require('../../assets/coffee-shop-favorite.png')}
                       moveOnMarkerPress
                       onPress={() => setSelectedStore(store)}
-                    />
+                    ></Marker>
                   );
                 } else {
                   return (
                     <Marker
+                      image={require("../../assets/takeaway-coffee.png")}
                       key={store.id}
                       title={store.name}
                       destination={store.address.description}
@@ -305,33 +323,50 @@ const MapScreen = () => {
         >
           {mapView()}
         </View>
-        <TouchableOpacity
-          style={{
-            borderWidth: 2,
-            borderColor:"#603a18",
-            alignItems: "center",
-            justifyContent: "center",
-            width: 70,
-            position: "absolute",
-            bottom: 10,
-            right: 10,
-            height: 70,
-            backgroundColor: "#fcf7e1",
-            borderRadius: 100,
-          }}
-        >
-          <Icon
-            name="flash"
-            size={30}
-            style={{color:'#603a18'}} 
-            
+
+        {openSearchModal()}
+        {bestSuggestion && partner && isShowPopup ? (
+          <Footer
+            style={{
+              height: "auto",
+              backgroundColor: null,
+              borderColor: LIGHT_COLOR,
+            }}
+          >
+            <TouchableOpacity
+              onPress={() => {
+                alert("press");
+              }}
+              style={styles.secondaryEmergency}
+            >
+              <Icon
+                name="flash-outline"
+                size={30}
+                style={{ color: "#603a18" }}
+                onPress={() => {
+                  alert("press");
+                }}
+              />
+            </TouchableOpacity>
+            <PopupStore store={partner} />
+          </Footer>
+        ) : (
+          <TouchableOpacity
             onPress={() => {
               alert("press");
             }}
-          />
-        </TouchableOpacity>
-        {openSearchModal()}
-        {bestSuggestion && partner && isShowPopup ? <PopupStore store={partner} /> : null}
+            style={styles.primaryEmergency}
+          >
+            <Icon
+              name="flash-outline"
+              size={30}
+              style={{ color: "#603a18" }}
+              onPress={() => {
+                alert("press");
+              }}
+            />
+          </TouchableOpacity>
+        )}
       </View>
       {suggestionStores && suggestionStores.length === 0 ? (
         <NotificationModal
@@ -366,6 +401,38 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  primaryEmergency: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: 50,
+    height: 50,
+    position: "absolute",
+    bottom: "5%",
+    right: "3%",
+    backgroundColor: LIGHT_COLOR,
+    elevation: 2,
+    borderRadius: 100,
+    shadowColor: "grey",
+    shadowOffset: { height: 1, width: 1 },
+    shadowOpacity: 1,
+    shadowRadius: 1,
+  },
+  secondaryEmergency: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: 50,
+    height: 50,
+    position: "absolute",
+    bottom: "100%",
+    right: "3%",
+    backgroundColor: LIGHT_COLOR,
+    elevation: 2,
+    borderRadius: 100,
+    shadowColor: "grey",
+    shadowOffset: { height: 1, width: 1 },
+    shadowOpacity: 1,
+    shadowRadius: 1,
   },
 });
 export default MapScreen;

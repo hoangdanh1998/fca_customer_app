@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { TouchableWithoutFeedback } from "react-native";
+import { TouchableWithoutFeedback, TouchableHighlight } from "react-native";
 import {
   Content,
   List,
@@ -12,8 +12,12 @@ import {
   Text,
   Footer,
   View,
+  SwipeRow,
+  Button,
+  // Icon,
 } from "native-base";
 import { Icon } from "react-native-elements";
+import Swipeable from "react-native-swipeable";
 import { withNavigation } from "@react-navigation/compat";
 import FocusedButton from "../../components/atoms/focused-button/index";
 import { getHistory } from "../../redux/actions/order";
@@ -23,51 +27,98 @@ import {
   LIGHT_COLOR,
   MESSAGES,
   LANGUAGE,
+  PRIMARY_LIGHT_COLOR,
 } from "../../constants/index";
 import { EMERGENCY_LIST } from "../../constants/seeding";
 
 const SavedAddressList = (props) => {
   init(LANGUAGE.VI);
   //   var orderList = props.orderList;
-  var customerAccount = useSelector((state) => Object.assign({}, state.account));
-  var emergencyList = customerAccount.customer.address;
-  console.log('emergencyList',emergencyList);
-  // var emergencyList = null;
-
-  
-  const profile = useSelector((state) => state.account.customer);
-
-    // const history = useSelector((state) => {
-    //   return state.order.history;
-    // });
-
-    // const dispatch = useDispatch();
-    // const loadHistory = useCallback(async () => {
-    //   try {
-    //     await dispatch(getHistory("0394422439"));
-    //   } catch (error) {
-    //     setError(error);
-    //   }
-    // }, [dispatch]);
-    // useEffect(() => {
-    //   loadHistory();
-    // }, [dispatch, loadHistory]);
+  const customerAccount = useSelector((state) =>
+    Object.assign({}, state.account)
+  );
+  const emergencyList = customerAccount.customer.address;
+  console.log("emergencyList", emergencyList);
+  const rightButtons = [
+    <Button
+      onPress={() => {
+        alert("Press button");
+      }}
+      style={{
+        backgroundColor: DARK_COLOR,
+        flex: 1,
+        width: "100%",
+      }}
+    >
+      <Icon
+        style={{ flex: 1, justifyContent: "center", paddingLeft: "10%" }}
+        size={30}
+        name="pencil-outline"
+        type="ionicon"
+        color="white"
+      />
+    </Button>,
+    <Button
+      onPress={() => {
+        alert("Press button");
+      }}
+      style={{
+        backgroundColor: "#ff4747",
+        flex: 1,
+        width: "100%",
+      }}
+    >
+      <Icon
+        style={{ flex: 1, justifyContent: "center", paddingLeft: "10%" }}
+        size={30}
+        name="trash-outline"
+        type="ionicon"
+        color="white"
+      />
+    </Button>,
+  ];
   return (
     <>
       <Content>
         <List
           dataArray={emergencyList}
           renderRow={(item) => (
-            <TouchableWithoutFeedback
-              onPress={() => {
-                alert("Handle set as default");
+            <Swipeable
+              rightButtons={rightButtons}
+              style={{
+                flex: 1,
+
+                height: "95%",
+                marginTop: "2.5%",
               }}
             >
-              <Card style={{ flex: 1 }}>
-                <CardItem style={{ flex: 1 }}>
+              <View
+                style={{
+                  flex: 1,
+                  width: "95%",
+                  marginLeft: "2.5%",
+                  shadowColor: "grey",
+                  shadowOffset: { height: 1, width: 1 },
+                  shadowOpacity: 1,
+                  shadowRadius: 1,
+                }}
+              >
+                <CardItem style={{ flex: 1, width: "100%" }}>
+                  {/* <Left style={{ flex: 1 }}>
+                        <Icon
+                          name={
+                            item.savedAddress.isDefault
+                              ? "flag"
+                              : "bookmark-outline"
+                          }
+                          type="ionicon"
+                          color={DARK_COLOR}
+                          size={15}
+                        />
+                      </Left> */}
                   <Left style={{ flex: 1 }}>
                     <Icon
-                      name="pricetag-outline"
+                      name="bookmark-outline"
                       type="ionicon"
                       color={DARK_COLOR}
                       size={15}
@@ -75,7 +126,7 @@ const SavedAddressList = (props) => {
                   </Left>
                   <Body
                     style={{
-                      flex: 7,
+                      flex: 9,
                     }}
                   >
                     <Text
@@ -84,46 +135,27 @@ const SavedAddressList = (props) => {
                         flex: 1,
                         justifyContent: "flex-start",
                         color: DARK_COLOR,
+                        fontWeight: "bold",
                       }}
                     >
                       {item.label}
                     </Text>
                   </Body>
-                  {/* <Right style={{ flex: 7 }}>
-                    {item.savedAddress.isDefault ? (
-                      <Text
-                        note
-                        style={{
-                          flex: 1,
-                          color: DARK_COLOR,
-                          borderColor: DARK_COLOR,
-                          borderWidth: 1,
-                          width: "90%",
-                          textAlign: "center",
-                        }}
-                      >
-                        {IMLocalized("wording-default-address")}
-                      </Text>
-                    ) : null}
-                  </Right> */}
                 </CardItem>
-                <CardItem style={{ flex: 1 }}>
+                <CardItem style={{ flex: 1, width: "100%" }}>
                   <Body style={{ flex: 1 }}>
                     <Text
                       style={{
                         flex: 1,
-                        color: DARK_COLOR,
                       }}
                     >
-                      {/* {item.description} */}
+                      {item.description}
                     </Text>
                   </Body>
                 </CardItem>
-              </Card>
-            </TouchableWithoutFeedback>
-         
-         
-         )}
+              </View>
+            </Swipeable>
+          )}
         />
       </Content>
       <Footer
