@@ -32,22 +32,30 @@ import { EMERGENCY_LIST } from "../../constants/seeding";
 const SavedAddressList = (props) => {
   init(LANGUAGE.VI);
   //   var orderList = props.orderList;
-  var emergencyList = EMERGENCY_LIST;
-  //   const history = useSelector((state) => {
-  //     return state.order.history;
-  //   });
+  const customerAccount = useSelector((state) =>
+    Object.assign({}, state.account)
+  );
+  const emergencyList = customerAccount.customer.address;
+  console.log("emergencyList", emergencyList);
+  // var emergencyList = null;
 
-  //   const dispatch = useDispatch();
-  //   const loadHistory = useCallback(async () => {
-  //     try {
-  //       await dispatch(getHistory("0394422439"));
-  //     } catch (error) {
-  //       setError(error);
-  //     }
-  //   }, [dispatch]);
-  //   useEffect(() => {
-  //     loadHistory();
-  //   }, [dispatch, loadHistory]);
+  const profile = useSelector((state) => state.account.customer);
+
+  // const history = useSelector((state) => {
+  //   return state.order.history;
+  // });
+
+  // const dispatch = useDispatch();
+  // const loadHistory = useCallback(async () => {
+  //   try {
+  //     await dispatch(getHistory("0394422439"));
+  //   } catch (error) {
+  //     setError(error);
+  //   }
+  // }, [dispatch]);
+  // useEffect(() => {
+  //   loadHistory();
+  // }, [dispatch, loadHistory]);
   return (
     <>
       <Content>
@@ -71,27 +79,27 @@ const SavedAddressList = (props) => {
                 }}
                 leftOpenValue={50}
                 rightOpenValue={-50}
-                left={
-                  <TouchableWithoutFeedback
-                    onPress={() => {
-                      alert("set default");
-                    }}
-                  >
-                    <View
-                      style={{
-                        flex: 1,
-                        justifyContent: "center",
-                        backgroundColor: LIGHT_COLOR,
-                      }}
-                    >
-                      <Icon
-                        name="flag-outline"
-                        type="ionicon"
-                        color={DARK_COLOR}
-                      />
-                    </View>
-                  </TouchableWithoutFeedback>
-                }
+                // left={
+                //   <TouchableWithoutFeedback
+                //     onPress={() => {
+                //       alert("set default");
+                //     }}
+                //   >
+                //     <View
+                //       style={{
+                //         flex: 1,
+                //         justifyContent: "center",
+                //         backgroundColor: LIGHT_COLOR,
+                //       }}
+                //     >
+                //       <Icon
+                //         name="flag-outline"
+                //         type="ionicon"
+                //         color={DARK_COLOR}
+                //       />
+                //     </View>
+                //   </TouchableWithoutFeedback>
+                // }
                 body={
                   <View
                     style={{
@@ -102,13 +110,21 @@ const SavedAddressList = (props) => {
                     }}
                   >
                     <CardItem style={{ flex: 1, width: "100%" }}>
-                      <Left style={{ flex: 1 }}>
+                      {/* <Left style={{ flex: 1 }}>
                         <Icon
                           name={
                             item.savedAddress.isDefault
                               ? "flag"
                               : "bookmark-outline"
                           }
+                          type="ionicon"
+                          color={DARK_COLOR}
+                          size={15}
+                        />
+                      </Left> */}
+                      <Left style={{ flex: 1 }}>
+                        <Icon
+                          name="bookmark-outline"
                           type="ionicon"
                           color={DARK_COLOR}
                           size={15}
@@ -128,7 +144,7 @@ const SavedAddressList = (props) => {
                             fontWeight: "bold",
                           }}
                         >
-                          {item.savedAddress.label}
+                          {item.label}
                         </Text>
                       </Body>
                     </CardItem>
@@ -139,7 +155,7 @@ const SavedAddressList = (props) => {
                             flex: 1,
                           }}
                         >
-                          {item.savedAddress.address.description}
+                          {item.description}
                         </Text>
                       </Body>
                     </CardItem>

@@ -4,13 +4,25 @@ import mapReducer from "./map";
 import orderReducer from "./order";
 import partnerReducer from "./partner";
 import accountReducer from "./account";
+import { SIGN_OUT } from "../actions/account";
 
-const rootReducer = combineReducers({
+const appReducer = combineReducers({
   store: storeReducer,
   order: orderReducer,
   map: mapReducer,
   partner: partnerReducer,
   account: accountReducer
 });
+
+const rootReducer = (state, action) => {
+  if (action.type === SIGN_OUT) {
+    state.store = undefined;
+    state.partner = undefined;
+    state.map = undefined;
+    state.order = undefined;
+  }
+
+  return appReducer (state, action);
+}
 
 export default rootReducer;

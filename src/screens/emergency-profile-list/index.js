@@ -135,7 +135,7 @@ const EmergencyProfileList = (props) => {
             name={MESSAGES.ADD}
             disable={false}
             onPress={() => {
-              props.navigation.navigate("SET_DEFAULT_VIEW")
+              props.navigation.navigate("SET_DEFAULT_VIEW");
             }}
           />
         </View>
