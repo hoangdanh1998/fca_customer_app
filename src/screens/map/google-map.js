@@ -35,6 +35,7 @@ const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
 init(LANGUAGE.VI);
+
 const MapScreen = () => {
   const dispatch = useDispatch();
   const mapRef = useRef(null);
@@ -51,6 +52,7 @@ const MapScreen = () => {
   const [userRegion, setUserRegion] = useState(null);
   const [isShowPopup, setIsShowPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [displaySuggestion, setDisplaySuggestion] = useState("flex");
   const [error, setError] = useState();
 
   const handleSetDetailsGeometry = (location) => {
@@ -89,6 +91,7 @@ const MapScreen = () => {
     return (
       <View style={{ flex: 1 }}>
         <GooglePlacesAutocomplete
+          id="GooglePlacesAutocomplete"
           placeholder={IMLocalized("wording-search-destination")}
           minLength={2}
           predefinedPlaces={
@@ -106,13 +109,23 @@ const MapScreen = () => {
                 })
               : []
           }
+          listEmptyComponent
           autoFocus={false}
           autoCorrect={false}
           listViewDisplayed="auto" // true/false/undefined
           fetchDetails={true}
-          textInputProps={{}}
+          textInputProps={{
+            onFocus: () => {
+              setDisplaySuggestion("none");
+            },
+            onBlur: () => {
+              setDisplaySuggestion("flex");
+            },
+          }}
+          keyboardShouldPersistTaps="handled"
           onPress={async (data, details = null) => {
             setIsShowPopup(true);
+            setDisplaySuggestion("flex");
             getSuggestionStore({
               latitude: details.geometry.location.lat,
               longitude: details.geometry.location.lng,
@@ -200,18 +213,20 @@ const MapScreen = () => {
                 latitude: destinationLocation.latitude,
                 longitude: destinationLocation.longitude,
               }}
-              image={require('../../assets/destination.png')}
-              onPress={()=>
-                { setIsShowPopup(false), 
-                  setUserRegion({  
-                  latitude: destinationLocation.latitude,
-                  longitude: destinationLocation.longitude,})}}
+              image={require("../../assets/destination.png")}
+              onPress={() => {
+                setIsShowPopup(false),
+                  setUserRegion({
+                    latitude: destinationLocation.latitude,
+                    longitude: destinationLocation.longitude,
+                  });
+              }}
             ></Marker>
           ) : null}
           {suggestionStores
             ? suggestionStores.map((store) => {
                 if (store.id == bestSuggestion.id) {
-                  return ( 
+                  return (
                     <Marker
                       image={require("../../assets/suggested-coffee.png")}
                       key={store.id}
@@ -221,7 +236,7 @@ const MapScreen = () => {
                         latitude: +store.address.latitude,
                         longitude: +store.address.longitude,
                       }}
-                      image={require('../../assets/coffee-shop-favorite.png')}
+                      image={require("../../assets/coffee-shop-favorite.png")}
                       moveOnMarkerPress
                       onPress={() => setSelectedStore(store)}
                     ></Marker>
@@ -238,7 +253,7 @@ const MapScreen = () => {
                         longitude: +store.address.longitude,
                       }}
                       moveOnMarkerPress
-                      image={require('../../assets/coffee-shop.png')}
+                      image={require("../../assets/coffee-shop.png")}
                       onPress={() => setSelectedStore(store)}
                     />
                   );
@@ -331,6 +346,7 @@ const MapScreen = () => {
               height: "auto",
               backgroundColor: null,
               borderColor: LIGHT_COLOR,
+              display: `${displaySuggestion}`,
             }}
           >
             <TouchableOpacity
