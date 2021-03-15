@@ -1,11 +1,12 @@
 import * as Location from "expo-location";
-import { Icon, Footer } from "native-base";
+import { Icon, Footer, Button } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
   StyleSheet,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
   Image,
 } from "react-native";
@@ -213,7 +214,6 @@ const MapScreen = () => {
                 latitude: destinationLocation.latitude,
                 longitude: destinationLocation.longitude,
               }}
-              image={require("../../assets/destination.png")}
               onPress={() => {
                 setIsShowPopup(false),
                   setUserRegion({
@@ -340,6 +340,26 @@ const MapScreen = () => {
         </View>
 
         {openSearchModal()}
+        <TouchableOpacity
+          onPress={() => {
+            alert("press");
+          }}
+          style={
+            bestSuggestion && partner && isShowPopup
+              ? styles.secondaryEmergency
+              : styles.primaryEmergency
+          }
+          // styles.primaryEmergency
+        >
+          <Icon
+            name="flash-outline"
+            size={30}
+            style={{ color: "#603a18" }}
+            onPress={() => {
+              alert("press");
+            }}
+          />
+        </TouchableOpacity>
         {bestSuggestion && partner && isShowPopup ? (
           <Footer
             style={{
@@ -349,40 +369,9 @@ const MapScreen = () => {
               display: `${displaySuggestion}`,
             }}
           >
-            <TouchableOpacity
-              onPress={() => {
-                alert("press");
-              }}
-              style={styles.secondaryEmergency}
-            >
-              <Icon
-                name="flash-outline"
-                size={30}
-                style={{ color: "#603a18" }}
-                onPress={() => {
-                  alert("press");
-                }}
-              />
-            </TouchableOpacity>
             <PopupStore store={partner} />
           </Footer>
-        ) : (
-          <TouchableOpacity
-            onPress={() => {
-              alert("press");
-            }}
-            style={styles.primaryEmergency}
-          >
-            <Icon
-              name="flash-outline"
-              size={30}
-              style={{ color: "#603a18" }}
-              onPress={() => {
-                alert("press");
-              }}
-            />
-          </TouchableOpacity>
-        )}
+        ) : null}
       </View>
       {suggestionStores && suggestionStores.length === 0 ? (
         <NotificationModal
@@ -440,7 +429,7 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     position: "absolute",
-    bottom: "100%",
+    bottom: "25%",
     right: "3%",
     backgroundColor: LIGHT_COLOR,
     elevation: 2,
