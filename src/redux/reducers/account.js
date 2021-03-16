@@ -65,7 +65,7 @@ const accountReducer = (state = initialState, action) => {
       console.log("change isloading");
       return { ...state, isLoading: false };
       case SAVE_ADDRESS: {
-        return {...state, customer: action.payload.customer}
+        return {...state, customer: action.payload}
       }
     default:
       return state;

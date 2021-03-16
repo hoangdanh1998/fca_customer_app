@@ -45,11 +45,12 @@ const AddressScreen = (props) => {
             customerAddressId: "",
             label: textLabel,
             description: addressDetail.Address,
-            latitude: marked.latitude,
-            longitude: marked.longitude,
+            latitude: `${marked.latitude}`,
+            longitude: `${marked.longitude}`,
           }
         )
       );
+      
     } catch (error) {
       // setError(error);
       alert(error);
@@ -259,17 +260,6 @@ const AddressScreen = (props) => {
                   if (textLabel == "") {
                     alert(IMLocalized("wording-set-saved-address"));
                   } else {
-                    // alert(
-                    //   // id=customer.id,
-                    //   JSON.stringify({ label: textLabel, address: addressDetail.Address })
-                    // );
-                    console.log( {
-                      customerAddressId: "",
-                      label: textLabel,
-                      description: addressDetail.Address,
-                      latitude: marked.latitude,
-                      longitude: marked.longitude,
-                    });
                     saveAddressLabel();
                     props.navigation.navigate("SAVED_ADDRESS_LIST");
                   }
