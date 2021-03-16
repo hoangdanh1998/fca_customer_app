@@ -1,35 +1,64 @@
 import * as Location from "expo-location";
-import React, { useEffect, useRef, useState } from "react";
+
 import { ActivityIndicator, Dimensions, StyleSheet, View } from "react-native";
-import { Footer, Card, CardItem, Left, Right } from "native-base";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import MapViewDirections from "react-native-maps-directions";
+import { Button, Form, Text } from "native-base";
+import { Card, CardItem, Footer, Left, Right } from "native-base";
 import {
+  DARK_COLOR,
   KEY_GOOGLE_MAP,
   LANGUAGE,
-  PRIMARY_LIGHT_COLOR,
   MESSAGES,
-  DARK_COLOR,
+  PRIMARY_LIGHT_COLOR,
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import FocusedButton from "../../components/atoms/focused-button/index";
-import { Button, Form, Text } from "native-base";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import MapViewDirections from "react-native-maps-directions";
 import { TextInput } from "react-native-gesture-handler";
+import { saveAddress } from "../../redux/actions/map";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
 init(LANGUAGE.VI);
-const AddressScreen = () => {
+const AddressScreen = (props) => {
   const [location, setLocation] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
   const [isShowPopup, setIsShowPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [marked, setmarked] = useState(null);
-  const [text, setText] = useState("");
+  const [textLabel, setTextLabel] = useState("");
   const [addressDetail, setaddress] = useState(null);
+
+  const dispatch = useDispatch();
+  const customer = useSelector((state) => state.account.customer);
+
+  const saveAddressLabel = async() => {
+    try {
+      await dispatch(
+        saveAddress(
+          (id = customer.id),
+          {
+            customerAddressId: "",
+            label: textLabel,
+            description: addressDetail.Address,
+            latitude: `${marked.latitude}`,
+            longitude: `${marked.longitude}`
+          }
+        )
+      );
+      
+    } catch (error) {
+      // setError(error);
+      alert(error);
+    }
+  };
+
   const openSearchModal = () => {
     return (
       <View style={{ flex: 1 }}>
@@ -38,12 +67,6 @@ const AddressScreen = () => {
           keyboardShouldPersistTaps="handled"
           placeholder={IMLocalized("wording-choose-saved-address")}
           minLength={2}
-          predefinedPlaces={[
-            {
-              description: "ĐH FPT",
-              geometry: { location: { lat: 10.8414846, lng: 106.8100464 } },
-            },
-          ]}
           autoFocus={false}
           autoCorrect={false}
           listViewDisplayed="auto" // true/false/undefined
@@ -130,7 +153,6 @@ const AddressScreen = () => {
 
   useEffect(() => {
     (async () => {
-      console.log("useEffect");
 
       try {
         setError();
@@ -213,7 +235,7 @@ const AddressScreen = () => {
                     placeholder={IMLocalized("wording-set-saved-address")}
                     placeholderTextColor={DARK_COLOR}
                     autoCapitalize="none"
-                    onChangeText={(text) => setText(text)}
+                    onChangeText={(text) => setTextLabel(text)}
                   />
                 </CardItem>
 
@@ -236,10 +258,14 @@ const AddressScreen = () => {
                 name={MESSAGES.SAVE}
                 disable={false}
                 onPress={() => {
+                  if (textLabel == "") {
+                    alert(IMLocalized("wording-set-saved-address"));
+                  } else {
+                    saveAddressLabel();
+                    props.navigation.navigate("SAVED_ADDRESS_LIST");
+                  }
+
                   //  props.navigation.navigate("ADD_ADDRESS");
-                  alert(
-                    JSON.stringify({ label: text, address: addressDetail })
-                  );
                 }}
               />
             </View>

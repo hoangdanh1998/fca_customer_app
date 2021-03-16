@@ -4,6 +4,7 @@ const {
   SIGN_OUT,
   FINISH_LOADING,
 } = require("../actions/account");
+const {SAVE_ADDRESS } = require('../actions/map')
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const initialState = {
@@ -63,6 +64,9 @@ const accountReducer = (state = initialState, action) => {
     case FINISH_LOADING:
       console.log("change isloading");
       return { ...state, isLoading: false };
+      case SAVE_ADDRESS: {
+        return {...state, customer: action.payload}
+      }
     default:
       return state;
   }
