@@ -42,7 +42,7 @@ const DeliveryOrder = (props) => {
       console.log("createdOrder", orderId);
       getOrderOnChange(orderId, (order) => {
         console.log("delivery-order");
-        if (order.status === OrderStatus.RECEPTION) {
+        if (order.status === OrderStatus.RECEPTION && order.qrcode) {
           handleScanSuccess();
         }
       });
