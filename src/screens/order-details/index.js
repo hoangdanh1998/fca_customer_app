@@ -14,17 +14,22 @@ import TimelineTransaction from "../../components/atoms/timeline-transaction/ind
 import UnFocusedButton from "../../components/atoms/unfocused-button/index";
 import { convertTransaction } from "../../utils/utils";
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
+import { setStoreSuggestion } from "../../redux/actions/store";
 import { init } from "../../i18n/IMLocalized";
 import moment from "moment";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 /* eslint-disable react/prop-types */
 import { withNavigation } from "@react-navigation/compat";
 
 init(LANGUAGE.VI);
 const OrderDetails = (props) => {
+  const dispatch = useDispatch();
   const order = useSelector((state) => {
     return state.order.createdOrder;
   });
+  const suggestionStores = useSelector((state) => state.store.suggestionStores);
+  const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
+
   const isAfterCreate = props.route.params.isAfterCreate;
   const firstTransaction = [
     { createdAt: moment(), toStatus: OrderStatus.ACCEPTANCE },
@@ -39,6 +44,23 @@ const OrderDetails = (props) => {
       qrCode: qrCode,
       orderId: orderId,
     });
+  };
+
+  const handleStaffCancelOrder = () => {
+    // alert("Your order has been canceled");
+    const length = suggestionStores.length;
+    if (length > 1) {
+      const newSuggestion = suggestionStores[length - 2];
+      const newSuggestList = suggestionStores.filter(
+        (store) => store.id !== bestSuggestion.id
+      );
+      dispatch(setStoreSuggestion(newSuggestion, newSuggestList));
+    }
+    props.navigation.navigate("MAP_VIEW", { isAfterCreate: true });
+  };
+
+  const handleStaffFinishOrder = () => {
+    props.navigation.navigate("ORDER_DETAIL", { isAfterCreate: false });
   };
 
   const [transactionState, setTransactionState] = useState(firstTransaction);
@@ -59,6 +81,12 @@ const OrderDetails = (props) => {
         }
         if (transactionState[0].toStatus !== order.status) {
           handleAddTransaction(order.status);
+          if (order.status === OrderStatus.CANCELLATION) {
+            handleStaffCancelOrder();
+          }
+          if (order.status === OrderStatus.RECEPTION && !order.qrcode) {
+            handleStaffFinishOrder();
+          }
         }
       });
     }

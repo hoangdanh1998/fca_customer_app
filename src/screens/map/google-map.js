@@ -287,6 +287,8 @@ const MapScreen = () => {
           });
           dispatch(setPartner(bestSuggestion));
           dispatch(setPartnerLocation(bestSuggestion.address));
+          setDisplaySuggestion("flex");
+          setIsShowPopup(true);
         } else {
           setUserRegion({
             latitude: location.coords.latitude,

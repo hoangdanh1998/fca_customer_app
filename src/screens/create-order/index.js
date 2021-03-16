@@ -14,7 +14,7 @@ import {
   LANGUAGE,
   MESSAGES,
   NOTICE_DURATION,
-  OrderStatus
+  OrderStatus,
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { ORDER_ACTIONS } from "../../redux/action-types/actions";
@@ -57,7 +57,6 @@ const CreateOrder = (props) => {
       }
       var location = await Location.getCurrentPositionAsync({});
 
-      console.log("storeId", store.id);
       dispatch(
         createOrder({
           customerId: customer.id,
