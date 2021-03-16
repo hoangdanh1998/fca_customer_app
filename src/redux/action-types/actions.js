@@ -14,3 +14,7 @@ export const ORDER_ACTIONS = {
 export const STORE_ACTIONS = {
   SET_SUGGESTION_STORES: "SET_SUGGESTION_STORE",
 };
+
+export const MAP_ACTIONS = {
+  SET_ADDRESS: "SET_ADDRESS",
+};
