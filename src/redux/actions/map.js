@@ -1,9 +1,9 @@
 export const SET_DESTINATION_LOCATION = "SET_DESTINATION_LOCATION ";
 export const SET_PARTNER_LOCATION = "SET_PARTNER_LOCATION ";
 export const SAVE_ADDRESS = "SAVE_ADDRESS";
-import api from "../../service/fca-api/fca-api";
-import { ResponseStatus } from "../../constants/index";
 
+import { ResponseStatus } from "../../constants/index";
+import api from "../../service/fca-api/fca-api";
 
 export const setDestinationLocation = (location) => {
     console.log('Action - setDestinationLocation')
@@ -25,8 +25,8 @@ export const setPartnerLocation = (location) => {
 export const saveAddress = (customerId,param) => {
   try {
     
-    console.log("customerID: "+ customerId);
-    console.log('param', param);
+    // console.log("customerID: "+ customerId);
+    // console.log('param', param);
     return async (dispatch) => {
       const response = await api.put(`/customer/${customerId}/address`, param);
    
@@ -36,11 +36,11 @@ export const saveAddress = (customerId,param) => {
       console.log("response: ", response);
       dispatch({
         type: SAVE_ADDRESS,
-        payload: response.data.customer,
+        payload: response.data.data.customer,
       });
     };
   } catch (error) {
-    console.error("err save address: ", error);
+    // console.error("err save address: ", error);
   }
 };
 

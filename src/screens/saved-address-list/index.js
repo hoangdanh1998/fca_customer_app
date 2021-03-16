@@ -1,35 +1,36 @@
-import React, { useCallback, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { TouchableWithoutFeedback, TouchableHighlight } from "react-native";
 import {
-  Content,
-  List,
+  Body,
+  Button,
   Card,
   CardItem,
-  Left,
-  Right,
-  Body,
-  Text,
+  Content,
   Footer,
-  View,
+  Left,
+  List,
+  Right,
   SwipeRow,
-  Button,
-  // Icon,
+  Text,
+  View,
 } from "native-base";
-import { Icon } from "react-native-elements";
-import Swipeable from "react-native-swipeable";
-import { withNavigation } from "@react-navigation/compat";
-import FocusedButton from "../../components/atoms/focused-button/index";
-import { getHistory } from "../../redux/actions/order";
-import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
   DARK_COLOR,
+  LANGUAGE,
   LIGHT_COLOR,
   MESSAGES,
-  LANGUAGE,
   PRIMARY_LIGHT_COLOR,
 } from "../../constants/index";
-import { EMERGENCY_LIST } from "../../constants/seeding";
+import { IMLocalized, init } from "../../i18n/IMLocalized";
+import React, { useCallback, useEffect } from "react";
+import { TouchableHighlight, TouchableWithoutFeedback } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+
+import FocusedButton from "../../components/atoms/focused-button/index";
+import { Icon } from "react-native-elements";
+import Swipeable from "react-native-swipeable";
+import { getHistory } from "../../redux/actions/order";
+import { withNavigation } from "@react-navigation/compat";
+
+// import { EMERGENCY_LIST } from "../../constants/seeding";
 
 const SavedAddressList = (props) => {
   init(LANGUAGE.VI);
@@ -38,7 +39,7 @@ const SavedAddressList = (props) => {
     Object.assign({}, state.account)
   );
   const emergencyList = customerAccount.customer.address;
-  console.log("emergencyList", emergencyList);
+  // console.log("emergencyList", emergencyList);
   const rightButtons = [
     <Button
       onPress={() => {

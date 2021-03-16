@@ -1,23 +1,25 @@
 import * as Location from "expo-location";
-import React, { useEffect, useRef, useState } from "react";
+
 import { ActivityIndicator, Dimensions, StyleSheet, View } from "react-native";
-import { Footer, Card, CardItem, Left, Right } from "native-base";
-import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
-import MapViewDirections from "react-native-maps-directions";
+import { Button, Form, Text } from "native-base";
+import { Card, CardItem, Footer, Left, Right } from "native-base";
 import {
+  DARK_COLOR,
   KEY_GOOGLE_MAP,
   LANGUAGE,
-  PRIMARY_LIGHT_COLOR,
   MESSAGES,
-  DARK_COLOR,
+  PRIMARY_LIGHT_COLOR,
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
+import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import FocusedButton from "../../components/atoms/focused-button/index";
-import { Button, Form, Text } from "native-base";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import MapViewDirections from "react-native-maps-directions";
 import { TextInput } from "react-native-gesture-handler";
 import { saveAddress } from "../../redux/actions/map";
-import { useDispatch, useSelector } from "react-redux";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -36,7 +38,7 @@ const AddressScreen = (props) => {
   const dispatch = useDispatch();
   const customer = useSelector((state) => state.account.customer);
 
-  const saveAddressLabel = async () => {
+  const saveAddressLabel = async() => {
     try {
       await dispatch(
         saveAddress(
@@ -46,7 +48,7 @@ const AddressScreen = (props) => {
             label: textLabel,
             description: addressDetail.Address,
             latitude: `${marked.latitude}`,
-            longitude: `${marked.longitude}`,
+            longitude: `${marked.longitude}`
           }
         )
       );
@@ -151,7 +153,6 @@ const AddressScreen = (props) => {
 
   useEffect(() => {
     (async () => {
-      console.log("useEffect");
 
       try {
         setError();
