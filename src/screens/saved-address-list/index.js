@@ -40,10 +40,10 @@ const SavedAddressList = (props) => {
   );
   const emergencyList = customerAccount.customer.address;
   // console.log("emergencyList", emergencyList);
-  const rightButtons = [
+  const rightButtons =(id) => [
     <Button
       onPress={() => {
-        alert("Press button");
+        props.navigation.navigate("ADD_ADDRESS",{addressId:id});
       }}
       style={{
         backgroundColor: DARK_COLOR,
@@ -85,7 +85,7 @@ const SavedAddressList = (props) => {
           dataArray={emergencyList}
           renderRow={(item) => (
             <Swipeable
-              rightButtons={rightButtons}
+              rightButtons={rightButtons(item.id)}
               style={{
                 flex: 1,
 
