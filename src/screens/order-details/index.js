@@ -15,7 +15,10 @@ import TimelineTransaction from "../../components/atoms/timeline-transaction/ind
 import UnFocusedButton from "../../components/atoms/unfocused-button/index";
 import NotificationModal from "../../components/atoms/notification-modal/index";
 import { convertTransaction } from "../../utils/utils";
-import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
+import {
+  getOrderOnChange,
+  stopListenOrder,
+} from "../../service/firebase/firebase-realtime";
 import { setStoreSuggestion } from "../../redux/actions/store";
 import { init } from "../../i18n/IMLocalized";
 import moment from "moment";
@@ -92,14 +95,17 @@ const OrderDetails = (props) => {
       getOrderOnChange(order.id, (order) => {
         if (order.qrcode && order.qrcode != "") {
           handleReceiveQRCode(order.qrcode, order.id);
+          stopListenOrder(order.id);
         }
         if (transactionState[0].toStatus !== order.status) {
           handleAddTransaction(order.status);
           if (order.status === OrderStatus.CANCELLATION) {
             handleStaffCancelOrder();
+            stopListenOrder(order.id);
           }
           if (order.status === OrderStatus.RECEPTION && !order.qrcode) {
             handleStaffFinishOrder();
+            stopListenOrder(order.id);
           }
         }
       });

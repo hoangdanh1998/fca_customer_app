@@ -20,7 +20,10 @@ import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { ORDER_ACTIONS } from "../../redux/action-types/actions";
 import { cancelOrder, createOrder } from "../../redux/actions/order";
 import { setStoreSuggestion } from "../../redux/actions/store";
-import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
+import {
+  getOrderOnChange,
+  stopListenOrder,
+} from "../../service/firebase/firebase-realtime";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -163,6 +166,7 @@ const CreateOrder = (props) => {
         if (order) {
           if (!order.timeRemain && order.status === OrderStatus.ACCEPTANCE) {
             handleAcceptedOrder();
+            stopListenOrder(createdOrder.id);
           }
           if (order.status === OrderStatus.REJECTION) {
             handleRejectedOrder();
