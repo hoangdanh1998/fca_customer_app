@@ -86,7 +86,7 @@ const EmergencyProfile = (props) => {
           </View>
         </View>
       </Content>
-      <Footer style={styles.footer}>
+      {/* <Footer style={styles.footer}>
         <View style={{ flex: 1 }}>
           <FocusedButton
             block
@@ -100,7 +100,7 @@ const EmergencyProfile = (props) => {
             }}
           />
         </View>
-      </Footer>
+      </Footer> */}
     </>
   );
 };
