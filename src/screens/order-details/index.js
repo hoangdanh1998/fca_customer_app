@@ -5,6 +5,7 @@ import {
   LANGUAGE,
   MESSAGES,
   OrderStatus,
+  NOTICE_DURATION,
 } from "../../constants/index";
 import React, { useEffect, useState } from "react";
 
@@ -12,6 +13,7 @@ import FocusedButton from "../../components/atoms/focused-button/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import TimelineTransaction from "../../components/atoms/timeline-transaction/index";
 import UnFocusedButton from "../../components/atoms/unfocused-button/index";
+import NotificationModal from "../../components/atoms/notification-modal/index";
 import { convertTransaction } from "../../utils/utils";
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 import { setStoreSuggestion } from "../../redux/actions/store";
@@ -29,6 +31,11 @@ const OrderDetails = (props) => {
   });
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
+
+  const [visibleNotificationModal, setVisibleNotificationModal] = useState(
+    false
+  );
+  const [notificationMessage, setNotificationMessage] = useState("");
 
   const isAfterCreate = props.route.params.isAfterCreate;
   const firstTransaction = [
@@ -48,6 +55,8 @@ const OrderDetails = (props) => {
 
   const handleStaffCancelOrder = () => {
     // alert("Your order has been canceled");
+    setVisibleNotificationModal(true);
+    setNotificationMessage(MESSAGES.CANCELLED);
     const length = suggestionStores.length;
     if (length > 1) {
       const newSuggestion = suggestionStores[length - 2];
@@ -60,7 +69,12 @@ const OrderDetails = (props) => {
   };
 
   const handleStaffFinishOrder = () => {
-    props.navigation.navigate("ORDER_DETAIL", { isAfterCreate: false });
+    setVisibleNotificationModal(true);
+    setNotificationMessage(MESSAGES.RECEIVED);
+    setTimeout(() => {
+      setVisibleNotificationModal(false);
+      props.navigation.navigate("ORDER_DETAIL", { isAfterCreate: false });
+    }, NOTICE_DURATION);
   };
 
   const [transactionState, setTransactionState] = useState(firstTransaction);
@@ -154,6 +168,11 @@ const OrderDetails = (props) => {
           </View>
         )}
       </Footer>
+      <NotificationModal
+        message={notificationMessage}
+        title={MESSAGES.TITLE_NOTIFICATION}
+        visible={visibleNotificationModal}
+      />
     </>
   );
 };

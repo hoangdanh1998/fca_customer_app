@@ -1,5 +1,6 @@
 import {
-  createStackNavigator, HeaderBackButton
+  createStackNavigator,
+  HeaderBackButton,
 } from "@react-navigation/stack";
 import { Icon, View } from "native-base";
 import React from "react";
@@ -7,7 +8,7 @@ import {
   APP_NAME,
   DARK_COLOR,
   LANGUAGE,
-  LIGHT_COLOR
+  LIGHT_COLOR,
 } from "../constants/index";
 import { IMLocalized, init } from "../i18n/IMLocalized";
 import CreateOrder from "../screens/create-order";
@@ -26,8 +27,6 @@ import SavedAddressList from "../screens/saved-address-list";
 import AddressScreen from "../screens/saved-address-list/google-map-address";
 import StoreDetails from "../screens/store-details";
 import StoreDetailsEmergency from "../screens/store-details-emergency";
-
-
 
 const Stack = createStackNavigator();
 export default function Navigation(props) {
@@ -78,13 +77,12 @@ export default function Navigation(props) {
         name="SET_DEFAULT_VIEW"
         component={MapScreenEmergency}
         options={({ navigation, route }) => ({
-          title: IMLocalized('set-default-emergency'),
+          title: IMLocalized("title-set-default-emergency"),
           headerTintColor: LIGHT_COLOR,
           headerStyle: {
             backgroundColor: DARK_COLOR,
           },
           headerLeft: HeaderBackButton,
-
         })}
       />
       <Stack.Screen
@@ -99,7 +97,7 @@ export default function Navigation(props) {
           headerLeft: HeaderBackButton,
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="STORE_DETAIL_EMERGENCY"
         component={StoreDetailsEmergency}
         options={{
@@ -111,7 +109,7 @@ export default function Navigation(props) {
           headerLeft: HeaderBackButton,
         }}
       />
-       <Stack.Screen
+      <Stack.Screen
         name="ADD_ADDRESS"
         component={AddressScreen}
         options={{
@@ -197,7 +195,7 @@ export default function Navigation(props) {
       <Stack.Screen
         name="MY_PROFILE"
         component={MyProfile}
-        initialParams = {{handleLogOut}}
+        initialParams={{ handleLogOut }}
         options={{
           title: IMLocalized("title-my-profile"),
           headerTintColor: LIGHT_COLOR,
