@@ -1,36 +1,35 @@
 import * as Location from "expo-location";
-import { Icon, Footer, Button } from "native-base";
+import { Footer, Icon } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
   Dimensions,
   StyleSheet,
   TouchableOpacity,
-  TouchableWithoutFeedback,
-  View,
-  Image,
+
+  View
 } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { useDispatch, useSelector } from "react-redux";
 import NotificationModal from "../../components/atoms/notification-modal/index";
-import PopupStore from "./popup-store";
 import {
-  KEY_GOOGLE_MAP,
+  DARK_COLOR, KEY_GOOGLE_MAP,
   LANGUAGE,
-  MESSAGES,
-  PRIMARY_LIGHT_COLOR,
-  LIGHT_COLOR,
-  DARK_COLOR,
+
+
+  LIGHT_COLOR, MESSAGES,
+  PRIMARY_LIGHT_COLOR
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
   setDestinationLocation,
-  setPartnerLocation,
+  setPartnerLocation
 } from "../../redux/actions/map";
 import { setPartner } from "../../redux/actions/partner";
 import { getStoreSuggestion } from "../../redux/actions/store";
+import PopupStore from "./popup-store";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -53,7 +52,6 @@ const MapScreen = () => {
   const [userRegion, setUserRegion] = useState(null);
   const [isShowPopup, setIsShowPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [displaySuggestion, setDisplaySuggestion] = useState("flex");
   const [error, setError] = useState();
 
   const handleSetDetailsGeometry = (location) => {
@@ -117,16 +115,17 @@ const MapScreen = () => {
           fetchDetails={true}
           textInputProps={{
             onFocus: () => {
-              setDisplaySuggestion("none");
+              setIsShowPopup(false);
             },
             onBlur: () => {
-              setDisplaySuggestion("flex");
-            },
+              if (suggestionStores && suggestionStores.length > 0) {
+                setIsShowPopup(true);
+              }
+            }
           }}
           keyboardShouldPersistTaps="handled"
           onPress={async (data, details = null) => {
             setIsShowPopup(true);
-            setDisplaySuggestion("flex");
             getSuggestionStore({
               latitude: details.geometry.location.lat,
               longitude: details.geometry.location.lng,
@@ -287,7 +286,6 @@ const MapScreen = () => {
           });
           dispatch(setPartner(bestSuggestion));
           dispatch(setPartnerLocation(bestSuggestion.address));
-          setDisplaySuggestion("flex");
           setIsShowPopup(true);
         } else {
           setUserRegion({
@@ -368,14 +366,13 @@ const MapScreen = () => {
               height: "auto",
               backgroundColor: null,
               borderColor: LIGHT_COLOR,
-              display: `${displaySuggestion}`,
             }}
           >
             <PopupStore store={partner} />
           </Footer>
         ) : null}
       </View>
-      {suggestionStores && suggestionStores.length === 0 ? (
+      {suggestionStores && suggestionStores.length === 0 && isShowPopup ? (
         <NotificationModal
           message={MESSAGES.NO_SUGGESTION}
           title={MESSAGES.TITLE_NOTIFICATION}
