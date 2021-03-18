@@ -64,26 +64,11 @@ const OrderDetails = (props) => {
       );
       dispatch(setStoreSuggestion(newSuggestion, newSuggestList));
     }
-    // props.navigation.navigate("MAP_VIEW", { isAfterCreate: true });
-    // props.navigation.dispatch(
-    //   CommonActions.reset({
-    //     index: 1,
-    //     routes: [
-    //       {
-    //         name: "MAP_VIEW",
-    //       },
-    //     ],
-    //   })
-    // );
   };
 
   const handleStaffFinishOrder = () => {
-    // setIsAfterCreate(false);
     setVisibleNotificationModal(true);
     setNotificationMessage(MESSAGES.RECEIVED);
-    // setTimeout(() => {
-    //   setVisibleNotificationModal(false);
-    // }, NOTICE_DURATION);
   };
 
   const [transactionState, setTransactionState] = useState([]);
@@ -166,8 +151,6 @@ const OrderDetails = (props) => {
               name={MESSAGES.HOME}
               disable={false}
               onPress={() => {
-                // dispatch(resetOrder());
-                // props.navigation.navigate("MAP_VIEW");
                 props.navigation.dispatch(
                   CommonActions.reset({
                     index: 1,
@@ -185,7 +168,6 @@ const OrderDetails = (props) => {
               name={MESSAGES.FEEDBACK}
               disable={false}
               onPress={() => {
-                // dispatch(resetOrder());
                 alert("Make feedback");
               }}
             />
