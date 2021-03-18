@@ -168,6 +168,9 @@ const CreateOrder = (props) => {
             handleAcceptedOrder();
             stopListenOrder(createdOrder.id);
           }
+          if (!order.timeRemain && order.status === OrderStatus.CANCELLATION) {
+            stopListenOrder(createdOrder.id);
+          }
           if (order.status === OrderStatus.REJECTION) {
             handleRejectedOrder();
             dispatch({

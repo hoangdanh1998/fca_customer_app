@@ -1,4 +1,5 @@
 import { Content, Footer, View } from "native-base";
+import { CommonActions } from "@react-navigation/native";
 import {
   DATE_FORMAT,
   DATE_FORMAT_CALL_API,
@@ -15,10 +16,7 @@ import TimelineTransaction from "../../components/atoms/timeline-transaction/ind
 import UnFocusedButton from "../../components/atoms/unfocused-button/index";
 import NotificationModal from "../../components/atoms/notification-modal/index";
 import { convertTransaction } from "../../utils/utils";
-import {
-  getOrderOnChange,
-  stopListenOrder,
-} from "../../service/firebase/firebase-realtime";
+import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 import { setStoreSuggestion } from "../../redux/actions/store";
 import { init } from "../../i18n/IMLocalized";
 import moment from "moment";
@@ -39,27 +37,25 @@ const OrderDetails = (props) => {
     false
   );
   const [notificationMessage, setNotificationMessage] = useState("");
+  const [isNeedHandleDismiss, setIsNeedHandleDismiss] = useState(false);
+  const [listenedOrder, setListenedOrder] = useState(order);
 
-  const isAfterCreate = props.route.params.isAfterCreate;
-  const firstTransaction = [
-    { createdAt: moment(), toStatus: OrderStatus.ACCEPTANCE },
-    {
-      createdAt: moment(order.createdAt),
-      toStatus: OrderStatus.INITIALIZATION,
-    },
-  ];
+  const [isAfterCreate, setIsAfterCreate] = useState(
+    props.route.params.isAfterCreate
+  );
 
   const handleReceiveQRCode = (qrCode, orderId) => {
     props.navigation.navigate("QR_CODE", {
       qrCode: qrCode,
       orderId: orderId,
     });
+    setIsAfterCreate(false);
   };
 
   const handleStaffCancelOrder = () => {
-    // alert("Your order has been canceled");
     setVisibleNotificationModal(true);
     setNotificationMessage(MESSAGES.CANCELLED);
+    setIsNeedHandleDismiss(true);
     const length = suggestionStores.length;
     if (length > 1) {
       const newSuggestion = suggestionStores[length - 2];
@@ -68,19 +64,29 @@ const OrderDetails = (props) => {
       );
       dispatch(setStoreSuggestion(newSuggestion, newSuggestList));
     }
-    props.navigation.navigate("MAP_VIEW", { isAfterCreate: true });
+    // props.navigation.navigate("MAP_VIEW", { isAfterCreate: true });
+    // props.navigation.dispatch(
+    //   CommonActions.reset({
+    //     index: 1,
+    //     routes: [
+    //       {
+    //         name: "MAP_VIEW",
+    //       },
+    //     ],
+    //   })
+    // );
   };
 
   const handleStaffFinishOrder = () => {
+    // setIsAfterCreate(false);
     setVisibleNotificationModal(true);
     setNotificationMessage(MESSAGES.RECEIVED);
-    setTimeout(() => {
-      setVisibleNotificationModal(false);
-      props.navigation.navigate("ORDER_DETAIL", { isAfterCreate: false });
-    }, NOTICE_DURATION);
+    // setTimeout(() => {
+    //   setVisibleNotificationModal(false);
+    // }, NOTICE_DURATION);
   };
 
-  const [transactionState, setTransactionState] = useState(firstTransaction);
+  const [transactionState, setTransactionState] = useState([]);
   const handleAddTransaction = (newStatus) => {
     const newTransaction = Array.from(transactionState, (transaction) => {
       return transaction;
@@ -90,31 +96,31 @@ const OrderDetails = (props) => {
   };
 
   useEffect(() => {
-    console.log("order", order.id);
     if (order.id) {
       getOrderOnChange(order.id, (order) => {
-        if (order.qrcode && order.qrcode != "") {
-          handleReceiveQRCode(order.qrcode, order.id);
-          stopListenOrder(order.id);
-        }
-        if (transactionState[0].toStatus !== order.status) {
-          handleAddTransaction(order.status);
-          if (order.status === OrderStatus.CANCELLATION) {
-            handleStaffCancelOrder();
-            stopListenOrder(order.id);
-          }
-          if (order.status === OrderStatus.RECEPTION && !order.qrcode) {
-            handleStaffFinishOrder();
-            stopListenOrder(order.id);
-          }
-        }
+        setListenedOrder(order);
       });
     }
-  }, [transactionState]);
+  }, []);
 
-  const navigateToNavigationPage = () => {
-    props.navigation.navigate("MAP_NAVIGATION", { order });
-  };
+  useEffect(() => {
+    if (transactionState[0]?.toStatus !== listenedOrder.status) {
+      handleAddTransaction(listenedOrder.status);
+      if (listenedOrder.status === OrderStatus.CANCELLATION) {
+        handleStaffCancelOrder();
+      }
+      if (
+        listenedOrder.status === OrderStatus.RECEPTION &&
+        !listenedOrder.qrcode
+      ) {
+        handleStaffFinishOrder();
+      }
+    }
+    if (listenedOrder.qrcode && listenedOrder.qrcode != "") {
+      handleReceiveQRCode(listenedOrder.qrcode, listenedOrder.id);
+    }
+  }, [listenedOrder]);
+
   return (
     <>
       <Content>
@@ -142,7 +148,7 @@ const OrderDetails = (props) => {
               name={MESSAGES.DIRECTION}
               disable={false}
               onPress={() => {
-                navigateToNavigationPage();
+                props.navigation.navigate("MAP_NAVIGATION", { order });
               }}
             />
           </View>
@@ -160,7 +166,18 @@ const OrderDetails = (props) => {
               name={MESSAGES.HOME}
               disable={false}
               onPress={() => {
-                props.navigation.navigate("MAP_VIEW");
+                // dispatch(resetOrder());
+                // props.navigation.navigate("MAP_VIEW");
+                props.navigation.dispatch(
+                  CommonActions.reset({
+                    index: 1,
+                    routes: [
+                      {
+                        name: "MAP_VIEW",
+                      },
+                    ],
+                  })
+                );
               }}
             />
             <FocusedButton
@@ -168,6 +185,7 @@ const OrderDetails = (props) => {
               name={MESSAGES.FEEDBACK}
               disable={false}
               onPress={() => {
+                // dispatch(resetOrder());
                 alert("Make feedback");
               }}
             />
@@ -175,6 +193,24 @@ const OrderDetails = (props) => {
         )}
       </Footer>
       <NotificationModal
+        onDismiss={() => {
+          if (isNeedHandleDismiss) {
+            setVisibleNotificationModal(false);
+            props.navigation.dispatch(
+              CommonActions.reset({
+                index: 1,
+                routes: [
+                  {
+                    name: "MAP_VIEW",
+                  },
+                ],
+              })
+            );
+          } else {
+            setVisibleNotificationModal(false);
+            setIsAfterCreate(false);
+          }
+        }}
         message={notificationMessage}
         title={MESSAGES.TITLE_NOTIFICATION}
         visible={visibleNotificationModal}
