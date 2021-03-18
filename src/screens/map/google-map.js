@@ -201,7 +201,7 @@ const MapScreen = () => {
               }}
               apikey={KEY_GOOGLE_MAP}
               strokeWidth={4}
-              strokeColor={DARK_COLOR}
+              strokeColor={"blue"}
               onReady={() => {}}
             />
           ) : null}
@@ -227,7 +227,6 @@ const MapScreen = () => {
                 if (store.id == bestSuggestion.id) {
                   return (
                     <Marker
-                      image={require("../../assets/suggested-coffee.png")}
                       key={store.id}
                       title={store.name}
                       destination={store.address.description}
@@ -243,7 +242,6 @@ const MapScreen = () => {
                 } else {
                   return (
                     <Marker
-                      image={require("../../assets/takeaway-coffee.png")}
                       key={store.id}
                       title={store.name}
                       destination={store.address.description}
@@ -252,7 +250,7 @@ const MapScreen = () => {
                         longitude: +store.address.longitude,
                       }}
                       moveOnMarkerPress
-                      image={require("../../assets/coffee-shop.png")}
+                      image={require("../../assets/coffee_shop.png")}
                       onPress={() => setSelectedStore(store)}
                     />
                   );
