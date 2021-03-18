@@ -29,6 +29,8 @@ export const MESSAGES = {
   ACCEPTED: "accepted",
   DONE: "done",
   REJECTED: "rejected",
+  CANCELLED: "cancelled",
+  RECEIVED: "received",
   NEXT: "next",
   ORDER: "order",
   HOME: "home",

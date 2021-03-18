@@ -32,13 +32,13 @@
     "title-my-profile": "Thông tin cá nhân",
     "title-emergency-profile": "Thiết lập đặt hàng nhanh",
     "title-saved-address": "Địa chỉ đã lưu",
-
-    "set-default-emergency":"Chọn đặt hàng nhanh",
+    "title-set-default-emergency":"Chọn đặt hàng nhanh",
 
     "wording-item": "món",
     "wording-my-orders": "Đơn hàng của tôi",
     "wording-accepted": "Đặt hàng thành công",
     "wording-rejected": "Tiếc quá! Hiện tại cửa hàng này không thể phục vụ đơn hàng cho bạn.",
+    "wording-received": "Đơn hàng của bạn đã hoàn tất",
     "wording-done": "Hoàn tất",
     "wording-next": "Tiếp theo",
     "wording-order": "Đặt hàng",
@@ -46,6 +46,7 @@
     "wording-fail": "Thất bại",
     "wording-feedback": "Đánh giá",
     "wording-cancel-order": "Huỷ đơn hàng",
+    "wording-cancelled": "Đơn hàng của bạn đã bị huỷ",
     "wording-too-much-item": "Bạn chỉ có thể đặt tối đa 2 món trong một đơn hàng",
     "wording-cart": "Giỏ hàng",
     "wording-take-order-at": "Địa điểm nhận hàng",

@@ -1,14 +1,13 @@
 import { withNavigation } from "@react-navigation/compat";
 import {
-  Body, Card,
-  CardItem, Content,
+  Body,
+  Card,
+  CardItem,
+  Content,
   Footer,
-
-
-
   Left,
   Right,
-  Text
+  Text,
 } from "native-base";
 import React from "react";
 import { TouchableWithoutFeedback } from "react-native";
@@ -17,21 +16,18 @@ import NumberFormat from "react-number-format";
 import { useDispatch, useSelector } from "react-redux";
 import UnFocusedButton from "../../components/atoms/unfocused-button/index";
 import {
-  DARK_COLOR, LANGUAGE,
-
-  LIGHT_COLOR, MESSAGES
+  DARK_COLOR,
+  LANGUAGE,
+  LIGHT_COLOR,
+  MESSAGES,
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 /* eslint-disable react/prop-types */
 
 init(LANGUAGE.VI);
 const MyProfile = (props) => {
-  // const profile = this.props.profile;
-
-  console.log("route logout: ", props.route.params.handleLogOut);
   const handleLogOut = props.route.params.handleLogOut;
 
-  // const profile = MY_PROFILE;
   const profile = useSelector((state) => state.account.customer);
 
   const dispatch = useDispatch();
@@ -87,7 +83,7 @@ const MyProfile = (props) => {
         </Card>
         <TouchableWithoutFeedback
           onPress={() => {
-            props.navigation.navigate("EMERGENCY_PROFILE_LIST");
+            props.navigation.navigate("EMERGENCY_PROFILE");
           }}
         >
           <Card style={{ flex: 1 }}>

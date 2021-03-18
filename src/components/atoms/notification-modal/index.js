@@ -14,6 +14,7 @@ const NotificationModal = (props) => {
       showProgress={false}
       title={title ? IMLocalized(`wording-${title}`) : null}
       message={IMLocalized(`wording-${message}`)}
+      onDismiss={props.onDismiss}
       closeOnTouchOutside={true}
       closeOnHardwareBackPress={false}
       titleStyle={

@@ -18,6 +18,10 @@ const orderReducer = (state = initialState, action) => {
       // const data = action.payload.data.data.order;
       return { ...state, createdOrder: {} };
     }
+    case ORDER_ACTIONS.RESET_ORDER: {
+      // const data = action.payload.data.data.order;
+      return { ...state, createdOrder: {} };
+    }
     case ORDER_ACTIONS.GET_ORDER: {
       const data = action.payload.data.data.order;
       return { ...state, order: data };

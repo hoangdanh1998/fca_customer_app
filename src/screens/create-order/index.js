@@ -20,7 +20,10 @@ import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { ORDER_ACTIONS } from "../../redux/action-types/actions";
 import { cancelOrder, createOrder } from "../../redux/actions/order";
 import { setStoreSuggestion } from "../../redux/actions/store";
-import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
+import {
+  getOrderOnChange,
+  stopListenOrder,
+} from "../../service/firebase/firebase-realtime";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -47,6 +50,7 @@ const CreateOrder = (props) => {
   const [visibleNotificationModal, setVisibleNotificationModal] = useState(
     false
   );
+  const [notificationMessage, setNotificationMessage] = useState("");
 
   const submitOrder = useCallback(async () => {
     try {
@@ -76,6 +80,7 @@ const CreateOrder = (props) => {
     } catch (error) {
       console.log("SubmitOrderError", error);
       setVisibleTimer(false);
+      setNotificationMessage(MESSAGES.REJECTED);
       setVisibleNotificationModal(true);
       setTimeout(() => {
         setVisibleNotificationModal(false);
@@ -106,11 +111,19 @@ const CreateOrder = (props) => {
   const handlePressCancelOrder = async () => {
     setVisibleTimer(false);
     await destroyOrder(createdOrder.id);
-    alert("Cancel order success");
+    setNotificationMessage(MESSAGES.CANCELLED);
+    setVisibleNotificationModal(true);
+    await new Promise((resolve, reject) => {
+      setTimeout(() => {
+        setVisibleNotificationModal(false);
+        resolve();
+      }, NOTICE_DURATION);
+    });
   };
 
   const handleRejectedOrder = async () => {
     setVisibleTimer(false);
+    setNotificationMessage(MESSAGES.REJECTED);
     setVisibleNotificationModal(true);
     await new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -145,7 +158,6 @@ const CreateOrder = (props) => {
         ],
       })
     );
-    // props.navigation.reset({ index: 0, actions: [NavigationActions.navigate({ routeName: 'ORDER_DETAIL' })] });
   };
 
   useEffect(() => {
@@ -154,6 +166,10 @@ const CreateOrder = (props) => {
         if (order) {
           if (!order.timeRemain && order.status === OrderStatus.ACCEPTANCE) {
             handleAcceptedOrder();
+            stopListenOrder(createdOrder.id);
+          }
+          if (!order.timeRemain && order.status === OrderStatus.CANCELLATION) {
+            stopListenOrder(createdOrder.id);
           }
           if (order.status === OrderStatus.REJECTION) {
             handleRejectedOrder();
@@ -192,12 +208,11 @@ const CreateOrder = (props) => {
         </View>
       </Footer>
       <NotificationModal
-        message={MESSAGES.REJECTED}
+        message={notificationMessage}
         title={MESSAGES.TITLE_NOTIFICATION}
         visible={visibleNotificationModal}
       />
     </>
   );
 };
-
 export default withNavigation(CreateOrder);

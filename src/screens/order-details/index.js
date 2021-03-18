@@ -1,10 +1,12 @@
 import { Content, Footer, View } from "native-base";
+import { CommonActions } from "@react-navigation/native";
 import {
   DATE_FORMAT,
   DATE_FORMAT_CALL_API,
   LANGUAGE,
   MESSAGES,
   OrderStatus,
+  NOTICE_DURATION,
 } from "../../constants/index";
 import React, { useEffect, useState } from "react";
 
@@ -12,6 +14,7 @@ import FocusedButton from "../../components/atoms/focused-button/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import TimelineTransaction from "../../components/atoms/timeline-transaction/index";
 import UnFocusedButton from "../../components/atoms/unfocused-button/index";
+import NotificationModal from "../../components/atoms/notification-modal/index";
 import { convertTransaction } from "../../utils/utils";
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 import { setStoreSuggestion } from "../../redux/actions/store";
@@ -30,24 +33,29 @@ const OrderDetails = (props) => {
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
 
-  const isAfterCreate = props.route.params.isAfterCreate;
-  const firstTransaction = [
-    { createdAt: moment(), toStatus: OrderStatus.ACCEPTANCE },
-    {
-      createdAt: moment(order.createdAt),
-      toStatus: OrderStatus.INITIALIZATION,
-    },
-  ];
+  const [visibleNotificationModal, setVisibleNotificationModal] = useState(
+    false
+  );
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [isNeedHandleDismiss, setIsNeedHandleDismiss] = useState(false);
+  const [listenedOrder, setListenedOrder] = useState(order);
+
+  const [isAfterCreate, setIsAfterCreate] = useState(
+    props.route.params.isAfterCreate
+  );
 
   const handleReceiveQRCode = (qrCode, orderId) => {
     props.navigation.navigate("QR_CODE", {
       qrCode: qrCode,
       orderId: orderId,
     });
+    setIsAfterCreate(false);
   };
 
   const handleStaffCancelOrder = () => {
-    // alert("Your order has been canceled");
+    setVisibleNotificationModal(true);
+    setNotificationMessage(MESSAGES.CANCELLED);
+    setIsNeedHandleDismiss(true);
     const length = suggestionStores.length;
     if (length > 1) {
       const newSuggestion = suggestionStores[length - 2];
@@ -56,14 +64,14 @@ const OrderDetails = (props) => {
       );
       dispatch(setStoreSuggestion(newSuggestion, newSuggestList));
     }
-    props.navigation.navigate("MAP_VIEW", { isAfterCreate: true });
   };
 
   const handleStaffFinishOrder = () => {
-    props.navigation.navigate("ORDER_DETAIL", { isAfterCreate: false });
+    setVisibleNotificationModal(true);
+    setNotificationMessage(MESSAGES.RECEIVED);
   };
 
-  const [transactionState, setTransactionState] = useState(firstTransaction);
+  const [transactionState, setTransactionState] = useState([]);
   const handleAddTransaction = (newStatus) => {
     const newTransaction = Array.from(transactionState, (transaction) => {
       return transaction;
@@ -73,28 +81,31 @@ const OrderDetails = (props) => {
   };
 
   useEffect(() => {
-    console.log("order", order.id);
     if (order.id) {
       getOrderOnChange(order.id, (order) => {
-        if (order.qrcode && order.qrcode != "") {
-          handleReceiveQRCode(order.qrcode, order.id);
-        }
-        if (transactionState[0].toStatus !== order.status) {
-          handleAddTransaction(order.status);
-          if (order.status === OrderStatus.CANCELLATION) {
-            handleStaffCancelOrder();
-          }
-          if (order.status === OrderStatus.RECEPTION && !order.qrcode) {
-            handleStaffFinishOrder();
-          }
-        }
+        setListenedOrder(order);
       });
     }
-  }, [transactionState]);
+  }, []);
 
-  const navigateToNavigationPage = () => {
-    props.navigation.navigate("MAP_NAVIGATION", { order });
-  };
+  useEffect(() => {
+    if (transactionState[0]?.toStatus !== listenedOrder.status) {
+      handleAddTransaction(listenedOrder.status);
+      if (listenedOrder.status === OrderStatus.CANCELLATION) {
+        handleStaffCancelOrder();
+      }
+      if (
+        listenedOrder.status === OrderStatus.RECEPTION &&
+        !listenedOrder.qrcode
+      ) {
+        handleStaffFinishOrder();
+      }
+    }
+    if (listenedOrder.qrcode && listenedOrder.qrcode != "") {
+      handleReceiveQRCode(listenedOrder.qrcode, listenedOrder.id);
+    }
+  }, [listenedOrder]);
+
   return (
     <>
       <Content>
@@ -122,7 +133,7 @@ const OrderDetails = (props) => {
               name={MESSAGES.DIRECTION}
               disable={false}
               onPress={() => {
-                navigateToNavigationPage();
+                props.navigation.navigate("MAP_NAVIGATION", { order });
               }}
             />
           </View>
@@ -140,7 +151,16 @@ const OrderDetails = (props) => {
               name={MESSAGES.HOME}
               disable={false}
               onPress={() => {
-                props.navigation.navigate("MAP_VIEW");
+                props.navigation.dispatch(
+                  CommonActions.reset({
+                    index: 1,
+                    routes: [
+                      {
+                        name: "MAP_VIEW",
+                      },
+                    ],
+                  })
+                );
               }}
             />
             <FocusedButton
@@ -154,6 +174,29 @@ const OrderDetails = (props) => {
           </View>
         )}
       </Footer>
+      <NotificationModal
+        onDismiss={() => {
+          if (isNeedHandleDismiss) {
+            setVisibleNotificationModal(false);
+            props.navigation.dispatch(
+              CommonActions.reset({
+                index: 1,
+                routes: [
+                  {
+                    name: "MAP_VIEW",
+                  },
+                ],
+              })
+            );
+          } else {
+            setVisibleNotificationModal(false);
+            setIsAfterCreate(false);
+          }
+        }}
+        message={notificationMessage}
+        title={MESSAGES.TITLE_NOTIFICATION}
+        visible={visibleNotificationModal}
+      />
     </>
   );
 };

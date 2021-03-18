@@ -58,3 +58,11 @@ export const getHistory = (param) => {
     });
   };
 };
+
+export const resetOrder = () => {
+  return async (dispatch) => {
+    dispatch({
+      type: ORDER_ACTIONS.RESET_ORDER,
+    });
+  };
+};
