@@ -108,7 +108,7 @@ const MapScreen = () => {
                 })
               : []
           }
-          listEmptyComponent
+          // listEmptyComponent
           autoFocus={false}
           autoCorrect={false}
           listViewDisplayed="auto" // true/false/undefined

@@ -34,16 +34,14 @@ import { withNavigation } from "@react-navigation/compat";
 
 const SavedAddressList = (props) => {
   init(LANGUAGE.VI);
-  //   var orderList = props.orderList;
   const customerAccount = useSelector((state) =>
     Object.assign({}, state.account)
   );
   const emergencyList = customerAccount.customer.address;
-  // console.log("emergencyList", emergencyList);
-  const rightButtons =(id) => [
+  const rightButtons =(item) => [
     <Button
       onPress={() => {
-        props.navigation.navigate("ADD_ADDRESS",{addressId:id});
+        props.navigation.navigate("ADD_ADDRESS",{addressId:item});
       }}
       style={{
         backgroundColor: DARK_COLOR,
@@ -85,7 +83,7 @@ const SavedAddressList = (props) => {
           dataArray={emergencyList}
           renderRow={(item) => (
             <Swipeable
-              rightButtons={rightButtons(item.id)}
+              rightButtons={rightButtons(item)}
               style={{
                 flex: 1,
 
@@ -172,7 +170,7 @@ const SavedAddressList = (props) => {
             name={MESSAGES.ADD}
             disable={false}
             onPress={() => {
-              props.navigation.navigate("ADD_ADDRESS");
+              props.navigation.navigate("ADD_ADDRESS",{addressId:null});
             }}
           />
         </View>
