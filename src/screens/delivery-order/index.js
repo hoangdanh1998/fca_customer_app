@@ -37,11 +37,8 @@ const DeliveryOrder = (props) => {
   };
 
   useEffect(() => {
-    console.log("useEffect", orderId);
     if (orderId) {
-      console.log("createdOrder", orderId);
       getOrderOnChange(orderId, (order) => {
-        console.log("delivery-order");
         if (order.status === OrderStatus.RECEPTION && order.qrcode) {
           handleScanSuccess();
         }

@@ -31,7 +31,6 @@ const OrderDetails = (props) => {
   const historyTransactions = [];
   if (props.route.params.screenName) {
     order = props.route.params.order;
-    console.log("screen name order", order);
   } else {
     order = useSelector((state) => {
       return state.order.createdOrder;

@@ -30,8 +30,6 @@ const GoogleMatrix = () => {
       fetch(google_APIUrl)
       .then((response) => response.json())
       .then((responseJson) => {
-        console.log(responseJson.rows[0].elements[0].distance.text)
-        console.log(responseJson.rows[0].elements[0].duration.text)
         // setMatrix({
         //   distance:responseJson.distance,
         //   duration:responseJson.duration
@@ -48,8 +46,6 @@ const GoogleMatrix = () => {
   //   fetch(google_APIUrl)
   //     .then((response) => response.json())
   //     .then((responseJson) => {
-  //       console.log(responseJson.rows.elements.distance.text)
-  //       console.log(responseJson.rows.elements.duration.text)
   //       setMatrix({
   //         distance:responseJson.rows.elements.distance.text,
   //         duration:responseJson.rows.elements.duration.text
