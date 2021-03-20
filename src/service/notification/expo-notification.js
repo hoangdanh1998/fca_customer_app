@@ -3,6 +3,7 @@ import Constants from 'expo-constants';
 import { updateExpoToken } from '../account/account';
 import {ID_ACCOUNT} from '../../constants/index'
 
+
 export const registerForPushNotificationsAsync = async () => {
     if (Constants.isDevice) {
         const { status: existingStatus } = await Notifications.getPermissionsAsync();

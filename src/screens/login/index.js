@@ -24,7 +24,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = (props) => {
 
-    // console.log("pros login page", props);
 
     const dispatch = useDispatch();
 

@@ -8,7 +8,6 @@ export const createOrder = (param) => {
     if (response.data.meta.status !== ResponseStatus.SUCCESS) {
       throw new Error("Something went wrong");
     }
-    console.log("orderId: " + response.data.data.order.id);
     dispatch({
       type: ORDER_ACTIONS.CREATE_ORDER,
       payload: response,

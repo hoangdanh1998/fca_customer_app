@@ -174,7 +174,6 @@ const MapScreen = () => {
   };
 
   const mapView = () => {
-    // console.log("userRegion", userRegion);
     return (
       <View style={{ flex: 1 }}>
         <MapView

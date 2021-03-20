@@ -11,7 +11,6 @@ import { OrderStatus } from "../../constants";
 const HistoryOrder = (props) => {
   //   var orderList = props.orderList;
   // var orderList = HISTORY_ORDER;
-  console.log("history order screen name:", props.route.name);
   const arrStatus = [
     OrderStatus.CLOSURE,
     OrderStatus.RECEPTION,
