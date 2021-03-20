@@ -32,27 +32,31 @@ const AddressScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
   const [marked, setmarked] = useState(null);
-  const [textLabel, setTextLabel] = useState("");
-  const [addressDetail, setaddress] = useState(null);
+  const [savedAddress, setsavedAdrees] = useState(props.route.params.addressId);
 
   const dispatch = useDispatch();
   const customer = useSelector((state) => state.account.customer);
-
-  const saveAddressLabel = async() => {
+  // const { addressId } = props.route.params;
+  // console.log(addressId);
+  // addressId
+  //   ? setmarked({
+  //       longitude: addressId.longitude,
+  //       latitude: addressId.latitude,
+  //       description: addressId.description,
+  //       label: addressId.label,
+  //     })
+  //   : null;
+  const saveAddressLabel = async () => {
     try {
       await dispatch(
-        saveAddress(
-          (id = customer.id),
-          {
-            customerAddressId: "",
-            label: textLabel,
-            description: addressDetail.Address,
-            latitude: `${marked.latitude}`,
-            longitude: `${marked.longitude}`
-          }
-        )
+        saveAddress((id = customer.id), {
+          customerAddressId: savedAddress?.id,
+          label: marked.label,
+          description: marked.description,
+          latitude: `${marked.latitude}`,
+          longitude: `${marked.longitude}`,
+        })
       );
-      
     } catch (error) {
       // setError(error);
       alert(error);
@@ -82,10 +86,8 @@ const AddressScreen = (props) => {
             setmarked({
               latitude: details.geometry.location.lat,
               longitude: details.geometry.location.lng,
-            });
-            setaddress({
-              Name: details.name,
-              Address: details.formatted_address,
+              name: details.name,
+              description: details.formatted_address,
             });
           }}
           query={{
@@ -153,7 +155,6 @@ const AddressScreen = (props) => {
 
   useEffect(() => {
     (async () => {
-
       try {
         setError();
         setIsLoading(true);
@@ -165,12 +166,25 @@ const AddressScreen = (props) => {
 
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
-        setUserRegion({
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.05,
-        });
+        savedAddress
+          ? (setUserRegion({
+              latitude: parseFloat(savedAddress.latitude),
+              longitude: parseFloat(savedAddress.longitude),
+              latitudeDelta: 0.05,
+              longitudeDelta: 0.05,
+            }),
+            setmarked({
+              latitude: parseFloat(savedAddress.latitude),
+              longitude: parseFloat(savedAddress.longitude),
+              label: savedAddress.label,
+              description: savedAddress.description,
+            }))
+          : setUserRegion({
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+              latitudeDelta: 0.05,
+              longitudeDelta: 0.05,
+            });
       } catch (error) {
         setError(error.message);
       }
@@ -234,12 +248,12 @@ const AddressScreen = (props) => {
                     underlineColorAndroid="transparent"
                     placeholder={IMLocalized("wording-set-saved-address")}
                     placeholderTextColor={DARK_COLOR}
+                    defaultValue={marked.label}
                     autoCapitalize="none"
-                    onChangeText={(text) => setTextLabel(text)}
+                    onChangeText={(text) => (marked.label = text)}
                   />
                 </CardItem>
-
-                {/* <Text>{addressDetail?.Name}</Text> */}
+                <Text>{marked?.name}</Text>
                 <CardItem bordered>
                   <Text
                     style={{
@@ -249,7 +263,7 @@ const AddressScreen = (props) => {
                       fontWeight: "bold",
                     }}
                   >
-                    {addressDetail?.Address}
+                    {marked?.description}
                   </Text>
                 </CardItem>
               </Card>
@@ -258,14 +272,12 @@ const AddressScreen = (props) => {
                 name={MESSAGES.SAVE}
                 disable={false}
                 onPress={() => {
-                  if (textLabel == "") {
+                  if (marked.label == "") {
                     alert(IMLocalized("wording-set-saved-address"));
                   } else {
                     saveAddressLabel();
                     props.navigation.navigate("SAVED_ADDRESS_LIST");
                   }
-
-                  //  props.navigation.navigate("ADD_ADDRESS");
                 }}
               />
             </View>

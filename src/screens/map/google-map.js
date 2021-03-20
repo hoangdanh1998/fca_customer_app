@@ -15,7 +15,7 @@ import MapViewDirections from "react-native-maps-directions";
 import { useDispatch, useSelector } from "react-redux";
 import NotificationModal from "../../components/atoms/notification-modal/index";
 import {
-  DARK_COLOR, KEY_GOOGLE_MAP,
+  KEY_GOOGLE_MAP,
   LANGUAGE,
 
 
@@ -93,7 +93,23 @@ const MapScreen = () => {
           id="GooglePlacesAutocomplete"
           placeholder={IMLocalized("wording-search-destination")}
           minLength={2}
-          listEmptyComponent
+          // listEmptyComponent
+          // predefinedPlaces={
+          //   profile && profile.address && profile.address.length > 0
+          //     ? profile.address.map((a) => {
+          //         return {
+          //           description: a.label,
+          //           geometry: {
+          //             location: {
+          //               lat: +a.latitude,
+          //               lng: +a.longitude,
+          //             },
+          //           },
+          //         };
+          //       })
+          //     : []
+          // }
+          // listEmptyComponent
           autoFocus={false}
           autoCorrect={false}
           listViewDisplayed="auto" // true/false/undefined
@@ -186,7 +202,7 @@ const MapScreen = () => {
               }}
               apikey={KEY_GOOGLE_MAP}
               strokeWidth={4}
-              strokeColor={DARK_COLOR}
+              strokeColor={"blue"}
               onReady={() => {}}
             />
           ) : null}
@@ -212,7 +228,6 @@ const MapScreen = () => {
                 if (store.id == bestSuggestion.id) {
                   return (
                     <Marker
-                      image={require("../../assets/suggested-coffee.png")}
                       key={store.id}
                       title={store.name}
                       destination={store.address.description}
@@ -228,7 +243,6 @@ const MapScreen = () => {
                 } else {
                   return (
                     <Marker
-                      image={require("../../assets/takeaway-coffee.png")}
                       key={store.id}
                       title={store.name}
                       destination={store.address.description}
@@ -237,7 +251,7 @@ const MapScreen = () => {
                         longitude: +store.address.longitude,
                       }}
                       moveOnMarkerPress
-                      image={require("../../assets/coffee-shop.png")}
+                      image={require("../../assets/coffee_shop.png")}
                       onPress={() => setSelectedStore(store)}
                     />
                   );
