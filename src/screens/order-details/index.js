@@ -27,9 +27,17 @@ import { withNavigation } from "@react-navigation/compat";
 init(LANGUAGE.VI);
 const OrderDetails = (props) => {
   const dispatch = useDispatch();
-  const order = useSelector((state) => {
-    return state.order.createdOrder;
-  });
+  let order;
+  const historyTransactions = [];
+  if (props.route.params.screenName) {
+    order = props.route.params.order;
+    console.log("screen name order", order);
+  } else {
+    order = useSelector((state) => {
+      return state.order.createdOrder;
+    });
+  }
+
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
 
@@ -71,7 +79,9 @@ const OrderDetails = (props) => {
     setNotificationMessage(MESSAGES.RECEIVED);
   };
 
-  const [transactionState, setTransactionState] = useState([]);
+  const [transactionState, setTransactionState] = useState(
+    props.route.params.screenName ? order.transaction : []
+  );
   const handleAddTransaction = (newStatus) => {
     const newTransaction = Array.from(transactionState, (transaction) => {
       return transaction;
@@ -138,41 +148,41 @@ const OrderDetails = (props) => {
             />
           </View>
         ) : (
-          <View
-            style={{
-              width: "100%",
-              flexDirection: "row",
-              justifyContent: "center",
-              flex: 1,
-            }}
-          >
-            <UnFocusedButton
-              bordered
-              name={MESSAGES.HOME}
-              disable={false}
-              onPress={() => {
-                props.navigation.dispatch(
-                  CommonActions.reset({
-                    index: 1,
-                    routes: [
-                      {
-                        name: "MAP_VIEW",
-                      },
-                    ],
-                  })
-                );
+            <View
+              style={{
+                width: "100%",
+                flexDirection: "row",
+                justifyContent: "center",
+                flex: 1,
               }}
-            />
-            <FocusedButton
-              block
-              name={MESSAGES.FEEDBACK}
-              disable={false}
-              onPress={() => {
-                alert("Make feedback");
-              }}
-            />
-          </View>
-        )}
+            >
+              <UnFocusedButton
+                bordered
+                name={MESSAGES.HOME}
+                disable={false}
+                onPress={() => {
+                  props.navigation.dispatch(
+                    CommonActions.reset({
+                      index: 1,
+                      routes: [
+                        {
+                          name: "MAP_VIEW",
+                        },
+                      ],
+                    })
+                  );
+                }}
+              />
+              <FocusedButton
+                block
+                name={MESSAGES.FEEDBACK}
+                disable={false}
+                onPress={() => {
+                  alert("Make feedback");
+                }}
+              />
+            </View>
+          )}
       </Footer>
       <NotificationModal
         onDismiss={() => {

@@ -19,6 +19,7 @@ import { convertTransaction } from "../../utils/utils";
 
 init(LANGUAGE.VI);
 const HistoryOrderDetails = (props) => {
+  console.log("Prop history order details:", props.route.name);
   const order = props.route.params.order;
   const orderTransaction = Array.from(
     props.route.params.order.transaction,

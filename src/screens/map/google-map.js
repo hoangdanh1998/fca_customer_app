@@ -15,7 +15,7 @@ import MapViewDirections from "react-native-maps-directions";
 import { useDispatch, useSelector } from "react-redux";
 import NotificationModal from "../../components/atoms/notification-modal/index";
 import {
-  DARK_COLOR, KEY_GOOGLE_MAP,
+  KEY_GOOGLE_MAP,
   LANGUAGE,
 
 
@@ -93,21 +93,22 @@ const MapScreen = () => {
           id="GooglePlacesAutocomplete"
           placeholder={IMLocalized("wording-search-destination")}
           minLength={2}
-          predefinedPlaces={
-            profile && profile.address && profile.address.length > 0
-              ? profile.address.map((a) => {
-                  return {
-                    description: a.label,
-                    geometry: {
-                      location: {
-                        lat: +a.latitude,
-                        lng: +a.longitude,
-                      },
-                    },
-                  };
-                })
-              : []
-          }
+          // listEmptyComponent
+          // predefinedPlaces={
+          //   profile && profile.address && profile.address.length > 0
+          //     ? profile.address.map((a) => {
+          //         return {
+          //           description: a.label,
+          //           geometry: {
+          //             location: {
+          //               lat: +a.latitude,
+          //               lng: +a.longitude,
+          //             },
+          //           },
+          //         };
+          //       })
+          //     : []
+          // }
           // listEmptyComponent
           autoFocus={false}
           autoCorrect={false}
