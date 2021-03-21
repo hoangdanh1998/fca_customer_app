@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import Login from "../screens/login/index";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { finishLoading, restoreToken, signOut } from "../redux/actions/account";
+import { restoreOrderCreated } from '../redux/actions/order';
 import LoadingPage from "../screens/loading-page/index";
+import Login from "../screens/login/index";
 import Navigation from "./Navigation";
 
 const LoginStack = createStackNavigator();
@@ -22,7 +23,6 @@ function LoginNavigation() {
     try {
       let token = await AsyncStorage.getItem("@storage_Token");
       let customer = await AsyncStorage.getItem("@storage_Customer");
-
       if (token !== null) {
         token = JSON.parse(token);
         customer = JSON.parse(customer);
@@ -33,6 +33,17 @@ function LoginNavigation() {
       console.error("get token from store: ", e);
     }
   };
+  const handleGetCreatedOrder = async () => {
+    try {
+      let order = await AsyncStorage.getItem("@storage_Order");
+      if (order !== null) {
+        order = JSON.parse(order);
+        dispatch(restoreOrderCreated(order));
+      }
+    } catch (e) {
+    }
+  };
+
 
   const handleLogOut = () => {
     dispatch(signOut());
@@ -40,6 +51,7 @@ function LoginNavigation() {
 
   useEffect(() => {
     handleGetToken();
+    handleGetCreatedOrder();
   }, []);
 
   return (
