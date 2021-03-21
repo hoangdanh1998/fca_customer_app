@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import moment from "moment";
 import {
   Card,
   CardItem,
@@ -7,22 +7,21 @@ import {
   Icon,
   Left,
   Right,
-  Text,
+  Text
 } from "native-base";
+import React from "react";
 import { TouchableWithoutFeedback } from "react-native";
 import NumberFormat from "react-number-format";
-import moment from "moment";
-import { styles } from "./styles";
-import { ORDER } from "../../../constants/seeding.js";
-import { IMLocalized, init } from "../../../i18n/IMLocalized";
 import {
-  LANGUAGE,
-  DATE_TIME_FORMAT_CALL_API,
-  DATE_TIME_FORMAT,
+  DATE_TIME_FORMAT, LANGUAGE,
+
+
   OrderStatus,
-  DARK_COLOR,
-  PRIMARY_LIGHT_COLOR,
+
+  PRIMARY_LIGHT_COLOR
 } from "../../../constants/index.js";
+import { IMLocalized, init } from "../../../i18n/IMLocalized";
+import { styles } from "./styles";
 
 const OrderCard = (props) => {
   var order = props.order;
@@ -61,7 +60,7 @@ const OrderCard = (props) => {
         <CardItem style={styles.card2nd}>
           <Left>
             <Content style={styles.orderContent}>
-              <H3 style={styles.storeName}>{order.partner.name}</H3>
+              <H3 style={styles.storeName}>{order?.partner?.name}</H3>
               <Text>
                 <NumberFormat
                   value={order.total}
