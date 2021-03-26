@@ -27,21 +27,33 @@ import { useDispatch, useSelector } from "react-redux";
 import FocusedButton from "../../components/atoms/focused-button/index";
 import { Icon } from "react-native-elements";
 import Swipeable from "react-native-swipeable";
-import { getHistory } from "../../redux/actions/order";
 import { withNavigation } from "@react-navigation/compat";
+import { delAddress } from "../../redux/actions/map";
 
 // import { EMERGENCY_LIST } from "../../constants/seeding";
 
 const SavedAddressList = (props) => {
   init(LANGUAGE.VI);
+  const dispatch = useDispatch();
   const customerAccount = useSelector((state) =>
     Object.assign({}, state.account)
   );
   const emergencyList = customerAccount.customer.address;
-  const rightButtons =(item) => [
+
+  const loadAddress = async (id) => {
+    try {
+      // console.log(customerAccount.customer.account.id);
+      await dispatch(delAddress(customerAccount.customer.account.id, id));
+    } catch (error) {
+      // setError(error);
+      alert(error);
+    }
+  };
+
+  const rightButtons = (item) => [
     <Button
       onPress={() => {
-        props.navigation.navigate("ADD_ADDRESS",{addressId:item});
+        props.navigation.navigate("ADD_ADDRESS", { addressId: item });
       }}
       style={{
         backgroundColor: DARK_COLOR,
@@ -59,7 +71,8 @@ const SavedAddressList = (props) => {
     </Button>,
     <Button
       onPress={() => {
-        alert("Press button");
+        alert("Adress deleted!");
+        loadAddress(item.id);
       }}
       style={{
         backgroundColor: "#ff4747",
@@ -170,7 +183,7 @@ const SavedAddressList = (props) => {
             name={MESSAGES.ADD}
             disable={false}
             onPress={() => {
-              props.navigation.navigate("ADD_ADDRESS",{addressId:null});
+              props.navigation.navigate("ADD_ADDRESS", { addressId: null });
             }}
           />
         </View>
