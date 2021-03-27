@@ -34,14 +34,12 @@ const MapScreen = () => {
             setUserRegion(null);
         })();
     }, []);
-    console.log("userRegion", userRegion);
     return (
         <View style={{ flex: 1 }}>
             <MapView
                 style={styles.map}
                 // followsUserLocation={true} //work on ios only
                 // onMapReady={getLocation}
-                // onUserLocationChange={(coordinate) => {console.log(coordinate)}}
                 showsUserLocation={true}
                 showsScale
                 showsCompass

@@ -36,7 +36,6 @@ const removeToken = async () => {
     throw new Error(error);
   }
 
-  console.log("Done.");
 };
 
 const accountReducer = (state = initialState, action) => {
@@ -62,7 +61,6 @@ const accountReducer = (state = initialState, action) => {
       removeToken();
       return { ...state, isSignOut: true, token: null, customer: null };
     case FINISH_LOADING:
-      console.log("change isloading");
       return { ...state, isLoading: false };
       case SAVE_ADDRESS: {
         return {...state, customer: action.payload}

@@ -1,3 +1,4 @@
+import { CommonActions } from "@react-navigation/native";
 import * as Location from "expo-location";
 import { Footer, Icon } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
@@ -15,7 +16,7 @@ import MapViewDirections from "react-native-maps-directions";
 import { useDispatch, useSelector } from "react-redux";
 import NotificationModal from "../../components/atoms/notification-modal/index";
 import {
-  DARK_COLOR, KEY_GOOGLE_MAP,
+  KEY_GOOGLE_MAP,
   LANGUAGE,
 
 
@@ -36,7 +37,7 @@ const height = Dimensions.get("window").height;
 const screenWidth = Dimensions.get("window").width;
 init(LANGUAGE.VI);
 
-const MapScreen = () => {
+const MapScreen = (props) => {
   const dispatch = useDispatch();
   const mapRef = useRef(null);
 
@@ -47,6 +48,7 @@ const MapScreen = () => {
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
   const partner = useSelector((state) => state.partner.partner);
   const profile = useSelector((state) => state.account.customer);
+  const createdOrder = useSelector((state) => state.order.createdOrder)
 
   const [location, setLocation] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
@@ -57,6 +59,24 @@ const MapScreen = () => {
   const handleSetDetailsGeometry = (location) => {
     dispatch(setDestinationLocation(location));
   };
+
+  useEffect(() => {
+    if (createdOrder) {
+      props.navigation.dispatch(
+        CommonActions.reset({
+          index: 1,
+          routes: [
+            {
+              name: "ORDER_DETAIL",
+              params: {
+                isAfterCreate: true,
+              },
+            },
+          ],
+        })
+      );
+    }
+  }, [])
 
   const getSuggestionStore = async (destination) => {
     try {
@@ -93,21 +113,22 @@ const MapScreen = () => {
           id="GooglePlacesAutocomplete"
           placeholder={IMLocalized("wording-search-destination")}
           minLength={2}
-          predefinedPlaces={
-            profile && profile.address && profile.address.length > 0
-              ? profile.address.map((a) => {
-                  return {
-                    description: a.label,
-                    geometry: {
-                      location: {
-                        lat: +a.latitude,
-                        lng: +a.longitude,
-                      },
-                    },
-                  };
-                })
-              : []
-          }
+          // listEmptyComponent
+          // predefinedPlaces={
+          //   profile && profile.address && profile.address.length > 0
+          //     ? profile.address.map((a) => {
+          //         return {
+          //           description: a.label,
+          //           geometry: {
+          //             location: {
+          //               lat: +a.latitude,
+          //               lng: +a.longitude,
+          //             },
+          //           },
+          //         };
+          //       })
+          //     : []
+          // }
           // listEmptyComponent
           autoFocus={false}
           autoCorrect={false}
@@ -173,7 +194,6 @@ const MapScreen = () => {
   };
 
   const mapView = () => {
-    // console.log("userRegion", userRegion);
     return (
       <View style={{ flex: 1 }}>
         <MapView

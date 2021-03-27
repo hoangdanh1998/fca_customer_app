@@ -5,10 +5,8 @@ import { STORE_ACTIONS } from "../action-types/actions";
 
 
 export const getStoreSuggestion = (location, destination) => {
-    console.log('dispatch setStoreSuggestion')
     return async (dispatch) => {
         try {
-            console.log('dispatch')
             const direction = await getDirection(location, destination);
             const directionSteps = direction.routes[0].legs[0].steps;
 

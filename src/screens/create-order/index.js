@@ -14,15 +14,14 @@ import {
   LANGUAGE,
   MESSAGES,
   NOTICE_DURATION,
-  OrderStatus,
+  OrderStatus
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
-import { ORDER_ACTIONS } from "../../redux/action-types/actions";
-import { cancelOrder, createOrder } from "../../redux/actions/order";
+import { cancelOrder, createOrder, resetOrder } from "../../redux/actions/order";
 import { setStoreSuggestion } from "../../redux/actions/store";
+import * as fcaStorage from '../../service/async-storage/async-storage';
 import {
-  getOrderOnChange,
-  stopListenOrder,
+  getOrderOnChange
 } from "../../service/firebase/firebase-realtime";
 
 Notifications.setNotificationHandler({
@@ -43,9 +42,7 @@ const CreateOrder = (props) => {
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
   const createdOrder = useSelector((state) => state.order.createdOrder);
   const customer = useSelector((state) => state.account.customer);
-  console.log("customer id from store:", customer.id);
 
-  console.log("Before" + bestSuggestion.name, suggestionStores.length);
   const [visibleTimer, setVisibleTimer] = useState(false);
   const [visibleNotificationModal, setVisibleNotificationModal] = useState(
     false
@@ -78,7 +75,6 @@ const CreateOrder = (props) => {
         })
       );
     } catch (error) {
-      console.log("SubmitOrderError", error);
       setVisibleTimer(false);
       setNotificationMessage(MESSAGES.REJECTED);
       setVisibleNotificationModal(true);
@@ -97,7 +93,6 @@ const CreateOrder = (props) => {
         })
       );
     } catch (error) {
-      console.log("CancelOrderError", error);
       setVisibleTimer(false);
       alert("Can not cancel order");
     }
@@ -110,7 +105,7 @@ const CreateOrder = (props) => {
 
   const handlePressCancelOrder = async () => {
     setVisibleTimer(false);
-    await destroyOrder(createdOrder.id);
+    await destroyOrder(createdOrder?.id);
     setNotificationMessage(MESSAGES.CANCELLED);
     setVisibleNotificationModal(true);
     await new Promise((resolve, reject) => {
@@ -145,6 +140,7 @@ const CreateOrder = (props) => {
 
   const handleAcceptedOrder = () => {
     setVisibleTimer(false);
+    fcaStorage.saveOrder(createdOrder);
     props.navigation.dispatch(
       CommonActions.reset({
         index: 1,
@@ -161,26 +157,23 @@ const CreateOrder = (props) => {
   };
 
   useEffect(() => {
-    if (createdOrder.id) {
+    if (createdOrder) {
       getOrderOnChange(createdOrder.id, (order) => {
         if (order) {
           if (!order.timeRemain && order.status === OrderStatus.ACCEPTANCE) {
             handleAcceptedOrder();
-            stopListenOrder(createdOrder.id);
           }
           if (!order.timeRemain && order.status === OrderStatus.CANCELLATION) {
-            stopListenOrder(createdOrder.id);
+            dispatch(resetOrder());
           }
           if (order.status === OrderStatus.REJECTION) {
             handleRejectedOrder();
-            dispatch({
-              type: ORDER_ACTIONS.CANCEL_ORDER,
-            });
+            dispatch(resetOrder());
           }
         }
       });
     }
-  }, [dispatch, createdOrder]);
+  }, [createdOrder]);
 
   return (
     <>

@@ -8,10 +8,10 @@ export const createOrder = (param) => {
     if (response.data.meta.status !== ResponseStatus.SUCCESS) {
       throw new Error("Something went wrong");
     }
-    console.log("orderId: " + response.data.data.order.id);
+    const order = response.data.data.order;
     dispatch({
       type: ORDER_ACTIONS.CREATE_ORDER,
-      payload: response,
+      payload: order,
     });
   };
 };
@@ -63,6 +63,15 @@ export const resetOrder = () => {
   return async (dispatch) => {
     dispatch({
       type: ORDER_ACTIONS.RESET_ORDER,
+    });
+  };
+};
+
+export const restoreOrderCreated = (order) => {
+  return async (dispatch) => {
+    dispatch({
+      type: ORDER_ACTIONS.CREATE_ORDER,
+      payload: order
     });
   };
 };

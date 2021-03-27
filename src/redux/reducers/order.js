@@ -3,7 +3,7 @@ import { DATE_TIME_FORMAT_CALL_API } from "../../constants/index";
 import { ORDER_ACTIONS } from "../action-types/actions";
 
 const initialState = {
-  createdOrder: {},
+  createdOrder: null,
   order: {},
   history: [],
 };
@@ -11,16 +11,16 @@ const initialState = {
 const orderReducer = (state = initialState, action) => {
   switch (action.type) {
     case ORDER_ACTIONS.CREATE_ORDER: {
-      const data = action.payload.data.data.order;
+      const data = action.payload;
       return { ...state, createdOrder: data };
     }
     case ORDER_ACTIONS.CANCEL_ORDER: {
       // const data = action.payload.data.data.order;
-      return { ...state, createdOrder: {} };
+      return { ...state, createdOrder: null };
     }
     case ORDER_ACTIONS.RESET_ORDER: {
       // const data = action.payload.data.data.order;
-      return { ...state, createdOrder: {} };
+      return { ...state, createdOrder: null };
     }
     case ORDER_ACTIONS.GET_ORDER: {
       const data = action.payload.data.data.order;

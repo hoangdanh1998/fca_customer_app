@@ -36,7 +36,6 @@ const AddressScreen = (props) => {
   const dispatch = useDispatch();
   const customer = useSelector((state) => state.account.customer);
   // const { addressId } = props.route.params;
-  // console.log(addressId);
   // addressId
   //   ? setmarked({
   //       longitude: addressId.longitude,

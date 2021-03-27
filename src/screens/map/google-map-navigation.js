@@ -22,12 +22,8 @@ const googleMapNavigation = () => {
   const [totalTravel, setTotalTravel] = useState(0);
   // const [originLocation, setOriginLocation] = useState(null)
 
-  // console.log('partnerLocation: ' + partnerLocation.latitude + ',' + partnerLocation.longitude)
-  // console.log('destination: ' + destinationLocation.latitude + ',' + destinationLocation.longitude)
 
   const calculateDistance = async (currentLocation) => {
-    // console.log({ startLocation })
-    // console.log({ currentLocation })
     const lat1 = startLocation.coords.latitude;
     const lon1 = startLocation.coords.longitude;
     const lat2 = currentLocation.coords.latitude;
@@ -45,7 +41,6 @@ const googleMapNavigation = () => {
     const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
     const d = R * c; //in metres
     const travel = +(totalTravel + d);
-    console.log('my Distance: ' + travel)
     setTotalTravel(travel);
     if (totalTravel > originDistance2Partner / 10000) {
       const distance = await getDistance(currentLocation.coords, partnerLocation);
@@ -74,7 +69,6 @@ const googleMapNavigation = () => {
 
 
       const distance = await getDistance(currentLocation.coords, partnerLocation);
-      console.log({ distance })
       setOriginDistance2Partner(distance.distance.value)
 
     })();
@@ -105,10 +99,7 @@ const googleMapNavigation = () => {
           onUserLocationChange={async () => {
             try {
               const distance = calculateDistance(await Location.getCurrentPositionAsync({}));
-              // console.log('duration1 ' + await distance.json())
             } catch (err) {
-              console.log(err)
-              console.log('Check connection')
             }
 
           }

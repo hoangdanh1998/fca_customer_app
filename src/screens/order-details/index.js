@@ -1,35 +1,43 @@
-import { Content, Footer, View } from "native-base";
+/* eslint-disable react/prop-types */
+import { withNavigation } from "@react-navigation/compat";
 import { CommonActions } from "@react-navigation/native";
+import moment from "moment";
+import { Content, Footer, View } from "native-base";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import FocusedButton from "../../components/atoms/focused-button/index";
+import NotificationModal from "../../components/atoms/notification-modal/index";
+import TimelineTransaction from "../../components/atoms/timeline-transaction/index";
+import UnFocusedButton from "../../components/atoms/unfocused-button/index";
+import OrderDetail from "../../components/molecules/order-details/index";
 import {
   DATE_FORMAT,
   DATE_FORMAT_CALL_API,
   LANGUAGE,
   MESSAGES,
-  OrderStatus,
-  NOTICE_DURATION,
+  OrderStatus
 } from "../../constants/index";
-import React, { useEffect, useState } from "react";
-
-import FocusedButton from "../../components/atoms/focused-button/index";
-import OrderDetail from "../../components/molecules/order-details/index";
-import TimelineTransaction from "../../components/atoms/timeline-transaction/index";
-import UnFocusedButton from "../../components/atoms/unfocused-button/index";
-import NotificationModal from "../../components/atoms/notification-modal/index";
-import { convertTransaction } from "../../utils/utils";
-import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
-import { setStoreSuggestion } from "../../redux/actions/store";
 import { init } from "../../i18n/IMLocalized";
-import moment from "moment";
-import { useSelector, useDispatch } from "react-redux";
-/* eslint-disable react/prop-types */
-import { withNavigation } from "@react-navigation/compat";
+import { resetOrder } from '../../redux/actions/order';
+import { setStoreSuggestion } from "../../redux/actions/store";
+import * as fcaStorage from '../../service/async-storage/async-storage';
+import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
+import { convertTransaction } from "../../utils/utils";
+
 
 init(LANGUAGE.VI);
 const OrderDetails = (props) => {
   const dispatch = useDispatch();
-  const order = useSelector((state) => {
-    return state.order.createdOrder;
-  });
+  let order;
+  const historyTransactions = [];
+  if (props.route.params.screenName) {
+    order = props.route.params.order;
+  } else {
+    order = useSelector((state) => {
+      return state.order.createdOrder;
+    });
+  }
+
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
 
@@ -39,7 +47,9 @@ const OrderDetails = (props) => {
   const [notificationMessage, setNotificationMessage] = useState("");
   const [isNeedHandleDismiss, setIsNeedHandleDismiss] = useState(false);
   const [listenedOrder, setListenedOrder] = useState(order);
-
+  const [transactionState, setTransactionState] = useState(
+    props.route.params.screenName ? order.transaction : []
+  );
   const [isAfterCreate, setIsAfterCreate] = useState(
     props.route.params.isAfterCreate
   );
@@ -65,13 +75,15 @@ const OrderDetails = (props) => {
       dispatch(setStoreSuggestion(newSuggestion, newSuggestList));
     }
   };
+  
 
   const handleStaffFinishOrder = () => {
     setVisibleNotificationModal(true);
+    fcaStorage.removeOrder();
+    dispatch(resetOrder())
     setNotificationMessage(MESSAGES.RECEIVED);
   };
 
-  const [transactionState, setTransactionState] = useState([]);
   const handleAddTransaction = (newStatus) => {
     const newTransaction = Array.from(transactionState, (transaction) => {
       return transaction;
@@ -110,10 +122,10 @@ const OrderDetails = (props) => {
     <>
       <Content>
         <View style={{ width: "95%", marginLeft: "2.5%" }}>
-          <OrderDetail store={order.partner} orderDetails={order} />
+          <OrderDetail store={order?.partner} orderDetails={order} />
           {transactionState ? (
             <TimelineTransaction
-              date={moment(order.createdAt, DATE_FORMAT_CALL_API).format(
+              date={moment(order?.createdAt, DATE_FORMAT_CALL_API).format(
                 DATE_FORMAT
               )}
               transactions={convertTransaction(transactionState)}
@@ -138,41 +150,41 @@ const OrderDetails = (props) => {
             />
           </View>
         ) : (
-          <View
-            style={{
-              width: "100%",
-              flexDirection: "row",
-              justifyContent: "center",
-              flex: 1,
-            }}
-          >
-            <UnFocusedButton
-              bordered
-              name={MESSAGES.HOME}
-              disable={false}
-              onPress={() => {
-                props.navigation.dispatch(
-                  CommonActions.reset({
-                    index: 1,
-                    routes: [
-                      {
-                        name: "MAP_VIEW",
-                      },
-                    ],
-                  })
-                );
+            <View
+              style={{
+                width: "100%",
+                flexDirection: "row",
+                justifyContent: "center",
+                flex: 1,
               }}
-            />
-            <FocusedButton
-              block
-              name={MESSAGES.FEEDBACK}
-              disable={false}
-              onPress={() => {
-                alert("Make feedback");
-              }}
-            />
-          </View>
-        )}
+            >
+              <UnFocusedButton
+                bordered
+                name={MESSAGES.HOME}
+                disable={false}
+                onPress={() => {
+                  props.navigation.dispatch(
+                    CommonActions.reset({
+                      index: 1,
+                      routes: [
+                        {
+                          name: "MAP_VIEW",
+                        },
+                      ],
+                    })
+                  );
+                }}
+              />
+              <FocusedButton
+                block
+                name={MESSAGES.FEEDBACK}
+                disable={false}
+                onPress={() => {
+                  alert("Make feedback");
+                }}
+              />
+            </View>
+          )}
       </Footer>
       <NotificationModal
         onDismiss={() => {

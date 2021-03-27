@@ -155,7 +155,6 @@ const EmergencyMapScreen = () => {
   };
 
   const mapView = () => {
-    // console.log("userRegion", userRegion);
     return (
       <View style={{ flex: 1 }}>
         <MapView
@@ -237,14 +236,17 @@ const EmergencyMapScreen = () => {
 
   useEffect(() => {
     (async () => {
+<<<<<<< HEAD
       console.log("useEffect");
+=======
+      
+>>>>>>> main
 
       try {
         setError();
         setIsLoading(true);
         let { status } = await Location.requestPermissionsAsync();
         if (status !== "granted") {
-          console.log("Permission to access location was denied");
           return;
         }
 
