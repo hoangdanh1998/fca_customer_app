@@ -7,8 +7,7 @@ import {
   Dimensions,
   StyleSheet,
   TouchableOpacity,
-
-  View
+  View,
 } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
@@ -18,15 +17,14 @@ import NotificationModal from "../../components/atoms/notification-modal/index";
 import {
   KEY_GOOGLE_MAP,
   LANGUAGE,
-
-
-  LIGHT_COLOR, MESSAGES,
-  PRIMARY_LIGHT_COLOR
+  LIGHT_COLOR,
+  MESSAGES,
+  PRIMARY_LIGHT_COLOR,
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
   setDestinationLocation,
-  setPartnerLocation
+  setPartnerLocation,
 } from "../../redux/actions/map";
 import { setPartner } from "../../redux/actions/partner";
 import { getStoreSuggestion } from "../../redux/actions/store";
@@ -48,7 +46,7 @@ const MapScreen = (props) => {
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
   const partner = useSelector((state) => state.partner.partner);
   const profile = useSelector((state) => state.account.customer);
-  const createdOrder = useSelector((state) => state.order.createdOrder)
+  const createdOrder = useSelector((state) => state.order.createdOrder);
 
   const [location, setLocation] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
@@ -76,7 +74,7 @@ const MapScreen = (props) => {
         })
       );
     }
-  }, [])
+  }, []);
 
   const getSuggestionStore = async (destination) => {
     try {
@@ -113,22 +111,22 @@ const MapScreen = (props) => {
           id="GooglePlacesAutocomplete"
           placeholder={IMLocalized("wording-search-destination")}
           minLength={2}
-          // listEmptyComponent
-          // predefinedPlaces={
-          //   profile && profile.address && profile.address.length > 0
-          //     ? profile.address.map((a) => {
-          //         return {
-          //           description: a.label,
-          //           geometry: {
-          //             location: {
-          //               lat: +a.latitude,
-          //               lng: +a.longitude,
-          //             },
-          //           },
-          //         };
-          //       })
-          //     : []
-          // }
+          listEmptyComponent
+          predefinedPlaces={
+            profile && profile.address && profile.address.length > 0
+              ? profile.address.map((a) => {
+                  return {
+                    description: a.label,
+                    geometry: {
+                      location: {
+                        lat: +a.latitude,
+                        lng: +a.longitude,
+                      },
+                    },
+                  };
+                })
+              : []
+          }
           // listEmptyComponent
           autoFocus={false}
           autoCorrect={false}
@@ -142,7 +140,7 @@ const MapScreen = (props) => {
               if (suggestionStores && suggestionStores.length > 0) {
                 setIsShowPopup(true);
               }
-            }
+            },
           }}
           keyboardShouldPersistTaps="handled"
           onPress={async (data, details = null) => {
@@ -358,26 +356,32 @@ const MapScreen = (props) => {
         </View>
 
         {openSearchModal()}
-        <TouchableOpacity
-          onPress={() => {
-            alert("press");
-          }}
-          style={
-            bestSuggestion && partner && isShowPopup
-              ? styles.secondaryEmergency
-              : styles.primaryEmergency
-          }
-          // styles.primaryEmergency
-        >
-          <Icon
-            name="flash-outline"
-            size={30}
-            style={{ color: "#603a18" }}
+        {profile?.orders&&profile?.orders.length>0 ? (
+          //  console.log(profile.orders),
+          <TouchableOpacity
             onPress={() => {
               alert("press");
             }}
-          />
-        </TouchableOpacity>
+            style={
+              bestSuggestion && partner && isShowPopup
+                ? styles.secondaryEmergency
+                : styles.primaryEmergency
+            }
+            // styles.primaryEmergency
+          >
+            <Icon
+              name="flash-outline"
+              size={30}
+              style={{ color: "#603a18" }}
+              onPress={() => {
+                alert("press");
+              }}
+            />
+          </TouchableOpacity>
+        ) : (
+          null
+        )}
+
         {bestSuggestion && partner && isShowPopup ? (
           <Footer
             style={{
