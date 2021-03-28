@@ -1,4 +1,3 @@
-import { CommonActions } from "@react-navigation/native";
 import * as Location from "expo-location";
 import { Footer, Icon } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
@@ -39,9 +38,7 @@ const MapScreen = (props) => {
   const dispatch = useDispatch();
   const mapRef = useRef(null);
 
-  const destinationLocation = useSelector(
-    (state) => state.map.destinationLocation
-  );
+  const destinationLocation = useSelector((state) => state.map.destinationLocation);
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
   const partner = useSelector((state) => state.partner.partner);
@@ -58,23 +55,23 @@ const MapScreen = (props) => {
     dispatch(setDestinationLocation(location));
   };
 
-  useEffect(() => {
-    if (createdOrder) {
-      props.navigation.dispatch(
-        CommonActions.reset({
-          index: 1,
-          routes: [
-            {
-              name: "ORDER_DETAIL",
-              params: {
-                isAfterCreate: true,
-              },
-            },
-          ],
-        })
-      );
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (createdOrder) {
+  //     props.navigation.dispatch(
+  //       CommonActions.reset({
+  //         index: 1,
+  //         routes: [
+  //           {
+  //             name: "ORDER_DETAIL",
+  //             params: {
+  //               isAfterCreate: true,
+  //             },
+  //           },
+  //         ],
+  //       })
+  //     );
+  //   }
+  // }, [])
 
   const getSuggestionStore = async (destination) => {
     try {

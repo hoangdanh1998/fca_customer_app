@@ -21,7 +21,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/fast-coffee-img-logo.png",
         "backgroundColor": "#FFFFFF"
       },
       "config": {

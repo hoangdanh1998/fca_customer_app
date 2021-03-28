@@ -18,7 +18,6 @@ import {
   OrderStatus
 } from "../../constants/index";
 import { init } from "../../i18n/IMLocalized";
-import { resetOrder } from '../../redux/actions/order';
 import { setStoreSuggestion } from "../../redux/actions/store";
 import * as fcaStorage from '../../service/async-storage/async-storage';
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
@@ -50,9 +49,7 @@ const OrderDetails = (props) => {
   const [transactionState, setTransactionState] = useState(
     props.route.params.screenName ? order.transaction : []
   );
-  const [isAfterCreate, setIsAfterCreate] = useState(
-    props.route.params.isAfterCreate
-  );
+  const [isAfterCreate, setIsAfterCreate] = useState(props.route.params.isAfterCreate);
 
   const handleReceiveQRCode = (qrCode, orderId) => {
     props.navigation.navigate("QR_CODE", {
@@ -80,7 +77,6 @@ const OrderDetails = (props) => {
   const handleStaffFinishOrder = () => {
     setVisibleNotificationModal(true);
     fcaStorage.removeOrder();
-    dispatch(resetOrder())
     setNotificationMessage(MESSAGES.RECEIVED);
   };
 
@@ -106,10 +102,8 @@ const OrderDetails = (props) => {
       if (listenedOrder.status === OrderStatus.CANCELLATION) {
         handleStaffCancelOrder();
       }
-      if (
-        listenedOrder.status === OrderStatus.RECEPTION &&
-        !listenedOrder.qrcode
-      ) {
+      if (listenedOrder.status === OrderStatus.RECEPTION &&
+        !listenedOrder.qrcode) {
         handleStaffFinishOrder();
       }
     }
