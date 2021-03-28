@@ -30,7 +30,7 @@ const PreparingOrder = (props) => {
         </H3>
         <Card style={{ width: "95%", marginLeft: "2.5%" }}>
           <List
-            dataArray={orderDetails.items}
+            dataArray={orderDetails?.items}
             renderRow={(item) => <OrderDetailCard item={item} />}
           />
           <CardItem>
@@ -49,7 +49,7 @@ const PreparingOrder = (props) => {
             </Left>
             <Right style={{ flex: 1 }}>
               <NumberFormat
-                value={orderDetails.total}
+                value={orderDetails?.total}
                 displayType={"text"}
                 thousandSeparator={true}
                 renderText={(formattedValue) => (

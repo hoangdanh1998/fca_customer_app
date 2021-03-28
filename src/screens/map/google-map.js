@@ -1,4 +1,3 @@
-import { CommonActions } from "@react-navigation/native";
 import * as Location from "expo-location";
 import { Footer, Icon } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
@@ -41,9 +40,7 @@ const MapScreen = (props) => {
   const dispatch = useDispatch();
   const mapRef = useRef(null);
 
-  const destinationLocation = useSelector(
-    (state) => state.map.destinationLocation
-  );
+  const destinationLocation = useSelector((state) => state.map.destinationLocation);
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
   const partner = useSelector((state) => state.partner.partner);
@@ -60,23 +57,23 @@ const MapScreen = (props) => {
     dispatch(setDestinationLocation(location));
   };
 
-  useEffect(() => {
-    if (createdOrder) {
-      props.navigation.dispatch(
-        CommonActions.reset({
-          index: 1,
-          routes: [
-            {
-              name: "ORDER_DETAIL",
-              params: {
-                isAfterCreate: true,
-              },
-            },
-          ],
-        })
-      );
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (createdOrder) {
+  //     props.navigation.dispatch(
+  //       CommonActions.reset({
+  //         index: 1,
+  //         routes: [
+  //           {
+  //             name: "ORDER_DETAIL",
+  //             params: {
+  //               isAfterCreate: true,
+  //             },
+  //           },
+  //         ],
+  //       })
+  //     );
+  //   }
+  // }, [])
 
   const getSuggestionStore = async (destination) => {
     try {
@@ -114,21 +111,21 @@ const MapScreen = (props) => {
           placeholder={IMLocalized("wording-search-destination")}
           minLength={2}
           // listEmptyComponent
-          // predefinedPlaces={
-          //   profile && profile.address && profile.address.length > 0
-          //     ? profile.address.map((a) => {
-          //         return {
-          //           description: a.label,
-          //           geometry: {
-          //             location: {
-          //               lat: +a.latitude,
-          //               lng: +a.longitude,
-          //             },
-          //           },
-          //         };
-          //       })
-          //     : []
-          // }
+          predefinedPlaces={
+            profile && profile.address && profile.address.length > 0
+              ? profile.address.map((a) => {
+                return {
+                  description: a.label,
+                  geometry: {
+                    location: {
+                      lat: +a.latitude,
+                      lng: +a.longitude,
+                    },
+                  },
+                };
+              })
+              : []
+          }
           // listEmptyComponent
           autoFocus={false}
           autoCorrect={false}

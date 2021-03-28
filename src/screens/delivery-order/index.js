@@ -8,7 +8,6 @@ import {
   NOTICE_DURATION,
   OrderStatus
 } from "../../constants/index.js";
-import { resetOrder } from '../../redux/actions/order';
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 import { styles } from "./styles";
 
@@ -42,7 +41,7 @@ const DeliveryOrder = (props) => {
       getOrderOnChange(orderId, (order) => {
         if (order.status === OrderStatus.RECEPTION && order.qrcode) {
           handleScanSuccess();
-          dispatch(resetOrder());
+          // dispatch(resetOrder());
         }
       });
     }

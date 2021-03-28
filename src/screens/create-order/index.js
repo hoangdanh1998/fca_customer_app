@@ -140,7 +140,6 @@ const CreateOrder = (props) => {
 
   const handleAcceptedOrder = () => {
     setVisibleTimer(false);
-    fcaStorage.saveOrder(createdOrder);
     props.navigation.dispatch(
       CommonActions.reset({
         index: 1,

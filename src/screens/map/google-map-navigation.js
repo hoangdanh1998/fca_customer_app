@@ -7,10 +7,13 @@ import { useSelector } from 'react-redux';
 import { KEY_GOOGLE_MAP } from "../../constants/index";
 import { setTrackingOrder } from "../../service/firebase/firebase-realtime";
 import { getDistance } from "../../service/google-api/google-map-api";
+import * as TaskManager from 'expo-task-manager';
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
 const googleMapNavigation = () => {
+
+
 
   const partnerLocation = useSelector(state => state.map.partnerLocation);
   const destinationLocation = useSelector(state => state.map.destinationLocation);
@@ -24,8 +27,8 @@ const googleMapNavigation = () => {
 
 
   const calculateDistance = async (currentLocation) => {
-    const lat1 = startLocation.coords.latitude;
-    const lon1 = startLocation.coords.longitude;
+    const lat1 = startLocation?.coords?.latitude;
+    const lon1 = startLocation?.coords?.longitude;
     const lat2 = currentLocation.coords.latitude;
     const lon2 = currentLocation.coords.longitude;
 
@@ -49,6 +52,9 @@ const googleMapNavigation = () => {
     return d;
   };
 
+
+  TaskManager.defineTask(taskName, calculateDistance)
+
   
 
   useEffect(() => {
@@ -70,7 +76,7 @@ const googleMapNavigation = () => {
 
       const distance = await getDistance(currentLocation.coords, partnerLocation);
       setOriginDistance2Partner(distance.distance.value)
-
+      Location.startLocationUpdatesAsync(calculateDistance);
     })();
   }, []);
 
@@ -115,8 +121,8 @@ const googleMapNavigation = () => {
 
           {startLocation ? (<MapViewDirections
             origin={{
-              latitude: +startLocation.coords.latitude,
-              longitude: +startLocation.coords.longitude,
+              latitude: +startLocation?.coords?.latitude,
+              longitude: +startLocation?.coords?.longitude,
             }}
             waypoints={[{
               latitude: +partnerLocation.latitude,
