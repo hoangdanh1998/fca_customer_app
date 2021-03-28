@@ -24,10 +24,10 @@ import googleMapNavigation from "../screens/map/google-map-navigation";
 import MyProfile from "../screens/my-profile";
 import OrderDetails from "../screens/order-details";
 import SavedAddressList from "../screens/saved-address-list";
-import AddressScreen from "../screens/saved-address-list/google-map-address";
+import AddressScreen from "../screens/map/google-map-address";
 import StoreDetails from "../screens/store-details";
 import StoreDetailsEmergency from "../screens/store-details-emergency";
-
+// import EmergencyMapScreen from '../screens/map/emergency-google-map'
 const Stack = createStackNavigator();
 export default function Navigation(props) {
   init(LANGUAGE.VI);
@@ -109,6 +109,18 @@ export default function Navigation(props) {
           headerLeft: HeaderBackButton,
         }}
       />
+      {/* <Stack.Screen
+        name="EMERGENCY_MAP"
+        component={EmergencyMapScreen}
+        options={{
+          title: IMLocalized("wording-set-default"),
+          headerTintColor: LIGHT_COLOR,
+          headerStyle: {
+            backgroundColor: DARK_COLOR,
+          },
+          headerLeft: HeaderBackButton,
+        }}
+      /> */}
       <Stack.Screen
         name="ADD_ADDRESS"
         component={AddressScreen}
@@ -227,9 +239,8 @@ export default function Navigation(props) {
                 name="pencil-outline"
                 style={{ color: LIGHT_COLOR }}
                 onPress={() => {
-                  alert("Edit profile");
 
-                  // navigation.navigate("EDIT_EMERGENCY");
+                  alert("Edit profile");
                 }}
               />
               <Icon
