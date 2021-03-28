@@ -3,7 +3,7 @@ import {
   HeaderBackButton,
 } from "@react-navigation/stack";
 import { Icon, View } from "native-base";
-import React from "react";
+import React, {useState} from "react";
 import {
   APP_NAME,
   DARK_COLOR,
@@ -27,15 +27,53 @@ import SavedAddressList from "../screens/saved-address-list";
 import AddressScreen from "../screens/saved-address-list/google-map-address";
 import StoreDetails from "../screens/store-details";
 import StoreDetailsEmergency from "../screens/store-details-emergency";
+import {useSelector} from 'react-redux';
+import { getDeviceKeyOnChange, setDeviceKey } from "../service/firebase/firebase-realtime";
+import AwesomeAlert from 'react-native-awesome-alerts';
+
 
 const Stack = createStackNavigator();
 export default function Navigation(props) {
+
+  const deviceKey = useSelector(state => state.account.deviceKey);
+  const customer = useSelector(state => state.account.customer);
+  const [isShowAlert, setIsShowAlert] = useState(false);
+  console.log("customer", customer?.account?.id);
+
+  const showAlert = () => {
+    // console.log("hien alert len");
+    setIsShowAlert(true);
+};
+
+const hideAlert = () => {
+    setIsShowAlert(false);
+};
+
   init(LANGUAGE.VI);
   const handleLogOut = props.route.params.handleLogOut;
+
+  if (customer) {
+    setDeviceKey(customer?.account?.id, deviceKey);
+
+    getDeviceKeyOnChange(customer.account.id, (account) =>{
+      if(deviceKey !== account.deviceKey) {
+        showAlert();
+        handleLogOut();
+        
+      } else {
+        return;
+      };
+    })
+  }
+
+  // setDeviceKey(customer?.account?.id, deviceKey);
+
+  
 
   return (
     // <NavigationContainer>
     <Stack.Navigator>
+      
       <Stack.Screen
         name="MAP_VIEW"
         component={MapScreen}
@@ -284,3 +322,5 @@ export default function Navigation(props) {
     // </NavigationContainer>
   );
 }
+
+

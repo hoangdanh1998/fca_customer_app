@@ -3,6 +3,7 @@ export const LOGIN = "LOGIN";
 export const RESTORE_TOKEN = "RESTORE_TOKEN";
 export const SIGN_OUT = "SIGN_OUT";
 export const FINISH_LOADING = "FINISH_LOADING";
+export const SET_DEVICE_KEY = "SET_DEVICE_KEY";
 
 
 import fca from "../../service/fca-api/fca-api";
@@ -42,5 +43,12 @@ export const restoreToken = (token, customer) => {
             token,
             customer
         }
+    }
+}
+
+export const setDeviceKey = (deviceKey) => {
+    return {
+        type: SET_DEVICE_KEY,
+        payload: deviceKey
     }
 }
