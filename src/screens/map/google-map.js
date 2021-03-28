@@ -6,7 +6,7 @@ import {
   Dimensions,
   StyleSheet,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
@@ -18,12 +18,12 @@ import {
   LANGUAGE,
   LIGHT_COLOR,
   MESSAGES,
-  PRIMARY_LIGHT_COLOR,
+  PRIMARY_LIGHT_COLOR
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
   setDestinationLocation,
-  setPartnerLocation,
+  setPartnerLocation
 } from "../../redux/actions/map";
 import { setPartner } from "../../redux/actions/partner";
 import { getStoreSuggestion } from "../../redux/actions/store";
@@ -50,6 +50,8 @@ const MapScreen = (props) => {
   const [isShowPopup, setIsShowPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+
+  
 
   const handleSetDetailsGeometry = (location) => {
     dispatch(setDestinationLocation(location));
@@ -108,7 +110,7 @@ const MapScreen = (props) => {
           id="GooglePlacesAutocomplete"
           placeholder={IMLocalized("wording-search-destination")}
           minLength={2}
-          listEmptyComponent
+          // listEmptyComponent
           predefinedPlaces={
             profile && profile.address && profile.address.length > 0
               ? profile.address.map((a) => {
