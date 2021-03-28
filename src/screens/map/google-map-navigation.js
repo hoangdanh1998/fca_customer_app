@@ -1,4 +1,6 @@
 import * as Location from "expo-location";
+import * as Permissions from 'expo-permissions';
+import * as TaskManager from 'expo-task-manager';
 import React, { useEffect, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
@@ -7,13 +9,14 @@ import { useSelector } from 'react-redux';
 import { KEY_GOOGLE_MAP } from "../../constants/index";
 import { setTrackingOrder } from "../../service/firebase/firebase-realtime";
 import { getDistance } from "../../service/google-api/google-map-api";
-import * as TaskManager from 'expo-task-manager';
+
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
+const TASK_FETCH_LOCATION = 'TASK_FETCH_LOCATION';
 const googleMapNavigation = () => {
 
-
+  
 
   const partnerLocation = useSelector(state => state.map.partnerLocation);
   const destinationLocation = useSelector(state => state.map.destinationLocation);
@@ -25,6 +28,38 @@ const googleMapNavigation = () => {
   const [totalTravel, setTotalTravel] = useState(0);
   // const [originLocation, setOriginLocation] = useState(null)
 
+  
+
+  const startTrackingLocation = async () => {
+    await Location.startLocationUpdatesAsync(TASK_FETCH_LOCATION, {
+      accuracy: Location.Accuracy.Highest,
+      distanceInterval: 1, // minimum change (in meters) betweens updates
+      deferredUpdatesInterval: 1000, // minimum interval (in milliseconds) between updates
+      // foregroundService is how you get the task to be updated as often as would be if the app was open
+      foregroundService: {
+        notificationTitle: 'Using your location',
+        notificationBody: 'To turn off, go back to the app and switch something off.',
+      },
+    });
+
+    const hasStarted = await Location.hasStartedLocationUpdatesAsync(
+      TASK_FETCH_LOCATION
+    );
+    console.log('tracking started?', hasStarted);
+  }
+
+  useEffect(() => {
+    const config = async () => {
+      let res = await Permissions.askAsync(Permissions.LOCATION);
+      if (res.status !== 'granted') {
+        console.log('Permission to access location was denied');
+      } else {
+        console.log('Permission to access location granted');
+      }
+    };
+    config();
+    startTrackingLocation();
+  }, []);
 
   const calculateDistance = async (currentLocation) => {
     const lat1 = startLocation?.coords?.latitude;
@@ -52,8 +87,22 @@ const googleMapNavigation = () => {
     return d;
   };
 
+  TaskManager.defineTask(TASK_FETCH_LOCATION, async ({ data: { locations }, error }) => {
+    if (error) {
+      console.error(error);
+      return;
+    }
+    const [location] = locations;
+    try {
+      calculateDistance(location)
+    } catch (err) {
+      console.error(err);
+    }
+  });
 
-  TaskManager.defineTask(taskName, calculateDistance)
+
+
+
 
   
 
@@ -76,7 +125,6 @@ const googleMapNavigation = () => {
 
       const distance = await getDistance(currentLocation.coords, partnerLocation);
       setOriginDistance2Partner(distance.distance.value)
-      Location.startLocationUpdatesAsync(calculateDistance);
     })();
   }, []);
 
