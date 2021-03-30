@@ -19,7 +19,6 @@ import {
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { cancelOrder, createOrder, resetOrder } from "../../redux/actions/order";
 import { setStoreSuggestion } from "../../redux/actions/store";
-import * as fcaStorage from '../../service/async-storage/async-storage';
 import {
   getOrderOnChange
 } from "../../service/firebase/firebase-realtime";
@@ -42,12 +41,14 @@ const CreateOrder = (props) => {
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
   const createdOrder = useSelector((state) => state.order.createdOrder);
   const customer = useSelector((state) => state.account.customer);
+  const destination = useSelector((state) => state.map.destinationLocation);
 
   const [visibleTimer, setVisibleTimer] = useState(false);
   const [visibleNotificationModal, setVisibleNotificationModal] = useState(
     false
   );
   const [notificationMessage, setNotificationMessage] = useState("");
+
 
   const submitOrder = useCallback(async () => {
     try {
@@ -65,6 +66,11 @@ const CreateOrder = (props) => {
           currentLocation: {
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
+          },
+          destination: {
+            latitude: destination.latitude,
+            longitude: destination.longitude,
+            description: destination.description,
           },
           items: Array.from(order.items, (item) => {
             return {
