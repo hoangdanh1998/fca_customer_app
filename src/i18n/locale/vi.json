@@ -21,7 +21,7 @@
     "status-arrival-message": "Bạn đã đến nơi",
     "status-reception-message": "Nhận hàng thành công",
     "status-closure-message": "Đơn hàng của bạn đã hoàn tất",
-    "status-cancellation-message": "Đơn hàng của bạn đã bị huỷ",
+    "status-cancellation-message": "Đơn hàng của bạn đã huỷ",
 
     "title-store-information": "Thông tin cửa hàng",
     "title-order-information": "Chi tiết đơn hàng",
@@ -46,7 +46,7 @@
     "wording-fail": "Thất bại",
     "wording-feedback": "Đánh giá",
     "wording-cancel-order": "Huỷ đơn hàng",
-    "wording-cancelled": "Đơn hàng của bạn đã bị huỷ",
+    "wording-cancelled": "Đơn hàng của bạn đã huỷ",
     "wording-too-much-item": "Bạn chỉ có thể đặt tối đa 2 món trong một đơn hàng",
     "wording-cart": "Giỏ hàng",
     "wording-take-order-at": "Địa điểm nhận hàng",
