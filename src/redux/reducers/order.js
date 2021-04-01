@@ -14,6 +14,10 @@ const orderReducer = (state = initialState, action) => {
       const data = action.payload;
       return { ...state, createdOrder: data };
     }
+    case ORDER_ACTIONS.SET_CREATED_ORDER: {
+      const data = action.payload;
+      return { ...state, createdOrder: data };
+    }
     case ORDER_ACTIONS.CANCEL_ORDER: {
       // const data = action.payload.data.data.order;
       return { ...state, createdOrder: null };

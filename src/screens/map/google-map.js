@@ -78,8 +78,8 @@ const MapScreen = (props) => {
   const getSuggestionStore = async (destination) => {
     try {
       setError();
-      setIsLoading(true);
-      await dispatch(getStoreSuggestion(location.coords, destination));
+
+      dispatch(getStoreSuggestion(location.coords, destination));
     } catch (error) {
       setError(error.message);
     }
@@ -144,6 +144,7 @@ const MapScreen = (props) => {
           keyboardShouldPersistTaps="handled"
           onPress={async (data, details = null) => {
             setIsShowPopup(true);
+            setIsLoading(true);
             getSuggestionStore({
               latitude: details.geometry.location.lat,
               longitude: details.geometry.location.lng,
