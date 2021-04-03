@@ -4,6 +4,8 @@ import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import OrderCard from "../../components/molecules/order-card/index";
 import { OrderStatus } from "../../constants";
+import { ORDER_ACTIONS } from '../../redux/action-types/actions';
+import { setDestinationLocation, setPartnerLocation } from '../../redux/actions/map';
 import { getHistory } from "../../redux/actions/order";
 
 const HistoryOrder = (props) => {
@@ -20,10 +22,15 @@ const HistoryOrder = (props) => {
     if (arrEndpointStatus.includes(order.status)) {
       props.navigation.navigate("HISTORY_ORDER_DETAILS", {
         order: order,
-        
       });
     }
     else {
+      dispatch({
+        type: ORDER_ACTIONS.SET_CREATED_ORDER,
+        payload: order,
+      });
+      dispatch(setPartnerLocation(order.partner.address))
+      dispatch(setDestinationLocation(order.destination))
       props.navigation.navigate("ORDER_DETAIL", {
         order: order,
         screenName: props.route.name
@@ -39,7 +46,7 @@ const HistoryOrder = (props) => {
   const dispatch = useDispatch();
   const loadHistory = useCallback(async () => {
     try {
-      dispatch(getHistory(customer.account.phone));
+      dispatch(getHistory(customer));
     } catch (error) {
       // setError(error);
       alert(error);

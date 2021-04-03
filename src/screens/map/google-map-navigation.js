@@ -22,6 +22,8 @@ const googleMapNavigation = () => {
   const destinationLocation = useSelector(state => state.map.destinationLocation);
   const createdOrder = useSelector(state => state.order.createdOrder);
 
+  console.log({ partnerLocation })
+  console.log({ destinationLocation })
   const [originDistance2Partner, setOriginDistance2Partner] = useState(0);
   const [startLocation, setStartLocation] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
@@ -148,7 +150,6 @@ const googleMapNavigation = () => {
       >
         <MapView
           style={styles.map}
-          showsTraffic
           showsUserLocation={true}
           onUserLocationChange={async () => {
             try {
@@ -167,7 +168,7 @@ const googleMapNavigation = () => {
           region={userRegion}
         >
 
-          {startLocation ? (<MapViewDirections
+          {startLocation && partnerLocation && destinationLocation ? (<MapViewDirections
             origin={{
               latitude: +startLocation?.coords?.latitude,
               longitude: +startLocation?.coords?.longitude,

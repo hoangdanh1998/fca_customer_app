@@ -31,9 +31,9 @@ const orderReducer = (state = initialState, action) => {
       return { ...state, order: data };
     }
     case ORDER_ACTIONS.GET_HISTORY: {
-      const data = action.payload.data.data.orders;
-      if (data.length > 0) {
-        data.forEach((order) => {
+      const ordersHistory = action.payload;
+      if (ordersHistory.length > 0) {
+        ordersHistory.forEach((order) => {
           order.transaction = order.transaction.sort((a, b) => {
             return (
               moment(b.createdAt, DATE_TIME_FORMAT_CALL_API) -
@@ -43,7 +43,7 @@ const orderReducer = (state = initialState, action) => {
         });
         return {
           ...state,
-          history: data.sort((a, b) => {
+          history: ordersHistory.sort((a, b) => {
             return (
               moment(b.createdAt, DATE_TIME_FORMAT_CALL_API) -
               moment(a.createdAt, DATE_TIME_FORMAT_CALL_API)

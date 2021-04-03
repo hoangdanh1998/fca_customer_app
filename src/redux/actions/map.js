@@ -3,7 +3,6 @@ export const SET_PARTNER_LOCATION = "SET_PARTNER_LOCATION ";
 export const SAVE_ADDRESS = "SAVE_ADDRESS";
 export const DEL_ADDRESS = "DEL_ADDRESS";
 
-import { ResponseStatus } from "../../constants/index";
 import api from "../../service/fca-api/fca-api";
 
 export const setDestinationLocation = (location) => {

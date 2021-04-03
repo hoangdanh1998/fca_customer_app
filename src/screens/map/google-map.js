@@ -78,7 +78,6 @@ const MapScreen = (props) => {
   const getSuggestionStore = async (destination) => {
     try {
       setError();
-
       dispatch(getStoreSuggestion(location.coords, destination));
     } catch (error) {
       setError(error.message);
@@ -142,7 +141,8 @@ const MapScreen = (props) => {
             },
           }}
           keyboardShouldPersistTaps="handled"
-          onPress={async (data, details = null) => {
+          onPress={
+            (data, details = null) => {
             setIsShowPopup(true);
             setIsLoading(true);
             getSuggestionStore({
@@ -155,7 +155,8 @@ const MapScreen = (props) => {
               latitude: details.geometry.location.lat,
               longitude: details.geometry.location.lng,
             });
-          }}
+            }
+          }
           query={{
             key: KEY_GOOGLE_MAP,
             components: "country:vn", //limit country
@@ -192,6 +193,7 @@ const MapScreen = (props) => {
   };
 
   const mapView = () => {
+
     return (
       <View style={{ flex: 1 }}>
         <MapView
@@ -214,8 +216,8 @@ const MapScreen = (props) => {
                 longitude: location.coords.longitude,
               }}
               destination={{
-                latitude: destinationLocation.latitude,
-                longitude: destinationLocation.longitude,
+                latitude: +destinationLocation.latitude,
+                longitude: +destinationLocation.longitude,
               }}
               apikey={KEY_GOOGLE_MAP}
               strokeWidth={4}
@@ -228,14 +230,14 @@ const MapScreen = (props) => {
             <Marker
               title={destinationLocation.description}
               coordinate={{
-                latitude: destinationLocation.latitude,
-                longitude: destinationLocation.longitude,
+                latitude: +destinationLocation.latitude,
+                longitude: +destinationLocation.longitude,
               }}
               onPress={() => {
                 setIsShowPopup(false),
                   setUserRegion({
-                    latitude: destinationLocation.latitude,
-                    longitude: destinationLocation.longitude,
+                    latitude: +destinationLocation.latitude,
+                    longitude: +destinationLocation.longitude,
                   });
               }}
             ></Marker>
@@ -276,7 +278,17 @@ const MapScreen = (props) => {
               })
             : null}
         </MapView>
+        {
+          suggestionStores && suggestionStores.length === 0 && isShowPopup ? (
+            <NotificationModal
+              message={MESSAGES.NO_SUGGESTION}
+              title={MESSAGES.TITLE_NOTIFICATION}
+              visible={true}
+            />
+          ) : null
+        }
       </View>
+
     );
   };
 
@@ -394,13 +406,7 @@ const MapScreen = (props) => {
           </Footer>
         ) : null}
       </View>
-      {suggestionStores && suggestionStores.length === 0 && isShowPopup ? (
-        <NotificationModal
-          message={MESSAGES.NO_SUGGESTION}
-          title={MESSAGES.TITLE_NOTIFICATION}
-          visible={true}
-        />
-      ) : null}
+
     </View>
   );
 };

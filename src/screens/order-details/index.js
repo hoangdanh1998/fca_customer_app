@@ -35,14 +35,7 @@ const arrEndpointStatus = [
 const OrderDetails = (props) => {
 
   const dispatch = useDispatch();
-  let order;
-  const historyTransactions = [];
-  if (props.route.params.screenName) {
-    order = props.route.params.order;
-  } else {
-    order = useSelector((state) => state.order.createdOrder);
-  }
-
+  const order = useSelector((state) => state.order.createdOrder);
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
 
@@ -51,7 +44,7 @@ const OrderDetails = (props) => {
   const [isNeedHandleDismiss, setIsNeedHandleDismiss] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [listenedOrder, setListenedOrder] = useState(order);
-  const [transactionState, setTransactionState] = useState(props.route.params.screenName ? order.transaction : []);
+  const [transactionState, setTransactionState] = useState(order?.transaction | []);
 
   const handleReceiveQRCode = (qrCode, orderId) => {
     props.navigation.navigate("QR_CODE", {
@@ -86,6 +79,7 @@ const OrderDetails = (props) => {
     setVisibleNotificationModal(true);
     fcaStorage.removeOrder();
     setNotificationMessage(MESSAGES.RECEIVED);
+    
 
   };
 
@@ -112,18 +106,24 @@ const OrderDetails = (props) => {
   }, []);
 
   useEffect(() => {
-    if (transactionState[0]?.toStatus !== listenedOrder.status) {
-      handleAddTransaction(listenedOrder.status);
-      setStatusCreatedOrder(listenedOrder.status);
-    }
-    if (listenedOrder.status === OrderStatus.CANCELLATION) {
+    if (listenedOrder) {
+      if (transactionState[0]?.toStatus !== listenedOrder.status) {
+        handleAddTransaction(listenedOrder.status);
+        setStatusCreatedOrder(listenedOrder.status);
+      }
+      if (listenedOrder.status === OrderStatus.CANCELLATION) {
         handleStaffCancelOrder();
-    }
-    if (listenedOrder.status === OrderStatus.RECEPTION && !listenedOrder.qrcode) {
+      }
+      if (listenedOrder.status === OrderStatus.RECEPTION) {
+        dispatch(setStoreSuggestion(null, []));
+      }
+      if (listenedOrder.status === OrderStatus.RECEPTION && !listenedOrder.qrcode) {
         handleStaffFinishOrder();
-    }
-    if (listenedOrder.qrcode && listenedOrder.qrcode != "") {
-      handleReceiveQRCode(listenedOrder.qrcode, listenedOrder.id);
+      }
+      if (listenedOrder.qrcode && listenedOrder.qrcode != "") {
+        handleReceiveQRCode(listenedOrder.qrcode, listenedOrder.id);
+      }
+
     }
   }, [listenedOrder]);
 

@@ -1,10 +1,10 @@
 import { withNavigation } from "@react-navigation/compat";
-import { CommonActions, useIsFocused } from "@react-navigation/native";
+import { CommonActions } from "@react-navigation/native";
 import * as Location from "expo-location";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 import { Content, Footer, View } from "native-base";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FocusedButton from "../../components/atoms/focused-button/index";
 import NotificationModal from "../../components/atoms/notification-modal/index";
@@ -50,7 +50,7 @@ const CreateOrder = (props) => {
 
   
 
-  const submitOrder = useCallback(async () => {
+  const submitOrder = async () => {
     try {
       const { status } = await Permissions.getAsync(Permissions.LOCATION);
       if (status !== "granted") {
@@ -59,7 +59,7 @@ const CreateOrder = (props) => {
       }
       var location = await Location.getCurrentPositionAsync({});
 
-      dispatch(
+      await dispatch(
         createOrder({
           customerId: customer.id,
           partnerId: store.id,
@@ -80,6 +80,7 @@ const CreateOrder = (props) => {
           }),
         })
       );
+      console.log('Before');
     } catch (error) {
       setVisibleTimer(false);
       setNotificationMessage(MESSAGES.REJECTED);
@@ -88,7 +89,7 @@ const CreateOrder = (props) => {
         setVisibleNotificationModal(false);
       }, NOTICE_DURATION);
     }
-  }, [dispatch]);
+  };
 
   const destroyOrder = async (orderId) => {
     try {
