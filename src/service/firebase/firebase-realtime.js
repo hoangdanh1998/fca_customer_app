@@ -20,7 +20,7 @@ export const stopListenOrder = async (orderId, listener) => {
 };
 
 export const setDeviceKey = (accountId, deviceKey) => {
-  firebase.database().ref("account").child(accountId).set({
+  firebase.database().ref("account").child(accountId).update({
     id: accountId,
     deviceKey,
   });
