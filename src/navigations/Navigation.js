@@ -13,9 +13,9 @@ import {
 import { IMLocalized, init } from "../i18n/IMLocalized";
 import CreateOrder from "../screens/create-order";
 import DeliveryOrder from "../screens/delivery-order";
-import EditEmergencyProfile from "../screens/edit-emergency-profile";
+import EditEmergencyOrder from "../screens/edit-emergency-order";
 import EmergencyProfile from "../screens/emergency-profile";
-import EmergencyProfileList from "../screens/emergency-profile-list";
+import EmergencyOrderList from "../screens/emergency-order-list";
 import HistoryOrder from "../screens/history-order";
 import HistoryOrderDetails from "../screens/history-order-details";
 import MapScreenEmergency from "../screens/map/emergency-google-map";
@@ -239,7 +239,6 @@ export default function Navigation(props) {
                 name="pencil-outline"
                 style={{ color: LIGHT_COLOR }}
                 onPress={() => {
-
                   alert("Edit profile");
                 }}
               />
@@ -256,8 +255,8 @@ export default function Navigation(props) {
         })}
       />
       <Stack.Screen
-        name="EMERGENCY_PROFILE_LIST"
-        component={EmergencyProfileList}
+        name="EMERGENCY_ORDER_LIST"
+        component={EmergencyOrderList}
         options={({ navigation, route }) => ({
           title: IMLocalized("title-emergency-profile"),
           headerTintColor: LIGHT_COLOR,
@@ -268,8 +267,8 @@ export default function Navigation(props) {
         })}
       />
       <Stack.Screen
-        name="EDIT_EMERGENCY"
-        component={EditEmergencyProfile}
+        name="EDIT_EMERGENCY_ORDER"
+        component={EditEmergencyOrder}
         options={({ navigation, route }) => ({
           title: IMLocalized("title-emergency-profile"),
           headerTintColor: LIGHT_COLOR,

@@ -1,32 +1,36 @@
 import * as Location from "expo-location";
 import { Footer, Icon } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
+import AwesomeAlert from "react-native-awesome-alerts";
 import {
   ActivityIndicator,
   Dimensions,
   StyleSheet,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
+import { Tooltip, Text } from "react-native-elements";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { useDispatch, useSelector } from "react-redux";
 import NotificationModal from "../../components/atoms/notification-modal/index";
 import {
+  DARK_COLOR,
   KEY_GOOGLE_MAP,
   LANGUAGE,
   LIGHT_COLOR,
   MESSAGES,
-  PRIMARY_LIGHT_COLOR
+  PRIMARY_LIGHT_COLOR,
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
   setDestinationLocation,
-  setPartnerLocation
+  setPartnerLocation,
 } from "../../redux/actions/map";
 import { setPartner } from "../../redux/actions/partner";
 import { getStoreSuggestion } from "../../redux/actions/store";
+import EmergencyTooltip from "./emergency-tooltip";
 import PopupStore from "./popup-store";
 
 const width = Dimensions.get("window").width;
@@ -38,7 +42,9 @@ const MapScreen = (props) => {
   const dispatch = useDispatch();
   const mapRef = useRef(null);
 
-  const destinationLocation = useSelector((state) => state.map.destinationLocation);
+  const destinationLocation = useSelector(
+    (state) => state.map.destinationLocation
+  );
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
   const partner = useSelector((state) => state.partner.partner);
@@ -50,8 +56,7 @@ const MapScreen = (props) => {
   const [isShowPopup, setIsShowPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
-
-  
+  const [visibleEmergencyModal, setVisibleEmergencyModal] = useState(false);
 
   const handleSetDetailsGeometry = (location) => {
     dispatch(setDestinationLocation(location));
@@ -141,8 +146,7 @@ const MapScreen = (props) => {
             },
           }}
           keyboardShouldPersistTaps="handled"
-          onPress={
-            (data, details = null) => {
+          onPress={(data, details = null) => {
             setIsShowPopup(true);
             setIsLoading(true);
             getSuggestionStore({
@@ -155,8 +159,7 @@ const MapScreen = (props) => {
               latitude: details.geometry.location.lat,
               longitude: details.geometry.location.lng,
             });
-            }
-          }
+          }}
           query={{
             key: KEY_GOOGLE_MAP,
             components: "country:vn", //limit country
@@ -193,7 +196,6 @@ const MapScreen = (props) => {
   };
 
   const mapView = () => {
-
     return (
       <View style={{ flex: 1 }}>
         <MapView
@@ -278,17 +280,14 @@ const MapScreen = (props) => {
               })
             : null}
         </MapView>
-        {
-          suggestionStores && suggestionStores.length === 0 && isShowPopup ? (
-            <NotificationModal
-              message={MESSAGES.NO_SUGGESTION}
-              title={MESSAGES.TITLE_NOTIFICATION}
-              visible={true}
-            />
-          ) : null
-        }
+        {suggestionStores && suggestionStores.length === 0 && isShowPopup ? (
+          <NotificationModal
+            message={MESSAGES.NO_SUGGESTION}
+            title={MESSAGES.TITLE_NOTIFICATION}
+            visible={true}
+          />
+        ) : null}
       </View>
-
     );
   };
 
@@ -368,7 +367,7 @@ const MapScreen = (props) => {
         </View>
 
         {openSearchModal()}
-        {profile?.orders&&profile?.orders.length>0 ? (
+        {/* {profile?.orders&&profile?.orders.length>0 ? (
           //  console.log(profile.orders),
           <TouchableOpacity
             onPress={() => {
@@ -392,7 +391,55 @@ const MapScreen = (props) => {
           </TouchableOpacity>
         ) : (
           null
-        )}
+        )} */}
+        <TouchableOpacity
+          onPress={() => {
+            // alert("press");
+            setVisibleEmergencyModal(true);
+          }}
+          style={
+            bestSuggestion && partner && isShowPopup
+              ? styles.secondaryEmergency
+              : styles.primaryEmergency
+          }
+          // styles.primaryEmergency
+        >
+          <Icon
+            name="flash-outline"
+            size={30}
+            style={{ color: "#603a18" }}
+            // onPress={() => {
+            //   alert("press");
+            // }}
+          />
+        </TouchableOpacity>
+        <AwesomeAlert
+          show={visibleEmergencyModal}
+          showProgress={false}
+          title={IMLocalized(`title-emergency-profile`)}
+          // message={IMLocalized(`wording-emergency-profile`)}
+          message={`Bạn chưa có đơn hàng đặt nhanh\n\nHãy cấu hình đơn hàng đặt nhanh`}
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          contentStyle={{ backgroundColor: LIGHT_COLOR }}
+          contentContainerStyle={{ backgroundColor: LIGHT_COLOR }}
+          cancelText={IMLocalized("wording-later")}
+          confirmText={IMLocalized("wording-config")}
+          confirmButtonColor={DARK_COLOR}
+          showCancelButton={true}
+          showConfirmButton={true}
+          onDismiss={() => {
+            setVisibleEmergencyModal(false);
+          }}
+          onCancelPressed={() => {
+            setVisibleEmergencyModal(false);
+          }}
+          onConfirmPressed={() => {
+            // alert("navogate");
+            setVisibleEmergencyModal(false);
+            props.navigation.navigate("EMERGENCY_ORDER_LIST");
+          }}
+        />
 
         {bestSuggestion && partner && isShowPopup ? (
           <Footer
@@ -406,7 +453,6 @@ const MapScreen = (props) => {
           </Footer>
         ) : null}
       </View>
-
     </View>
   );
 };
