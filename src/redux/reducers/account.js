@@ -61,7 +61,7 @@ const accountReducer = (state = initialState, action) => {
       };
     case SIGN_OUT:
       removeToken();
-      return { ...state, isSignOut: true, token: null, customer: null };
+      return { state: null, isSignOut: true };
     case FINISH_LOADING:
       return { ...state, isLoading: false };
     case SAVE_ADDRESS: {
