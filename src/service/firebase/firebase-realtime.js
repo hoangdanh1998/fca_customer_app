@@ -4,7 +4,6 @@ export const setTrackingOrder = (orderId, timeRemain) => {
     id: orderId,
     timeRemain,
   });
-  return;
 };
  
 export const updateQRCode = (orderId, qrCode) => {
@@ -25,4 +24,20 @@ export const getOrderOnChange = (orderId, order) => {
 
 export const stopListenOrder = async (orderId, listener) => {
   firebase.database().ref("order").child(orderId).off("value", listener());
+};
+
+export const setDeviceKey = (accountId, deviceKey) => {
+  firebase.database().ref("account").child(accountId).update({
+    id: accountId,
+    deviceKey,
+  });
+};
+
+export const getDeviceKeyOnChange = (accountId, account) => {
+  if(accountId) {
+    const ref = firebase.database().ref("account");
+    ref.child(accountId).on("value", (snapshot) => {
+      account(snapshot.val());
+    });
+  }
 };

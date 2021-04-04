@@ -2,9 +2,13 @@ import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 import { updateExpoToken } from '../account/account';
 import {ID_ACCOUNT} from '../../constants/index'
+import {useDispatch} from 'react-redux';
+import { setDeviceKey } from '../../redux/actions/account';
 
 
 export const registerForPushNotificationsAsync = async () => {
+
+    let token;
     if (Constants.isDevice) {
         const { status: existingStatus } = await Notifications.getPermissionsAsync();
         let finalStatus = existingStatus;
@@ -16,14 +20,14 @@ export const registerForPushNotificationsAsync = async () => {
             alert('Ứng dụng cần được cấp quyền thông báo để hoạt động!');
             return;
         }
-        const token = (await Notifications.getExpoPushTokenAsync()).data;
+        token = (await Notifications.getExpoPushTokenAsync()).data;
         try {
             await updateExpoToken(token, ID_ACCOUNT);
         } catch (error) {
             console.error(error);
         }
+        // console.log("token: " + token);
         
-        console.log(token);
     } else {
         alert('Must use physical device for Push Notifications');
     }
@@ -36,6 +40,7 @@ export const registerForPushNotificationsAsync = async () => {
             lightColor: '#FF231F7C',
         });
     }
+    return token;
 
 };
 

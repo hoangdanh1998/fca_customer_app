@@ -3,8 +3,9 @@ const {
   RESTORE_TOKEN,
   SIGN_OUT,
   FINISH_LOADING,
+  SET_DEVICE_KEY,
 } = require("../actions/account");
-const {SAVE_ADDRESS } = require('../actions/map')
+const { SAVE_ADDRESS } = require('../actions/map')
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const initialState = {
@@ -12,6 +13,7 @@ const initialState = {
   token: null,
   isLoading: true,
   isSignOut: false,
+  deviceKey: null,
 };
 
 const storeToken = async (token, customer) => {
@@ -62,9 +64,12 @@ const accountReducer = (state = initialState, action) => {
       return { ...state, isSignOut: true, token: null, customer: null };
     case FINISH_LOADING:
       return { ...state, isLoading: false };
-      case SAVE_ADDRESS: {
-        return {...state, customer: action.payload}
-      }
+    case SAVE_ADDRESS: {
+      return { ...state, customer: action.payload }
+    }
+    case SET_DEVICE_KEY: {
+      return { ...state, deviceKey: action.payload}
+    }
     default:
       return state;
   }

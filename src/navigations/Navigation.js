@@ -1,14 +1,15 @@
 import {
   createStackNavigator,
-  HeaderBackButton,
+  HeaderBackButton
 } from "@react-navigation/stack";
 import { Icon, View } from "native-base";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector } from 'react-redux';
 import {
   APP_NAME,
   DARK_COLOR,
   LANGUAGE,
-  LIGHT_COLOR,
+  LIGHT_COLOR
 } from "../constants/index";
 import { IMLocalized, init } from "../i18n/IMLocalized";
 import CreateOrder from "../screens/create-order";
@@ -27,15 +28,58 @@ import SavedAddressList from "../screens/saved-address-list";
 import AddressScreen from "../screens/map/google-map-address";
 import StoreDetails from "../screens/store-details";
 import StoreDetailsEmergency from "../screens/store-details-emergency";
+import { getDeviceKeyOnChange, setDeviceKey } from "../service/firebase/firebase-realtime";
+
+
 // import EmergencyMapScreen from '../screens/map/emergency-google-map'
 const Stack = createStackNavigator();
 export default function Navigation(props) {
+
+  const deviceKey = useSelector(state => state.account.deviceKey);
+  const customer = useSelector(state => state.account.customer);
+  const [isShowAlert, setIsShowAlert] = useState(false);
+  console.log("customer", customer?.account?.id);
+
+  const showAlert = () => {
+    // console.log("hien alert len");
+    setIsShowAlert(true);
+};
+
+const hideAlert = () => {
+    setIsShowAlert(false);
+};
+
   init(LANGUAGE.VI);
   const handleLogOut = props.route.params.handleLogOut;
+  useEffect(() => {
+    if (customer) {
+      setDeviceKey(customer?.account?.id, deviceKey);
+    }
+  }, [])
+
+  useEffect(() => {
+    if (customer) {
+      getDeviceKeyOnChange(customer.account.id, (account) => {
+        console.log({ account })
+        if (account) {
+          if (deviceKey !== account.deviceKey) {
+            alert('Tài khoản được đăng nhập từ thiết bị khác')
+          handleLogOut();
+          }
+        }
+      })
+    }
+  }, [])
+
+
+  // setDeviceKey(customer?.account?.id, deviceKey);
+
+  
 
   return (
     // <NavigationContainer>
     <Stack.Navigator>
+      
       <Stack.Screen
         name="MAP_VIEW"
         component={MapScreen}
@@ -295,3 +339,5 @@ export default function Navigation(props) {
     // </NavigationContainer>
   );
 }
+
+
