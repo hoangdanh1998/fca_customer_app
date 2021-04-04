@@ -9,7 +9,7 @@ import LoadingPage from "../screens/loading-page/index";
 import Login from "../screens/login/index";
 import Navigation from "./Navigation";
 import * as fcaStorage from '../service/async-storage/async-storage';
-import { registerForPushNotificationsAsync } from "../service/notification/expo-notification";
+
 
 
 const LoginStack = createStackNavigator();
@@ -24,11 +24,7 @@ const LoginStack = createStackNavigator();
   const token = useSelector((state) => state.account.token);
   const dispatch = useDispatch();
 
-  const handleSetDeviceKey = async () => {
-    const deviceKey = await registerForPushNotificationsAsync();
-    console.log("device token:", deviceKey);
-    dispatch(setDeviceKey(deviceKey));
-  }
+  
 
 
   const handleGetToken = async () => {
@@ -65,7 +61,6 @@ const LoginStack = createStackNavigator();
     fcaStorage.removeOrder();
     handleGetToken();
     handleGetCreatedOrder();
-    handleSetDeviceKey();
   }, []);
 
   return (
