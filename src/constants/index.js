@@ -47,6 +47,7 @@ export const MESSAGES = {
   SET_DEFAULT: "set-default",
   NO_SUGGESTION: "no-suggestion",
   TITLE_NOTIFICATION: "title-notification",
+  STORE_CLOSING: "store-closing"
 };
 
 // APP STATUS

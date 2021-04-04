@@ -1,18 +1,22 @@
+import moment from 'moment';
 import { ResponseStatus } from "../../constants/index";
 import api from "../../service/fca-api/fca-api";
 import { ORDER_ACTIONS } from "../action-types/actions";
 
 export const createOrder = (param) => {
   return async (dispatch) => {
-    const response = await api.post("/order", param);
-    if (response.data.meta.status !== ResponseStatus.SUCCESS) {
-      throw new Error("Something went wrong");
+    try {
+      const response = await api.post("/order", param);
+      const order = response.data.data.order;
+      dispatch({
+        type: ORDER_ACTIONS.CREATE_ORDER,
+        payload: order,
+      });
+    } catch (err) {
+      // console.log(err);
+      throw new Error(err);
     }
-    const order = response.data.data.order;
-    dispatch({
-      type: ORDER_ACTIONS.CREATE_ORDER,
-      payload: order,
-    });
+
   };
 };
 
@@ -46,15 +50,18 @@ export const getOrder = (param) => {
 };
 
 export const getHistory = (param) => {
+  const from = moment(param.createdAt).format('YYYY-MM-DD');
+  const now = moment(new Date()).add(1, 'days').format('YYYY-MM-DD');
+
   return async (dispatch) => {
-    const response = await api.get(`/order?customerPhone=${param}`);
+    const response = await api.get(`/order?customerPhone=${param.phone}&createdDate=${from}&toDate=${now}`);
     if (response.data.meta.status !== ResponseStatus.SUCCESS) {
       throw new Error("Something went wrong");
     }
 
     dispatch({
       type: ORDER_ACTIONS.GET_HISTORY,
-      payload: response,
+      payload: response.data.data.orders,
     });
   };
 };

@@ -1,4 +1,3 @@
-import { CommonActions } from "@react-navigation/native";
 import * as Location from "expo-location";
 import { Footer, Icon } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
@@ -7,7 +6,6 @@ import {
   Dimensions,
   StyleSheet,
   TouchableOpacity,
-
   View
 } from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
@@ -18,9 +16,8 @@ import NotificationModal from "../../components/atoms/notification-modal/index";
 import {
   KEY_GOOGLE_MAP,
   LANGUAGE,
-
-
-  LIGHT_COLOR, MESSAGES,
+  LIGHT_COLOR,
+  MESSAGES,
   PRIMARY_LIGHT_COLOR
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
@@ -41,14 +38,12 @@ const MapScreen = (props) => {
   const dispatch = useDispatch();
   const mapRef = useRef(null);
 
-  const destinationLocation = useSelector(
-    (state) => state.map.destinationLocation
-  );
+  const destinationLocation = useSelector((state) => state.map.destinationLocation);
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
   const partner = useSelector((state) => state.partner.partner);
   const profile = useSelector((state) => state.account.customer);
-  const createdOrder = useSelector((state) => state.order.createdOrder)
+  const createdOrder = useSelector((state) => state.order.createdOrder);
 
   const [location, setLocation] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
@@ -56,33 +51,34 @@ const MapScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
 
+  
+
   const handleSetDetailsGeometry = (location) => {
     dispatch(setDestinationLocation(location));
   };
 
-  useEffect(() => {
-    if (createdOrder) {
-      props.navigation.dispatch(
-        CommonActions.reset({
-          index: 1,
-          routes: [
-            {
-              name: "ORDER_DETAIL",
-              params: {
-                isAfterCreate: true,
-              },
-            },
-          ],
-        })
-      );
-    }
-  }, [])
+  // useEffect(() => {
+  //   if (createdOrder) {
+  //     props.navigation.dispatch(
+  //       CommonActions.reset({
+  //         index: 1,
+  //         routes: [
+  //           {
+  //             name: "ORDER_DETAIL",
+  //             params: {
+  //               isAfterCreate: true,
+  //             },
+  //           },
+  //         ],
+  //       })
+  //     );
+  //   }
+  // }, [])
 
   const getSuggestionStore = async (destination) => {
     try {
       setError();
-      setIsLoading(true);
-      await dispatch(getStoreSuggestion(location.coords, destination));
+      dispatch(getStoreSuggestion(location.coords, destination));
     } catch (error) {
       setError(error.message);
     }
@@ -114,21 +110,21 @@ const MapScreen = (props) => {
           placeholder={IMLocalized("wording-search-destination")}
           minLength={2}
           // listEmptyComponent
-          // predefinedPlaces={
-          //   profile && profile.address && profile.address.length > 0
-          //     ? profile.address.map((a) => {
-          //         return {
-          //           description: a.label,
-          //           geometry: {
-          //             location: {
-          //               lat: +a.latitude,
-          //               lng: +a.longitude,
-          //             },
-          //           },
-          //         };
-          //       })
-          //     : []
-          // }
+          predefinedPlaces={
+            profile && profile.address && profile.address.length > 0
+              ? profile.address.map((a) => {
+                  return {
+                    description: a.label,
+                    geometry: {
+                      location: {
+                        lat: +a.latitude,
+                        lng: +a.longitude,
+                      },
+                    },
+                  };
+                })
+              : []
+          }
           // listEmptyComponent
           autoFocus={false}
           autoCorrect={false}
@@ -142,11 +138,13 @@ const MapScreen = (props) => {
               if (suggestionStores && suggestionStores.length > 0) {
                 setIsShowPopup(true);
               }
-            }
+            },
           }}
           keyboardShouldPersistTaps="handled"
-          onPress={async (data, details = null) => {
+          onPress={
+            (data, details = null) => {
             setIsShowPopup(true);
+            setIsLoading(true);
             getSuggestionStore({
               latitude: details.geometry.location.lat,
               longitude: details.geometry.location.lng,
@@ -157,7 +155,8 @@ const MapScreen = (props) => {
               latitude: details.geometry.location.lat,
               longitude: details.geometry.location.lng,
             });
-          }}
+            }
+          }
           query={{
             key: KEY_GOOGLE_MAP,
             components: "country:vn", //limit country
@@ -194,6 +193,7 @@ const MapScreen = (props) => {
   };
 
   const mapView = () => {
+
     return (
       <View style={{ flex: 1 }}>
         <MapView
@@ -216,8 +216,8 @@ const MapScreen = (props) => {
                 longitude: location.coords.longitude,
               }}
               destination={{
-                latitude: destinationLocation.latitude,
-                longitude: destinationLocation.longitude,
+                latitude: +destinationLocation.latitude,
+                longitude: +destinationLocation.longitude,
               }}
               apikey={KEY_GOOGLE_MAP}
               strokeWidth={4}
@@ -230,14 +230,14 @@ const MapScreen = (props) => {
             <Marker
               title={destinationLocation.description}
               coordinate={{
-                latitude: destinationLocation.latitude,
-                longitude: destinationLocation.longitude,
+                latitude: +destinationLocation.latitude,
+                longitude: +destinationLocation.longitude,
               }}
               onPress={() => {
                 setIsShowPopup(false),
                   setUserRegion({
-                    latitude: destinationLocation.latitude,
-                    longitude: destinationLocation.longitude,
+                    latitude: +destinationLocation.latitude,
+                    longitude: +destinationLocation.longitude,
                   });
               }}
             ></Marker>
@@ -278,7 +278,17 @@ const MapScreen = (props) => {
               })
             : null}
         </MapView>
+        {
+          suggestionStores && suggestionStores.length === 0 && isShowPopup ? (
+            <NotificationModal
+              message={MESSAGES.NO_SUGGESTION}
+              title={MESSAGES.TITLE_NOTIFICATION}
+              visible={true}
+            />
+          ) : null
+        }
       </View>
+
     );
   };
 
@@ -358,26 +368,32 @@ const MapScreen = (props) => {
         </View>
 
         {openSearchModal()}
-        <TouchableOpacity
-          onPress={() => {
-            alert("press");
-          }}
-          style={
-            bestSuggestion && partner && isShowPopup
-              ? styles.secondaryEmergency
-              : styles.primaryEmergency
-          }
-          // styles.primaryEmergency
-        >
-          <Icon
-            name="flash-outline"
-            size={30}
-            style={{ color: "#603a18" }}
+        {profile?.orders&&profile?.orders.length>0 ? (
+          //  console.log(profile.orders),
+          <TouchableOpacity
             onPress={() => {
               alert("press");
             }}
-          />
-        </TouchableOpacity>
+            style={
+              bestSuggestion && partner && isShowPopup
+                ? styles.secondaryEmergency
+                : styles.primaryEmergency
+            }
+            // styles.primaryEmergency
+          >
+            <Icon
+              name="flash-outline"
+              size={30}
+              style={{ color: "#603a18" }}
+              onPress={() => {
+                alert("press");
+              }}
+            />
+          </TouchableOpacity>
+        ) : (
+          null
+        )}
+
         {bestSuggestion && partner && isShowPopup ? (
           <Footer
             style={{
@@ -390,13 +406,7 @@ const MapScreen = (props) => {
           </Footer>
         ) : null}
       </View>
-      {suggestionStores && suggestionStores.length === 0 && isShowPopup ? (
-        <NotificationModal
-          message={MESSAGES.NO_SUGGESTION}
-          title={MESSAGES.TITLE_NOTIFICATION}
-          visible={true}
-        />
-      ) : null}
+
     </View>
   );
 };

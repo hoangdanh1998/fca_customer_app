@@ -18,48 +18,39 @@ import {
   OrderStatus
 } from "../../constants/index";
 import { init } from "../../i18n/IMLocalized";
-import { resetOrder } from '../../redux/actions/order';
 import { setStoreSuggestion } from "../../redux/actions/store";
 import * as fcaStorage from '../../service/async-storage/async-storage';
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 import { convertTransaction } from "../../utils/utils";
-
+import { ORDER_ACTIONS } from "./../../redux/action-types/actions";
 
 init(LANGUAGE.VI);
-const OrderDetails = (props) => {
-  const dispatch = useDispatch();
-  let order;
-  const historyTransactions = [];
-  if (props.route.params.screenName) {
-    order = props.route.params.order;
-  } else {
-    order = useSelector((state) => {
-      return state.order.createdOrder;
-    });
-  }
+const arrEndpointStatus = [
+  OrderStatus.CLOSURE,
+  OrderStatus.RECEPTION,
+  OrderStatus.REJECTION,
+  OrderStatus.CANCELLATION
+];
 
+const OrderDetails = (props) => {
+
+  const dispatch = useDispatch();
+  const order = useSelector((state) => state.order.createdOrder);
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
 
-  const [visibleNotificationModal, setVisibleNotificationModal] = useState(
-    false
-  );
+  const [visibleNotificationModal, setVisibleNotificationModal] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
   const [isNeedHandleDismiss, setIsNeedHandleDismiss] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
   const [listenedOrder, setListenedOrder] = useState(order);
-  const [transactionState, setTransactionState] = useState(
-    props.route.params.screenName ? order.transaction : []
-  );
-  const [isAfterCreate, setIsAfterCreate] = useState(
-    props.route.params.isAfterCreate
-  );
+  const [transactionState, setTransactionState] = useState(order?.transaction | []);
 
   const handleReceiveQRCode = (qrCode, orderId) => {
     props.navigation.navigate("QR_CODE", {
       qrCode: qrCode,
       orderId: orderId,
     });
-    setIsAfterCreate(false);
   };
 
   const handleStaffCancelOrder = () => {
@@ -76,12 +67,20 @@ const OrderDetails = (props) => {
     }
   };
   
+  const setStatusCreatedOrder = (status) => {
+    dispatch({
+      type: ORDER_ACTIONS.SET_CREATED_ORDER,
+      payload: { ...order, status },
+    });
+  }
+
 
   const handleStaffFinishOrder = () => {
     setVisibleNotificationModal(true);
     fcaStorage.removeOrder();
-    dispatch(resetOrder())
     setNotificationMessage(MESSAGES.RECEIVED);
+    
+
   };
 
   const handleAddTransaction = (newStatus) => {
@@ -93,6 +92,12 @@ const OrderDetails = (props) => {
   };
 
   useEffect(() => {
+    if (order && arrEndpointStatus.includes(order.status)) {
+      setIsComplete(true)
+    }
+  }, [order]);
+
+  useEffect(() => {
     if (order.id) {
       getOrderOnChange(order.id, (order) => {
         setListenedOrder(order);
@@ -101,20 +106,24 @@ const OrderDetails = (props) => {
   }, []);
 
   useEffect(() => {
-    if (transactionState[0]?.toStatus !== listenedOrder.status) {
-      handleAddTransaction(listenedOrder.status);
+    if (listenedOrder) {
+      if (transactionState[0]?.toStatus !== listenedOrder.status) {
+        handleAddTransaction(listenedOrder.status);
+        setStatusCreatedOrder(listenedOrder.status);
+      }
       if (listenedOrder.status === OrderStatus.CANCELLATION) {
         handleStaffCancelOrder();
       }
-      if (
-        listenedOrder.status === OrderStatus.RECEPTION &&
-        !listenedOrder.qrcode
-      ) {
+      if (listenedOrder.status === OrderStatus.RECEPTION) {
+        dispatch(setStoreSuggestion(null, []));
+      }
+      if (listenedOrder.status === OrderStatus.RECEPTION && !listenedOrder.qrcode) {
         handleStaffFinishOrder();
       }
-    }
-    if (listenedOrder.qrcode && listenedOrder.qrcode != "") {
-      handleReceiveQRCode(listenedOrder.qrcode, listenedOrder.id);
+      if (listenedOrder.qrcode && listenedOrder.qrcode != "") {
+        handleReceiveQRCode(listenedOrder.qrcode, listenedOrder.id);
+      }
+
     }
   }, [listenedOrder]);
 
@@ -134,7 +143,8 @@ const OrderDetails = (props) => {
         </View>
       </Content>
       <Footer style={{ backgroundColor: null, justifyContent: "space-around" }}>
-        {isAfterCreate ? (
+
+        {!isComplete ? (
           <View
             style={{
               flex: 1,
@@ -202,7 +212,6 @@ const OrderDetails = (props) => {
             );
           } else {
             setVisibleNotificationModal(false);
-            setIsAfterCreate(false);
           }
         }}
         message={notificationMessage}

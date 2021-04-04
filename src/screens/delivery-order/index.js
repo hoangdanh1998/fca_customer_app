@@ -1,16 +1,14 @@
+import { useIsFocused } from '@react-navigation/native';
 import * as Notifications from "expo-notifications";
 import { Content } from "native-base";
 import React, { useEffect, useState } from "react";
 import { Image, View } from "react-native";
 import NotificationModal from "../../components/atoms/notification-modal/index";
-import {
-  MESSAGES,
-  NOTICE_DURATION,
-  OrderStatus
-} from "../../constants/index.js";
-import { resetOrder } from '../../redux/actions/order';
+import { MESSAGES, NOTICE_DURATION, OrderStatus } from "../../constants/index.js";
+import * as firebase from '../../service/firebase/firebase-realtime';
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 import { styles } from "./styles";
+
 
 
 
@@ -28,12 +26,17 @@ const DeliveryOrder = (props) => {
 
   const [visible, setVisible] = useState(false);
 
+  if (!useIsFocused()) {
+    firebase.updateQRCode(orderId, '');
+  }
+
+
   const handleScanSuccess = () => {
     setVisible(true);
 
     setTimeout(() => {
       setVisible(false);
-      props.navigation.navigate("ORDER_DETAIL", { isAfterCreate: false });
+      props.navigation.navigate("ORDER_DETAIL");
     }, NOTICE_DURATION);
   };
 
@@ -42,7 +45,7 @@ const DeliveryOrder = (props) => {
       getOrderOnChange(orderId, (order) => {
         if (order.status === OrderStatus.RECEPTION && order.qrcode) {
           handleScanSuccess();
-          dispatch(resetOrder());
+          // dispatch(resetOrder());
         }
       });
     }

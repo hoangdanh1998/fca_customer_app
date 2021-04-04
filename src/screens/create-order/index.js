@@ -4,7 +4,7 @@ import * as Location from "expo-location";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
 import { Content, Footer, View } from "native-base";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FocusedButton from "../../components/atoms/focused-button/index";
 import NotificationModal from "../../components/atoms/notification-modal/index";
@@ -19,10 +19,7 @@ import {
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { cancelOrder, createOrder, resetOrder } from "../../redux/actions/order";
 import { setStoreSuggestion } from "../../redux/actions/store";
-import * as fcaStorage from '../../service/async-storage/async-storage';
-import {
-  getOrderOnChange
-} from "../../service/firebase/firebase-realtime";
+import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -42,6 +39,7 @@ const CreateOrder = (props) => {
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
   const createdOrder = useSelector((state) => state.order.createdOrder);
   const customer = useSelector((state) => state.account.customer);
+  const destination = useSelector((state) => state.map.destinationLocation);
 
   const [visibleTimer, setVisibleTimer] = useState(false);
   const [visibleNotificationModal, setVisibleNotificationModal] = useState(
@@ -49,7 +47,10 @@ const CreateOrder = (props) => {
   );
   const [notificationMessage, setNotificationMessage] = useState("");
 
-  const submitOrder = useCallback(async () => {
+
+  
+
+  const submitOrder = async () => {
     try {
       const { status } = await Permissions.getAsync(Permissions.LOCATION);
       if (status !== "granted") {
@@ -58,13 +59,18 @@ const CreateOrder = (props) => {
       }
       var location = await Location.getCurrentPositionAsync({});
 
-      dispatch(
+      await dispatch(
         createOrder({
           customerId: customer.id,
           partnerId: store.id,
           currentLocation: {
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
+          },
+          destination: {
+            latitude: destination.latitude,
+            longitude: destination.longitude,
+            description: destination.description,
           },
           items: Array.from(order.items, (item) => {
             return {
@@ -74,6 +80,7 @@ const CreateOrder = (props) => {
           }),
         })
       );
+      console.log('Before');
     } catch (error) {
       setVisibleTimer(false);
       setNotificationMessage(MESSAGES.REJECTED);
@@ -82,7 +89,7 @@ const CreateOrder = (props) => {
         setVisibleNotificationModal(false);
       }, NOTICE_DURATION);
     }
-  }, [dispatch]);
+  };
 
   const destroyOrder = async (orderId) => {
     try {
@@ -105,8 +112,10 @@ const CreateOrder = (props) => {
 
   const handlePressCancelOrder = async () => {
     setVisibleTimer(false);
-    await destroyOrder(createdOrder?.id);
-    setNotificationMessage(MESSAGES.CANCELLED);
+    if (createdOrder) {
+      await destroyOrder(createdOrder.id);
+      setNotificationMessage(MESSAGES.CANCELLED);
+    }
     setVisibleNotificationModal(true);
     await new Promise((resolve, reject) => {
       setTimeout(() => {
@@ -114,6 +123,7 @@ const CreateOrder = (props) => {
         resolve();
       }, NOTICE_DURATION);
     });
+    dispatch(resetOrder());
   };
 
   const handleRejectedOrder = async () => {
@@ -135,12 +145,11 @@ const CreateOrder = (props) => {
       );
       dispatch(setStoreSuggestion(newSuggestion, newSuggestList));
     }
-    props.navigation.navigate("MAP_VIEW", { isAfterCreate: true });
+    props.navigation.navigate("MAP_VIEW");
   };
 
   const handleAcceptedOrder = () => {
     setVisibleTimer(false);
-    fcaStorage.saveOrder(createdOrder);
     props.navigation.dispatch(
       CommonActions.reset({
         index: 1,
@@ -148,7 +157,7 @@ const CreateOrder = (props) => {
           {
             name: "ORDER_DETAIL",
             params: {
-              isAfterCreate: true,
+
             },
           },
         ],
@@ -160,12 +169,10 @@ const CreateOrder = (props) => {
     if (createdOrder) {
       getOrderOnChange(createdOrder.id, (order) => {
         if (order) {
-          if (!order.timeRemain && order.status === OrderStatus.ACCEPTANCE) {
+          if (order.status === OrderStatus.ACCEPTANCE) {
             handleAcceptedOrder();
           }
-          if (!order.timeRemain && order.status === OrderStatus.CANCELLATION) {
-            dispatch(resetOrder());
-          }
+
           if (order.status === OrderStatus.REJECTION) {
             handleRejectedOrder();
             dispatch(resetOrder());

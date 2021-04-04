@@ -17,7 +17,6 @@ import { useDispatch, useSelector } from "react-redux";
 
 import FocusedButton from "../../components/atoms/focused-button/index";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import MapViewDirections from "react-native-maps-directions";
 import { TextInput } from "react-native-gesture-handler";
 import { saveAddress } from "../../redux/actions/map";
 
@@ -247,7 +246,7 @@ const AddressScreen = (props) => {
                     underlineColorAndroid="transparent"
                     placeholder={IMLocalized("wording-set-saved-address")}
                     placeholderTextColor={DARK_COLOR}
-                    defaultValue={marked.label}
+                    defaultValue={savedAddress?.label}
                     autoCapitalize="none"
                     onChangeText={(text) => (marked.label = text)}
                   />

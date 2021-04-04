@@ -5,6 +5,13 @@ export const setTrackingOrder = (orderId, timeRemain) => {
     timeRemain,
   });
 };
+ 
+export const updateQRCode = (orderId, qrCode) => {
+  firebase.database().ref("order").child(orderId).update({
+    id: orderId,
+    qrcode: qrCode,
+  });
+}
 
 export const getOrderOnChange = (orderId, order) => {
   if (orderId) {
