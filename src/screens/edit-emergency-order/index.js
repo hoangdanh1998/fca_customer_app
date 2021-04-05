@@ -14,6 +14,8 @@ import {
   ListItem,
   Right,
 } from "native-base";
+import { TouchableWithoutFeedback } from "react-native";
+import NumberFormat from "react-number-format";
 import { withNavigation } from "@react-navigation/compat";
 import { Divider } from "react-native-elements";
 import OrderDetailCard from "../../components/atoms/order-detail-card/index";
@@ -25,10 +27,16 @@ import { EMERGENCY_ORDER } from "../../constants/seeding";
 import { LANGUAGE, DARK_COLOR, MESSAGES } from "../../constants/index.js";
 
 import { getPartnerInformation } from "../../redux/actions/partner";
+import EditQuantityModal from "../../components/atoms/edit-quantity-modal/index";
 
 const EditEmergencyOrder = (props) => {
   init(LANGUAGE.VI);
   const order = EMERGENCY_ORDER;
+  const totalItems = order.items.reduce((sum, item) => {
+    return (sum += item.quantity);
+  }, 0);
+  // const [visibleEditQuantity, setVisibleEditQuantity] = useState(false);
+  const [visibleEditQuantity, setVisibleEditQuantity] = useState("block");
 
   // ================================= HANDLE UI =================================
 
@@ -46,12 +54,44 @@ const EditEmergencyOrder = (props) => {
           <List
             dataArray={order.items}
             renderRow={(item) => (
-              <>
-                <OrderDetailCard item={Object.assign({}, item)} />
-                <Divider style={{ backgroundColor: DARK_COLOR }} />
-              </>
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  setVisibleEditQuantity("flex");
+                }}
+              >
+                <View>
+                  <OrderDetailCard item={item} />
+                  <Divider style={{ backgroundColor: DARK_COLOR }} />
+                  <EditQuantityModal visible={visibleEditQuantity} />
+                </View>
+              </TouchableWithoutFeedback>
             )}
           />
+          <CardItem style={{ flex: 1 }}>
+            <Left style={{ flex: 3 }}>
+              <H3 style={{ width: "100%", textAlign: "left" }}>
+                {IMLocalized("wording-total-price")}
+              </H3>
+            </Left>
+            <Body style={{ flex: 4 }}>
+              <H3 style={{ width: "100%", textAlign: "left" }}>
+                {totalItems} {IMLocalized("wording-item")}
+              </H3>
+            </Body>
+            <Right style={{ flex: 3 }}>
+              <NumberFormat
+                value={order.total}
+                displayType={"text"}
+                thousandSeparator={true}
+                renderText={(formattedValue) => (
+                  <H3 style={{ width: "100%", textAlign: "right" }}>
+                    {formattedValue} {IMLocalized("currency")}
+                  </H3>
+                )}
+              />
+            </Right>
+          </CardItem>
+
           <View
             style={{
               flex: 1,
