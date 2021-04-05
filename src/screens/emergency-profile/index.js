@@ -28,10 +28,30 @@ import { getPartnerInformation } from "../../redux/actions/partner";
 
 const EmergencyProfile = (props) => {
   init(LANGUAGE.VI);
-  const profile = EMERGENCY_PROFILE;
-  const p = useSelector((state) => state.emergency.emergency);
+  // const profile = EMERGENCY_PROFILE;
+  const loadedProfile = useSelector((state) => state.emergency.emergency);
+  const [profile, setProfile] = useState(loadedProfile);
+  console.log("profile", profile);
   useEffect(() => {
-    console.log(p);
+    const convertedProfile = {
+      partner: loadedProfile.partner,
+      destination: loadedProfile.destination,
+      items: loadedProfile.items.map((item) => {
+        return {
+          partnerItem: {
+            id: item.partnerItem.id,
+            name: item.partnerItem.name,
+            price: item.partnerItem.price,
+            status: item.partnerItem.status,
+          },
+          id: item.id,
+          name: item.partnerItem.name,
+          price: item.partnerItem.price,
+          quantity: item.quantity,
+        };
+      }),
+    };
+    setProfile(convertedProfile);
   });
 
   // ================================= HANDLE UI =================================
@@ -40,15 +60,15 @@ const EmergencyProfile = (props) => {
     <>
       <Content style={styles.content}>
         <View style={{ backgroundColor: "white", flex: 1 }}>
-          <H3 style={styles.title}>{profile.partner.name}</H3>
+          <H3 style={styles.title}>{profile?.partner?.name}</H3>
           <Text
             note
             style={{ color: DARK_COLOR, width: "95%", marginLeft: "2.5%" }}
           >
-            {profile.partner.address.description}
+            {profile?.partner?.address?.description}
           </Text>
           <List
-            dataArray={profile.selectedItem}
+            dataArray={profile?.items}
             renderRow={(item) => (
               <>
                 <OrderDetailCard item={item} />
@@ -67,16 +87,18 @@ const EmergencyProfile = (props) => {
             <Text note style={{ fontWeight: "bold" }}>
               {IMLocalized("wording-saved-address")}
             </Text>
-            <CardItem style={{ flex: 1 }}>
-              <Left style={{ flex: 1 }}>
-                <Text note style={{ fontWeight: "bold" }}>
-                  {IMLocalized("wording-saved-address-label")}
-                </Text>
-              </Left>
-              <Body style={{ flex: 4 }}>
-                <Text note>Home</Text>
-              </Body>
-            </CardItem>
+            {profile?.destination?.label ? (
+              <CardItem style={{ flex: 1 }}>
+                <Left style={{ flex: 1 }}>
+                  <Text note style={{ fontWeight: "bold" }}>
+                    {IMLocalized("wording-saved-address-label")}
+                  </Text>
+                </Left>
+                <Body style={{ flex: 4 }}>
+                  <Text note>{profile?.destination?.label}</Text>
+                </Body>
+              </CardItem>
+            ) : null}
             <CardItem style={{ flex: 1 }}>
               <Left style={{ flex: 1 }}>
                 <Text note style={{ fontWeight: "bold" }}>
@@ -84,7 +106,7 @@ const EmergencyProfile = (props) => {
                 </Text>
               </Left>
               <Body style={{ flex: 4 }}>
-                <Text note>{profile.partner.address.description}</Text>
+                <Text note>{profile?.destination?.description}</Text>
               </Body>
             </CardItem>
           </View>

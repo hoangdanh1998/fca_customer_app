@@ -1,12 +1,21 @@
 import moment from "moment";
 import { DATE_TIME_FORMAT_CALL_API } from "../../constants/index";
 import { EMERGENCY_ACTION } from "../action-types/actions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const initialState = {
   createdEmergency: null,
   prepareEmergencyOrder: {},
   history: [],
   emergency: {},
+};
+
+const storeEmergency = async (emergency) => {
+  try {
+    await AsyncStorage.setItem("@storage_Emergency", JSON.stringify(emergency));
+  } catch (e) {
+    console.log("store-emergency", e);
+  }
 };
 
 const emergencyReducer = (state = initialState, action) => {
@@ -41,6 +50,7 @@ const emergencyReducer = (state = initialState, action) => {
       } else return { ...state, history: [] };
     }
     case EMERGENCY_ACTION.GET_EMERGENCY: {
+      storeEmergency(action.payload);
       return { ...state, emergency: action.payload };
     }
     default:

@@ -33,10 +33,9 @@ export const getEmergency = (param) => {
       console.log("getOrder-fail");
       alert("Something went wrong");
     }
-    console.log("emergency", response.data);
     dispatch({
       type: EMERGENCY_ACTION.GET_EMERGENCY,
-      payload: response.data.customer.favoriteSummary,
+      payload: response.data.data.customer.favoriteSummary,
     });
   };
 };

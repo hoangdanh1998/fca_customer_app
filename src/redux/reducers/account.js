@@ -5,7 +5,7 @@ const {
   FINISH_LOADING,
   SET_DEVICE_KEY,
 } = require("../actions/account");
-const { SAVE_ADDRESS } = require('../actions/map')
+const { SAVE_ADDRESS } = require("../actions/map");
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const initialState = {
@@ -31,13 +31,12 @@ const storeToken = async (token, customer) => {
 const removeToken = async () => {
   try {
     await AsyncStorage.removeItem("@storage_Token");
-
     await AsyncStorage.removeItem("@storage_Customer");
+    await AsyncStorage.removeItem("@storage_Emergency");
   } catch (e) {
-    // console.error("remove token error: ", e);
-    throw new Error(error);
+    console.log("remove token error: ", e);
+    // throw new Error(error);
   }
-
 };
 
 const accountReducer = (state = initialState, action) => {
@@ -65,10 +64,10 @@ const accountReducer = (state = initialState, action) => {
     case FINISH_LOADING:
       return { ...state, isLoading: false };
     case SAVE_ADDRESS: {
-      return { ...state, customer: action.payload }
+      return { ...state, customer: action.payload };
     }
     case SET_DEVICE_KEY: {
-      return { ...state, deviceKey: action.payload}
+      return { ...state, deviceKey: action.payload };
     }
     default:
       return state;
