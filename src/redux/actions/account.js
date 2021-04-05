@@ -3,7 +3,11 @@ export const LOGIN = "LOGIN";
 export const RESTORE_TOKEN = "RESTORE_TOKEN";
 export const SIGN_OUT = "SIGN_OUT";
 export const FINISH_LOADING = "FINISH_LOADING";
+<<<<<<< HEAD
 export const REGISTER_ACCOUNT = "REGISTER_ACCOUNT";
+=======
+export const SET_DEVICE_KEY = "SET_DEVICE_KEY";
+>>>>>>> fbddb4eabd8d34080935a8224f4945c5116793ee
 
 
 import fca from "../../service/fca-api/fca-api";
@@ -62,5 +66,11 @@ export const registerAccount = (account, name) => {
         } catch (error) {
             console.error(error);
         }
+    }
+}
+export const setDeviceKey = (deviceKey) => {
+    return {
+        type: SET_DEVICE_KEY,
+        payload: deviceKey
     }
 }

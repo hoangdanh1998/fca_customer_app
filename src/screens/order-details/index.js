@@ -115,7 +115,7 @@ const OrderDetails = (props) => {
         handleStaffCancelOrder();
       }
       if (listenedOrder.status === OrderStatus.RECEPTION) {
-        dispatch(setStoreSuggestion(null, []));
+        dispatch(setStoreSuggestion(null, null));
       }
       if (listenedOrder.status === OrderStatus.RECEPTION && !listenedOrder.qrcode) {
         handleStaffFinishOrder();
