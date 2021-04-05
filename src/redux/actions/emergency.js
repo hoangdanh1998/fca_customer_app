@@ -6,19 +6,16 @@ import { ACCOUNT_ACTION, EMERGENCY_ACTION } from "../action-types/actions";
 export const createEmergency = (param) => {
   return async (dispatch) => {
     try {
-      const response = await api.post(
+      const response = await api.put(
         `/customer/${param.customerId}/favorite`,
         param
       );
-      const customer = response.data.data.customer;
       dispatch({
-        // type: EMERGENCY_ACTION.CREATE_EMERGENCY,
-        type: ACCOUNT_ACTION.RESET_CUSTOMER,
-        payload: customer,
+        type: EMERGENCY_ACTION.GET_EMERGENCY,
+        payload: response.data.data.customer.favoriteSummary,
       });
     } catch (err) {
       console.log(err);
-      // throw new Error(err);
       console.log("createEmergency-fail");
       alert("Something went wrong");
     }

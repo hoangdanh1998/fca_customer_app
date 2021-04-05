@@ -14,6 +14,7 @@ import {
   ListItem,
   Right,
 } from "native-base";
+import NumberFormat from "react-number-format";
 import { withNavigation } from "@react-navigation/compat";
 import { Divider } from "react-native-elements";
 import OrderDetailCard from "../../components/atoms/order-detail-card/index";
@@ -23,8 +24,7 @@ import { styles } from "./styles";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { EMERGENCY_PROFILE } from "../../constants/seeding";
 import { LANGUAGE, DARK_COLOR, MESSAGES } from "../../constants/index.js";
-
-import { getPartnerInformation } from "../../redux/actions/partner";
+import { convertEmergencyToNormal } from "../../utils/utils";
 
 const EmergencyProfile = (props) => {
   init(LANGUAGE.VI);
@@ -33,26 +33,10 @@ const EmergencyProfile = (props) => {
   const [profile, setProfile] = useState(loadedProfile);
   console.log("profile", profile);
   useEffect(() => {
-    const convertedProfile = {
-      partner: loadedProfile.partner,
-      destination: loadedProfile.destination,
-      items: loadedProfile.items.map((item) => {
-        return {
-          partnerItem: {
-            id: item.partnerItem.id,
-            name: item.partnerItem.name,
-            price: item.partnerItem.price,
-            status: item.partnerItem.status,
-          },
-          id: item.id,
-          name: item.partnerItem.name,
-          price: item.partnerItem.price,
-          quantity: item.quantity,
-        };
-      }),
-    };
+    const convertedProfile = convertEmergencyToNormal(loadedProfile);
+    console.log("loadedProfile", loadedProfile);
     setProfile(convertedProfile);
-  });
+  }, []);
 
   // ================================= HANDLE UI =================================
 
@@ -76,6 +60,35 @@ const EmergencyProfile = (props) => {
               </>
             )}
           />
+          <CardItem style={{ flex: 1 }}>
+            <Left style={{ flex: 3 }}>
+              <H3 style={{ width: "100%", textAlign: "left" }}>
+                {IMLocalized("wording-total-price")}
+              </H3>
+            </Left>
+            <Body style={{ flex: 4 }}>
+              <H3 style={{ width: "100%", textAlign: "left" }}>
+                {profile?.items?.reduce((sum, item) => {
+                  return (sum += item.quantity);
+                }, 0)}
+                {` ${IMLocalized("wording-item")}`}
+              </H3>
+            </Body>
+            <Right style={{ flex: 3 }}>
+              <NumberFormat
+                value={profile?.items?.reduce((sum, item) => {
+                  return (sum += item.quantity * item.price);
+                }, 0)}
+                displayType={"text"}
+                thousandSeparator={true}
+                renderText={(formattedValue) => (
+                  <H3 style={{ width: "100%", textAlign: "right" }}>
+                    {formattedValue} {IMLocalized("currency")}
+                  </H3>
+                )}
+              />
+            </Right>
+          </CardItem>
           <View
             style={{
               flex: 1,
@@ -112,21 +125,21 @@ const EmergencyProfile = (props) => {
           </View>
         </View>
       </Content>
-      {/* <Footer style={styles.footer}>
+      <Footer style={styles.footer}>
         <View style={{ flex: 1 }}>
           <FocusedButton
             block
             name={MESSAGES.SET_DEFAULT}
             disable={false}
             onPress={() => {
-              // props.navigation.navigate("EDIT_EMERGENCY", {
-              //   currentStore: profile.partner,
-              // });
-              alert("Set as Default Order");
+              console.log("press");
+              props.navigation.navigate("CREATE_EMERGENCY_ORDER", {
+                emergencyOrder: profile,
+              });
             }}
           />
         </View>
-      </Footer> */}
+      </Footer>
     </>
   );
 };

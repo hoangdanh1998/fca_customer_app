@@ -23,3 +23,41 @@ export const convertTransaction = (transactions) => {
   });
   return result;
 };
+
+export const convertEmergencyToNormal = (emergency) => {
+  return {
+    partner: emergency.partner,
+    destination: emergency.destination,
+    items: emergency.items.map((item) => {
+      return {
+        partnerItem: {
+          id: item.partnerItem.id,
+          name: item.partnerItem.name,
+          price: item.partnerItem.price,
+          status: item.partnerItem.status,
+        },
+        id: item.id,
+        name: item.partnerItem.name,
+        price: item.partnerItem.price,
+        quantity: item.quantity,
+      };
+    }),
+    order: {
+      items: emergency.items.map((item) => {
+        return {
+          id: item.partnerItem.id,
+          quantity: item.quantity,
+          price: item.partnerItem.price,
+          name: item.partnerItem.name,
+          status: item.partnerItem.status,
+          favoriteItemId: item.id,
+        };
+      }),
+      total: emergency?.items?.reduce((sum, item) => {
+        return (sum += item.quantity * item.partnerItem.price);
+      }, 0),
+      destination: emergency.destination,
+      partner: emergency.partner,
+    },
+  };
+};

@@ -36,13 +36,16 @@ import {
 } from "../../constants/index.js";
 
 import { getOrder, createEmergency } from "../../redux/actions/emergency";
+import { convertEmergencyToNormal } from "../../utils/utils";
 
 init(LANGUAGE.VI);
 const EditEmergencyOrder = (props) => {
+  const isEmergency = props.route.params.isEmergency;
   const loadedOrder = useSelector((state) => {
     return state.emergency.prepareEmergencyOrder;
   });
   const customer = useSelector((state) => state.account.customer);
+  const emergency = useSelector((state) => state.emergency.emergency);
 
   const [isLoading, setIsLoading] = useState(true);
   const [displayId, setDisplayId] = useState("");
@@ -93,21 +96,29 @@ const EditEmergencyOrder = (props) => {
       customerId: customer.id,
       destinationId: order.destination.id,
       items: items.map((item) => {
-        return { partnerItemId: item.id, quantity: item.quantity };
+        return {
+          partnerItemId: item.id,
+          quantity: item.quantity,
+          favoriteItemId: isEmergency ? item.favoriteItemId : "",
+        };
       }),
     };
-    alert(JSON.stringify(param));
-    console.log("param", param);
-    // try {
-    //   dispatch(createEmergency(param));
-    //   alert("Success!");
-    // } catch (error) {
-    //   console.log("error", error);
-    // }
+    // alert(JSON.stringify(param));
+    // console.log("param", param);
+    try {
+      dispatch(createEmergency(param));
+      alert("Success!");
+    } catch (error) {
+      console.log("error", error);
+    }
   };
   useEffect(() => {
-    loadOrder();
-  }, []);
+    setIsLoading(true);
+    if (isEmergency) {
+      setOrder(convertEmergencyToNormal(emergency).order);
+      setIsLoading(false);
+    } else loadOrder();
+  }, [isLoading]);
   useEffect(() => {
     setOrder(loadedOrder);
     setIsLoading(false);
@@ -116,7 +127,7 @@ const EditEmergencyOrder = (props) => {
 
   // ================================= HANDLE UI =================================
 
-  return order?.id ? (
+  return !isLoading ? (
     <Root>
       <Content style={styles.content}>
         <View style={{ backgroundColor: "white", flex: 1 }}>

@@ -34,6 +34,7 @@ import {
   setStoreSuggestion,
 } from "../../redux/actions/store";
 import PopupStore from "./popup-store";
+import { convertEmergencyToNormal } from "../../utils/utils";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -52,6 +53,7 @@ const MapScreen = (props) => {
   const partner = useSelector((state) => state.partner.partner);
   const profile = useSelector((state) => state.account.customer);
   const createdOrder = useSelector((state) => state.order.createdOrder);
+  const emergency = useSelector((state) => state.emergency.emergency);
 
   const [location, setLocation] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
@@ -63,24 +65,6 @@ const MapScreen = (props) => {
   const handleSetDetailsGeometry = (location) => {
     dispatch(setDestinationLocation(location));
   };
-
-  // useEffect(() => {
-  //   if (createdOrder) {
-  //     props.navigation.dispatch(
-  //       CommonActions.reset({
-  //         index: 1,
-  //         routes: [
-  //           {
-  //             name: "ORDER_DETAIL",
-  //             params: {
-  //               isAfterCreate: true,
-  //             },
-  //           },
-  //         ],
-  //       })
-  //     );
-  //   }
-  // }, [])
 
   const getSuggestionStore = async (destination) => {
     try {
@@ -394,7 +378,11 @@ const MapScreen = (props) => {
               <>
                 <TouchableOpacity
                   onPress={() => {
-                    setVisibleEmergencyModal(true);
+                    if (emergency)
+                      props.navigation.navigate("CREATE_EMERGENCY_ORDER", {
+                        emergencyOrder: convertEmergencyToNormal(emergency),
+                      });
+                    else setVisibleEmergencyModal(true);
                   }}
                   style={
                     bestSuggestion && partner && isShowPopup
