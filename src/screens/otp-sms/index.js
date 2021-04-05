@@ -17,14 +17,19 @@ import {
     FirebaseRecaptchaVerifierModal,
     FirebaseRecaptchaBanner,
 } from "expo-firebase-recaptcha";
+import {useDispatch} from 'react-redux';
+import { registerAccount } from "../../redux/actions/account";
 
 export default function OtpSmsScreen(props) {
 
-
+    const dispatch = useDispatch();
     // console.log("props of otp:", props);
     const newAccount = props.route.params.newAccount.newAccount;
+    const numberPhoneValue = props.route.params.numberPhoneValue;
+    const numberPhone = newAccount.numberPhone;
+    const password = newAccount.password;
 
-    const [duration, setDuration] = useState(90);
+    const [duration, setDuration] = useState(180);
     const [isShowButton, setIsShowButton] = useState(false);
     const [key, setKey] = useState(0);
     const recaptchaVerifier = useRef(null);
@@ -51,10 +56,11 @@ export default function OtpSmsScreen(props) {
     const sendVerification = () => {
         try {
             const phoneProvider = new firebase.auth.PhoneAuthProvider();
-            let phone = "+84" + newAccount.numberPhone;
+            
             phoneProvider
-                .verifyPhoneNumber(phone, recaptchaVerifier.current)
-                .then(setVerificationId);
+                .verifyPhoneNumber(numberPhoneValue, recaptchaVerifier.current)
+                .then(setVerificationId)
+                .catch(error => console.error(error));
             console.log("send success");
         } catch (error) {
             console.error("err sendVerification: ", error);
@@ -72,9 +78,15 @@ export default function OtpSmsScreen(props) {
                 .auth()
                 .signInWithCredential(credential)
                 .then((result) => {
-                    // Do something with the results here
+                    dispatch(registerAccount(
+                        { numberPhone, password },
+                        newAccount.name));
 
-                    console.log(result);
+                    alert('Đăng ký thành công');
+                    props.navigation.navigate('LOGIN');
+                }).catch(error => {
+                    console.error(error);
+                    alert('Mã xác thực không chính xác')
                 });
         } catch (error) {
             console.error("confirm code err: ", error);
@@ -105,10 +117,10 @@ export default function OtpSmsScreen(props) {
                             </View>
                             <View style={{ marginTop: "2%" }}>
                                 <Text style={styles.title}>
-                                    Một mã xác nhận gồm 6 số đã được gửi đến
+                                    Một mã xác nhận gồm 6 số đã được
                                 </Text>
-                                <Text style={styles.title}>số điện thoại
-                                    <Text> {newAccount.numberPhone}</Text>
+                                <Text style={styles.title}> gửi đến số điện thoại
+                                    <Text style={{ fontWeight: 'bold' }}> {newAccount.numberPhone}</Text>
                                 </Text>
 
                             </View>
@@ -126,17 +138,17 @@ export default function OtpSmsScreen(props) {
                             </View>
 
                             <View style={[styles.rowContainer, styles.marginContainer, { justifyContent: "center" }]}>
-                                <Text style={styles.title}>Bạn không nhận được mã ? </Text>
+                                <Text style={{ ...styles.title, marginTop: 3 }}>Bạn không nhận được mã ? </Text>
 
                                 {
                                     isShowButton
                                         ? (<TouchableHighlight
                                             onPress={() => { console.log('click'); handleReSendOtp() }}
-                                            style={{ backgroundColor: "red", width: 100, height: 50 }}
+                                            style={{ width: 100, height: 50 }}
                                         >
-                                            <Text style={[[styles.title, { marginRight: 5, color: "#004777" }]]}> Gửi lại</Text>
+                                            <Text style={[[styles.title, { marginRight: 5, color: "#004777", marginTop: 3 }]]}> Gửi lại</Text>
                                         </TouchableHighlight>)
-                                        : <Text style={[[styles.title, { marginRight: 5 }]]}> Gửi lại sau</Text>
+                                        : <Text style={[[styles.title, { marginRight: 5, marginTop: 3 }]]}> Gửi lại sau</Text>
                                 }
 
                                 <CountdownCircleTimer
@@ -144,7 +156,7 @@ export default function OtpSmsScreen(props) {
                                     isPlaying
                                     duration={duration}
                                     strokeWidth={0}
-                                    size={28}
+                                    size={35}
                                     onComplete={onComplete}
                                     colors={[
                                         ['#004777', 1],
@@ -155,7 +167,7 @@ export default function OtpSmsScreen(props) {
 
                                         return (
 
-                                            <Animated.Text style={{ color: animatedColor, fontSize: 22 }}>
+                                            <Animated.Text style={{ color: animatedColor, fontSize: 20 }}>
                                                 {remainingTime}
                                             </Animated.Text>
                                         )

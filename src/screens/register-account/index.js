@@ -13,8 +13,8 @@ import {
 import { styles } from './style'
 import Feather from 'react-native-vector-icons/Feather'
 import { DARK_COLOR, LIGHT_COLOR, PRIMARY_LIGHT_COLOR } from '../../constants';
-import {useDispatch} from 'react-redux';
-import {registerAccount} from '../../redux/actions/account';
+import { useDispatch } from 'react-redux';
+import { registerAccount } from '../../redux/actions/account';
 
 
 export default function RegisterAccountScreen(props) {
@@ -149,18 +149,38 @@ export default function RegisterAccountScreen(props) {
                 && isConfirmPass
             ) {
 
+                let newAccount = null;
+                const chars = numberPhone.split("");
+                let phone = "+84";
+                let phoneFormat = "";
+                if (chars[0] === "0") {
+                    phone += numberPhone.replace(/^0/, "");
+                    // phone = "+84" + phone;
+                    console.log("phone sau khi dieu chinh:", phone);
 
+                    newAccount = {
+                        numberPhone: data.numberPhone,
+                        password: data.password,
+                        name: data.name,
+                    };
+                    props.navigation.navigate("OTP_SMS", { newAccount: { newAccount }, numberPhoneValue: phone });
+                } else {
+                    console.log("so ko co so 0:", numberPhone);
+                    phone = "0" + numberPhone;
+                    phoneFormat = "+84" + numberPhone;
+                    console.log("phone format: ", phoneFormat);
+                    newAccount = {
+                        numberPhone: phone,
+                        password: data.password,
+                        name: data.name,
+                    };
+                    props.navigation.navigate("OTP_SMS", { newAccount: { newAccount }, numberPhoneValue: phoneFormat });
+                }
 
-                const newAccount = {
-                    numberPhone: data.numberPhone,
-                    password: data.password,
-                    name: data.name,
-                };
+                
 
                 // dispatch(registerAccount(newAccount,name));
 
-                props.navigation.navigate("OTP_SMS",
-                    { newAccount: { newAccount }});
             }
         }
 
@@ -304,13 +324,13 @@ export default function RegisterAccountScreen(props) {
                             </View>
                         </View>
                         {confirmPasswordErr
-                                ? (<View style={styles.errContainer}>
-                                    <Text style={[styles.errorMessage]}>
-                                        {confirmPasswordErr}
-                                    </Text>
-                                </View>)
-                                : null
-                            }
+                            ? (<View style={styles.errContainer}>
+                                <Text style={[styles.errorMessage]}>
+                                    {confirmPasswordErr}
+                                </Text>
+                            </View>)
+                            : null
+                        }
                         <View style={styles.buttonContainer}>
                             <TouchableHighlight
                                 style={{ ...styles.button, marginTop: 15 }}

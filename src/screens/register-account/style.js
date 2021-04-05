@@ -57,7 +57,7 @@ export const styles = StyleSheet.create({
         fontWeight: "bold",
     },
     buttonContainer: {
-        marginTop:20
+        marginVertical:20
     },
 
     errContainer: {
