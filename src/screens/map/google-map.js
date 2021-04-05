@@ -367,79 +367,52 @@ const MapScreen = (props) => {
         </View>
 
         {openSearchModal()}
-        {/* {profile?.orders&&profile?.orders.length>0 ? (
-          //  console.log(profile.orders),
-          <TouchableOpacity
-            onPress={() => {
-              alert("press");
-            }}
-            style={
-              bestSuggestion && partner && isShowPopup
-                ? styles.secondaryEmergency
-                : styles.primaryEmergency
-            }
-            // styles.primaryEmergency
-          >
-            <Icon
-              name="flash-outline"
-              size={30}
-              style={{ color: "#603a18" }}
+        {profile?.orders && profile?.orders.length > 0 ? (
+          <>
+            <TouchableOpacity
               onPress={() => {
-                alert("press");
+                setVisibleEmergencyModal(true);
+              }}
+              style={
+                bestSuggestion && partner && isShowPopup
+                  ? styles.secondaryEmergency
+                  : styles.primaryEmergency
+              }
+            >
+              <Icon
+                name="flash-outline"
+                size={30}
+                style={{ color: "#603a18" }}
+              />
+            </TouchableOpacity>
+            <AwesomeAlert
+              show={visibleEmergencyModal}
+              showProgress={false}
+              title={IMLocalized(`title-emergency-profile`)}
+              // message={IMLocalized(`wording-emergency-profile`)}
+              message={`Bạn chưa có đơn hàng đặt nhanh\n\nHãy cấu hình đơn hàng đặt nhanh`}
+              closeOnTouchOutside={true}
+              closeOnHardwareBackPress={false}
+              contentStyle={{ backgroundColor: LIGHT_COLOR }}
+              contentContainerStyle={{ backgroundColor: LIGHT_COLOR }}
+              cancelText={IMLocalized("wording-later")}
+              confirmText={IMLocalized("wording-config")}
+              confirmButtonColor={DARK_COLOR}
+              showCancelButton={true}
+              showConfirmButton={true}
+              onDismiss={() => {
+                setVisibleEmergencyModal(false);
+              }}
+              onCancelPressed={() => {
+                setVisibleEmergencyModal(false);
+              }}
+              onConfirmPressed={() => {
+                setVisibleEmergencyModal(false);
+                props.navigation.navigate("EMERGENCY_ORDER_LIST");
               }}
             />
-          </TouchableOpacity>
-        ) : (
-          null
-        )} */}
-        <TouchableOpacity
-          onPress={() => {
-            // alert("press");
-            setVisibleEmergencyModal(true);
-          }}
-          style={
-            bestSuggestion && partner && isShowPopup
-              ? styles.secondaryEmergency
-              : styles.primaryEmergency
-          }
-          // styles.primaryEmergency
-        >
-          <Icon
-            name="flash-outline"
-            size={30}
-            style={{ color: "#603a18" }}
-            // onPress={() => {
-            //   alert("press");
-            // }}
-          />
-        </TouchableOpacity>
-        <AwesomeAlert
-          show={visibleEmergencyModal}
-          showProgress={false}
-          title={IMLocalized(`title-emergency-profile`)}
-          // message={IMLocalized(`wording-emergency-profile`)}
-          message={`Bạn chưa có đơn hàng đặt nhanh\n\nHãy cấu hình đơn hàng đặt nhanh`}
-          closeOnTouchOutside={true}
-          closeOnHardwareBackPress={false}
-          contentStyle={{ backgroundColor: LIGHT_COLOR }}
-          contentContainerStyle={{ backgroundColor: LIGHT_COLOR }}
-          cancelText={IMLocalized("wording-later")}
-          confirmText={IMLocalized("wording-config")}
-          confirmButtonColor={DARK_COLOR}
-          showCancelButton={true}
-          showConfirmButton={true}
-          onDismiss={() => {
-            setVisibleEmergencyModal(false);
-          }}
-          onCancelPressed={() => {
-            setVisibleEmergencyModal(false);
-          }}
-          onConfirmPressed={() => {
-            // alert("navogate");
-            setVisibleEmergencyModal(false);
-            props.navigation.navigate("EMERGENCY_ORDER_LIST");
-          }}
-        />
+          </>
+        ) : null}
 
         {bestSuggestion && partner && isShowPopup ? (
           <Footer
