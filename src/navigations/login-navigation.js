@@ -3,21 +3,29 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { finishLoading, restoreToken, signOut } from "../redux/actions/account";
+import { finishLoading, restoreToken, setDeviceKey, signOut } from "../redux/actions/account";
 import { restoreOrderCreated } from '../redux/actions/order';
 import LoadingPage from "../screens/loading-page/index";
 import Login from "../screens/login/index";
 import Navigation from "./Navigation";
+import * as fcaStorage from '../service/async-storage/async-storage';
+
+
 
 const LoginStack = createStackNavigator();
 
-function LoginNavigation() {
+ function LoginNavigation() {
   // const [isLoading, setIsLoading] = useState(true)
+
+
 
   const isLoading = useSelector((state) => state.account.isLoading);
   const isSignOut = useSelector((state) => state.account.isSignOut);
   const token = useSelector((state) => state.account.token);
   const dispatch = useDispatch();
+
+  
+
 
   const handleGetToken = async () => {
     try {
@@ -50,6 +58,7 @@ function LoginNavigation() {
   };
 
   useEffect(() => {
+    fcaStorage.removeOrder();
     handleGetToken();
     handleGetCreatedOrder();
   }, []);
@@ -69,12 +78,12 @@ function LoginNavigation() {
             }}
           />
         ) : (
-          <LoginStack.Screen
-            name="HOME_STACK"
-            component={Navigation}
-            initialParams={{ handleLogOut }}
-          />
-        )}
+              <LoginStack.Screen
+                name="HOME_STACK"
+                component={Navigation}
+                initialParams={{ handleLogOut }}
+              />
+            )}
       </LoginStack.Navigator>
     </NavigationContainer>
   );

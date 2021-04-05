@@ -20,6 +20,7 @@ const rootReducer = (state, action) => {
     state.partner = undefined;
     state.map = undefined;
     state.order = undefined;
+
   }
 
   return appReducer (state, action);

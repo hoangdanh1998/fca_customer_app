@@ -1,16 +1,18 @@
 import {
   createStackNavigator,
-  HeaderBackButton,
+  HeaderBackButton
 } from "@react-navigation/stack";
 import { Icon, View } from "native-base";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from 'react-redux';
 import {
   APP_NAME,
   DARK_COLOR,
   LANGUAGE,
-  LIGHT_COLOR,
+  LIGHT_COLOR
 } from "../constants/index";
 import { IMLocalized, init } from "../i18n/IMLocalized";
+import { setDeviceKey } from "../redux/actions/account";
 import CreateOrder from "../screens/create-order";
 import DeliveryOrder from "../screens/delivery-order";
 import EditEmergencyOrder from "../screens/edit-emergency-order";
@@ -20,22 +22,65 @@ import HistoryOrder from "../screens/history-order";
 import HistoryOrderDetails from "../screens/history-order-details";
 import MapScreenEmergency from "../screens/map/emergency-google-map";
 import MapScreen from "../screens/map/google-map";
+import AddressScreen from "../screens/map/google-map-address";
 import googleMapNavigation from "../screens/map/google-map-navigation";
 import MyProfile from "../screens/my-profile";
 import OrderDetails from "../screens/order-details";
 import SavedAddressList from "../screens/saved-address-list";
-import AddressScreen from "../screens/map/google-map-address";
 import StoreDetails from "../screens/store-details";
 import StoreDetailsEmergency from "../screens/store-details-emergency";
+import { getDeviceKeyOnChange, setDeviceKeyFirebase } from "../service/firebase/firebase-realtime";
+import { registerForPushNotificationsAsync } from "../service/notification/expo-notification";
+
 // import EmergencyMapScreen from '../screens/map/emergency-google-map'
 const Stack = createStackNavigator();
 export default function Navigation(props) {
+
+  const deviceKey = useSelector(state => state.account.deviceKey);
+  const customer = useSelector(state => state.account.customer);
+  const [isShowAlert, setIsShowAlert] = useState(false);
+  const [listenAccount, setListenAccount] = useState(null);
+  const dispatch = useDispatch();
+  
+  const handleSetDeviceKey = async () => {
+    const deviceKey = await registerForPushNotificationsAsync();
+    console.log("device token:", deviceKey);
+    await setDeviceKeyFirebase(customer.account.id, deviceKey);
+    dispatch(setDeviceKey(deviceKey));
+  }
+
   init(LANGUAGE.VI);
   const handleLogOut = props.route.params.handleLogOut;
+  useEffect(() => {
+    handleSetDeviceKey();
+  }, [])
 
+  useEffect(() => {
+    console.log({ listenAccount, deviceKey })
+    if (listenAccount && deviceKey) {
+      if (deviceKey !== listenAccount.deviceKey) {
+        alert('Tài khoản được đăng nhập từ thiết bị khác')
+        handleLogOut();
+      }
+    }
+  }, [listenAccount, deviceKey])
+
+  useEffect(() => {
+    if (customer) {
+      getDeviceKeyOnChange(customer.account.id, (account) => {
+        setListenAccount(account);
+      })
+    }
+  }, [])
+
+
+
+
+  // setDeviceKey(customer?.account?.id, deviceKey);
   return (
     // <NavigationContainer>
     <Stack.Navigator>
+      
       <Stack.Screen
         name="MAP_VIEW"
         component={MapScreen}
@@ -294,3 +339,5 @@ export default function Navigation(props) {
     // </NavigationContainer>
   );
 }
+
+
