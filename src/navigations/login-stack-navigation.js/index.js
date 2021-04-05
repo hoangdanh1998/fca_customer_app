@@ -19,6 +19,7 @@ function LoginStackScreen(props) {
             screenOptions={{ headerShow: false }}
         >
 
+
             <LoginStack.Screen name="LOGIN" component={Login} options={{ headerShown: false }} />
             <LoginStack.Screen name="REGISTER_ACCOUNT"
                 options={{

@@ -19,8 +19,8 @@ export const styles = StyleSheet.create({
     },
 
     formContainer: {
-        width: "50%",
-        marginTop: "3%"
+        width: "90%",
+        marginTop: "15%"
     },
 
     title: {
