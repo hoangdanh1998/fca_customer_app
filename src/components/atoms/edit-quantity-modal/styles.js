@@ -12,5 +12,5 @@ export const styles = StyleSheet.create({
   right: { justifyContent: "space-between", flexDirection: "row" },
   icon: { fontSize: 25, color: DARK_COLOR },
   action0: { marginLeft: "33.3%", fontSize: 25, color: DARK_COLOR },
-  action1text: { textAlign: "center", fontSize: 20 },
+  action1text: { textAlign: "center", fontSize: 20, width: "100%" },
 });

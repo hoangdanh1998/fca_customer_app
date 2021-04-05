@@ -12,29 +12,31 @@ const OrderDetailCard = (props) => {
   //   var item = item;
   init(LANGUAGE.VI);
   return (
-    <CardItem style={styles.container}>
-      <Left style={styles.left}>
-        <Image
-          source={item.quantity == 1 ? IMAGE_1 : IMAGE_2}
-          style={styles.image}
-        />
-      </Left>
-      <Body style={styles.body}>
-        <Text style={styles.name}>{item.name}</Text>
-      </Body>
-      <Right style={styles.right}>
-        <NumberFormat
-          value={item.price}
-          displayType={"text"}
-          thousandSeparator={true}
-          renderText={(formattedValue) => (
-            <Text note style={styles.price}>
-              {formattedValue} {IMLocalized("currency")}
-            </Text>
-          )}
-        />
-      </Right>
-    </CardItem>
+    <>
+      <CardItem style={styles.container}>
+        <Left style={styles.left}>
+          <Image
+            source={item.quantity == 1 ? IMAGE_1 : IMAGE_2}
+            style={styles.image}
+          />
+        </Left>
+        <Body style={styles.body}>
+          <Text style={styles.name}>{item.name}</Text>
+        </Body>
+        <Right style={styles.right}>
+          <NumberFormat
+            value={item.price}
+            displayType={"text"}
+            thousandSeparator={true}
+            renderText={(formattedValue) => (
+              <Text note style={styles.price}>
+                {formattedValue} {IMLocalized("currency")}
+              </Text>
+            )}
+          />
+        </Right>
+      </CardItem>
+    </>
   );
 };
 

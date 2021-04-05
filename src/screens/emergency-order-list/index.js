@@ -21,25 +21,7 @@ const EmergencyOrderList = (props) => {
     OrderStatus.CANCELLATION,
   ];
   const handleNextScreen = (order) => {
-    // if (arrEndpointStatus.includes(order.status)) {
-    //   // props.navigation.navigate("HISTORY_ORDER_DETAILS", {
-    //   //   order: order,
-    //   // });
-    //   props.navigation.navigate("EDIT_EMERGENCY_ORDER");
-    // } else {
-    //   dispatch({
-    //     type: ORDER_ACTIONS.SET_CREATED_ORDER,
-    //     payload: order,
-    //   });
-    //   dispatch(setPartnerLocation(order.partner.address));
-    //   dispatch(setDestinationLocation(order.destination));
-    //   // props.navigation.navigate("ORDER_DETAIL", {
-    //   //   order: order,
-    //   //   screenName: props.route.name,
-    //   // });
-    //   props.navigation.navigate("EDIT_EMERGENCY_ORDER");
-    // }
-    props.navigation.navigate("EDIT_EMERGENCY_ORDER");
+    props.navigation.navigate("EDIT_EMERGENCY_ORDER", { id: order.id });
   };
   const history = useSelector((state) => {
     return state.order.history;
@@ -57,7 +39,6 @@ const EmergencyOrderList = (props) => {
   }, [dispatch]);
   useEffect(() => {
     loadHistory();
-    console.log("history", history[0]);
   }, [dispatch, loadHistory]);
   return (
     <Content>
