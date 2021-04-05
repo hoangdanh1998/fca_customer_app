@@ -11,15 +11,12 @@ const LoginStack = createStackNavigator();
 
 
 function LoginStackScreen(props) {
-    console.log("props of login stack ", props.route);
     // const handleLogOut = props.route.params.handleLogOut;
     return (
 
         <LoginStack.Navigator
             screenOptions={{ headerShow: false }}
         >
-
-
             <LoginStack.Screen name="LOGIN" component={Login} options={{ headerShown: false }} />
             <LoginStack.Screen name="REGISTER_ACCOUNT"
                 options={{
