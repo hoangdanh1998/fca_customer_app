@@ -69,7 +69,7 @@ const MyProfile = (props) => {
             </Left>
             <Right>
               <NumberFormat
-                value={profile?.account?.balance ? profile.account.balance : 1}
+                value={profile?.account?.balance ? profile.account.balance : 0}
                 displayType={"text"}
                 thousandSeparator={true}
                 renderText={(formattedValue) => (
