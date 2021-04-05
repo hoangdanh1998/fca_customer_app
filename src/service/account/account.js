@@ -15,3 +15,15 @@ export const updateExpoToken = async (token, id) => {
 
 
 }
+
+export const checkPhoneExisted = async (phone) => {
+
+    try {
+        const response = await fca.get(`/account/?phone=${phone}`);
+        if (response.data.meta.status !== ResponseStatus.SUCCESS) {
+            throw new Error("Something went wrong!");
+        }
+    } catch (error) {
+        throw error;
+    }
+}

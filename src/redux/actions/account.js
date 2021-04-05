@@ -59,7 +59,6 @@ export const registerAccount = (account, name) => {
                     name,
                 }
             )
-            console.log("response registerAccount", response);
         } catch (error) {
             console.error(error);
         }

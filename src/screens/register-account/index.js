@@ -1,21 +1,21 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 import {
-    View,
-    Text,
-    KeyboardAvoidingView,
-    TouchableWithoutFeedback,
-    ScrollView,
-    TextInput,
-    TouchableOpacity,
-    Image,
-    TouchableHighlight
-} from 'react-native';
-import { styles } from './style'
-import Feather from 'react-native-vector-icons/Feather'
-import { DARK_COLOR, LIGHT_COLOR, PRIMARY_LIGHT_COLOR } from '../../constants';
-import { useDispatch } from 'react-redux';
-import { registerAccount } from '../../redux/actions/account';
+    Image, KeyboardAvoidingView,
 
+    ScrollView, Text,
+
+
+
+    TextInput,
+
+
+    TouchableHighlight, TouchableOpacity, TouchableWithoutFeedback, View
+} from 'react-native';
+import Feather from 'react-native-vector-icons/Feather';
+import { useDispatch } from 'react-redux';
+import { DARK_COLOR, LIGHT_COLOR, PRIMARY_LIGHT_COLOR } from '../../constants';
+import { checkPhoneExisted } from '../../service/account/account';
+import { styles } from './style';
 
 export default function RegisterAccountScreen(props) {
 
@@ -76,15 +76,22 @@ export default function RegisterAccountScreen(props) {
         })
     }
 
-    const checkValuePhoneNumber = (numberPhone) => {
+    const checkValuePhoneNumber = async (numberPhone) => {
 
         const phoneReg = /^[0-9]{9,10}$/;
-
+        console.log({ numberPhone })
         if (!numberPhone.match(phoneReg)) {
             setNumberErr("Số điện thoại phải có từ 9 đến 10 chữ số");
             return false;
         } else {
-            return true;
+            try {
+                await checkPhoneExisted(numberPhone);
+                setNumberErr("Số điện thoại đã được đăng ký");
+                return false;
+            } catch (e) {
+                console.log("Error", e)
+                return true;
+            }
         }
     }
 
@@ -115,7 +122,7 @@ export default function RegisterAccountScreen(props) {
         }
     }
 
-    const checkConfirmPassword = (confirmPassword) => {
+    const checkConfirmPassword = async (confirmPassword) => {
 
         // const passReg = /^([A-Z]+[a-z]+[0-9]+){8,16}$/;
         // console.log("pass:",confirmPassword.match(passReg));
@@ -128,19 +135,13 @@ export default function RegisterAccountScreen(props) {
         }
     }
 
-    const handleRegisterAccount =
-        (
-            numberPhone,
-            password,
-            confirmPassword,
-            name
-        ) => {
+    const handleRegisterAccount = async (numberPhone, password, confirmPassword, name) => {
             setNumberErr(null);
             setConfirmPasswordErr(null);
             setNameErr(null);
             setPasswordErr(null);
 
-            const isNumberPhone = checkValuePhoneNumber(numberPhone);
+        const isNumberPhone = await checkValuePhoneNumber(numberPhone);
             const isName = checkName(name);
             const isPassword = checkPassword(password);
             const isConfirmPass = checkConfirmPassword(confirmPassword);

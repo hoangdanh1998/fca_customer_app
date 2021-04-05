@@ -7,7 +7,7 @@ import {
   Footer,
   Left,
   Right,
-  Text,
+  Text
 } from "native-base";
 import React from "react";
 import { TouchableWithoutFeedback } from "react-native";
@@ -19,7 +19,7 @@ import {
   DARK_COLOR,
   LANGUAGE,
   LIGHT_COLOR,
-  MESSAGES,
+  MESSAGES
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 /* eslint-disable react/prop-types */
@@ -69,7 +69,7 @@ const MyProfile = (props) => {
             </Left>
             <Right>
               <NumberFormat
-                value={profile?.currentAmount ? profile?.currentAmount : 0}
+                value={profile?.account?.balance ? profile.account.balance : 1}
                 displayType={"text"}
                 thousandSeparator={true}
                 renderText={(formattedValue) => (
