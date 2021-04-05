@@ -16,7 +16,7 @@ import {
   Root,
   Toast,
 } from "native-base";
-import { TouchableWithoutFeedback } from "react-native";
+import { TouchableWithoutFeedback, ActivityIndicator } from "react-native";
 import NumberFormat from "react-number-format";
 import { withNavigation } from "@react-navigation/compat";
 import { Divider } from "react-native-elements";
@@ -32,18 +32,17 @@ import {
   MESSAGES,
   MAX_ORDER_ITEM,
   NOTICE_DURATION,
+  PRIMARY_LIGHT_COLOR,
 } from "../../constants/index.js";
 
-import { getOrder } from "../../redux/actions/order";
+import { getOrder, createEmergency } from "../../redux/actions/emergency";
 
 init(LANGUAGE.VI);
 const EditEmergencyOrder = (props) => {
   const loadedOrder = useSelector((state) => {
-    return state.order.prepareEmergencyOrder;
+    return state.emergency.prepareEmergencyOrder;
   });
-  const originOrder = useSelector((state) => {
-    return state.order.originalPrepareEmergencyOrder;
-  });
+  const customer = useSelector((state) => state.account.customer);
 
   const [isLoading, setIsLoading] = useState(true);
   const [displayId, setDisplayId] = useState("");
@@ -70,7 +69,6 @@ const EditEmergencyOrder = (props) => {
       return;
     }
     if (totalItem <= 1 && quantityParam < 0) {
-      console.log("totalItem <= 1 && quantityParam < 0");
       Toast.show({
         text: IMLocalized("wording-too-less-item"),
         buttonText: "OK",
@@ -89,17 +87,36 @@ const EditEmergencyOrder = (props) => {
     newOrder.items[index] = { ...item };
     setOrder({ ...newOrder });
   };
+  const handleCreateEmergency = () => {
+    const items = order.items.filter((item) => item.quantity > 0);
+    const param = {
+      customerId: customer.id,
+      destinationId: order.destination.id,
+      items: items.map((item) => {
+        return { partnerItemId: item.id, quantity: item.quantity };
+      }),
+    };
+    alert(JSON.stringify(param));
+    console.log("param", param);
+    // try {
+    //   dispatch(createEmergency(param));
+    //   alert("Success!");
+    // } catch (error) {
+    //   console.log("error", error);
+    // }
+  };
   useEffect(() => {
     loadOrder();
   }, []);
   useEffect(() => {
     setOrder(loadedOrder);
     setIsLoading(false);
+    console.log("order", loadedOrder);
   }, [loadedOrder]);
 
   // ================================= HANDLE UI =================================
 
-  return order ? (
+  return order?.id ? (
     <Root>
       <Content style={styles.content}>
         <View style={{ backgroundColor: "white", flex: 1 }}>
@@ -153,7 +170,6 @@ const EditEmergencyOrder = (props) => {
             </Body>
             <Right style={{ flex: 3 }}>
               <NumberFormat
-                // value={order?.total}
                 value={order?.items?.reduce((sum, item) => {
                   return (sum += item.quantity * item.price);
                 }, 0)}
@@ -211,14 +227,17 @@ const EditEmergencyOrder = (props) => {
             name={MESSAGES.SET_DEFAULT}
             disable={false}
             onPress={() => {
-              alert(JSON.stringify(order.items));
+              // alert(JSON.stringify(order.items));
+              handleCreateEmergency();
             }}
           />
         </View>
       </Footer>
     </Root>
   ) : (
-    <View></View>
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <ActivityIndicator size="large" color={PRIMARY_LIGHT_COLOR} />
+    </View>
   );
 };
 

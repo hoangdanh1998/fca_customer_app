@@ -9,11 +9,9 @@ import {
   setDestinationLocation,
   setPartnerLocation,
 } from "../../redux/actions/map";
-import { getHistory } from "../../redux/actions/order";
+import { getHistory } from "../../redux/actions/emergency";
 
 const EmergencyOrderList = (props) => {
-  //   var orderList = props.orderList;
-  // var orderList = HISTORY_ORDER;
   const arrEndpointStatus = [
     OrderStatus.CLOSURE,
     OrderStatus.RECEPTION,
@@ -24,7 +22,7 @@ const EmergencyOrderList = (props) => {
     props.navigation.navigate("EDIT_EMERGENCY_ORDER", { id: order.id });
   };
   const history = useSelector((state) => {
-    return state.order.history;
+    return state.emergency.history;
   });
   const customer = useSelector((state) => state.account.customer);
 
@@ -33,7 +31,6 @@ const EmergencyOrderList = (props) => {
     try {
       dispatch(getHistory(customer));
     } catch (error) {
-      // setError(error);
       alert(error);
     }
   }, [dispatch]);

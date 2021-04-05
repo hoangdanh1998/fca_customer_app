@@ -29,6 +29,10 @@ import { getPartnerInformation } from "../../redux/actions/partner";
 const EmergencyProfile = (props) => {
   init(LANGUAGE.VI);
   const profile = EMERGENCY_PROFILE;
+  const p = useSelector((state) => state.emergency.emergency);
+  useEffect(() => {
+    console.log(p);
+  });
 
   // ================================= HANDLE UI =================================
 
