@@ -26,7 +26,7 @@ import {
   setPartnerLocation
 } from "../../redux/actions/map";
 import { setPartner } from "../../redux/actions/partner";
-import { getStoreSuggestion } from "../../redux/actions/store";
+import { getStoreSuggestion, setStoreSuggestion } from "../../redux/actions/store";
 import PopupStore from "./popup-store";
 
 const width = Dimensions.get("window").width;
@@ -78,7 +78,8 @@ const MapScreen = (props) => {
   const getSuggestionStore = async (destination) => {
     try {
       setError();
-      dispatch(getStoreSuggestion(location.coords, destination));
+      setIsLoading(true);
+      await dispatch(getStoreSuggestion(location.coords, destination));
     } catch (error) {
       setError(error.message);
     }
@@ -141,20 +142,20 @@ const MapScreen = (props) => {
             },
           }}
           keyboardShouldPersistTaps="handled"
-          onPress={
-            (data, details = null) => {
+          onPress={async (data, details = null) => {
             setIsShowPopup(true);
-            setIsLoading(true);
-            getSuggestionStore({
-              latitude: details.geometry.location.lat,
-              longitude: details.geometry.location.lng,
-            });
 
             handleSetDetailsGeometry({
               description: data.description,
               latitude: details.geometry.location.lat,
               longitude: details.geometry.location.lng,
             });
+
+            await getSuggestionStore({
+              latitude: details.geometry.location.lat,
+              longitude: details.geometry.location.lng,
+            });
+
             }
           }
           query={{
@@ -193,7 +194,6 @@ const MapScreen = (props) => {
   };
 
   const mapView = () => {
-
     return (
       <View style={{ flex: 1 }}>
         <MapView
@@ -284,6 +284,11 @@ const MapScreen = (props) => {
               message={MESSAGES.NO_SUGGESTION}
               title={MESSAGES.TITLE_NOTIFICATION}
               visible={true}
+              onDismiss={() => {
+                // console.log('Dismiss')
+                dispatch(setStoreSuggestion(null, null));
+              }
+              }
             />
           ) : null
         }
@@ -297,6 +302,25 @@ const MapScreen = (props) => {
       try {
         setError();
         setIsLoading(true);
+        let { status } = await Location.requestPermissionsAsync();
+        if (status !== "granted") {
+          console.log("Permission to access location was denied");
+          return;
+        }
+
+        let location = await Location.getCurrentPositionAsync({});
+        setLocation(location);
+        setIsLoading(false);
+      } catch (error) {
+        setError(error.message);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setError();
         let { status } = await Location.requestPermissionsAsync();
         if (status !== "granted") {
           console.log("Permission to access location was denied");
@@ -326,20 +350,15 @@ const MapScreen = (props) => {
       } catch (error) {
         setError(error.message);
       }
-      setIsLoading(false);
     })();
   }, [bestSuggestion]);
 
-  if (isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={PRIMARY_LIGHT_COLOR} />
-      </View>
-    );
-  }
-
   return (
-    <View
+    <>
+      {isLoading ?
+        (<View style={styles.centered}>
+        <ActivityIndicator size="large" color={PRIMARY_LIGHT_COLOR} />
+        </View>) : (<View
       style={{
         flex: 1,
         height: "100%",
@@ -407,7 +426,8 @@ const MapScreen = (props) => {
         ) : null}
       </View>
 
-    </View>
+        </View>)}
+    </>
   );
 };
 const styles = StyleSheet.create({
