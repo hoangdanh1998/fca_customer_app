@@ -29,6 +29,7 @@ import OrderDetails from "../screens/order-details";
 import SavedAddressList from "../screens/saved-address-list";
 import StoreDetails from "../screens/store-details";
 import StoreDetailsEmergency from "../screens/store-details-emergency";
+import { updateExpoToken } from "../service/account/account";
 import { getDeviceKeyOnChange, setDeviceKeyFirebase } from "../service/firebase/firebase-realtime";
 import { registerForPushNotificationsAsync } from "../service/notification/expo-notification";
 
@@ -45,7 +46,10 @@ export default function Navigation(props) {
   const handleSetDeviceKey = async () => {
     const deviceKey = await registerForPushNotificationsAsync();
     console.log("device token:", deviceKey);
+
+    updateExpoToken(deviceKey, customer.account.id);
     await setDeviceKeyFirebase(customer.account.id, deviceKey);
+
     dispatch(setDeviceKey(deviceKey));
   }
 
@@ -56,7 +60,6 @@ export default function Navigation(props) {
   }, [])
 
   useEffect(() => {
-    console.log({ listenAccount, deviceKey })
     if (listenAccount && deviceKey) {
       if (deviceKey !== listenAccount.deviceKey) {
         alert('Tài khoản được đăng nhập từ thiết bị khác')

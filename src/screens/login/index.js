@@ -188,7 +188,7 @@ const Login = (props) => {
                                 <TouchableHighlight
 
                                     style={{ color: "blue" }}
-
+                                    onPress = {() => props.navigation.navigate("REGISTER_ACCOUNT")}
                                     underlayColor={LIGHT_COLOR}
                                     activeOpacity={0.9}
                                 >

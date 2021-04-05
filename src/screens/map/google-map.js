@@ -29,8 +29,10 @@ import {
   setPartnerLocation,
 } from "../../redux/actions/map";
 import { setPartner } from "../../redux/actions/partner";
-import { getStoreSuggestion } from "../../redux/actions/store";
-import EmergencyTooltip from "./emergency-tooltip";
+import {
+  getStoreSuggestion,
+  setStoreSuggestion,
+} from "../../redux/actions/store";
 import PopupStore from "./popup-store";
 
 const width = Dimensions.get("window").width;
@@ -83,7 +85,8 @@ const MapScreen = (props) => {
   const getSuggestionStore = async (destination) => {
     try {
       setError();
-      dispatch(getStoreSuggestion(location.coords, destination));
+      setIsLoading(true);
+      await dispatch(getStoreSuggestion(location.coords, destination));
     } catch (error) {
       setError(error.message);
     }
@@ -146,16 +149,16 @@ const MapScreen = (props) => {
             },
           }}
           keyboardShouldPersistTaps="handled"
-          onPress={(data, details = null) => {
+          onPress={async (data, details = null) => {
             setIsShowPopup(true);
-            setIsLoading(true);
-            getSuggestionStore({
+
+            handleSetDetailsGeometry({
+              description: data.description,
               latitude: details.geometry.location.lat,
               longitude: details.geometry.location.lng,
             });
 
-            handleSetDetailsGeometry({
-              description: data.description,
+            await getSuggestionStore({
               latitude: details.geometry.location.lat,
               longitude: details.geometry.location.lng,
             });
@@ -285,6 +288,10 @@ const MapScreen = (props) => {
             message={MESSAGES.NO_SUGGESTION}
             title={MESSAGES.TITLE_NOTIFICATION}
             visible={true}
+            onDismiss={() => {
+              // console.log('Dismiss')
+              dispatch(setStoreSuggestion(null, null));
+            }}
           />
         ) : null}
       </View>
@@ -296,6 +303,25 @@ const MapScreen = (props) => {
       try {
         setError();
         setIsLoading(true);
+        let { status } = await Location.requestPermissionsAsync();
+        if (status !== "granted") {
+          console.log("Permission to access location was denied");
+          return;
+        }
+
+        let location = await Location.getCurrentPositionAsync({});
+        setLocation(location);
+        setIsLoading(false);
+      } catch (error) {
+        setError(error.message);
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        setError();
         let { status } = await Location.requestPermissionsAsync();
         if (status !== "granted") {
           console.log("Permission to access location was denied");
@@ -325,108 +351,107 @@ const MapScreen = (props) => {
       } catch (error) {
         setError(error.message);
       }
-      setIsLoading(false);
     })();
   }, [bestSuggestion]);
 
-  if (isLoading) {
-    return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={PRIMARY_LIGHT_COLOR} />
-      </View>
-    );
-  }
-
   return (
-    <View
-      style={{
-        flex: 1,
-        height: "100%",
-      }}
-    >
-      <View
-        style={{
-          width: "100%",
-          height: "100%",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
+    <>
+      {isLoading ? (
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" color={PRIMARY_LIGHT_COLOR} />
+        </View>
+      ) : (
         <View
           style={{
-            width: "100%",
-            // height: "100%",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "absolute",
-            left: 0,
-            top: 0,
+            flex: 1,
+            height: "100%",
           }}
         >
-          {mapView()}
-        </View>
-
-        {openSearchModal()}
-        {profile?.orders && profile?.orders.length > 0 ? (
-          <>
-            <TouchableOpacity
-              onPress={() => {
-                setVisibleEmergencyModal(true);
-              }}
-              style={
-                bestSuggestion && partner && isShowPopup
-                  ? styles.secondaryEmergency
-                  : styles.primaryEmergency
-              }
-            >
-              <Icon
-                name="flash-outline"
-                size={30}
-                style={{ color: "#603a18" }}
-              />
-            </TouchableOpacity>
-            <AwesomeAlert
-              show={visibleEmergencyModal}
-              showProgress={false}
-              title={IMLocalized(`title-emergency-profile`)}
-              // message={IMLocalized(`wording-emergency-profile`)}
-              message={`Bạn chưa có đơn hàng đặt nhanh\n\nHãy cấu hình đơn hàng đặt nhanh`}
-              closeOnTouchOutside={true}
-              closeOnHardwareBackPress={false}
-              contentStyle={{ backgroundColor: LIGHT_COLOR }}
-              contentContainerStyle={{ backgroundColor: LIGHT_COLOR }}
-              cancelText={IMLocalized("wording-later")}
-              confirmText={IMLocalized("wording-config")}
-              confirmButtonColor={DARK_COLOR}
-              showCancelButton={true}
-              showConfirmButton={true}
-              onDismiss={() => {
-                setVisibleEmergencyModal(false);
-              }}
-              onCancelPressed={() => {
-                setVisibleEmergencyModal(false);
-              }}
-              onConfirmPressed={() => {
-                setVisibleEmergencyModal(false);
-                props.navigation.navigate("EMERGENCY_ORDER_LIST");
-              }}
-            />
-          </>
-        ) : null}
-
-        {bestSuggestion && partner && isShowPopup ? (
-          <Footer
+          <View
             style={{
-              height: "auto",
-              backgroundColor: null,
-              borderColor: LIGHT_COLOR,
+              width: "100%",
+              height: "100%",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            <PopupStore store={partner} />
-          </Footer>
-        ) : null}
-      </View>
-    </View>
+            <View
+              style={{
+                width: "100%",
+                // height: "100%",
+                alignItems: "center",
+                justifyContent: "center",
+                position: "absolute",
+                left: 0,
+                top: 0,
+              }}
+            >
+              {mapView()}
+            </View>
+
+            {openSearchModal()}
+            {profile?.orders && profile?.orders.length > 0 ? (
+              <>
+                <TouchableOpacity
+                  onPress={() => {
+                    setVisibleEmergencyModal(true);
+                  }}
+                  style={
+                    bestSuggestion && partner && isShowPopup
+                      ? styles.secondaryEmergency
+                      : styles.primaryEmergency
+                  }
+                >
+                  <Icon
+                    name="flash-outline"
+                    size={30}
+                    style={{ color: "#603a18" }}
+                  />
+                </TouchableOpacity>
+                <AwesomeAlert
+                  show={visibleEmergencyModal}
+                  showProgress={false}
+                  title={IMLocalized(`title-emergency-profile`)}
+                  // message={IMLocalized(`wording-emergency-profile`)}
+                  message={`Bạn chưa có đơn hàng đặt nhanh\n\nHãy cấu hình đơn hàng đặt nhanh`}
+                  closeOnTouchOutside={true}
+                  closeOnHardwareBackPress={false}
+                  contentStyle={{ backgroundColor: LIGHT_COLOR }}
+                  contentContainerStyle={{ backgroundColor: LIGHT_COLOR }}
+                  cancelText={IMLocalized("wording-later")}
+                  confirmText={IMLocalized("wording-config")}
+                  confirmButtonColor={DARK_COLOR}
+                  showCancelButton={true}
+                  showConfirmButton={true}
+                  onDismiss={() => {
+                    setVisibleEmergencyModal(false);
+                  }}
+                  onCancelPressed={() => {
+                    setVisibleEmergencyModal(false);
+                  }}
+                  onConfirmPressed={() => {
+                    setVisibleEmergencyModal(false);
+                    props.navigation.navigate("EMERGENCY_ORDER_LIST");
+                  }}
+                />
+              </>
+            ) : null}
+
+            {bestSuggestion && partner && isShowPopup ? (
+              <Footer
+                style={{
+                  height: "auto",
+                  backgroundColor: null,
+                  borderColor: LIGHT_COLOR,
+                }}
+              >
+                <PopupStore store={partner} />
+              </Footer>
+            ) : null}
+          </View>
+        </View>
+      )}
+    </>
   );
 };
 const styles = StyleSheet.create({
