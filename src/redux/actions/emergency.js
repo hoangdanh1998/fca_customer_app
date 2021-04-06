@@ -25,9 +25,11 @@ export const createEmergency = (param) => {
 export const getEmergency = (param) => {
   return async (dispatch) => {
     const response = await api.get(`/customer/${param}/favorite`);
-    if (response.data.meta.status !== ResponseStatus.SUCCESS) {
-      // throw new Error("Something went wrong");
-      console.log("getOrder-fail");
+    if (
+      response.data.meta.status !== ResponseStatus.SUCCESS ||
+      !response?.data?.data?.customer?.id
+    ) {
+      console.log("getEmergency-fail");
       alert("Something went wrong");
     }
     dispatch({

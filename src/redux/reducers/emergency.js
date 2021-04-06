@@ -50,7 +50,6 @@ const emergencyReducer = (state = initialState, action) => {
       } else return { ...state, history: [] };
     }
     case EMERGENCY_ACTION.GET_EMERGENCY: {
-      storeEmergency(action.payload);
       return { ...state, emergency: action.payload };
     }
     default:

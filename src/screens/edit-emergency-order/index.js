@@ -90,7 +90,7 @@ const EditEmergencyOrder = (props) => {
     newOrder.items[index] = { ...item };
     setOrder({ ...newOrder });
   };
-  const handleCreateEmergency = () => {
+  const handleCreateEmergency = async () => {
     const items = order.items.filter((item) => item.quantity > 0);
     const param = {
       customerId: customer.id,
@@ -103,11 +103,11 @@ const EditEmergencyOrder = (props) => {
         };
       }),
     };
-    // alert(JSON.stringify(param));
-    // console.log("param", param);
+    console.log("param", param);
     try {
-      dispatch(createEmergency(param));
+      await dispatch(createEmergency(param));
       alert("Success!");
+      props.navigation.navigate("EMERGENCY_PROFILE");
     } catch (error) {
       console.log("error", error);
     }
@@ -118,11 +118,15 @@ const EditEmergencyOrder = (props) => {
       setOrder(convertEmergencyToNormal(emergency).order);
       setIsLoading(false);
     } else loadOrder();
-  }, [isLoading]);
+  }, []);
   useEffect(() => {
-    setOrder(loadedOrder);
+    // setOrder(loadedOrder);
+    // setIsLoading(false);
+    // console.log("order", loadedOrder);
+    if (isEmergency) {
+      setOrder(convertEmergencyToNormal(emergency).order);
+    } else setOrder(loadedOrder);
     setIsLoading(false);
-    console.log("order", loadedOrder);
   }, [loadedOrder]);
 
   // ================================= HANDLE UI =================================
@@ -235,7 +239,7 @@ const EditEmergencyOrder = (props) => {
         <View style={{ flex: 1 }}>
           <FocusedButton
             block
-            name={MESSAGES.SET_DEFAULT}
+            name={MESSAGES.SAVE}
             disable={false}
             onPress={() => {
               // alert(JSON.stringify(order.items));

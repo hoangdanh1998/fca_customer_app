@@ -378,11 +378,12 @@ const MapScreen = (props) => {
               <>
                 <TouchableOpacity
                   onPress={() => {
-                    if (emergency)
+                    if (emergency && emergency?.items) {
+                      console.log("emergency", emergency);
                       props.navigation.navigate("CREATE_EMERGENCY_ORDER", {
                         emergencyOrder: convertEmergencyToNormal(emergency),
                       });
-                    else setVisibleEmergencyModal(true);
+                    } else setVisibleEmergencyModal(true);
                   }}
                   style={
                     bestSuggestion && partner && isShowPopup

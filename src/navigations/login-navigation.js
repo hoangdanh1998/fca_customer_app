@@ -51,15 +51,6 @@ function LoginNavigation() {
       }
     } catch (e) {}
   };
-  // const handleGetEmergency = async () => {
-  //   try {
-  //     let emergency = await AsyncStorage.getItem("@storage_Emergency");
-  //     if (emergency !== null) {
-  //       emergency = JSON.parse(emergency);
-  //       dispatch(getEmergency(emergency));
-  //     }
-  //   } catch (e) {}
-  // };
 
   const handleLogOut = () => {
     dispatch(signOut());
@@ -76,9 +67,7 @@ function LoginNavigation() {
     <NavigationContainer>
       <LoginStack.Navigator headerMode="none">
         {isLoading ? (
-          <LoginStack.Screen 
-          name="LOADING_PAGE" 
-          component={LoadingPage} />
+          <LoginStack.Screen name="LOADING_PAGE" component={LoadingPage} />
         ) : token == null ? (
           <LoginStack.Screen
             name="LOGIN"

@@ -274,33 +274,33 @@ export default function Navigation(props) {
             backgroundColor: DARK_COLOR,
           },
           headerLeft: HeaderBackButton,
-          // headerRight: () => (
-          //   <View
-          //     style={{
-          //       flexDirection: "row",
-          //       justifyContent: "space-between",
-          //       width: "120%",
-          //     }}
-          //   >
-          //     <Icon
-          //       name="pencil-outline"
-          //       style={{ color: LIGHT_COLOR }}
-          //       onPress={() => {
-          //         navigation.navigate("EDIT_EMERGENCY_ORDER", {
-          //           isEmergency: true,
-          //         });
-          //       }}
-          //     />
-          //     <Icon
-          //       name="trash-outline"
-          //       style={{ color: LIGHT_COLOR }}
-          //       onPress={() => {
-          //         // navigation.navigate("MY_PROFILE");
-          //         alert("Delete profile");
-          //       }}
-          //     />
-          //   </View>
-          // ),
+          headerRight: () => (
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                width: "120%",
+              }}
+            >
+              <Icon
+                name="pencil-outline"
+                style={{ color: LIGHT_COLOR }}
+                onPress={() => {
+                  navigation.navigate("EDIT_EMERGENCY_ORDER", {
+                    isEmergency: true,
+                  });
+                }}
+              />
+              <Icon
+                name="trash-outline"
+                style={{ color: LIGHT_COLOR }}
+                onPress={() => {
+                  // navigation.navigate("MY_PROFILE");
+                  alert("Delete profile");
+                }}
+              />
+            </View>
+          ),
         })}
       />
       <Stack.Screen
