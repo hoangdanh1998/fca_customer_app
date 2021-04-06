@@ -93,3 +93,50 @@ export const ResponseStatus = {
 };
 
 export const ID_ACCOUNT = "67babaeb-3a80-4c35-8695-0305083e88fd";
+
+export const CUSTOMER_ADDRESS = [
+  {
+    id: "a4b1e81e-0e8b-4d1b-99bb-74aee590b652",
+    label: "Thủ Đức",
+    description:
+      "Trường Đại học FPT, Khu Công Nghệ Cao, Long Thạnh Mỹ, District 9, Ho Chi Minh City, Vietnam",
+    latitude: "10.857794429942652",
+    longitude: "106.75784111022949",
+    createdAt: "2021-02-24T03:18:59.314Z",
+    updatedAt: "2021-02-24T03:18:59.314Z",
+    deletedAt: null,
+  },
+  {
+    id: "756b8d21-ffc7-4ebd-b632-0c84e4a4d5d9",
+    longitude: "106.8075766",
+    latitude: "10.8351754",
+    label: "",
+    createdAt: "2021-04-05 16:33:20.958+07",
+    updatedAt: "2021-04-05 16:33:20.958+07",
+    deletedAt: null,
+    description:
+      "FPT Software F-Town 3, Đường Võ Chí Công, Long Thạnh Mỹ, District 9, Ho Chi Minh City, Vietnam",
+  },
+  {
+    id: "adee3ed8-662c-4850-acd6-887fdbd0edfd",
+    longitude: "106.679275",
+    latitude: "10.827614",
+    label: "",
+    createdAt: "2021-04-05 16:33:20.958+07",
+    updatedAt: "2021-04-05 16:33:20.958+07",
+    deletedAt: null,
+    description:
+      "Moda House Coffe, phường 10, Gò Vấp, Ho Chi Minh City, Vietnam",
+  },
+  {
+    id: "757b3ea3-da85-407c-be59-100dec783346",
+    longitude: "106.6934509",
+    latitude: "10.8231406",
+    label: "",
+    createdAt: "2021-04-05 16:33:20.958+07",
+    updatedAt: "2021-04-05 16:33:20.958+07",
+    deletedAt: null,
+    description:
+      "Emart Go Vap, Đường Phan Văn Trị, Phường 5, Gò Vấp, Ho Chi Minh City, Vietnam",
+  },
+];

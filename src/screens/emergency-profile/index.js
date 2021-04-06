@@ -138,7 +138,7 @@ const EmergencyProfile = (props) => {
           <View style={{ flex: 1 }}>
             <FocusedButton
               block
-              name={MESSAGES.SET_DEFAULT}
+              name={MESSAGES.ORDER}
               disable={false}
               onPress={() => {
                 console.log("press");
