@@ -11,10 +11,10 @@ const EditQuantityModal = (props) => {
   const visible = props.visible;
   const item = props.item;
   return (
-    <CardItem style={{ display: visible, backgroundColor: LIGHT_COLOR }}>
+    <CardItem style={{ display: visible }}>
       <Left style={{ flex: 2.5 }}></Left>
       <Body style={{ flex: 5 }}>
-        <CardItem style={{ display: visible, backgroundColor: LIGHT_COLOR }}>
+        <CardItem style={{ display: visible }}>
           <Left style={{ flex: 1 }}>
             <Icon
               style={styles.icon}

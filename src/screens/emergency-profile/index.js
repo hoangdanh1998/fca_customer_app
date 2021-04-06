@@ -44,7 +44,7 @@ const EmergencyProfile = (props) => {
       setProfile(convertedProfile);
     }
     setIsLoading(false);
-  }, []);
+  }, [loadedProfile]);
 
   // ================================= HANDLE UI =================================
 

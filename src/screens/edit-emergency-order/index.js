@@ -18,6 +18,7 @@ import {
   Radio,
 } from "native-base";
 import { TouchableWithoutFeedback, ActivityIndicator } from "react-native";
+import { CommonActions } from "@react-navigation/native";
 import NumberFormat from "react-number-format";
 import { withNavigation } from "@react-navigation/compat";
 import { Divider } from "react-native-elements";
@@ -43,6 +44,7 @@ import {
   getDestination,
 } from "../../redux/actions/emergency";
 import { convertEmergencyToNormal } from "../../utils/utils";
+import NotificationModal from "../../components/atoms/notification-modal";
 
 init(LANGUAGE.VI);
 const EditEmergencyOrder = (props) => {
@@ -56,6 +58,10 @@ const EditEmergencyOrder = (props) => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [displayId, setDisplayId] = useState("");
+  const [visibleNotificationModal, setVisibleNotificationModal] = useState(
+    false
+  );
+  const [messageNotificationModal, setMessageNotificationModal] = useState("");
 
   const [partner, setPartner] = useState();
   const [selectedDestination, setSelectedDestination] = useState();
@@ -122,9 +128,24 @@ const EditEmergencyOrder = (props) => {
     console.log("param", param);
     try {
       await dispatch(createEmergency(param));
-      props.navigation.navigate("EMERGENCY_PROFILE");
+      setVisibleNotificationModal(true);
+      setMessageNotificationModal(MESSAGES.SUCCESS);
+      setTimeout(() => {
+        setVisibleNotificationModal(false);
+        // props.navigation.navigate("EMERGENCY_PROFILE");
+        props.navigation.dispatch(
+          CommonActions.navigate({
+            name: "EMERGENCY_PROFILE",
+          })
+        );
+      }, NOTICE_DURATION);
     } catch (error) {
       console.log("error", error);
+      setVisibleNotificationModal(true);
+      setMessageNotificationModal(MESSAGES.FAIL);
+      setTimeout(() => {
+        setVisibleNotificationModal(false);
+      }, NOTICE_DURATION);
     }
   };
   useEffect(() => {
@@ -249,13 +270,17 @@ const EditEmergencyOrder = (props) => {
               name={MESSAGES.SAVE}
               disable={false}
               onPress={() => {
-                // alert(JSON.stringify(order.items));
                 handleCreateEmergency();
               }}
             />
           </View>
         </Footer>
       ) : null}
+      <NotificationModal
+        visible={visibleNotificationModal}
+        message={messageNotificationModal}
+        title={MESSAGES.TITLE_NOTIFICATION}
+      />
     </Root>
   ) : (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
