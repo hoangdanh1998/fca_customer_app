@@ -1,7 +1,7 @@
 import moment from "moment";
 import { ResponseStatus } from "../../constants/index";
 import api from "../../service/fca-api/fca-api";
-import { ACCOUNT_ACTION, EMERGENCY_ACTION } from "../action-types/actions";
+import { EMERGENCY_ACTION } from "../action-types/actions";
 
 export const createEmergency = (param) => {
   return async (dispatch) => {
@@ -72,6 +72,20 @@ export const getHistory = (param) => {
     dispatch({
       type: EMERGENCY_ACTION.GET_HISTORY,
       payload: response.data.data.orders,
+    });
+  };
+};
+
+export const getPartnerInformation = (param) => {
+  return async (dispatch) => {
+    const response = await api.get(`/partner/${param}`);
+    if (response.data.meta.status !== ResponseStatus.SUCCESS) {
+      throw new Error("Something went wrong");
+    }
+
+    dispatch({
+      type: EMERGENCY_ACTION.GET_PARTNER,
+      payload: response,
     });
   };
 };

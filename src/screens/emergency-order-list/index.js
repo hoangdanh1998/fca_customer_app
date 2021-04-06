@@ -1,24 +1,15 @@
-import { withNavigation } from "@react-navigation/compat";
-import { Content, List, Text } from "native-base";
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import OrderCard from "../../components/molecules/order-card/index";
-import { OrderStatus } from "../../constants";
-import { ORDER_ACTIONS } from "../../redux/action-types/actions";
-import {
-  setDestinationLocation,
-  setPartnerLocation,
-} from "../../redux/actions/map";
-import { getHistory } from "../../redux/actions/emergency";
+import { Content, List, Text, View } from "native-base";
+import { ActivityIndicator } from "react-native";
 import EmergencyPartnerCard from "../../components/molecules/emergency-partner-card";
+import { withNavigation } from "@react-navigation/compat";
+import { PRIMARY_LIGHT_COLOR, LANGUAGE } from "../../constants";
+import { getHistory } from "../../redux/actions/emergency";
+import { IMLocalized, init } from "../../i18n/IMLocalized";
 
+init(LANGUAGE.VI);
 const EmergencyOrderList = (props) => {
-  const arrEndpointStatus = [
-    OrderStatus.CLOSURE,
-    OrderStatus.RECEPTION,
-    OrderStatus.REJECTION,
-    OrderStatus.CANCELLATION,
-  ];
   const handleNextScreen = (order) => {
     props.navigation.navigate("EDIT_EMERGENCY_ORDER", { id: order.id });
   };
@@ -26,6 +17,7 @@ const EmergencyOrderList = (props) => {
     return state.emergency.suggestionEmergency;
   });
   const customer = useSelector((state) => state.account.customer);
+  const [isLoading, setIsLoading] = useState(true);
 
   const dispatch = useDispatch();
   const loadSuggestionEmergency = useCallback(async () => {
@@ -37,25 +29,35 @@ const EmergencyOrderList = (props) => {
   }, [dispatch]);
   useEffect(() => {
     loadSuggestionEmergency();
+    setIsLoading(false);
   }, [dispatch, loadSuggestionEmergency]);
-  return (
+
+  const handleOnPressPartner = (partner) => {
+    props.navigation.navigate("EDIT_EMERGENCY_ORDER", {
+      selectedPartner: partner,
+    });
+  };
+
+  return isLoading ? (
+    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <ActivityIndicator size="large" color={PRIMARY_LIGHT_COLOR} />
+    </View>
+  ) : (
     <Content>
       {suggestionEmergency.length > 0 ? (
         <List
           dataArray={suggestionEmergency}
           renderRow={(partner) => (
-            // <OrderCard
-            //   order={item}
-            //   onNext={() => {
-            //     handleNextScreen(item);
-            //     // props.navigation.navigate("EDIT_EMERGENCY_ORDER");
-            //   }}
-            // />
-            <EmergencyPartnerCard emergencyPartner={partner} />
+            <EmergencyPartnerCard
+              onNext={(p) => {
+                handleOnPressPartner(p);
+              }}
+              emergencyPartner={partner}
+            />
           )}
         />
       ) : (
-        <Text>Bạn chưa có đơn hàng nào</Text>
+        <Text>{IMLocalized("wording-no-data")}</Text>
       )}
     </Content>
   );

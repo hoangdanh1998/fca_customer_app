@@ -62,3 +62,14 @@ export const convertEmergencyToNormal = (emergency) => {
     },
   };
 };
+
+export const convertPartnerItemToEmergencyItem = (item) => {
+  return {
+    favoriteItemId: "",
+    partnerItemId: item.id,
+    quantity: 0,
+    name: item.name,
+    id: item.id,
+    price: item.price,
+  };
+};

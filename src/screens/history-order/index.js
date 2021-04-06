@@ -4,6 +4,8 @@ import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import OrderCard from "../../components/molecules/order-card/index";
 import { OrderStatus } from "../../constants";
+import { IMLocalized, init } from "../../i18n/IMLocalized";
+import { LANGUAGE } from "../../constants/index";
 import { ORDER_ACTIONS } from "../../redux/action-types/actions";
 import {
   setDestinationLocation,
@@ -11,6 +13,7 @@ import {
 } from "../../redux/actions/map";
 import { getHistory } from "../../redux/actions/order";
 
+init(LANGUAGE.VI);
 const HistoryOrder = (props) => {
   //   var orderList = props.orderList;
   // var orderList = HISTORY_ORDER;
@@ -65,7 +68,7 @@ const HistoryOrder = (props) => {
           )}
         />
       ) : (
-        <Text>Bạn chưa có đơn hàng nào</Text>
+        <Text>{IMLocalized("wording-no-data")}</Text>
       )}
     </Content>
   );

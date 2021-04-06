@@ -35,31 +35,33 @@ import {
   PRIMARY_LIGHT_COLOR,
 } from "../../constants/index.js";
 
-import { getOrder, createEmergency } from "../../redux/actions/emergency";
+import {
+  getOrder,
+  createEmergency,
+  getPartnerInformation,
+} from "../../redux/actions/emergency";
 import { convertEmergencyToNormal } from "../../utils/utils";
 
 init(LANGUAGE.VI);
 const EditEmergencyOrder = (props) => {
-  const isEmergency = props.route.params.isEmergency;
-  const loadedOrder = useSelector((state) => {
-    return state.emergency.prepareEmergencyOrder;
-  });
+  const selectedPartner = props.route.params.selectedPartner;
   const customer = useSelector((state) => state.account.customer);
-  const emergency = useSelector((state) => state.emergency.emergency);
+  const loadedPartner = useSelector((state) => state.emergency.partner);
 
   const [isLoading, setIsLoading] = useState(true);
   const [displayId, setDisplayId] = useState("");
-  const [order, setOrder] = useState();
+
+  const [partner, setPartner] = useState();
   const dispatch = useDispatch();
-  const loadOrder = () => {
+  const loadPartner = () => {
     try {
-      dispatch(getOrder(props.route.params.id));
+      dispatch(getPartnerInformation(selectedPartner.id));
     } catch (error) {
       console.log("error", error);
     }
   };
   const updateItemQuantity = (itemParam, quantityParam) => {
-    const totalItem = order?.items?.reduce((sum, i) => {
+    const totalItem = partner.items?.reduce((sum, i) => {
       return (sum += i.quantity);
     }, 0);
     if (totalItem >= MAX_ORDER_ITEM && quantityParam > 0) {
@@ -78,17 +80,17 @@ const EditEmergencyOrder = (props) => {
         duration: NOTICE_DURATION,
         position: "bottom",
       });
-      loadOrder();
+      loadPartner();
       return;
     }
     const item = itemParam;
     item.quantity += quantityParam;
-    const index = order.items.findIndex((i) => {
+    const index = partner.items.findIndex((i) => {
       return i.id === item.id;
     });
-    const newOrder = order;
-    newOrder.items[index] = { ...item };
-    setOrder({ ...newOrder });
+    const newPartner = partner;
+    newPartner.items[index] = { ...item };
+    setPartner({ ...newPartner });
   };
   const handleCreateEmergency = async () => {
     const items = order.items.filter((item) => item.quantity > 0);
@@ -114,20 +116,13 @@ const EditEmergencyOrder = (props) => {
   };
   useEffect(() => {
     setIsLoading(true);
-    if (isEmergency) {
-      setOrder(convertEmergencyToNormal(emergency).order);
-      setIsLoading(false);
-    } else loadOrder();
+    loadPartner();
   }, []);
   useEffect(() => {
-    // setOrder(loadedOrder);
-    // setIsLoading(false);
-    // console.log("order", loadedOrder);
-    if (isEmergency) {
-      setOrder(convertEmergencyToNormal(emergency).order);
-    } else setOrder(loadedOrder);
+    setPartner(loadedPartner);
     setIsLoading(false);
-  }, [loadedOrder]);
+    console.log("loadedPartner", loadedPartner);
+  }, [loadedPartner]);
 
   // ================================= HANDLE UI =================================
 
@@ -135,39 +130,35 @@ const EditEmergencyOrder = (props) => {
     <Root>
       <Content style={styles.content}>
         <View style={{ backgroundColor: "white", flex: 1 }}>
-          <H3 style={styles.title}>{order?.partner?.name}</H3>
+          <H3 style={styles.title}>{partner?.name}</H3>
           <Text
             note
             style={{ color: DARK_COLOR, width: "95%", marginLeft: "2.5%" }}
           >
-            {order?.partner?.address?.description}
+            {partner?.address?.description}
           </Text>
           <List
-            dataArray={order?.items}
-            renderRow={(item) =>
-              item.quantity > 0 ? (
-                <>
-                  <TouchableWithoutFeedback
-                    onPress={() => {
-                      setDisplayId(displayId === item.id ? "" : item.id);
-                    }}
-                  >
-                    <View>
-                      <OrderDetailCard item={item} />
-                      <Divider style={{ backgroundColor: DARK_COLOR }} />
-                    </View>
-                  </TouchableWithoutFeedback>
-                  <EditQuantityModal
-                    item={item}
-                    visible={item.id === displayId ? "flex" : "none"}
-                    removeItem={() => updateItemQuantity(item, -1)}
-                    addItem={() => updateItemQuantity(item, 1)}
-                  />
-                </>
-              ) : (
-                <View></View>
-              )
-            }
+            dataArray={partner.items}
+            renderRow={(item) => (
+              <>
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    setDisplayId(displayId === item.id ? "" : item.id);
+                  }}
+                >
+                  <View>
+                    <OrderDetailCard item={item} />
+                    <Divider style={{ backgroundColor: DARK_COLOR }} />
+                  </View>
+                </TouchableWithoutFeedback>
+                <EditQuantityModal
+                  item={item}
+                  visible={item.id === displayId ? "flex" : "none"}
+                  removeItem={() => updateItemQuantity(item, -1)}
+                  addItem={() => updateItemQuantity(item, 1)}
+                />
+              </>
+            )}
           />
           <CardItem style={{ flex: 1 }}>
             <Left style={{ flex: 3 }}>
@@ -177,7 +168,7 @@ const EditEmergencyOrder = (props) => {
             </Left>
             <Body style={{ flex: 4 }}>
               <H3 style={{ width: "100%", textAlign: "left" }}>
-                {order?.items?.reduce((sum, item) => {
+                {partner.items?.reduce((sum, item) => {
                   return (sum += item.quantity);
                 }, 0)}
                 {` ${IMLocalized("wording-item")}`}
@@ -185,7 +176,7 @@ const EditEmergencyOrder = (props) => {
             </Body>
             <Right style={{ flex: 3 }}>
               <NumberFormat
-                value={order?.items?.reduce((sum, item) => {
+                value={partner.items?.reduce((sum, item) => {
                   return (sum += item.quantity * item.price);
                 }, 0)}
                 displayType={"text"}
@@ -199,7 +190,7 @@ const EditEmergencyOrder = (props) => {
             </Right>
           </CardItem>
 
-          <View
+          {/* <View
             style={{
               flex: 1,
               marginTop: "5%",
@@ -210,7 +201,7 @@ const EditEmergencyOrder = (props) => {
             <Text note style={{ fontWeight: "bold" }}>
               {IMLocalized("wording-order-destination")}
             </Text>
-            {order?.destination?.label ? (
+            {destination?.label ? (
               <CardItem style={{ flex: 1 }}>
                 <Left style={{ flex: 1 }}>
                   <Text note style={{ fontWeight: "bold" }}>
@@ -218,7 +209,7 @@ const EditEmergencyOrder = (props) => {
                   </Text>
                 </Left>
                 <Body style={{ flex: 4 }}>
-                  <Text note>{order?.destination?.label}</Text>
+                  <Text note>{destination?.label}</Text>
                 </Body>
               </CardItem>
             ) : null}
@@ -229,25 +220,29 @@ const EditEmergencyOrder = (props) => {
                 </Text>
               </Left>
               <Body style={{ flex: 4 }}>
-                <Text note>{order?.destination?.description}</Text>
+                <Text note>{destination?.description}</Text>
               </Body>
             </CardItem>
-          </View>
+          </View> */}
         </View>
       </Content>
-      <Footer style={styles.footer}>
-        <View style={{ flex: 1 }}>
-          <FocusedButton
-            block
-            name={MESSAGES.SAVE}
-            disable={false}
-            onPress={() => {
-              // alert(JSON.stringify(order.items));
-              handleCreateEmergency();
-            }}
-          />
-        </View>
-      </Footer>
+      {partner.items?.reduce((sum, item) => {
+        return (sum += item.quantity);
+      }, 0) !== 0 ? (
+        <Footer style={styles.footer}>
+          <View style={{ flex: 1 }}>
+            <FocusedButton
+              block
+              name={MESSAGES.SAVE}
+              disable={false}
+              onPress={() => {
+                // alert(JSON.stringify(order.items));
+                handleCreateEmergency();
+              }}
+            />
+          </View>
+        </Footer>
+      ) : null}
     </Root>
   ) : (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
