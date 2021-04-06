@@ -1,23 +1,23 @@
 import {
   createStackNavigator,
-  HeaderBackButton
+  HeaderBackButton,
 } from "@react-navigation/stack";
 import { Icon, View } from "native-base";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import {
   APP_NAME,
   DARK_COLOR,
   LANGUAGE,
-  LIGHT_COLOR
+  LIGHT_COLOR,
 } from "../constants/index";
 import { IMLocalized, init } from "../i18n/IMLocalized";
 import { setDeviceKey } from "../redux/actions/account";
 import CreateOrder from "../screens/create-order";
 import DeliveryOrder from "../screens/delivery-order";
-import EditEmergencyProfile from "../screens/edit-emergency-profile";
+import EditEmergencyOrder from "../screens/edit-emergency-order";
 import EmergencyProfile from "../screens/emergency-profile";
-import EmergencyProfileList from "../screens/emergency-profile-list";
+import EmergencyOrderList from "../screens/emergency-order-list";
 import HistoryOrder from "../screens/history-order";
 import HistoryOrderDetails from "../screens/history-order-details";
 import MapScreenEmergency from "../screens/map/emergency-google-map";
@@ -30,19 +30,22 @@ import SavedAddressList from "../screens/saved-address-list";
 import StoreDetails from "../screens/store-details";
 import StoreDetailsEmergency from "../screens/store-details-emergency";
 import { updateExpoToken } from "../service/account/account";
-import { getDeviceKeyOnChange, setDeviceKeyFirebase } from "../service/firebase/firebase-realtime";
+import {
+  getDeviceKeyOnChange,
+  setDeviceKeyFirebase,
+} from "../service/firebase/firebase-realtime";
 import { registerForPushNotificationsAsync } from "../service/notification/expo-notification";
+import CreateEmergencyOrder from "../screens/create-emergency-order";
 
 // import EmergencyMapScreen from '../screens/map/emergency-google-map'
 const Stack = createStackNavigator();
 export default function Navigation(props) {
-
-  const deviceKey = useSelector(state => state.account.deviceKey);
-  const customer = useSelector(state => state.account.customer);
+  const deviceKey = useSelector((state) => state.account.deviceKey);
+  const customer = useSelector((state) => state.account.customer);
   const [isShowAlert, setIsShowAlert] = useState(false);
   const [listenAccount, setListenAccount] = useState(null);
   const dispatch = useDispatch();
-  
+
   const handleSetDeviceKey = async () => {
     const deviceKey = await registerForPushNotificationsAsync();
     console.log("device token:", deviceKey);
@@ -51,39 +54,35 @@ export default function Navigation(props) {
     await setDeviceKeyFirebase(customer.account.id, deviceKey);
 
     dispatch(setDeviceKey(deviceKey));
-  }
+  };
 
   init(LANGUAGE.VI);
   const handleLogOut = props.route.params.handleLogOut;
   useEffect(() => {
     handleSetDeviceKey();
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (listenAccount && deviceKey) {
       if (deviceKey !== listenAccount.deviceKey) {
-        alert('Tài khoản được đăng nhập từ thiết bị khác')
+        alert("Tài khoản được đăng nhập từ thiết bị khác");
         handleLogOut();
       }
     }
-  }, [listenAccount, deviceKey])
+  }, [listenAccount, deviceKey]);
 
   useEffect(() => {
     if (customer) {
       getDeviceKeyOnChange(customer.account.id, (account) => {
         setListenAccount(account);
-      })
+      });
     }
-  }, [])
-
-
-
+  }, []);
 
   // setDeviceKey(customer?.account?.id, deviceKey);
   return (
     // <NavigationContainer>
     <Stack.Navigator>
-      
       <Stack.Screen
         name="MAP_VIEW"
         component={MapScreen}
@@ -157,18 +156,6 @@ export default function Navigation(props) {
           headerLeft: HeaderBackButton,
         }}
       />
-      {/* <Stack.Screen
-        name="EMERGENCY_MAP"
-        component={EmergencyMapScreen}
-        options={{
-          title: IMLocalized("wording-set-default"),
-          headerTintColor: LIGHT_COLOR,
-          headerStyle: {
-            backgroundColor: DARK_COLOR,
-          },
-          headerLeft: HeaderBackButton,
-        }}
-      /> */}
       <Stack.Screen
         name="ADD_ADDRESS"
         component={AddressScreen}
@@ -184,6 +171,18 @@ export default function Navigation(props) {
       <Stack.Screen
         name="CREATE_ORDER"
         component={CreateOrder}
+        options={{
+          title: IMLocalized("title-order-information"),
+          headerTintColor: LIGHT_COLOR,
+          headerStyle: {
+            backgroundColor: DARK_COLOR,
+          },
+          headerLeft: HeaderBackButton,
+        }}
+      />
+      <Stack.Screen
+        name="CREATE_EMERGENCY_ORDER"
+        component={CreateEmergencyOrder}
         options={{
           title: IMLocalized("title-order-information"),
           headerTintColor: LIGHT_COLOR,
@@ -275,7 +274,7 @@ export default function Navigation(props) {
             backgroundColor: DARK_COLOR,
           },
           headerLeft: HeaderBackButton,
-          headerRight: (selectedStore) => (
+          headerRight: () => (
             <View
               style={{
                 flexDirection: "row",
@@ -287,8 +286,9 @@ export default function Navigation(props) {
                 name="pencil-outline"
                 style={{ color: LIGHT_COLOR }}
                 onPress={() => {
-
-                  alert("Edit profile");
+                  navigation.navigate("EDIT_EMERGENCY_ORDER", {
+                    isEmergency: true,
+                  });
                 }}
               />
               <Icon
@@ -304,8 +304,8 @@ export default function Navigation(props) {
         })}
       />
       <Stack.Screen
-        name="EMERGENCY_PROFILE_LIST"
-        component={EmergencyProfileList}
+        name="EMERGENCY_ORDER_LIST"
+        component={EmergencyOrderList}
         options={({ navigation, route }) => ({
           title: IMLocalized("title-emergency-profile"),
           headerTintColor: LIGHT_COLOR,
@@ -316,8 +316,8 @@ export default function Navigation(props) {
         })}
       />
       <Stack.Screen
-        name="EDIT_EMERGENCY"
-        component={EditEmergencyProfile}
+        name="EDIT_EMERGENCY_ORDER"
+        component={EditEmergencyOrder}
         options={({ navigation, route }) => ({
           title: IMLocalized("title-emergency-profile"),
           headerTintColor: LIGHT_COLOR,
@@ -343,5 +343,3 @@ export default function Navigation(props) {
     // </NavigationContainer>
   );
 }
-
-

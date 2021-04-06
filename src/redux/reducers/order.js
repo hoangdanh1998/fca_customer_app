@@ -5,6 +5,8 @@ import { ORDER_ACTIONS } from "../action-types/actions";
 const initialState = {
   createdOrder: null,
   order: {},
+  prepareEmergencyOrder: {},
+  originalPrepareEmergencyOrder: {},
   history: [],
 };
 
@@ -28,7 +30,12 @@ const orderReducer = (state = initialState, action) => {
     }
     case ORDER_ACTIONS.GET_ORDER: {
       const data = action.payload.data.data.order;
-      return { ...state, order: data };
+      return {
+        ...state,
+        order: data,
+        prepareEmergencyOrder: data,
+        originalPrepareEmergencyOrder: data,
+      };
     }
     case ORDER_ACTIONS.GET_HISTORY: {
       const ordersHistory = action.payload;

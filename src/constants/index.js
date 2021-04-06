@@ -3,8 +3,9 @@ export const KEY_GOOGLE_MAP = "AIzaSyCbsRxuA3NGxpOMeC0UkmJTi0V2bvSyAJo";
 
 // APP CONFIG
 export const APP_NAME = "FAST COFFEE";
-export const IMAGE_1 = require("../assets/1.png");
-export const IMAGE_2 = require("../assets/2.png");
+export const IMAGE_0 = require("../assets/0b.png");
+export const IMAGE_1 = require("../assets/1b.png");
+export const IMAGE_2 = require("../assets/2bb.png");
 export const PROCESSING_MODAL_IMAGE = require("../assets/preparetakeawaycoffee.gif");
 export const AVATAR_IMAGE = require("../assets/avatar.png");
 export const PROCESSING_MODAL_COLOR = "#f0eada";
@@ -47,7 +48,7 @@ export const MESSAGES = {
   SET_DEFAULT: "set-default",
   NO_SUGGESTION: "no-suggestion",
   TITLE_NOTIFICATION: "title-notification",
-  STORE_CLOSING: "store-closing"
+  STORE_CLOSING: "store-closing",
 };
 
 // APP STATUS

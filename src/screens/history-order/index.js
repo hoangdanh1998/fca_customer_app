@@ -4,10 +4,16 @@ import React, { useCallback, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import OrderCard from "../../components/molecules/order-card/index";
 import { OrderStatus } from "../../constants";
-import { ORDER_ACTIONS } from '../../redux/action-types/actions';
-import { setDestinationLocation, setPartnerLocation } from '../../redux/actions/map';
+import { IMLocalized, init } from "../../i18n/IMLocalized";
+import { LANGUAGE } from "../../constants/index";
+import { ORDER_ACTIONS } from "../../redux/action-types/actions";
+import {
+  setDestinationLocation,
+  setPartnerLocation,
+} from "../../redux/actions/map";
 import { getHistory } from "../../redux/actions/order";
 
+init(LANGUAGE.VI);
 const HistoryOrder = (props) => {
   //   var orderList = props.orderList;
   // var orderList = HISTORY_ORDER;
@@ -15,29 +21,26 @@ const HistoryOrder = (props) => {
     OrderStatus.CLOSURE,
     OrderStatus.RECEPTION,
     OrderStatus.REJECTION,
-    OrderStatus.CANCELLATION
+    OrderStatus.CANCELLATION,
   ];
   const handleNextScreen = (order) => {
-    
     if (arrEndpointStatus.includes(order.status)) {
       props.navigation.navigate("HISTORY_ORDER_DETAILS", {
         order: order,
       });
-    }
-    else {
+    } else {
       dispatch({
         type: ORDER_ACTIONS.SET_CREATED_ORDER,
         payload: order,
       });
-      dispatch(setPartnerLocation(order.partner.address))
-      dispatch(setDestinationLocation(order.destination))
+      dispatch(setPartnerLocation(order.partner.address));
+      dispatch(setDestinationLocation(order.destination));
       props.navigation.navigate("ORDER_DETAIL", {
         order: order,
-        screenName: props.route.name
+        screenName: props.route.name,
       });
     }
-
-  }
+  };
   const history = useSelector((state) => {
     return state.order.history;
   });
@@ -57,15 +60,16 @@ const HistoryOrder = (props) => {
   }, [dispatch, loadHistory]);
   return (
     <Content>
-      {history.length > 0 ? (<List
-        dataArray={history}
-        renderRow={(item) => (
-          <OrderCard
-            order={item}
-            onNext={handleNextScreen}
-          />
+      {history.length > 0 ? (
+        <List
+          dataArray={history}
+          renderRow={(item) => (
+            <OrderCard order={item} onNext={handleNextScreen} />
           )}
-      />) : <Text>Bạn chưa có đơn hàng nào</Text>}
+        />
+      ) : (
+        <Text>{IMLocalized("wording-no-data")}</Text>
+      )}
     </Content>
   );
 };
