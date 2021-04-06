@@ -15,8 +15,10 @@ import {
   Right,
   Root,
   Toast,
+  Radio,
 } from "native-base";
 import { TouchableWithoutFeedback, ActivityIndicator } from "react-native";
+import { CommonActions } from "@react-navigation/native";
 import NumberFormat from "react-number-format";
 import { withNavigation } from "@react-navigation/compat";
 import { Divider } from "react-native-elements";
@@ -39,23 +41,41 @@ import {
   getOrder,
   createEmergency,
   getPartnerInformation,
+  getDestination,
 } from "../../redux/actions/emergency";
 import { convertEmergencyToNormal } from "../../utils/utils";
+import NotificationModal from "../../components/atoms/notification-modal";
 
 init(LANGUAGE.VI);
 const EditEmergencyOrder = (props) => {
   const selectedPartner = props.route.params.selectedPartner;
+
   const customer = useSelector((state) => state.account.customer);
   const loadedPartner = useSelector((state) => state.emergency.partner);
+  const destinationList = useSelector(
+    (state) => state.emergency.destinationList
+  );
 
   const [isLoading, setIsLoading] = useState(true);
   const [displayId, setDisplayId] = useState("");
+  const [visibleNotificationModal, setVisibleNotificationModal] = useState(
+    false
+  );
+  const [messageNotificationModal, setMessageNotificationModal] = useState("");
 
   const [partner, setPartner] = useState();
+  const [selectedDestination, setSelectedDestination] = useState();
   const dispatch = useDispatch();
   const loadPartner = () => {
     try {
       dispatch(getPartnerInformation(selectedPartner.id));
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+  const loadDestinationList = () => {
+    try {
+      dispatch(getDestination(customer.id));
     } catch (error) {
       console.log("error", error);
     }
@@ -93,36 +113,54 @@ const EditEmergencyOrder = (props) => {
     setPartner({ ...newPartner });
   };
   const handleCreateEmergency = async () => {
-    const items = order.items.filter((item) => item.quantity > 0);
+    const items = partner.items.filter((item) => item.quantity > 0);
     const param = {
       customerId: customer.id,
-      destinationId: order.destination.id,
+      destinationId: selectedDestination.id,
       items: items.map((item) => {
         return {
           partnerItemId: item.id,
           quantity: item.quantity,
-          favoriteItemId: isEmergency ? item.favoriteItemId : "",
+          favoriteItemId: item.favoriteItemId,
         };
       }),
     };
     console.log("param", param);
     try {
       await dispatch(createEmergency(param));
-      alert("Success!");
-      props.navigation.navigate("EMERGENCY_PROFILE");
+      setVisibleNotificationModal(true);
+      setMessageNotificationModal(MESSAGES.SUCCESS);
+      setTimeout(() => {
+        setVisibleNotificationModal(false);
+        // props.navigation.navigate("EMERGENCY_PROFILE");
+        props.navigation.dispatch(
+          CommonActions.navigate({
+            name: "EMERGENCY_PROFILE",
+          })
+        );
+      }, NOTICE_DURATION);
     } catch (error) {
       console.log("error", error);
+      setVisibleNotificationModal(true);
+      setMessageNotificationModal(MESSAGES.FAIL);
+      setTimeout(() => {
+        setVisibleNotificationModal(false);
+      }, NOTICE_DURATION);
     }
   };
   useEffect(() => {
     setIsLoading(true);
     loadPartner();
+    loadDestinationList();
   }, []);
   useEffect(() => {
     setPartner(loadedPartner);
+    setSelectedDestination(
+      destinationList?.length > 0 ? destinationList[0] : {}
+    );
     setIsLoading(false);
-    console.log("loadedPartner", loadedPartner);
-  }, [loadedPartner]);
+    console.log("destinationList", destinationList);
+  }, [loadedPartner, destinationList]);
 
   // ================================= HANDLE UI =================================
 
@@ -190,7 +228,7 @@ const EditEmergencyOrder = (props) => {
             </Right>
           </CardItem>
 
-          {/* <View
+          <View
             style={{
               flex: 1,
               marginTop: "5%",
@@ -201,29 +239,25 @@ const EditEmergencyOrder = (props) => {
             <Text note style={{ fontWeight: "bold" }}>
               {IMLocalized("wording-order-destination")}
             </Text>
-            {destination?.label ? (
-              <CardItem style={{ flex: 1 }}>
-                <Left style={{ flex: 1 }}>
-                  <Text note style={{ fontWeight: "bold" }}>
-                    {IMLocalized("wording-saved-address-label")}
-                  </Text>
-                </Left>
-                <Body style={{ flex: 4 }}>
-                  <Text note>{destination?.label}</Text>
-                </Body>
-              </CardItem>
-            ) : null}
-            <CardItem style={{ flex: 1 }}>
-              <Left style={{ flex: 1 }}>
-                <Text note style={{ fontWeight: "bold" }}>
-                  {IMLocalized("wording-address")}
-                </Text>
-              </Left>
-              <Body style={{ flex: 4 }}>
-                <Text note>{destination?.description}</Text>
-              </Body>
-            </CardItem>
-          </View> */}
+            <List
+              dataArray={destinationList}
+              renderRow={(destination) => (
+                <ListItem>
+                  <Radio
+                    color={PRIMARY_LIGHT_COLOR}
+                    selectedColor={DARK_COLOR}
+                    selected={selectedDestination.id === destination.id}
+                    onPress={() => {
+                      setSelectedDestination(destination);
+                    }}
+                  />
+                  <Body>
+                    <Text>{destination.description}</Text>
+                  </Body>
+                </ListItem>
+              )}
+            />
+          </View>
         </View>
       </Content>
       {partner.items?.reduce((sum, item) => {
@@ -236,13 +270,17 @@ const EditEmergencyOrder = (props) => {
               name={MESSAGES.SAVE}
               disable={false}
               onPress={() => {
-                // alert(JSON.stringify(order.items));
                 handleCreateEmergency();
               }}
             />
           </View>
         </Footer>
       ) : null}
+      <NotificationModal
+        visible={visibleNotificationModal}
+        message={messageNotificationModal}
+        title={MESSAGES.TITLE_NOTIFICATION}
+      />
     </Root>
   ) : (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>

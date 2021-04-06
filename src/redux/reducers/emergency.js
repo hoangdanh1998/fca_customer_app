@@ -6,11 +6,12 @@ import { convertPartnerItemToEmergencyItem } from "../../utils/utils";
 
 const initialState = {
   createdEmergency: null,
-  prepareEmergencyOrder: {},
+  // prepareEmergencyOrder: {},
   history: [],
   emergency: {},
   suggestionEmergency: [],
   partner: {},
+  destinationList: [],
 };
 
 const storeEmergency = async (emergency) => {
@@ -23,13 +24,6 @@ const storeEmergency = async (emergency) => {
 
 const emergencyReducer = (state = initialState, action) => {
   switch (action.type) {
-    case EMERGENCY_ACTION.GET_ORDER: {
-      const data = action.payload.data.data.order;
-      return {
-        ...state,
-        prepareEmergencyOrder: data,
-      };
-    }
     case EMERGENCY_ACTION.GET_HISTORY: {
       const ordersHistory = action.payload;
       const suggestionEmergency = [];
@@ -57,6 +51,9 @@ const emergencyReducer = (state = initialState, action) => {
     }
     case EMERGENCY_ACTION.GET_EMERGENCY: {
       return { ...state, emergency: action.payload };
+    }
+    case EMERGENCY_ACTION.GET_DESTINATION: {
+      return { ...state, destinationList: action.payload };
     }
     case EMERGENCY_ACTION.GET_PARTNER: {
       var data = action.payload.data.data.partner;

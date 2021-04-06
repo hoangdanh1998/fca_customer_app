@@ -286,19 +286,17 @@ export default function Navigation(props) {
                 name="pencil-outline"
                 style={{ color: LIGHT_COLOR }}
                 onPress={() => {
-                  navigation.navigate("EDIT_EMERGENCY_ORDER", {
-                    isEmergency: true,
-                  });
+                  navigation.navigate("EMERGENCY_ORDER_LIST");
                 }}
               />
-              <Icon
+              {/* <Icon
                 name="trash-outline"
                 style={{ color: LIGHT_COLOR }}
                 onPress={() => {
-                  // navigation.navigate("MY_PROFILE");
+                  navigation.navigate("MY_PROFILE");
                   alert("Delete profile");
                 }}
-              />
+              /> */}
             </View>
           ),
         })}

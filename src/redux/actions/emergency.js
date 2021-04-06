@@ -1,5 +1,5 @@
 import moment from "moment";
-import { ResponseStatus } from "../../constants/index";
+import { CUSTOMER_ADDRESS, ResponseStatus } from "../../constants/index";
 import api from "../../service/fca-api/fca-api";
 import { EMERGENCY_ACTION } from "../action-types/actions";
 
@@ -86,6 +86,15 @@ export const getPartnerInformation = (param) => {
     dispatch({
       type: EMERGENCY_ACTION.GET_PARTNER,
       payload: response,
+    });
+  };
+};
+
+export const getDestination = (param) => {
+  return async (dispatch) => {
+    dispatch({
+      type: EMERGENCY_ACTION.GET_DESTINATION,
+      payload: CUSTOMER_ADDRESS,
     });
   };
 };
