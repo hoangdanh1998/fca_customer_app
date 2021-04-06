@@ -10,6 +10,7 @@ import {
   setPartnerLocation,
 } from "../../redux/actions/map";
 import { getHistory } from "../../redux/actions/emergency";
+import EmergencyPartnerCard from "../../components/molecules/emergency-partner-card";
 
 const EmergencyOrderList = (props) => {
   const arrEndpointStatus = [
@@ -21,13 +22,13 @@ const EmergencyOrderList = (props) => {
   const handleNextScreen = (order) => {
     props.navigation.navigate("EDIT_EMERGENCY_ORDER", { id: order.id });
   };
-  const history = useSelector((state) => {
-    return state.emergency.history;
+  const suggestionEmergency = useSelector((state) => {
+    return state.emergency.suggestionEmergency;
   });
   const customer = useSelector((state) => state.account.customer);
 
   const dispatch = useDispatch();
-  const loadHistory = useCallback(async () => {
+  const loadSuggestionEmergency = useCallback(async () => {
     try {
       dispatch(getHistory(customer));
     } catch (error) {
@@ -35,21 +36,22 @@ const EmergencyOrderList = (props) => {
     }
   }, [dispatch]);
   useEffect(() => {
-    loadHistory();
-  }, [dispatch, loadHistory]);
+    loadSuggestionEmergency();
+  }, [dispatch, loadSuggestionEmergency]);
   return (
     <Content>
-      {history.length > 0 ? (
+      {suggestionEmergency.length > 0 ? (
         <List
-          dataArray={history}
-          renderRow={(item) => (
-            <OrderCard
-              order={item}
-              onNext={() => {
-                handleNextScreen(item);
-                // props.navigation.navigate("EDIT_EMERGENCY_ORDER");
-              }}
-            />
+          dataArray={suggestionEmergency}
+          renderRow={(partner) => (
+            // <OrderCard
+            //   order={item}
+            //   onNext={() => {
+            //     handleNextScreen(item);
+            //     // props.navigation.navigate("EDIT_EMERGENCY_ORDER");
+            //   }}
+            // />
+            <EmergencyPartnerCard emergencyPartner={partner} />
           )}
         />
       ) : (

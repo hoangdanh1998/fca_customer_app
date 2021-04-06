@@ -8,6 +8,7 @@ const initialState = {
   prepareEmergencyOrder: {},
   history: [],
   emergency: {},
+  suggestionEmergency: [],
 };
 
 const storeEmergency = async (emergency) => {
@@ -29,25 +30,28 @@ const emergencyReducer = (state = initialState, action) => {
     }
     case EMERGENCY_ACTION.GET_HISTORY: {
       const ordersHistory = action.payload;
+      const suggestionEmergency = [];
       if (ordersHistory.length > 0) {
         ordersHistory.forEach((order) => {
-          order.transaction = order.transaction.sort((a, b) => {
-            return (
-              moment(b.createdAt, DATE_TIME_FORMAT_CALL_API) -
-              moment(a.createdAt, DATE_TIME_FORMAT_CALL_API)
-            );
-          });
+          const elementEmergency = suggestionEmergency.find(
+            (suggestion) => suggestion.partner.id === order.partner.id
+          );
+          if (elementEmergency) {
+            elementEmergency.orders.push(order);
+          } else {
+            suggestionEmergency.push({
+              partner: order.partner,
+              orders: [order],
+            });
+          }
         });
         return {
           ...state,
-          history: ordersHistory.sort((a, b) => {
-            return (
-              moment(b.createdAt, DATE_TIME_FORMAT_CALL_API) -
-              moment(a.createdAt, DATE_TIME_FORMAT_CALL_API)
-            );
+          suggestionEmergency: suggestionEmergency.sort((a, b) => {
+            return b.orders.length - a.orders.length;
           }),
         };
-      } else return { ...state, history: [] };
+      } else return { ...state, suggestionEmergency: [] };
     }
     case EMERGENCY_ACTION.GET_EMERGENCY: {
       return { ...state, emergency: action.payload };

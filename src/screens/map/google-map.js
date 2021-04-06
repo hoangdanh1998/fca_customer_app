@@ -379,7 +379,6 @@ const MapScreen = (props) => {
                 <TouchableOpacity
                   onPress={() => {
                     if (emergency && emergency?.items) {
-                      console.log("emergency", emergency);
                       props.navigation.navigate("CREATE_EMERGENCY_ORDER", {
                         emergencyOrder: convertEmergencyToNormal(emergency),
                       });
@@ -401,8 +400,7 @@ const MapScreen = (props) => {
                   show={visibleEmergencyModal}
                   showProgress={false}
                   title={IMLocalized(`title-emergency-profile`)}
-                  // message={IMLocalized(`wording-emergency-profile`)}
-                  message={`Bạn chưa có đơn hàng đặt nhanh\n\nHãy cấu hình đơn hàng đặt nhanh`}
+                  message={IMLocalized("wording-emergency-message")}
                   closeOnTouchOutside={true}
                   closeOnHardwareBackPress={false}
                   contentStyle={{ backgroundColor: LIGHT_COLOR }}

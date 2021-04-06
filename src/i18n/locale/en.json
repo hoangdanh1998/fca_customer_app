@@ -33,6 +33,7 @@
     "title-saved-address": "Saved Address",
 
     "wording-item": "item(s)",
+    "wording-an-order": "order(s)",
     "wording-my-orders": "My Orders",
     "wording-accepted": "Accepted",
     "wording-rejected": "Rejected",
@@ -69,6 +70,8 @@
     "wording-order-destination": "Destination",
     "wording-saved-address-label": "Label",
     "wording-emergency-profile": "Favorite store",
+    "wording-emergency-message": "You don't have any favorite order\n\nCreate one",
+    "wording-number-orders-in-store": "You have make ",
     "wording-search-store": "Search store",
     "wording-default-order": "Default Order",
     "wording-default-address": "Default Address",

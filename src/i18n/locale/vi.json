@@ -35,6 +35,7 @@
     "title-set-default-emergency":"Chọn đặt hàng nhanh",
 
     "wording-item": "món",
+    "wording-an-order": "đơn hàng",
     "wording-my-orders": "Đơn hàng của tôi",
     "wording-accepted": "Đặt hàng thành công",
     "wording-rejected": "Tiếc quá! Hiện tại cửa hàng này không thể phục vụ đơn hàng cho bạn.",
@@ -71,6 +72,8 @@
     "wording-order-destination": "Đi đến",
     "wording-saved-address-label": "Nhãn",
     "wording-emergency-profile": "Thiết lập đặt hàng nhanh",
+    "wording-emergency-message": "Bạn chưa có đơn hàng đặt nhanh\n\nHãy cấu hình đơn hàng đặt nhanh",
+    "wording-number-orders-in-store": "Bạn đã đặt ",
     "wording-search-store": "Tìm kiếm cửa hàng",
     "wording-default-order": "Đơn hàng mặc định",
     "wording-default-address": "Điểm đến mặc định",
