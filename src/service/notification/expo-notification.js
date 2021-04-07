@@ -1,9 +1,5 @@
-import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
-import { updateExpoToken } from '../account/account';
-import {ID_ACCOUNT} from '../../constants/index'
-import {useDispatch} from 'react-redux';
-import { setDeviceKey } from '../../redux/actions/account';
+import * as Notifications from 'expo-notifications';
 
 
 export const registerForPushNotificationsAsync = async () => {
@@ -21,13 +17,6 @@ export const registerForPushNotificationsAsync = async () => {
             return;
         }
         token = (await Notifications.getExpoPushTokenAsync()).data;
-        try {
-            await updateExpoToken(token, ID_ACCOUNT);
-        } catch (error) {
-            console.error(error);
-        }
-        // console.log("token: " + token);
-        
     } else {
         alert('Must use physical device for Push Notifications');
     }

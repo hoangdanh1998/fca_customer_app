@@ -100,12 +100,6 @@ const googleMapNavigation = () => {
     }
   });
 
-
-
-
-
-  
-
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestPermissionsAsync();
