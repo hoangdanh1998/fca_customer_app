@@ -52,19 +52,25 @@ const OrderDetails = (props) => {
       orderId: orderId,
     });
   };
+  
+  const reSuggest = () => {
+    if (suggestionStores && bestSuggestion) {
+      const length = suggestionStores.length;
+      if (length > 1) {
+        const newSuggestion = suggestionStores[length - 2];
+        const newSuggestList = suggestionStores.filter(
+          (store) => store.id !== bestSuggestion.id
+        );
+        dispatch(setStoreSuggestion(newSuggestion, newSuggestList));
+      }
+    }
+  }
 
   const handleStaffCancelOrder = () => {
     setVisibleNotificationModal(true);
     setNotificationMessage(MESSAGES.CANCELLED);
     setIsNeedHandleDismiss(true);
-    const length = suggestionStores.length;
-    if (length > 1) {
-      const newSuggestion = suggestionStores[length - 2];
-      const newSuggestList = suggestionStores.filter(
-        (store) => store.id !== bestSuggestion.id
-      );
-      dispatch(setStoreSuggestion(newSuggestion, newSuggestList));
-    }
+    reSuggest();
   };
   
   const setStatusCreatedOrder = (status) => {

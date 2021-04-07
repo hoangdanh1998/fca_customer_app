@@ -49,6 +49,18 @@ const CreateOrder = (props) => {
 
 
   
+  const reSuggest = () => {
+    if (suggestionStores && bestSuggestion) {
+      const length = suggestionStores.length;
+      if (length > 1) {
+        const newSuggestion = suggestionStores[length - 2];
+        const newSuggestList = suggestionStores.filter(
+          (store) => store.id !== bestSuggestion.id
+        );
+        dispatch(setStoreSuggestion(newSuggestion, newSuggestList));
+      }
+    }
+  }
 
   const submitOrder = async () => {
     try {
@@ -136,15 +148,7 @@ const CreateOrder = (props) => {
         resolve();
       }, NOTICE_DURATION);
     });
-
-    const length = suggestionStores.length;
-    if (length > 1) {
-      const newSuggestion = suggestionStores[length - 2];
-      const newSuggestList = suggestionStores.filter(
-        (store) => store.id !== bestSuggestion.id
-      );
-      dispatch(setStoreSuggestion(newSuggestion, newSuggestList));
-    }
+    reSuggest();
     props.navigation.navigate("MAP_VIEW");
   };
 
