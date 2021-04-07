@@ -50,8 +50,8 @@ export default function Navigation(props) {
     const deviceKey = await registerForPushNotificationsAsync();
     console.log("device token:", deviceKey);
 
-    updateExpoToken(deviceKey, customer.account.id);
-    await setDeviceKeyFirebase(customer.account.id, deviceKey);
+    updateExpoToken(deviceKey, customer?.account?.id);
+    await setDeviceKeyFirebase(customer?.account?.id, deviceKey);
 
     dispatch(setDeviceKey(deviceKey));
   };
@@ -73,7 +73,7 @@ export default function Navigation(props) {
 
   useEffect(() => {
     if (customer) {
-      getDeviceKeyOnChange(customer.account.id, (account) => {
+      getDeviceKeyOnChange(customer?.account?.id, (account) => {
         setListenAccount(account);
       });
     }

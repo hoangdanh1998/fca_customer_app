@@ -18,8 +18,8 @@ import {
 import { styles } from './style';
 import Feather from 'react-native-vector-icons/Feather'
 import { PRIMARY_LIGHT_COLOR, DARK_COLOR,LIGHT_COLOR} from '../../constants/index';
-import { useDispatch } from 'react-redux'
-import { login } from '../../redux/actions/account';
+import { useDispatch, useSelector } from 'react-redux'
+import { changeError, login } from '../../redux/actions/account';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = (props) => {
@@ -27,6 +27,8 @@ const Login = (props) => {
 
     const dispatch = useDispatch();
 
+
+    const errMessage = useSelector(state => state.account.errMessage);
 
     const [data, setData] = useState({
         numberPhone: '',
@@ -63,20 +65,29 @@ const Login = (props) => {
         try {
             setData({
                 ...data,
-                error: false,
+                // error: false,
                 isLoading: true
             })
-
-            await dispatch(login(phone, password));
+            console.log("phone:", phone.length);
+            dispatch(changeError(null));
+            if(phone.trim().length == 0 || password.trim().length == 0) {
+                console.log("vao day ko");
+                await dispatch(changeError("Số điện thoại và mật khẩu là bắt buộc!"));
+            } else {
+                await dispatch(login(phone, password));
+            }
 
             // props.navigation.navigate("HOME_STACK");
 
         } catch (error) {
-            setData({
-                ...data,
-                error: true,
+            // setData({
+            //     ...data,
+            //     error: true,
 
-            })
+            // })
+            console.error("handle login err", error);
+            dispatch(changeError("Số điện thoại hoặc mật khẩu không hợp lệ"));
+            
         }
 
         setData({
@@ -168,9 +179,10 @@ const Login = (props) => {
 
                             </View>
                             <View>
-                                {data.error ?
-                                    <Text style={[styles.titleText, styles.errorMessage,]}>Số điện thoại hoặc mật khẩu không hợp lệ</Text>
-                                    : null}
+                                {errMessage != null ?
+                                    <Text style={[styles.titleText, styles.errorMessage,]}>{errMessage}</Text> :
+                                    null
+                                }
                             </View>
                             <View style={styles.buttonBody}>
                                 <TouchableHighlight

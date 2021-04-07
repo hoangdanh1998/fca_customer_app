@@ -43,7 +43,7 @@ const SavedAddressList = (props) => {
   const loadAddress = async (id) => {
     try {
       // console.log(customerAccount.customer.account.id);
-      await dispatch(delAddress(customerAccount.customer.account.id, id));
+      await dispatch(delAddress(customerAccount?.customer?.account?.id, id));
     } catch (error) {
       // setError(error);
       alert(error);
