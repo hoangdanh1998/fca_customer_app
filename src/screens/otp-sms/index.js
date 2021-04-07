@@ -137,18 +137,18 @@ export default function OtpSmsScreen(props) {
                                 />
                             </View>
 
-                            <View style={[styles.rowContainer, styles.marginContainer, { justifyContent: "center" }]}>
+                            
                                 <Text style={{ ...styles.title, marginTop: 3 }}>Bạn không nhận được mã ? </Text>
-
+                                <View style={[styles.rowContainer, styles.marginContainer, { justifyContent: "center" }]}>
                                 {
                                     isShowButton
                                         ? (<TouchableHighlight
                                             onPress={() => { console.log('click'); handleReSendOtp() }}
                                             style={{ width: 100, height: 50 }}
                                         >
-                                            <Text style={[[styles.title, { marginRight: 5, color: "#004777", marginTop: 3 }]]}> Gửi lại</Text>
+                                            <Text style={[[styles.title, { marginRight: 5, color: "#004777", marginTop: 4 }]]}> Gửi lại</Text>
                                         </TouchableHighlight>)
-                                        : <Text style={[[styles.title, { marginRight: 5, marginTop: 3 }]]}> Gửi lại sau</Text>
+                                        : <Text style={[[styles.title, { marginRight: 5, marginTop: 4 }]]}> Gửi lại sau</Text>
                                 }
 
                                 <CountdownCircleTimer
