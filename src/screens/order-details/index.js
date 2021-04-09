@@ -85,7 +85,7 @@ const OrderDetails = (props) => {
     setVisibleNotificationModal(true);
     fcaStorage.removeOrder();
     setNotificationMessage(MESSAGES.RECEIVED);
-    
+        
 
   };
 

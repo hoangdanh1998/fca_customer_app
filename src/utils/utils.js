@@ -25,7 +25,6 @@ export const convertTransaction = (transactions) => {
 };
 
 export const convertEmergencyToNormal = (emergency) => {
-  console.log("emergency", emergency);
   return {
     partner: emergency.partner,
     destination: emergency.destination,

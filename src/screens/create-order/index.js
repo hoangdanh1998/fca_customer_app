@@ -173,7 +173,7 @@ const CreateOrder = (props) => {
     if (createdOrder) {
       getOrderOnChange(createdOrder.id, (order) => {
         if (order) {
-          if (order.status === OrderStatus.ACCEPTANCE) {
+          if (!order.timeRemain && order.status === OrderStatus.ACCEPTANCE) {
             handleAcceptedOrder();
           }
 

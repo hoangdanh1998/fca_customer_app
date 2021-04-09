@@ -11,7 +11,6 @@ init(LANGUAGE.VI);
 const OrderDetailCard = (props) => {
   const item = props.item;
   const handleImage = () => {
-    console.log("handleImage");
     switch (item.quantity) {
       case 1:
         return IMAGE_1;

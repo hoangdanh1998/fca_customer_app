@@ -27,6 +27,7 @@ const EmergencyOrderList = (props) => {
       alert(error);
     }
   }, [dispatch]);
+  
   useEffect(() => {
     loadSuggestionEmergency();
     setIsLoading(false);

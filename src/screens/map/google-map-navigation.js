@@ -62,28 +62,28 @@ const googleMapNavigation = () => {
   }, []);
 
   const calculateDistance = async (currentLocation) => {
-    const lat1 = startLocation?.coords?.latitude;
-    const lon1 = startLocation?.coords?.longitude;
-    const lat2 = currentLocation.coords.latitude;
-    const lon2 = currentLocation.coords.longitude;
+    // const lat1 = startLocation?.coords?.latitude;
+    // const lon1 = startLocation?.coords?.longitude;
+    // const lat2 = currentLocation.coords.latitude;
+    // const lon2 = currentLocation.coords.longitude;
 
-    const R = 6371e3;
-    const o1 = (lat1 * Math.PI) / 180;
-    const o2 = (lat2 * Math.PI) / 180;
-    const deltaO = ((lat2 - lat1) * Math.PI) / 180;
-    const deltaL = ((lon2 - lon1) * Math.PI) / 180;
+    // const R = 6371e3;
+    // const o1 = (lat1 * Math.PI) / 180;
+    // const o2 = (lat2 * Math.PI) / 180;
+    // const deltaO = ((lat2 - lat1) * Math.PI) / 180;
+    // const deltaL = ((lon2 - lon1) * Math.PI) / 180;
 
-    const a =
-      Math.sin(deltaO / 2) * Math.sin(deltaO / 2) +
-      Math.cos(o1) * Math.cos(o2) * Math.sin(deltaL / 2) * Math.sin(deltaL / 2); //Haversine formula
-    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    const d = R * c; //in metres
-    const travel = +(totalTravel + d);
-    setTotalTravel(travel);
-    if (totalTravel > originDistance2Partner / 10000) {
-      const distance = await getDistance(currentLocation.coords, partnerLocation);
-      setTrackingOrder(createdOrder.id, distance.duration.text);
-    }
+    // const a =
+    //   Math.sin(deltaO / 2) * Math.sin(deltaO / 2) +
+    //   Math.cos(o1) * Math.cos(o2) * Math.sin(deltaL / 2) * Math.sin(deltaL / 2); //Haversine formula
+    // const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    // const d = R * c; //in metres
+    // const travel = +(totalTravel + d);
+    // setTotalTravel(travel);
+
+    const distance = await getDistance(currentLocation.coords, partnerLocation);
+    setTrackingOrder(createdOrder.id, distance.duration.text);
+
     return d;
   };
 
@@ -145,7 +145,7 @@ const googleMapNavigation = () => {
           showsUserLocation={true}
           onUserLocationChange={async () => {
             try {
-              const distance = calculateDistance(await Location.getCurrentPositionAsync({}));
+              calculateDistance(await Location.getCurrentPositionAsync({}));
             } catch (err) {
             }
 

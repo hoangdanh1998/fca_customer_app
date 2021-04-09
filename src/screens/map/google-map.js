@@ -70,6 +70,7 @@ const MapScreen = (props) => {
     try {
       setError();
       setIsLoading(true);
+      const location = await Location.getCurrentPositionAsync({});
       await dispatch(getStoreSuggestion(location.coords, destination));
     } catch (error) {
       setError(error.message);
@@ -135,7 +136,6 @@ const MapScreen = (props) => {
           keyboardShouldPersistTaps="handled"
           onPress={async (data, details = null) => {
             setIsShowPopup(true);
-
             handleSetDetailsGeometry({
               description: data.description,
               latitude: details.geometry.location.lat,
