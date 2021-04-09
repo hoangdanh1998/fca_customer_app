@@ -1,8 +1,6 @@
-import moment from "moment";
-import { DATE_TIME_FORMAT_CALL_API } from "../../constants/index";
-import { EMERGENCY_ACTION } from "../action-types/actions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { convertPartnerItemToEmergencyItem } from "../../utils/utils";
+import { EMERGENCY_ACTION } from "../action-types/actions";
 
 const initialState = {
   createdEmergency: null,
@@ -49,12 +47,15 @@ const emergencyReducer = (state = initialState, action) => {
         };
       } else return { ...state, suggestionEmergency: [] };
     }
+
     case EMERGENCY_ACTION.GET_EMERGENCY: {
       return { ...state, emergency: action.payload };
     }
+
     case EMERGENCY_ACTION.GET_DESTINATION: {
       return { ...state, destinationList: action.payload };
     }
+
     case EMERGENCY_ACTION.GET_PARTNER: {
       var data = action.payload.data.data.partner;
       var items = Array.from(data.items, (item) => {
@@ -63,6 +64,7 @@ const emergencyReducer = (state = initialState, action) => {
       data.items = items;
       return { ...state, partner: data };
     }
+
     default:
       return state;
   }

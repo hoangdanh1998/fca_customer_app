@@ -21,7 +21,7 @@ const EmergencyPartnerCard = (props) => {
   const orders = props.emergencyPartner.orders;
   init(LANGUAGE.VI);
   return (
-    <TouchableWithoutFeedback onPress={() => props.onNext(partner)}>
+    <TouchableWithoutFeedback onPress={() => props.onNext(props.emergencyPartner)}>
       <Card style={styles.card}>
         <CardItem style={styles.card2nd}>
           <Left>

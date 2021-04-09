@@ -1,60 +1,33 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  Card,
-  CardItem,
-  Content,
-  Left,
-  List,
-  Text,
-  Body,
-  H3,
-  View,
-  Footer,
-  ListItem,
-  Right,
-  Root,
-  Toast,
-  Radio,
-} from "native-base";
-import { TouchableWithoutFeedback, ActivityIndicator } from "react-native";
-import { CommonActions } from "@react-navigation/native";
-import NumberFormat from "react-number-format";
 import { withNavigation } from "@react-navigation/compat";
+import { CommonActions } from "@react-navigation/native";
+import {
+  Body, CardItem, Content, Footer, H3, Left, List,
+  ListItem, Radio, Right, Root, Text, Toast, View
+} from "native-base";
+import React, { useEffect, useState } from "react";
+import { ActivityIndicator, TouchableWithoutFeedback } from "react-native";
 import { Divider } from "react-native-elements";
-import OrderDetailCard from "../../components/atoms/order-detail-card/index";
-import FocusedButton from "../../components/atoms/focused-button/index";
+import NumberFormat from "react-number-format";
+import { useDispatch, useSelector } from "react-redux";
 import EditQuantityModal from "../../components/atoms/edit-quantity-modal/index";
-import { styles } from "./styles";
-import { IMLocalized, init } from "../../i18n/IMLocalized";
-import { EMERGENCY_ORDER } from "../../constants/seeding";
-import {
-  LANGUAGE,
-  DARK_COLOR,
-  MESSAGES,
-  MAX_ORDER_ITEM,
-  NOTICE_DURATION,
-  PRIMARY_LIGHT_COLOR,
-} from "../../constants/index.js";
-
-import {
-  getOrder,
-  createEmergency,
-  getPartnerInformation,
-  getDestination,
-} from "../../redux/actions/emergency";
-import { convertEmergencyToNormal } from "../../utils/utils";
+import FocusedButton from "../../components/atoms/focused-button/index";
 import NotificationModal from "../../components/atoms/notification-modal";
+import OrderDetailCard from "../../components/atoms/order-detail-card/index";
+import { DARK_COLOR, LANGUAGE, MAX_ORDER_ITEM, MESSAGES, NOTICE_DURATION, PRIMARY_LIGHT_COLOR } from "../../constants/index.js";
+import { IMLocalized, init } from "../../i18n/IMLocalized";
+import {
+  createEmergency,
+  getPartnerInformation
+} from "../../redux/actions/emergency";
+import { styles } from "./styles";
+
 
 init(LANGUAGE.VI);
 const EditEmergencyOrder = (props) => {
   const selectedPartner = props.route.params.selectedPartner;
-
   const customer = useSelector((state) => state.account.customer);
   const loadedPartner = useSelector((state) => state.emergency.partner);
-  const destinationList = useSelector(
-    (state) => state.emergency.destinationList
-  );
+  const [destinationList, setDestinationList] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [displayId, setDisplayId] = useState("");
@@ -68,18 +41,25 @@ const EditEmergencyOrder = (props) => {
   const dispatch = useDispatch();
   const loadPartner = () => {
     try {
-      dispatch(getPartnerInformation(selectedPartner.id));
+      dispatch(getPartnerInformation(selectedPartner.partner.id));
     } catch (error) {
       console.log("error", error);
     }
   };
-  const loadDestinationList = () => {
-    try {
-      dispatch(getDestination(customer.id));
-    } catch (error) {
-      console.log("error", error);
+
+  useEffect(() => {
+    if (selectedPartner) {
+      const destinations = selectedPartner.orders.reduce((desList, order) => {
+        if (!desList[`${order.destination.description}`]) {
+          desList[`${order.destination.description}`] = order.destination;
+        } 
+        return desList;
+      }, {})
+      setDestinationList(Object.values(destinations));
     }
-  };
+  }, [])
+
+
   const updateItemQuantity = (itemParam, quantityParam) => {
     const totalItem = partner.items?.reduce((sum, i) => {
       return (sum += i.quantity);
@@ -135,9 +115,30 @@ const EditEmergencyOrder = (props) => {
         // props.navigation.navigate("EMERGENCY_PROFILE");
         props.navigation.dispatch(
           CommonActions.navigate({
-            name: "EMERGENCY_PROFILE",
+            name: "",
           })
         );
+
+        props.navigation.dispatch(
+          CommonActions.reset({
+            index: 1,
+            routes: [
+              {
+                name: "MAP_VIEW",
+                params: {},
+              },
+              {
+                name: "MY_PROFILE",
+                params: {},
+              },
+              {
+                name: "EMERGENCY_PROFILE",
+                params: {},
+              },
+            ],
+          })
+        );
+
       }, NOTICE_DURATION);
     } catch (error) {
       console.log("error", error);
@@ -148,18 +149,18 @@ const EditEmergencyOrder = (props) => {
       }, NOTICE_DURATION);
     }
   };
+
   useEffect(() => {
     setIsLoading(true);
     loadPartner();
-    loadDestinationList();
   }, []);
+
   useEffect(() => {
     setPartner(loadedPartner);
     setSelectedDestination(
       destinationList?.length > 0 ? destinationList[0] : {}
     );
     setIsLoading(false);
-    console.log("destinationList", destinationList);
   }, [loadedPartner, destinationList]);
 
   // ================================= HANDLE UI =================================
@@ -243,6 +244,7 @@ const EditEmergencyOrder = (props) => {
               dataArray={destinationList}
               renderRow={(destination) => (
                 <ListItem>
+
                   <Radio
                     color={PRIMARY_LIGHT_COLOR}
                     selectedColor={DARK_COLOR}
