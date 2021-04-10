@@ -34,6 +34,22 @@
     "title-saved-address": "Địa chỉ đã lưu",
     "title-set-default-emergency":"Chọn đặt hàng nhanh",
 
+    "weekly-every-monday": "Mỗi thứ Hai",
+    "weekly-every-tuesday": "Mỗi thứ Ba",
+    "weekly-every-wednesday": "Mỗi thứ Tư",
+    "weekly-every-thursday": "Mỗi thứ Năm",
+    "weekly-every-friday": "Mỗi thứ Sáu",
+    "weekly-every-saturday": "Mỗi thứ Bảy",
+    "weekly-every-sunday": "Mỗi Chủ Nhật",
+    
+    "weekly-monday": "Thứ Hai",
+    "weekly-tuesday": "Thứ Ba",
+    "weekly-wednesday": "Thứ Tư",
+    "weekly-thursday": "Thứ Năm",
+    "weekly-friday": "Thứ Sáu",
+    "weekly-saturday": "Thứ Bảy",
+    "weekly-sunday": "Chủ Nhật",
+
     "wording-no-data": "Chưa có dữ liệu",
     "wording-item": "món",
     "wording-an-order": "đơn hàng",
@@ -83,7 +99,14 @@
     "wording-later": "Để sau",
     "wording-config": "Cài đặt",
     "wording-set-default": "Đặt làm mặc định",
+    "wording-setup-schedule": "Tự động đặt hàng",
     "wording-set-saved-address": "Đặt tên cho địa chỉ",
     "wording-choose-saved-address": "Chọn địa chỉ để lưu",
-    "wording-title-notification": "Thông báo"
+    "wording-title-notification": "Thông báo",
+    "wording-option-all-day": "Tất cả các ngày trong tuần",
+    "wording-option-working-day": "Từ thứ Hai đến thứ Sáu",
+    "wording-option-selection-day": "Tuỳ chọn",
+    "wording-subtitle-automatic-schedule": "Lịch đặt hàng tự động",
+    "wording-note-automatic-schedule": "Hãy đảm bảo ví bạn còn đủ tiền để có thể đặt hàng",
+    "wording-message-automatic-schedule": "Hệ thống tự động đặt hàng lúc"
 }
