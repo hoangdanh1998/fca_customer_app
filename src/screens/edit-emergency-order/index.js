@@ -40,6 +40,7 @@ import {
   LIGHT_COLOR,
   DAY_IN_WEEK,
   SCHEDULE_DAY_OPTION,
+  TIME_FORMAT,
 } from "../../constants/index.js";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
@@ -100,7 +101,6 @@ const EditEmergencyOrder = (props) => {
       setMessageNotificationModal(MESSAGES.SUCCESS);
       setTimeout(() => {
         setVisibleNotificationModal(false);
-        // props.navigation.navigate("EMERGENCY_PROFILE");
         props.navigation.dispatch(
           CommonActions.navigate({
             name: "",
@@ -135,6 +135,9 @@ const EditEmergencyOrder = (props) => {
         setVisibleNotificationModal(false);
       }, NOTICE_DURATION);
     }
+  };
+  const handleSaveSchedule = () => {
+    console.log("schedule", { day: scheduleDayList, time: scheduleTime });
   };
 
   useEffect(() => {
@@ -212,7 +215,7 @@ const EditEmergencyOrder = (props) => {
   };
   const handleSelectDayInWeek = (day) => {
     const selectedDay = scheduleDayList.findIndex((d) => d === day);
-    const newSelectionDayList = scheduleDayList;
+    const newSelectionDayList = [...scheduleDayList];
     if (selectedDay < 0) {
       newSelectionDayList.push(day);
     } else {
@@ -220,6 +223,16 @@ const EditEmergencyOrder = (props) => {
     }
     setScheduleDayList(newSelectionDayList);
     console.log(scheduleDayList.toString());
+  };
+  const handleSelectSchedule = () => {
+    const selection = !isSchedule;
+    console.log("selection", selection);
+    setIsSchedule(selection);
+    if (selection) {
+      setDisplayMode("time");
+    } else {
+      setDisplayMode("order");
+    }
   };
 
   const renderOrderPicker = () => {
@@ -306,23 +319,23 @@ const EditEmergencyOrder = (props) => {
                 )}
               />
             </View>
-            <CardItem style={{ flex: 1 }}>
-              <Left style={{ flex: 1 }}>
-                <CheckBox
-                  color={DARK_COLOR}
-                  onPress={() => {
-                    setIsSchedule(!isSchedule);
-                    setDisplayMode("time");
-                  }}
-                  checked={isSchedule}
-                />
-              </Left>
-              <Body style={{ flex: 9 }}>
-                <Text style={{ width: "100%" }}>
-                  {IMLocalized("wording-setup-schedule")}
-                </Text>
-              </Body>
-            </CardItem>
+            <TouchableWithoutFeedback
+              onPress={() => {
+                handleSelectSchedule();
+              }}
+            >
+              <CardItem style={{ flex: 1 }}>
+                <Left style={{ flex: 1 }}>
+                  <CheckBox color={DARK_COLOR} checked={isSchedule} />
+                </Left>
+                <Body style={{ flex: 9 }}>
+                  <Text style={{ width: "100%" }}>
+                    {IMLocalized("wording-setup-schedule")}
+                  </Text>
+                </Body>
+              </CardItem>
+            </TouchableWithoutFeedback>
+            {renderRemindSchedule()}
           </View>
         </Content>
         {partner.items?.reduce((sum, item) => {
@@ -335,7 +348,8 @@ const EditEmergencyOrder = (props) => {
                 name={MESSAGES.SAVE}
                 disable={false}
                 onPress={() => {
-                  handleCreateEmergency();
+                  // handleCreateEmergency();
+                  handleSaveSchedule();
                 }}
               />
             </View>
@@ -389,7 +403,7 @@ const EditEmergencyOrder = (props) => {
             <Text
               style={{ fontWeight: "bold", fontSize: 30, fontStyle: "normal" }}
             >
-              {scheduleTime.format("HH:mm")}
+              {scheduleTime.format(TIME_FORMAT)}
               <Icon
                 name="time-outline"
                 style={{ fontSize: 20, color: PRIMARY_LIGHT_COLOR }}
@@ -402,23 +416,26 @@ const EditEmergencyOrder = (props) => {
           dataArray={SCHEDULE_DAY_OPTION}
           renderRow={(item) => {
             return (
-              <CardItem>
-                <Left style={{ flex: 1 }}>
-                  <Radio
-                    onPress={() => {
-                      handleSelectScheduleDayOption(item);
-                    }}
-                    selected={item === scheduleDayOption}
-                    color={PRIMARY_LIGHT_COLOR}
-                    selectedColor={DARK_COLOR}
-                  />
-                </Left>
-                <Right style={{ flex: 9 }}>
-                  <Text style={{ width: "100%" }}>
-                    {IMLocalized(`wording-option-${item}`)}
-                  </Text>
-                </Right>
-              </CardItem>
+              <TouchableWithoutFeedback
+                onPress={() => {
+                  handleSelectScheduleDayOption(item);
+                }}
+              >
+                <CardItem>
+                  <Left style={{ flex: 1 }}>
+                    <Radio
+                      selected={item === scheduleDayOption}
+                      color={PRIMARY_LIGHT_COLOR}
+                      selectedColor={DARK_COLOR}
+                    />
+                  </Left>
+                  <Right style={{ flex: 9 }}>
+                    <Text style={{ width: "100%" }}>
+                      {IMLocalized(`wording-option-${item}`)}
+                    </Text>
+                  </Right>
+                </CardItem>
+              </TouchableWithoutFeedback>
             );
           }}
         />
@@ -427,24 +444,26 @@ const EditEmergencyOrder = (props) => {
             dataArray={DAY_IN_WEEK}
             renderRow={(item) => {
               return (
-                <CardItem>
-                  <Left style={{ flex: 1 }}>
-                    <CheckBox
-                      onPress={() => {
-                        console.log(`onPress - ${item}`);
-                        handleSelectDayInWeek(item);
-                      }}
-                      checked={scheduleDayList.includes(item)}
-                      color={DARK_COLOR}
-                      selectedColor={DARK_COLOR}
-                    />
-                  </Left>
-                  <Right style={{ flex: 9 }}>
-                    <Text style={{ width: "100%" }}>
-                      {IMLocalized(`weekly-every-${item}`)}
-                    </Text>
-                  </Right>
-                </CardItem>
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    handleSelectDayInWeek(item);
+                  }}
+                >
+                  <CardItem>
+                    <Left style={{ flex: 1 }}>
+                      <CheckBox
+                        checked={scheduleDayList.includes(item)}
+                        color={DARK_COLOR}
+                        selectedColor={DARK_COLOR}
+                      />
+                    </Left>
+                    <Right style={{ flex: 9 }}>
+                      <Text style={{ width: "100%" }}>
+                        {IMLocalized(`weekly-every-${item}`)}
+                      </Text>
+                    </Right>
+                  </CardItem>
+                </TouchableWithoutFeedback>
               );
             }}
           />
@@ -460,14 +479,59 @@ const EditEmergencyOrder = (props) => {
               name="later"
               onPress={() => {
                 setDisplayMode("order");
+                setIsSchedule(false);
               }}
             />
           </Left>
           <Right style={{ flex: 1 }}>
-            <FocusedButton name="done" />
+            <FocusedButton
+              name="save"
+              onPress={() => {
+                setDisplayMode("order");
+              }}
+            />
           </Right>
         </CardItem>
       </>
+    );
+  };
+  const renderRemindSchedule = () => {
+    if (!isSchedule) return;
+    return (
+      <CardItem style={{ flex: 1 }}>
+        <Left style={{ flex: 8, flexDirection: "column" }}>
+          <Text note style={{ width: "100%" }}>
+            {IMLocalized("wording-message-automatic-schedule")}
+          </Text>
+          <Text note style={{ width: "100%", fontWeight: "bold" }}>
+            {scheduleTime.format(TIME_FORMAT)}{" "}
+            {scheduleDayOption === SCHEDULE_DAY_OPTION[2]
+              ? scheduleDayList
+                  .map((day) => {
+                    return IMLocalized(`weekly-${day}`);
+                  })
+                  .toString()
+              : IMLocalized(`wording-option-${scheduleDayOption}`)}
+          </Text>
+        </Left>
+        <TouchableWithoutFeedback
+          onPress={() => {
+            setDisplayMode("time");
+          }}
+        >
+          <Right style={{ flex: 2 }}>
+            <Text
+              style={{
+                width: "100%",
+                color: PRIMARY_LIGHT_COLOR,
+                textAlign: "right",
+              }}
+            >
+              {IMLocalized("wording-edit")}
+            </Text>
+          </Right>
+        </TouchableWithoutFeedback>
+      </CardItem>
     );
   };
 
