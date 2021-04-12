@@ -3,7 +3,8 @@ import { StyleSheet } from "react-native";
 import { DARK_COLOR, LIGHT_COLOR } from "../../constants/index";
 export const styles = StyleSheet.create({
   content: { flex: 1 },
-  title: {
+  view: { backgroundColor: "white", flex: 1 },
+  partnerName: {
     color: DARK_COLOR,
     fontWeight: "bold",
     fontSize: 30,
@@ -11,6 +12,21 @@ export const styles = StyleSheet.create({
     flex: 1,
     height: "50%",
     paddingTop: "10%",
+  },
+  partnerAddress: {
+    color: DARK_COLOR,
+    width: "95%",
+    marginLeft: "2.5%",
+    textAlign: "center",
+  },
+  totalItem: { flex: 1 },
+  totalItemText: { width: "100%", textAlign: "left" },
+  totalItemNumber: { width: "100%", textAlign: "right" },
+  destinationView: {
+    flex: 1,
+    marginTop: "5%",
+    width: "95%",
+    marginLeft: "2.5%",
   },
   footer: {
     height: "auto",

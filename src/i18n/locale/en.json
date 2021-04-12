@@ -32,6 +32,22 @@
     "title-emergency-profile": "Emergency profile",
     "title-saved-address": "Saved Address",
 
+    "weekly-every-monday": "Every Monday",
+    "weekly-every-tuesday": "Every Tuesday",
+    "weekly-every-wednesday": "Every Wednesday",
+    "weekly-every-thursday": "Every Thursday",
+    "weekly-every-friday": "Every Friday",
+    "weekly-every-saturday": "Every Saturday",
+    "weekly-every-sunday": "Every Sunday",
+
+    "weekly-monday": "Monday",
+    "weekly-tuesday": "Tuesday",
+    "weekly-wednesday": "Wednesday",
+    "weekly-thursday": "Thursday",
+    "weekly-friday": "Friday",
+    "weekly-saturday": "Saturday",
+    "weekly-sunday": "Sunday",
+
     "wording-no-data": "No data",
     "wording-item": "item(s)",
     "wording-an-order": "order(s)",
@@ -81,5 +97,12 @@
     "wording-later": "Later",
     "wording-config": "Config",
     "wording-set-default": "Set as default",
-    "wording-title-notification": "Notification"
+    "wording-setup-schedule": "Make order automatically",
+    "wording-title-notification": "Notification",
+    "wording-option-all-day": "All days",
+    "wording-option-working-day": "From Monday to Friday",
+    "wording-option-selection-day": "Selection",
+    "wording-subtitle-automatic-schedule": "Automatic order schedule",
+    "wording-note-automatic-schedule": "Please make sure that your balance is enough to make order",
+    "wording-message-automatic-schedule": "System will make order automatically at"
 }

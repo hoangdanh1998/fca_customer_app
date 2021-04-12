@@ -1,5 +1,6 @@
 import moment from "moment";
-import { CUSTOMER_ADDRESS, ResponseStatus } from "../../constants/index";
+import { ResponseStatus } from "../../constants/index";
+import { CUSTOMER_ADDRESS } from "../../constants/seeding";
 import api from "../../service/fca-api/fca-api";
 import { EMERGENCY_ACTION } from "../action-types/actions";
 
@@ -58,7 +59,7 @@ export const getOrder = (param) => {
 export const getHistory = (param) => {
   const from = moment(param.createdAt).format("YYYY-MM-DD");
   const now = moment(new Date()).add(1, "days").format("YYYY-MM-DD");
-
+  console.log("getHistory");
   return async (dispatch) => {
     const response = await api.get(
       `/order?customerPhone=${param.phone}&createdDate=${from}&toDate=${now}`
