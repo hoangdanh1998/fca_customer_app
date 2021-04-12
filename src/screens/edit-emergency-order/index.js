@@ -47,6 +47,7 @@ import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
   createEmergency,
   getPartnerInformation,
+  storeOrderParam,
 } from "../../redux/actions/emergency";
 import { styles } from "./styles";
 
@@ -103,8 +104,12 @@ const EditEmergencyOrder = (props) => {
       }),
     };
     console.log("param", param);
+
     try {
       await dispatch(createEmergency(param));
+      if (isSchedule) {
+        await handleSetupSchedule();
+      }
       setVisibleNotificationModal(true);
       setMessageNotificationModal(MESSAGES.SUCCESS);
       setTimeout(() => {
@@ -144,20 +149,35 @@ const EditEmergencyOrder = (props) => {
       }, NOTICE_DURATION);
     }
   };
-  const handleSaveSchedule = async () => {
-    console.log("schedule", { day: scheduleDayList, time: scheduleTime });
-    // const demo = await Notifications.scheduleNotificationAsync({
-    //   content: {
-    //     title: "Time's up!",
-    //     body: JSON.stringify({ day: scheduleDayList, time: scheduleTime }),
-    //   },
-    //   trigger: {
-    //     seconds: 30,
-    //     repeats: true,
-    //   },
-    // });
-    // console.log("demo", demo);
-    Notifications.cancelAllScheduledNotificationsAsync();
+  const handleSetupSchedule = async () => {
+    const items = partner.items.filter((item) => item.quantity > 0);
+    const orderParam = {
+      customerId: customer.id,
+      partnerId: partner.id,
+      currentLocation: {
+        latitude: "",
+        longitude: "",
+        destination: "",
+      },
+      destination: {
+        latitude: selectedDestination.latitude,
+        longitude: selectedDestination.longitude,
+        description: selectedDestination.description,
+      },
+      items: items.map((item) => {
+        return {
+          partnerItemId: item.id,
+          quantity: item.quantity,
+        };
+      }),
+    };
+    const scheduleParam = {
+      day: scheduleDayList,
+      time: scheduleTime,
+    };
+    console.log("order-param", orderParam);
+    console.log("schedule", scheduleParam);
+    dispatch(storeOrderParam(orderParam));
   };
 
   useEffect(() => {
@@ -369,7 +389,7 @@ const EditEmergencyOrder = (props) => {
                 disable={false}
                 onPress={() => {
                   // handleCreateEmergency();
-                  handleSaveSchedule();
+                  handleSetupSchedule();
                 }}
               />
             </View>
