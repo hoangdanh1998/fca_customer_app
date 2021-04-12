@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import moment from "moment";
+import * as Notifications from "expo-notifications";
 import { withNavigation } from "@react-navigation/compat";
 import { useDispatch, useSelector } from "react-redux";
 import { CommonActions } from "@react-navigation/native";
@@ -49,6 +50,13 @@ import {
 } from "../../redux/actions/emergency";
 import { styles } from "./styles";
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 init(LANGUAGE.VI);
 const EditEmergencyOrder = (props) => {
   const selectedPartner = props.route.params.selectedPartner;
@@ -136,8 +144,20 @@ const EditEmergencyOrder = (props) => {
       }, NOTICE_DURATION);
     }
   };
-  const handleSaveSchedule = () => {
+  const handleSaveSchedule = async () => {
     console.log("schedule", { day: scheduleDayList, time: scheduleTime });
+    // const demo = await Notifications.scheduleNotificationAsync({
+    //   content: {
+    //     title: "Time's up!",
+    //     body: JSON.stringify({ day: scheduleDayList, time: scheduleTime }),
+    //   },
+    //   trigger: {
+    //     seconds: 30,
+    //     repeats: true,
+    //   },
+    // });
+    // console.log("demo", demo);
+    Notifications.cancelAllScheduledNotificationsAsync();
   };
 
   useEffect(() => {
