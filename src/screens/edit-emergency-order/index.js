@@ -49,6 +49,7 @@ import {
   getPartnerInformation,
   storeOrderParam,
 } from "../../redux/actions/emergency";
+// import { addSchedule } from "../../service/cronjob/index";
 import { styles } from "./styles";
 
 Notifications.setNotificationHandler({
@@ -175,9 +176,10 @@ const EditEmergencyOrder = (props) => {
       day: scheduleDayList,
       time: scheduleTime,
     };
-    console.log("order-param", orderParam);
-    console.log("schedule", scheduleParam);
-    dispatch(storeOrderParam(orderParam));
+    // console.log("order-param", orderParam);
+    // console.log("schedule", scheduleParam);
+    // addSchedule(JSON.stringify(scheduleParam), JSON.stringify(orderParam));
+    // dispatch(storeOrderParam(orderParam));
   };
 
   useEffect(() => {
