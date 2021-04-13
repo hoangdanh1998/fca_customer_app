@@ -4,7 +4,6 @@ import { EMERGENCY_ACTION } from "../action-types/actions";
 
 const initialState = {
   createdEmergency: null,
-  // prepareEmergencyOrder: {},
   history: [],
   emergency: {},
   suggestionEmergency: [],
@@ -12,11 +11,30 @@ const initialState = {
   destinationList: [],
 };
 
-const storeEmergency = async (emergency) => {
+const storeOrderParam = async (order) => {
   try {
-    await AsyncStorage.setItem("@storage_Emergency", JSON.stringify(emergency));
+    await AsyncStorage.setItem("@storage_OrderParam", JSON.stringify(order));
+    console.log(
+      "order-param-in-storage",
+      await AsyncStorage.getItem("@storage_OrderParam")
+    );
   } catch (e) {
-    console.log("store-emergency", e);
+    console.log("store-order", e);
+  }
+};
+
+const storeScheduleParam = async (schedule) => {
+  try {
+    await AsyncStorage.setItem(
+      "@storage_ScheduleParam",
+      JSON.stringify(schedule)
+    );
+    console.log(
+      "schedule-param-in-storage",
+      await AsyncStorage.getItem("@storage_ScheduleParam")
+    );
+  } catch (e) {
+    console.log("store-schedule", e);
   }
 };
 
@@ -63,6 +81,16 @@ const emergencyReducer = (state = initialState, action) => {
       });
       data.items = items;
       return { ...state, partner: data };
+    }
+
+    case EMERGENCY_ACTION.STORE_ORDER: {
+      storeOrderParam(action.payload);
+      return;
+    }
+
+    case EMERGENCY_ACTION.STORE_SCHEDULE: {
+      storeScheduleParam(action.payload);
+      return;
     }
 
     default:

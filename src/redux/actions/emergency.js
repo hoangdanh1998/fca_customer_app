@@ -99,3 +99,21 @@ export const getDestination = (param) => {
     });
   };
 };
+
+export const storeOrderParam = (order) => {
+  return async (dispatch) => {
+    dispatch({
+      type: EMERGENCY_ACTION.STORE_ORDER,
+      payload: order,
+    });
+  };
+};
+
+export const storeScheduleParam = (schedule) => {
+  return async (dispatch) => {
+    dispatch({
+      type: EMERGENCY_ACTION.STORE_SCHEDULE,
+      payload: schedule,
+    });
+  };
+};

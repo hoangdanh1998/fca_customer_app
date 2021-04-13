@@ -14,16 +14,17 @@ import {
   LANGUAGE,
   MESSAGES,
   NOTICE_DURATION,
-  OrderStatus
+  OrderStatus,
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
-  setDestinationLocation, setPartnerLocation
+  setDestinationLocation,
+  setPartnerLocation,
 } from "../../redux/actions/map";
 import {
   cancelOrder,
   createOrder,
-  resetOrder
+  resetOrder,
 } from "../../redux/actions/order";
 import { setStoreSuggestion } from "../../redux/actions/store";
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
@@ -54,16 +55,6 @@ const CreateEmergencyOrder = (props) => {
     false
   );
   const [notificationMessage, setNotificationMessage] = useState("");
-  console.log('10')
-  Notifications.scheduleNotificationAsync({
-    content: {
-      title: 'Remember to drink water!',
-    },
-    trigger: {
-      seconds: 10,
-      repeats: true
-    },
-  });
 
   const submitOrder = async () => {
     try {
@@ -94,11 +85,10 @@ const CreateEmergencyOrder = (props) => {
           }),
         })
       );
-      console.log('des ', destination)
-      console.log('part', store.address)
-      dispatch(setDestinationLocation(destination))
-      dispatch(setPartnerLocation(store.address))
-
+      console.log("des ", destination);
+      console.log("part", store.address);
+      dispatch(setDestinationLocation(destination));
+      dispatch(setPartnerLocation(store.address));
     } catch (error) {
       setVisibleTimer(false);
       setNotificationMessage(MESSAGES.REJECTED);
