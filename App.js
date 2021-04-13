@@ -6,10 +6,11 @@ import Navigation from "./src/navigations/Navigation";
 import { applyMiddleware, createStore } from "redux";
 import ReduxThunk from "redux-thunk";
 import { Provider } from "react-redux";
-import rootReducer from './src/redux/reducers/root-reducer'
-import * as firebase from 'firebase';
-import { registerForPushNotificationsAsync } from './src/service/notification/expo-notification'
-import { LogBox } from 'react-native';
+import rootReducer from "./src/redux/reducers/root-reducer";
+import * as firebase from "firebase";
+import * as Notifications from "expo-notifications";
+import { registerForPushNotificationsAsync } from "./src/service/notification/expo-notification";
+import { LogBox } from "react-native";
 import LoginNavigation from "./src/navigations/login-navigation";
 
 LogBox.ignoreAllLogs();
@@ -46,16 +47,14 @@ export default class App extends React.Component {
   }
 }
 
-
-
 function initializeFirebase() {
   const firebaseConfig = {
-    apiKey: 'AIzaSyAYB22QAFUtlPnYjUOxoliIjNCHDJjvoQ8',
-    authDomain: 'fast-coffee-2021.firebaseapp.com',
-    databaseURL: 'https://fast-coffee-2021-default-rtdb.firebaseio.com/',
-    projectId: 'fast-coffee-2021',
-    storageBucket: 'fast-coffee-2021.appspot.com',
-    messagingSenderId: '319088293595',
+    apiKey: "AIzaSyAYB22QAFUtlPnYjUOxoliIjNCHDJjvoQ8",
+    authDomain: "fast-coffee-2021.firebaseapp.com",
+    databaseURL: "https://fast-coffee-2021-default-rtdb.firebaseio.com/",
+    projectId: "fast-coffee-2021",
+    storageBucket: "fast-coffee-2021.appspot.com",
+    messagingSenderId: "319088293595",
   };
 
   if (firebase.apps.length === 0) {

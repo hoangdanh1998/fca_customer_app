@@ -48,8 +48,9 @@ import {
   createEmergency,
   getPartnerInformation,
   storeOrderParam,
+  storeScheduleParam,
 } from "../../redux/actions/emergency";
-// import { addSchedule } from "../../service/cronjob/index";
+import { addSchedule } from "../../service/cronjob/index";
 import { styles } from "./styles";
 
 Notifications.setNotificationHandler({
@@ -178,8 +179,12 @@ const EditEmergencyOrder = (props) => {
     };
     // console.log("order-param", orderParam);
     // console.log("schedule", scheduleParam);
-    // addSchedule(JSON.stringify(scheduleParam), JSON.stringify(orderParam));
-    // dispatch(storeOrderParam(orderParam));
+    dispatch(storeOrderParam(orderParam));
+    dispatch(storeScheduleParam(scheduleParam));
+    // await addSchedule(
+    //   JSON.stringify(scheduleParam),
+    //   JSON.stringify(orderParam)
+    // );
   };
 
   useEffect(() => {

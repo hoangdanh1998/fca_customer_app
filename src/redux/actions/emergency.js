@@ -108,3 +108,12 @@ export const storeOrderParam = (order) => {
     });
   };
 };
+
+export const storeScheduleParam = (schedule) => {
+  return async (dispatch) => {
+    dispatch({
+      type: EMERGENCY_ACTION.STORE_SCHEDULE,
+      payload: schedule,
+    });
+  };
+};
