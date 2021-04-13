@@ -4,6 +4,7 @@ const {
   SIGN_OUT,
   FINISH_LOADING,
   SET_DEVICE_KEY,
+  CHANGE_ERROR,
 } = require("../actions/account");
 const { SAVE_ADDRESS } = require("../actions/map");
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -14,6 +15,7 @@ const initialState = {
   isLoading: true,
   isSignOut: false,
   deviceKey: null,
+  errMessage:null
 };
 
 const storeToken = async (token, customer) => {
@@ -58,6 +60,8 @@ const accountReducer = (state = initialState, action) => {
         customer: action.payload.customer,
         isLoading: false,
       };
+    case CHANGE_ERROR:
+      return { ...state, errMessage: action.payload }
     case SIGN_OUT:
       removeToken();
       return { state: null, isSignOut: true };

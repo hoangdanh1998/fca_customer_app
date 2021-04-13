@@ -73,4 +73,9 @@ export const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center"
     },
+    errorMessage: {
+        color: "red",
+        marginTop: 10,
+        fontSize: 18,
+    },
 })
