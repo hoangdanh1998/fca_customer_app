@@ -26,10 +26,6 @@ const HistoryOrderDetails = (props) => {
       return t;
     }
   );
-  orderTransaction.push({
-    toStatus: OrderStatus.INITIALIZATION,
-    createdAt: order.createdAt,
-  });
   const transaction = orderTransaction.sort((a, b) => {
     return (
       new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime() < 0

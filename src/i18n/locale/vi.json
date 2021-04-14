@@ -98,15 +98,21 @@
     "wording-save": "Lưu",
     "wording-later": "Để sau",
     "wording-config": "Cài đặt",
+    "wording-ok": "OK",
+    "wording-cancel": "Huỷ",
     "wording-set-default": "Đặt làm mặc định",
     "wording-setup-schedule": "Tự động đặt hàng",
     "wording-set-saved-address": "Đặt tên cho địa chỉ",
     "wording-choose-saved-address": "Chọn địa chỉ để lưu",
     "wording-title-notification": "Thông báo",
+    "wording-title-confirmation": "Xác nhận",
     "wording-option-all-day": "Tất cả các ngày trong tuần",
     "wording-option-working-day": "Từ thứ Hai đến thứ Sáu",
     "wording-option-selection-day": "Tuỳ chọn",
     "wording-subtitle-automatic-schedule": "Lịch đặt hàng tự động",
     "wording-note-automatic-schedule": "Hãy đảm bảo ví bạn còn đủ tiền để có thể đặt hàng",
-    "wording-message-automatic-schedule": "Hệ thống tự động đặt hàng lúc"
+    "wording-message-automatic-schedule": "Hệ thống tự động đặt hàng lúc",
+    "wording-message-make-order-before-arrive": "Cửa hàng sẽ chuẩn bị đơn hàng trước khi bạn đến",
+    "wording-message-make-order-after-arrive": "Cửa hàng sẽ chuẩn bị đơn hàng sau khi bạn đến",
+    "wording-message-default-prepare-order": "Chuẩn bị đơn hàng trước khi đến"
 }
