@@ -35,7 +35,10 @@ import {
 import { init, IMLocalized } from "../../i18n/IMLocalized";
 import { setStoreSuggestion } from "../../redux/actions/store";
 import * as fcaStorage from "../../service/async-storage/async-storage";
-import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
+import {
+  getOrderOnChange,
+  setAutoPrepareOrder,
+} from "../../service/firebase/firebase-realtime";
 import { convertTransaction } from "../../utils/utils";
 import { ORDER_ACTIONS } from "./../../redux/action-types/actions";
 
@@ -45,6 +48,11 @@ const arrEndpointStatus = [
   OrderStatus.RECEPTION,
   OrderStatus.REJECTION,
   OrderStatus.CANCELLATION,
+];
+const canDelayOrderStatus = [
+  OrderStatus.INITIALIZATION,
+  OrderStatus.ACCEPTANCE,
+  OrderStatus.PREPARATION,
 ];
 
 const OrderDetails = (props) => {
@@ -111,12 +119,14 @@ const OrderDetails = (props) => {
     const newTransaction = Array.from(transactionState, (transaction) => {
       return transaction;
     });
+    if (newStatus === OrderStatus.ACCEPTANCE && transactionState.length === 0) {
+      newTransaction.unshift({
+        createdAt: moment(order.createdAt),
+        toStatus: OrderStatus.INITIALIZATION,
+      });
+    }
     newTransaction.unshift({ createdAt: moment(), toStatus: newStatus });
-    if (
-      newStatus !== OrderStatus.ACCEPTANCE &&
-      newStatus !== OrderStatus.PREPARATION &&
-      newStatus !== OrderStatus.CANCELLATION
-    ) {
+    if (!canDelayOrderStatus.includes(listenedOrder.status)) {
       setIsDisableAutoPrepare(true);
     }
     setTransactionState(newTransaction);
@@ -170,11 +180,9 @@ const OrderDetails = (props) => {
               <Left style={{ flex: 2 }}>
                 <Switch
                   trackColor={{ false: PRIMARY_LIGHT_COLOR, true: DARK_COLOR }}
-                  // thumbColor={isAutoPrepare ? PRIMARY_LIGHT_COLOR : LIGHT_COLOR}
                   thumbColor={LIGHT_COLOR}
                   ios_backgroundColor={PRIMARY_LIGHT_COLOR}
                   onValueChange={() => {
-                    // setIsAutoPrepare(!isAutoPrepare);
                     setVisibleDelayModal(true);
                   }}
                   disabled={isDisableAutoPrepare}
@@ -298,6 +306,7 @@ const OrderDetails = (props) => {
           setVisibleDelayModal(false);
         }}
         onConfirmPressed={() => {
+          setAutoPrepareOrder(order.id, !isAutoPrepare);
           setIsAutoPrepare(!isAutoPrepare);
           setVisibleDelayModal(false);
         }}

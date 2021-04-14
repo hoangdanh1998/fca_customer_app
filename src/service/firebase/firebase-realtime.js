@@ -5,13 +5,20 @@ export const setTrackingOrder = (orderId, timeRemain) => {
     timeRemain,
   });
 };
- 
+
+export const setAutoPrepareOrder = (orderId, isAutoPrepareOrder) => {
+  firebase.database().ref("order").child(orderId).update({
+    id: orderId,
+    isAutoPrepareOrder,
+  });
+};
+
 export const updateQRCode = (orderId, qrCode) => {
   firebase.database().ref("order").child(orderId).update({
     id: orderId,
     qrcode: qrCode,
   });
-}
+};
 
 export const getOrderOnChange = (orderId, order) => {
   if (orderId) {
@@ -28,15 +35,15 @@ export const stopListenOrder = async (orderId, listener) => {
 
 export const setDeviceKeyFirebase = async (accountId, deviceKey) => {
   if (deviceKey) {
-  await firebase.database().ref("account").child(accountId).update({
-    id: accountId,
-    deviceKey,
-  });
+    await firebase.database().ref("account").child(accountId).update({
+      id: accountId,
+      deviceKey,
+    });
   }
 };
 
 export const getDeviceKeyOnChange = (accountId, account) => {
-  if(accountId) {
+  if (accountId) {
     const ref = firebase.database().ref("account");
     ref.child(accountId).on("value", (snapshot) => {
       account(snapshot.val());
