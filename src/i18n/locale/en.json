@@ -96,13 +96,19 @@
     "wording-save": "Save",
     "wording-later": "Later",
     "wording-config": "Config",
+    "wording-ok": "OK",
+    "wording-cancel": "Huỷ",
     "wording-set-default": "Set as default",
     "wording-setup-schedule": "Make order automatically",
     "wording-title-notification": "Notification",
+    "wording-title-confirmation": "Confirmation",
     "wording-option-all-day": "All days",
     "wording-option-working-day": "From Monday to Friday",
     "wording-option-selection-day": "Selection",
     "wording-subtitle-automatic-schedule": "Automatic order schedule",
     "wording-note-automatic-schedule": "Please make sure that your balance is enough to make order",
-    "wording-message-automatic-schedule": "System will make order automatically at"
+    "wording-message-automatic-schedule": "System will make order automatically at",
+    "wording-message-make-order-before-arrive": "The store will prepare your order before arriving",
+    "wording-message-make-order-after-arrive": "The store will prepare your order after arriving",
+    "wording-message-default-prepare-order": "Prepare order before arriving"
 }

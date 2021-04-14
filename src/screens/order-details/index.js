@@ -2,7 +2,19 @@
 import { withNavigation } from "@react-navigation/compat";
 import { CommonActions } from "@react-navigation/native";
 import moment from "moment";
-import { Content, Footer, View } from "native-base";
+import {
+  CardItem,
+  Content,
+  Footer,
+  Right,
+  View,
+  Left,
+  Body,
+  Text,
+  Card,
+} from "native-base";
+import { Switch } from "react-native";
+import AwesomeAlert from "react-native-awesome-alerts";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FocusedButton from "../../components/atoms/focused-button/index";
@@ -15,11 +27,14 @@ import {
   DATE_FORMAT_CALL_API,
   LANGUAGE,
   MESSAGES,
-  OrderStatus
+  OrderStatus,
+  PRIMARY_LIGHT_COLOR,
+  LIGHT_COLOR,
+  DARK_COLOR,
 } from "../../constants/index";
-import { init } from "../../i18n/IMLocalized";
+import { init, IMLocalized } from "../../i18n/IMLocalized";
 import { setStoreSuggestion } from "../../redux/actions/store";
-import * as fcaStorage from '../../service/async-storage/async-storage';
+import * as fcaStorage from "../../service/async-storage/async-storage";
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 import { convertTransaction } from "../../utils/utils";
 import { ORDER_ACTIONS } from "./../../redux/action-types/actions";
@@ -29,22 +44,28 @@ const arrEndpointStatus = [
   OrderStatus.CLOSURE,
   OrderStatus.RECEPTION,
   OrderStatus.REJECTION,
-  OrderStatus.CANCELLATION
+  OrderStatus.CANCELLATION,
 ];
 
 const OrderDetails = (props) => {
-
   const dispatch = useDispatch();
   const order = useSelector((state) => state.order.createdOrder);
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
   const bestSuggestion = useSelector((state) => state.store.bestSuggestion);
 
-  const [visibleNotificationModal, setVisibleNotificationModal] = useState(false);
+  const [visibleNotificationModal, setVisibleNotificationModal] = useState(
+    false
+  );
   const [notificationMessage, setNotificationMessage] = useState("");
   const [isNeedHandleDismiss, setIsNeedHandleDismiss] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
   const [listenedOrder, setListenedOrder] = useState(order);
-  const [transactionState, setTransactionState] = useState(order?.transaction | []);
+  const [transactionState, setTransactionState] = useState(
+    order?.transaction | []
+  );
+  const [isAutoPrepare, setIsAutoPrepare] = useState(true);
+  const [isDisableAutoPrepare, setIsDisableAutoPrepare] = useState(false);
+  const [visibleDelayModal, setVisibleDelayModal] = useState(false);
 
   const handleReceiveQRCode = (qrCode, orderId) => {
     props.navigation.navigate("QR_CODE", {
@@ -52,7 +73,7 @@ const OrderDetails = (props) => {
       orderId: orderId,
     });
   };
-  
+
   const reSuggest = () => {
     if (suggestionStores && bestSuggestion) {
       const length = suggestionStores.length;
@@ -64,7 +85,7 @@ const OrderDetails = (props) => {
         dispatch(setStoreSuggestion(newSuggestion, newSuggestList));
       }
     }
-  }
+  };
 
   const handleStaffCancelOrder = () => {
     setVisibleNotificationModal(true);
@@ -72,21 +93,18 @@ const OrderDetails = (props) => {
     setIsNeedHandleDismiss(true);
     reSuggest();
   };
-  
+
   const setStatusCreatedOrder = (status) => {
     dispatch({
       type: ORDER_ACTIONS.SET_CREATED_ORDER,
       payload: { ...order, status },
     });
-  }
-
+  };
 
   const handleStaffFinishOrder = () => {
     setVisibleNotificationModal(true);
     fcaStorage.removeOrder();
     setNotificationMessage(MESSAGES.RECEIVED);
-        
-
   };
 
   const handleAddTransaction = (newStatus) => {
@@ -94,12 +112,19 @@ const OrderDetails = (props) => {
       return transaction;
     });
     newTransaction.unshift({ createdAt: moment(), toStatus: newStatus });
+    if (
+      newStatus !== OrderStatus.ACCEPTANCE &&
+      newStatus !== OrderStatus.PREPARATION &&
+      newStatus !== OrderStatus.CANCELLATION
+    ) {
+      setIsDisableAutoPrepare(true);
+    }
     setTransactionState(newTransaction);
   };
 
   useEffect(() => {
     if (order && arrEndpointStatus.includes(order.status)) {
-      setIsComplete(true)
+      setIsComplete(true);
     }
   }, [order]);
 
@@ -123,13 +148,15 @@ const OrderDetails = (props) => {
       if (listenedOrder.status === OrderStatus.RECEPTION) {
         dispatch(setStoreSuggestion(null, null));
       }
-      if (listenedOrder.status === OrderStatus.RECEPTION && !listenedOrder.qrcode) {
+      if (
+        listenedOrder.status === OrderStatus.RECEPTION &&
+        !listenedOrder.qrcode
+      ) {
         handleStaffFinishOrder();
       }
       if (listenedOrder.qrcode && listenedOrder.qrcode != "") {
         handleReceiveQRCode(listenedOrder.qrcode, listenedOrder.id);
       }
-
     }
   }, [listenedOrder]);
 
@@ -138,6 +165,29 @@ const OrderDetails = (props) => {
       <Content>
         <View style={{ width: "95%", marginLeft: "2.5%" }}>
           <OrderDetail store={order?.partner} orderDetails={order} />
+          <Card style={{ width: "95%", marginLeft: "2.5%" }}>
+            <CardItem>
+              <Left style={{ flex: 2 }}>
+                <Switch
+                  trackColor={{ false: PRIMARY_LIGHT_COLOR, true: DARK_COLOR }}
+                  // thumbColor={isAutoPrepare ? PRIMARY_LIGHT_COLOR : LIGHT_COLOR}
+                  thumbColor={LIGHT_COLOR}
+                  ios_backgroundColor={PRIMARY_LIGHT_COLOR}
+                  onValueChange={() => {
+                    // setIsAutoPrepare(!isAutoPrepare);
+                    setVisibleDelayModal(true);
+                  }}
+                  disabled={isDisableAutoPrepare}
+                  value={isAutoPrepare}
+                />
+              </Left>
+              <Body style={{ flex: 8 }}>
+                <Text>
+                  {IMLocalized("wording-message-default-prepare-order")}
+                </Text>
+              </Body>
+            </CardItem>
+          </Card>
           {transactionState ? (
             <TimelineTransaction
               date={moment(order?.createdAt, DATE_FORMAT_CALL_API).format(
@@ -149,7 +199,6 @@ const OrderDetails = (props) => {
         </View>
       </Content>
       <Footer style={{ backgroundColor: null, justifyContent: "space-around" }}>
-
         {!isComplete ? (
           <View
             style={{
@@ -166,41 +215,41 @@ const OrderDetails = (props) => {
             />
           </View>
         ) : (
-            <View
-              style={{
-                width: "100%",
-                flexDirection: "row",
-                justifyContent: "center",
-                flex: 1,
+          <View
+            style={{
+              width: "100%",
+              flexDirection: "row",
+              justifyContent: "center",
+              flex: 1,
+            }}
+          >
+            <UnFocusedButton
+              bordered
+              name={MESSAGES.HOME}
+              disable={false}
+              onPress={() => {
+                props.navigation.dispatch(
+                  CommonActions.reset({
+                    index: 1,
+                    routes: [
+                      {
+                        name: "MAP_VIEW",
+                      },
+                    ],
+                  })
+                );
               }}
-            >
-              <UnFocusedButton
-                bordered
-                name={MESSAGES.HOME}
-                disable={false}
-                onPress={() => {
-                  props.navigation.dispatch(
-                    CommonActions.reset({
-                      index: 1,
-                      routes: [
-                        {
-                          name: "MAP_VIEW",
-                        },
-                      ],
-                    })
-                  );
-                }}
-              />
-              <FocusedButton
-                block
-                name={MESSAGES.FEEDBACK}
-                disable={false}
-                onPress={() => {
-                  alert("Make feedback");
-                }}
-              />
-            </View>
-          )}
+            />
+            <FocusedButton
+              block
+              name={MESSAGES.FEEDBACK}
+              disable={false}
+              onPress={() => {
+                alert("Make feedback");
+              }}
+            />
+          </View>
+        )}
       </Footer>
       <NotificationModal
         onDismiss={() => {
@@ -223,6 +272,35 @@ const OrderDetails = (props) => {
         message={notificationMessage}
         title={MESSAGES.TITLE_NOTIFICATION}
         visible={visibleNotificationModal}
+      />
+      <AwesomeAlert
+        show={visibleDelayModal}
+        showProgress={false}
+        title={IMLocalized(`wording-title-confirmation`)}
+        message={
+          isAutoPrepare
+            ? IMLocalized("wording-message-make-order-after-arrive")
+            : IMLocalized("wording-message-make-order-before-arrive")
+        }
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        contentStyle={{ backgroundColor: LIGHT_COLOR }}
+        contentContainerStyle={{ backgroundColor: LIGHT_COLOR }}
+        cancelText={IMLocalized("wording-cancel")}
+        confirmText={IMLocalized("wording-ok")}
+        confirmButtonColor={DARK_COLOR}
+        showCancelButton={true}
+        showConfirmButton={true}
+        onDismiss={() => {
+          setVisibleDelayModal(false);
+        }}
+        onCancelPressed={() => {
+          setVisibleDelayModal(false);
+        }}
+        onConfirmPressed={() => {
+          setIsAutoPrepare(!isAutoPrepare);
+          setVisibleDelayModal(false);
+        }}
       />
     </>
   );
