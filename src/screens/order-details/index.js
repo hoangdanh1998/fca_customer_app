@@ -192,11 +192,18 @@ const OrderDetails = (props) => {
               <CardItem>
                 <Left style={{ flex: 2 }}>
                   <Switch
-                    trackColor={{
-                      false: PRIMARY_LIGHT_COLOR,
-                      true: DARK_COLOR,
-                    }}
-                    thumbColor={LIGHT_COLOR}
+                    trackColor={
+                      isDisableAutoPrepare
+                        ? {
+                            false: "#dbd7d7",
+                            true: "#dbd7d7",
+                          }
+                        : {
+                            false: PRIMARY_LIGHT_COLOR,
+                            true: DARK_COLOR,
+                          }
+                    }
+                    thumbColor={isDisableAutoPrepare ? "#dbd7d7" : LIGHT_COLOR}
                     ios_backgroundColor={PRIMARY_LIGHT_COLOR}
                     onValueChange={(newValue) => {
                       setVisibleDelayModal(true);
@@ -206,7 +213,12 @@ const OrderDetails = (props) => {
                   />
                 </Left>
                 <Body style={{ flex: 8 }}>
-                  <Text>
+                  <Text
+                    style={{
+                      width: "100%",
+                      color: isDisableAutoPrepare ? "grey" : DARK_COLOR,
+                    }}
+                  >
                     {IMLocalized("wording-message-default-prepare-order")}
                   </Text>
                 </Body>
