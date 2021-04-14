@@ -13,7 +13,7 @@ import {
   Text,
   Card,
 } from "native-base";
-import { Switch } from "react-native";
+import { Switch, TouchableWithoutFeedback } from "react-native";
 import AwesomeAlert from "react-native-awesome-alerts";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -116,14 +116,14 @@ const OrderDetails = (props) => {
   };
 
   const handleAddTransaction = (newStatus) => {
-    const newTransaction = Array.from(transactionState, (transaction) => {
-      return transaction;
-    });
-    if (newStatus === OrderStatus.ACCEPTANCE && transactionState.length === 0) {
-      newTransaction.unshift({
-        createdAt: moment(order.createdAt),
-        toStatus: OrderStatus.INITIALIZATION,
-      });
+    let newTransaction = transactionState;
+    if (newTransaction === 0) {
+      newTransaction = [
+        {
+          toStatus: OrderStatus.INITIALIZATION,
+          createdAt: moment(order.createdAt),
+        },
+      ];
     }
     newTransaction.unshift({ createdAt: moment(), toStatus: newStatus });
     if (!canDelayOrderStatus.includes(listenedOrder.status)) {
@@ -148,6 +148,14 @@ const OrderDetails = (props) => {
 
   useEffect(() => {
     if (listenedOrder) {
+      if (
+        listenedOrder.isAutoPrepareOrder !== null &&
+        listenedOrder.isAutoPrepareOrder !== undefined &&
+        listenedOrder.isAutoPrepareOrder !== isAutoPrepare
+      ) {
+        setIsAutoPrepare(listenedOrder.isAutoPrepareOrder);
+        return;
+      }
       if (transactionState[0]?.toStatus !== listenedOrder.status) {
         handleAddTransaction(listenedOrder.status);
         setStatusCreatedOrder(listenedOrder.status);
@@ -176,25 +184,34 @@ const OrderDetails = (props) => {
         <View style={{ width: "95%", marginLeft: "2.5%" }}>
           <OrderDetail store={order?.partner} orderDetails={order} />
           <Card style={{ width: "95%", marginLeft: "2.5%" }}>
-            <CardItem>
-              <Left style={{ flex: 2 }}>
-                <Switch
-                  trackColor={{ false: PRIMARY_LIGHT_COLOR, true: DARK_COLOR }}
-                  thumbColor={LIGHT_COLOR}
-                  ios_backgroundColor={PRIMARY_LIGHT_COLOR}
-                  onValueChange={() => {
-                    setVisibleDelayModal(true);
-                  }}
-                  disabled={isDisableAutoPrepare}
-                  value={isAutoPrepare}
-                />
-              </Left>
-              <Body style={{ flex: 8 }}>
-                <Text>
-                  {IMLocalized("wording-message-default-prepare-order")}
-                </Text>
-              </Body>
-            </CardItem>
+            <TouchableWithoutFeedback
+              onPress={() => {
+                isDisableAutoPrepare ? null : setVisibleDelayModal(true);
+              }}
+            >
+              <CardItem>
+                <Left style={{ flex: 2 }}>
+                  <Switch
+                    trackColor={{
+                      false: PRIMARY_LIGHT_COLOR,
+                      true: DARK_COLOR,
+                    }}
+                    thumbColor={LIGHT_COLOR}
+                    ios_backgroundColor={PRIMARY_LIGHT_COLOR}
+                    onValueChange={(newValue) => {
+                      setVisibleDelayModal(true);
+                    }}
+                    disabled={isDisableAutoPrepare}
+                    value={isAutoPrepare}
+                  />
+                </Left>
+                <Body style={{ flex: 8 }}>
+                  <Text>
+                    {IMLocalized("wording-message-default-prepare-order")}
+                  </Text>
+                </Body>
+              </CardItem>
+            </TouchableWithoutFeedback>
           </Card>
           {transactionState ? (
             <TimelineTransaction
@@ -281,36 +298,38 @@ const OrderDetails = (props) => {
         title={MESSAGES.TITLE_NOTIFICATION}
         visible={visibleNotificationModal}
       />
-      <AwesomeAlert
-        show={visibleDelayModal}
-        showProgress={false}
-        title={IMLocalized(`wording-title-confirmation`)}
-        message={
-          isAutoPrepare
-            ? IMLocalized("wording-message-make-order-after-arrive")
-            : IMLocalized("wording-message-make-order-before-arrive")
-        }
-        closeOnTouchOutside={true}
-        closeOnHardwareBackPress={false}
-        contentStyle={{ backgroundColor: LIGHT_COLOR }}
-        contentContainerStyle={{ backgroundColor: LIGHT_COLOR }}
-        cancelText={IMLocalized("wording-cancel")}
-        confirmText={IMLocalized("wording-ok")}
-        confirmButtonColor={DARK_COLOR}
-        showCancelButton={true}
-        showConfirmButton={true}
-        onDismiss={() => {
-          setVisibleDelayModal(false);
-        }}
-        onCancelPressed={() => {
-          setVisibleDelayModal(false);
-        }}
-        onConfirmPressed={() => {
-          setAutoPrepareOrder(order.id, !isAutoPrepare);
-          setIsAutoPrepare(!isAutoPrepare);
-          setVisibleDelayModal(false);
-        }}
-      />
+      {visibleDelayModal ? (
+        <AwesomeAlert
+          show={visibleDelayModal}
+          showProgress={false}
+          title={IMLocalized(`wording-title-confirmation`)}
+          message={
+            isAutoPrepare
+              ? IMLocalized("wording-message-make-order-after-arrive")
+              : IMLocalized("wording-message-make-order-before-arrive")
+          }
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          contentStyle={{ backgroundColor: LIGHT_COLOR }}
+          contentContainerStyle={{ backgroundColor: LIGHT_COLOR }}
+          cancelText={IMLocalized("wording-cancel")}
+          confirmText={IMLocalized("wording-ok")}
+          confirmButtonColor={DARK_COLOR}
+          showCancelButton={true}
+          showConfirmButton={true}
+          onDismiss={() => {
+            setVisibleDelayModal(false);
+          }}
+          onCancelPressed={() => {
+            setVisibleDelayModal(false);
+          }}
+          onConfirmPressed={() => {
+            setVisibleDelayModal(false);
+            setAutoPrepareOrder(order.id, !isAutoPrepare);
+            setVisibleDelayModal(false);
+          }}
+        />
+      ) : null}
     </>
   );
 };
