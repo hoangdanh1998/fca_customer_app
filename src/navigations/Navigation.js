@@ -5,6 +5,7 @@ import {
 import { Icon, View } from "native-base";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { Alert } from 'react-native'
 import {
   APP_NAME,
   DARK_COLOR,
@@ -36,6 +37,7 @@ import {
 } from "../service/firebase/firebase-realtime";
 import { registerForPushNotificationsAsync } from "../service/notification/expo-notification";
 import CreateEmergencyOrder from "../screens/create-emergency-order";
+import FeedBackScreen from "../screens/feedback";
 
 // import EmergencyMapScreen from '../screens/map/emergency-google-map'
 const Stack = createStackNavigator();
@@ -65,7 +67,14 @@ export default function Navigation(props) {
   useEffect(() => {
     if (listenAccount && deviceKey) {
       if (deviceKey !== listenAccount.deviceKey) {
-        alert("Tài khoản được đăng nhập từ thiết bị khác");
+        Alert.alert(
+          "Thông báo",
+          "Tài khoản được đăng nhập từ thiết bị khác",
+          [
+              { text: "OK"}
+          ]
+      );
+        // alert("Tài khoản được đăng nhập từ thiết bị khác");
         handleLogOut();
       }
     }
@@ -83,6 +92,18 @@ export default function Navigation(props) {
   return (
     // <NavigationContainer>
     <Stack.Navigator>
+      <Stack.Screen
+        name="FEED_BACK"
+        component={FeedBackScreen}
+        options={{
+          title: "Đánh giá",
+          headerTintColor: LIGHT_COLOR,
+          headerStyle: {
+            backgroundColor: DARK_COLOR,
+          },
+          headerLeft: HeaderBackButton,
+        }}
+      />
       <Stack.Screen
         name="MAP_VIEW"
         component={MapScreen}
