@@ -1,8 +1,13 @@
 import moment from "moment";
-import { ResponseStatus } from "../../constants/index";
+import momentTz from "moment-timezone";
+import {
+  ResponseStatus,
+  DATE_TIME_FORMAT_CALL_API,
+} from "../../constants/index";
 import { CUSTOMER_ADDRESS } from "../../constants/seeding";
 import api from "../../service/fca-api/fca-api";
 import { EMERGENCY_ACTION } from "../action-types/actions";
+import { convertDayOfWeekToNumber } from "../../utils/utils";
 
 export const createEmergency = (param) => {
   return async (dispatch) => {
@@ -110,7 +115,19 @@ export const storeOrderParam = (order) => {
 };
 
 export const storeScheduleParam = (schedule) => {
+  const scheduleParam = {
+    customerId: schedule.customerId,
+    dayInWeek: schedule.day.map((day) => {
+      return convertDayOfWeekToNumber(day);
+    }),
+    time: schedule.time.format(DATE_TIME_FORMAT_CALL_API),
+  };
+  console.log("scheduleParam", scheduleParam);
   return async (dispatch) => {
+    const response = await api.post("order/auto-order", scheduleParam);
+    if (response.data.meta.status !== ResponseStatus.SUCCESS) {
+      alert("Something went wrong");
+    }
     dispatch({
       type: EMERGENCY_ACTION.STORE_SCHEDULE,
       payload: schedule,

@@ -55,6 +55,7 @@ import {
   storeScheduleParam,
 } from "../../redux/actions/emergency";
 import { addSchedule } from "../../service/cronjob/index";
+import { convertDayOfWeekToNumber } from "../../utils/utils";
 import { styles } from "./styles";
 
 Notifications.setNotificationHandler({
@@ -117,6 +118,7 @@ const EditEmergencyOrder = (props) => {
       if (isSchedule) {
         await handleSetupSchedule();
       }
+      setHasUnsavedChanges(false);
       setVisibleNotificationModal(true);
       setMessageNotificationModal(MESSAGES.SUCCESS);
       setTimeout(() => {
@@ -179,17 +181,15 @@ const EditEmergencyOrder = (props) => {
       }),
     };
     const scheduleParam = {
+      customerId: customer.id,
       day: scheduleDayList,
       time: scheduleTime,
+      isSchedule: isSchedule,
     };
     // console.log("order-param", orderParam);
     // console.log("schedule", scheduleParam);
     dispatch(storeOrderParam(orderParam));
     dispatch(storeScheduleParam(scheduleParam));
-    // await addSchedule(
-    //   JSON.stringify(scheduleParam),
-    //   JSON.stringify(orderParam)
-    // );
   };
 
   useEffect(() => {
@@ -203,6 +203,7 @@ const EditEmergencyOrder = (props) => {
       setDestinationList(Object.values(destinations));
     }
   }, []);
+
   useEffect(() => {
     setIsLoading(true);
     loadPartner();
@@ -214,10 +215,8 @@ const EditEmergencyOrder = (props) => {
         // If we don't have unsaved changes, then we don't need to do anything
         return;
       }
-
       // Prevent default behavior of leaving the screen
       e.preventDefault();
-
       // Prompt the user before leaving the screen
       Alert.alert(
         IMLocalized("wording-title-confirmation"),
@@ -435,8 +434,8 @@ const EditEmergencyOrder = (props) => {
                 name={MESSAGES.SAVE}
                 disable={false}
                 onPress={() => {
-                  // handleCreateEmergency();
-                  handleSetupSchedule();
+                  handleCreateEmergency();
+                  // handleSetupSchedule();
                 }}
               />
             </View>
