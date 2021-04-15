@@ -5,7 +5,7 @@ import {
 import { Icon, View } from "native-base";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Alert } from 'react-native'
+import { Alert } from "react-native";
 import {
   APP_NAME,
   DARK_COLOR,
@@ -41,6 +41,7 @@ import FeedBackScreen from "../screens/feedback";
 
 // import EmergencyMapScreen from '../screens/map/emergency-google-map'
 const Stack = createStackNavigator();
+init(LANGUAGE.VI);
 export default function Navigation(props) {
   const deviceKey = useSelector((state) => state.account.deviceKey);
   const customer = useSelector((state) => state.account.customer);
@@ -58,7 +59,6 @@ export default function Navigation(props) {
     dispatch(setDeviceKey(deviceKey));
   };
 
-  init(LANGUAGE.VI);
   const handleLogOut = props.route.params.handleLogOut;
   useEffect(() => {
     handleSetDeviceKey();
@@ -68,13 +68,10 @@ export default function Navigation(props) {
     if (listenAccount && deviceKey) {
       if (deviceKey !== listenAccount.deviceKey) {
         Alert.alert(
-          "Thông báo",
-          "Tài khoản được đăng nhập từ thiết bị khác",
-          [
-              { text: "OK"}
-          ]
-      );
-        // alert("Tài khoản được đăng nhập từ thiết bị khác");
+          IMLocalized("wording-title-notification"),
+          IMLocalized("wording-message-force-logout"),
+          [{ text: "OK" }]
+        );
         handleLogOut();
       }
     }
@@ -92,18 +89,6 @@ export default function Navigation(props) {
   return (
     // <NavigationContainer>
     <Stack.Navigator>
-      {/* <Stack.Screen
-        name="FEED_BACK"
-        component={FeedBackScreen}
-        options={{
-          title: "Đánh giá",
-          headerTintColor: LIGHT_COLOR,
-          headerStyle: {
-            backgroundColor: DARK_COLOR,
-          },
-          headerLeft: HeaderBackButton,
-        }}
-      /> */}
       <Stack.Screen
         name="MAP_VIEW"
         component={MapScreen}
@@ -310,14 +295,6 @@ export default function Navigation(props) {
                   navigation.navigate("EMERGENCY_ORDER_LIST");
                 }}
               />
-              {/* <Icon
-                name="trash-outline"
-                style={{ color: LIGHT_COLOR }}
-                onPress={() => {
-                  navigation.navigate("MY_PROFILE");
-                  alert("Delete profile");
-                }}
-              /> */}
             </View>
           ),
         })}
@@ -357,6 +334,18 @@ export default function Navigation(props) {
           },
           headerLeft: HeaderBackButton,
         })}
+      />
+      <Stack.Screen
+        name="FEEDBACK"
+        component={FeedBackScreen}
+        options={{
+          title: IMLocalized("title-feedback"),
+          headerTintColor: LIGHT_COLOR,
+          headerStyle: {
+            backgroundColor: DARK_COLOR,
+          },
+          headerLeft: HeaderBackButton,
+        }}
       />
     </Stack.Navigator>
     // </NavigationContainer>

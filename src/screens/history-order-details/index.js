@@ -61,7 +61,7 @@ const HistoryOrderDetails = (props) => {
               name={MESSAGES.FEEDBACK}
               disable={false}
               onPress={() => {
-                alert("Do feedback");
+                props.navigation.navigate("FEEDBACK", { order });
               }}
             />
           </View>

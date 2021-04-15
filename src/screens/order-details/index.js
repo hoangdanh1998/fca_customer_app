@@ -282,7 +282,7 @@ const OrderDetails = (props) => {
               name={MESSAGES.FEEDBACK}
               disable={false}
               onPress={() => {
-                alert("Make feedback");
+                props.navigation.navigate("FEEDBACK", { order });
               }}
             />
           </View>
