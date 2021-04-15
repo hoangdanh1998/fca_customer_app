@@ -10,7 +10,7 @@ export const updateExpoToken = async (token, id) => {
         }
         
     } catch (error) {
-        throw error;
+        console.log("err update expo token: ", error);
     }
 
 
