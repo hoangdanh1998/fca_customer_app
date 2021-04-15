@@ -15,7 +15,7 @@ const StoreProfileWithAvatar = (props) => {
       <Left style={{ flex: 1 }}>
         <Image
           source={{
-            uri: store.imageLink,
+            uri: store?.imageLink,
           }}
           style={{ height: 100, width: "100%" }}
         />
@@ -28,11 +28,11 @@ const StoreProfileWithAvatar = (props) => {
             width: "95%",
           }}
         >
-          {store.name}
+          {store?.name}
         </Text>
         <Text></Text>
         <Text style={{ textAlign: "left", width: "95%" }}>
-          {store.address.description}
+          {store?.address?.description}
         </Text>
       </Right>
     </CardItem>

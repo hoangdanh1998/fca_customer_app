@@ -17,6 +17,7 @@ import {
   Left,
   Right,
   Body,
+  List,
 } from "native-base";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import FocusedButton from "../../components/atoms/focused-button/index";
@@ -28,6 +29,9 @@ init(LANGUAGE.VI);
 export default function FeedBackScreen(props) {
   const [colorIconDislike, setColorIconDislike] = useState("grey");
   const [colorIconLike, setColorIconLike] = useState("grey");
+  const order = props.route.params.order;
+  const [comment, setComment] = useState("");
+  const [react, setReact] = useState("");
 
   return (
     <KeyboardAvoidingView style={{ flex: 1 }} behavior="height" enabled>
@@ -50,21 +54,24 @@ export default function FeedBackScreen(props) {
                       color: DARK_COLOR,
                     }}
                   >
-                    Cà phê sân vườn Mimosa
+                    {order?.partner?.name}
                   </Text>
                 </CardItem>
-                <CardItem>
-                  <Text style={styles.drinkItem}>Cà phê sữa</Text>
-                </CardItem>
-                <CardItem>
-                  <Text style={styles.drinkItem}>Cacao sữa</Text>
-                </CardItem>
+                <List
+                  dataArray={order?.items}
+                  renderRow={(item) => (
+                    <CardItem>
+                      <Text style={styles.drinkItem}>{item.name}</Text>
+                    </CardItem>
+                  )}
+                />
               </Card>
               <View style={[styles.rowContainer]}>
                 <TouchableOpacity
                   onPress={() => {
                     setColorIconDislike("red");
                     setColorIconLike("#e0e0e0");
+                    setReact("dislike");
                   }}
                 >
                   <AntDesign
@@ -77,6 +84,7 @@ export default function FeedBackScreen(props) {
                   onPress={() => {
                     setColorIconLike("green");
                     setColorIconDislike("#e0e0e0");
+                    setReact("like");
                   }}
                 >
                   <AntDesign size={70} name="like2" color={colorIconLike} />
@@ -93,6 +101,9 @@ export default function FeedBackScreen(props) {
                   )}
                   autoCompleteType="off"
                   autoCorrect={false}
+                  onChangeText={(text) => {
+                    setComment(text);
+                  }}
                 />
               </View>
             </View>
@@ -101,7 +112,13 @@ export default function FeedBackScreen(props) {
       </TouchableWithoutFeedback>
       <Footer style={{ backgroundColor: "white" }}>
         <View style={{ width: "100%" }}>
-          <FocusedButton full name="send" />
+          <FocusedButton
+            full
+            name="send"
+            onPress={() => {
+              alert(JSON.stringify({ react: react, comment: comment }));
+            }}
+          />
         </View>
       </Footer>
     </KeyboardAvoidingView>

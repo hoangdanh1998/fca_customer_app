@@ -31,6 +31,7 @@
     "title-my-profile": "My Profile",
     "title-emergency-profile": "Emergency profile",
     "title-saved-address": "Saved Address",
+    "title-feedback":"Feedback",
 
     "weekly-every-monday": "Every Monday",
     "weekly-every-tuesday": "Every Tuesday",
@@ -108,6 +109,7 @@
     "wording-option-selection-day": "Selection",
     "wording-subtitle-automatic-schedule": "Automatic order schedule",
     "wording-note-automatic-schedule": "Please make sure that your balance is enough to make order",
+    "wording-message-force-logout": "Your account is logged on other device",
     "wording-message-feedback-order": "How do you feel about this order?",
     "wording-message-give-feedback-comment": "Tell me how you feel about this order",
     "wording-message-automatic-schedule": "System will make order automatically at",

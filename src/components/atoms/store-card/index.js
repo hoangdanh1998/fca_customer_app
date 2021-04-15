@@ -10,13 +10,13 @@ const StoreCard = (props) => {
       <CardItem style={{ flex: 1, paddingLeft: "-5%" }}>
         <Left>
           <Body>
-            <H3>{store.name}</H3>
-            {store.rate ? (
+            <H3>{store?.name}</H3>
+            {store?.rate ? (
               <Text note>
-                <Rating imageSize={15} readonly startingValue={store.rate} />
+                <Rating imageSize={15} readonly startingValue={store?.rate} />
               </Text>
             ) : null}
-            <Text>{store.address ? store.address.description : "-"}</Text>
+            <Text>{store?.address ? store?.address?.description : "-"}</Text>
           </Body>
         </Left>
       </CardItem>
