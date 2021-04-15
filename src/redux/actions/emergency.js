@@ -1,5 +1,5 @@
 import moment from "moment";
-import momentTz from "moment-timezone";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   ResponseStatus,
   DATE_TIME_FORMAT_CALL_API,
@@ -16,6 +16,7 @@ export const createEmergency = (param) => {
         `/customer/${param.customerId}/favorite`,
         param
       );
+      await AsyncStorage.removeItem("@storage_ScheduleParam");
       dispatch({
         type: EMERGENCY_ACTION.GET_EMERGENCY,
         payload: response.data.data.customer.favoriteSummary,
@@ -38,6 +39,10 @@ export const getEmergency = (param) => {
       console.log("getEmergency-fail");
       alert("Something went wrong");
     }
+
+    // const scheduleString = await AsyncStorage.getItem("@storage_ScheduleParam");
+    // console.log("scheduleString", scheduleString);
+    // const schedule = scheduleString ? JSON.parse(scheduleString) : {};
     dispatch({
       type: EMERGENCY_ACTION.GET_EMERGENCY,
       payload: response.data.data.customer.favoriteSummary,

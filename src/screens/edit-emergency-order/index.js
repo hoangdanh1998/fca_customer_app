@@ -116,9 +116,9 @@ const EditEmergencyOrder = (props) => {
     try {
       await dispatch(createEmergency(param));
       if (isSchedule) {
+        console.log("isSchedule", isSchedule);
         await handleSetupSchedule();
       }
-      setHasUnsavedChanges(false);
       setVisibleNotificationModal(true);
       setMessageNotificationModal(MESSAGES.SUCCESS);
       setTimeout(() => {
@@ -188,8 +188,8 @@ const EditEmergencyOrder = (props) => {
     };
     // console.log("order-param", orderParam);
     // console.log("schedule", scheduleParam);
-    dispatch(storeOrderParam(orderParam));
     dispatch(storeScheduleParam(scheduleParam));
+    dispatch(storeOrderParam(orderParam));
   };
 
   useEffect(() => {
@@ -210,34 +210,36 @@ const EditEmergencyOrder = (props) => {
   }, []);
 
   useEffect(() => {
-    props.navigation.addListener("beforeRemove", (e) => {
-      if (!hasUnsavedChanges) {
-        // If we don't have unsaved changes, then we don't need to do anything
-        return;
-      }
-      // Prevent default behavior of leaving the screen
-      e.preventDefault();
-      // Prompt the user before leaving the screen
-      Alert.alert(
-        IMLocalized("wording-title-confirmation"),
-        IMLocalized("wording-message-discard-changes"),
-        [
-          {
-            text: IMLocalized("wording-dont-leave"),
-            style: "cancel",
-            onPress: () => {},
-          },
-          {
-            text: IMLocalized("wording-discard-changes"),
-            style: "default",
-            // If the user confirmed, then we dispatch the action we blocked earlier
-            // This will continue the action that had triggered the removal of the screen
-            onPress: () => props.navigation.dispatch(e.data.action),
-          },
-        ]
-      );
-    });
-  }, [props.navigation, hasUnsavedChanges]);
+    if (hasUnsavedChanges) {
+      props.navigation.addListener("beforeRemove", (e) => {
+        if (!hasUnsavedChanges) {
+          // If we don't have unsaved changes, then we don't need to do anything
+          return;
+        }
+        // Prevent default behavior of leaving the screen
+        e.preventDefault();
+        // Prompt the user before leaving the screen
+        Alert.alert(
+          IMLocalized("wording-title-confirmation"),
+          IMLocalized("wording-message-discard-changes"),
+          [
+            {
+              text: IMLocalized("wording-dont-leave"),
+              style: "cancel",
+              onPress: () => {},
+            },
+            {
+              text: IMLocalized("wording-discard-changes"),
+              style: "default",
+              // If the user confirmed, then we dispatch the action we blocked earlier
+              // This will continue the action that had triggered the removal of the screen
+              onPress: () => props.navigation.dispatch(e.data.action),
+            },
+          ]
+        );
+      });
+    } else return;
+  }, [hasUnsavedChanges]);
 
   useEffect(() => {
     setPartner(loadedPartner);
@@ -434,6 +436,7 @@ const EditEmergencyOrder = (props) => {
                 name={MESSAGES.SAVE}
                 disable={false}
                 onPress={() => {
+                  setHasUnsavedChanges(false);
                   handleCreateEmergency();
                   // handleSetupSchedule();
                 }}
