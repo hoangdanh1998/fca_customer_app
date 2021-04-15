@@ -164,7 +164,7 @@ const EmergencyProfile = (props) => {
                 </Body>
               </CardItem>
             </View>
-            {loadedProfile?.schedule?.day ? (
+            {schedule?.day ? (
               <View
                 style={{
                   flex: 1,

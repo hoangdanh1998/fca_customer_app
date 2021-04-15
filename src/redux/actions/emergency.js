@@ -18,7 +18,7 @@ export const createEmergency = (param) => {
       );
       await AsyncStorage.removeItem("@storage_ScheduleParam");
       dispatch({
-        type: EMERGENCY_ACTION.GET_EMERGENCY,
+        type: EMERGENCY_ACTION.CREATE_EMERGENCY,
         payload: response.data.data.customer.favoriteSummary,
       });
     } catch (err) {
@@ -40,12 +40,16 @@ export const getEmergency = (param) => {
       alert("Something went wrong");
     }
 
-    // const scheduleString = await AsyncStorage.getItem("@storage_ScheduleParam");
-    // console.log("scheduleString", scheduleString);
-    // const schedule = scheduleString ? JSON.parse(scheduleString) : {};
+    const scheduleString = await AsyncStorage.getItem("@storage_ScheduleParam");
+    console.log("scheduleString", scheduleString);
+    const schedule =
+      scheduleString && scheduleString.length > 0
+        ? JSON.parse(scheduleString)
+        : {};
     dispatch({
       type: EMERGENCY_ACTION.GET_EMERGENCY,
-      payload: response.data.data.customer.favoriteSummary,
+      payload: { ...response.data.data.customer.favoriteSummary, schedule },
+      // payload: response.data.data.customer.favoriteSummary,
     });
   };
 };

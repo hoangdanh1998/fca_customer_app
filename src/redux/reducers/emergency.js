@@ -82,6 +82,14 @@ const emergencyReducer = (state = initialState, action) => {
       return {
         ...state,
         emergency: action.payload,
+        schedule: action.payload.schedule,
+      };
+    }
+
+    case EMERGENCY_ACTION.CREATE_EMERGENCY: {
+      return {
+        ...state,
+        emergency: action.payload,
       };
     }
 

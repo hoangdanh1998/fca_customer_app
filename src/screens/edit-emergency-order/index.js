@@ -53,6 +53,7 @@ import {
   getPartnerInformation,
   storeOrderParam,
   storeScheduleParam,
+  getEmergency,
 } from "../../redux/actions/emergency";
 import { addSchedule } from "../../service/cronjob/index";
 import { convertDayOfWeekToNumber } from "../../utils/utils";
@@ -119,9 +120,11 @@ const EditEmergencyOrder = (props) => {
         console.log("isSchedule", isSchedule);
         await handleSetupSchedule();
       }
+      dispatch(getEmergency(customer.id));
       setVisibleNotificationModal(true);
       setMessageNotificationModal(MESSAGES.SUCCESS);
       setTimeout(() => {
+        setHasUnsavedChanges(false);
         setVisibleNotificationModal(false);
         props.navigation.dispatch(
           CommonActions.navigate({
@@ -210,36 +213,34 @@ const EditEmergencyOrder = (props) => {
   }, []);
 
   useEffect(() => {
-    if (hasUnsavedChanges) {
-      props.navigation.addListener("beforeRemove", (e) => {
-        if (!hasUnsavedChanges) {
-          // If we don't have unsaved changes, then we don't need to do anything
-          return;
-        }
-        // Prevent default behavior of leaving the screen
-        e.preventDefault();
-        // Prompt the user before leaving the screen
-        Alert.alert(
-          IMLocalized("wording-title-confirmation"),
-          IMLocalized("wording-message-discard-changes"),
-          [
-            {
-              text: IMLocalized("wording-dont-leave"),
-              style: "cancel",
-              onPress: () => {},
-            },
-            {
-              text: IMLocalized("wording-discard-changes"),
-              style: "default",
-              // If the user confirmed, then we dispatch the action we blocked earlier
-              // This will continue the action that had triggered the removal of the screen
-              onPress: () => props.navigation.dispatch(e.data.action),
-            },
-          ]
-        );
-      });
-    } else return;
-  }, [hasUnsavedChanges]);
+    props.navigation.addListener("beforeRemove", (e) => {
+      if (!hasUnsavedChanges) {
+        // If we don't have unsaved changes, then we don't need to do anything
+        return;
+      }
+      // Prevent default behavior of leaving the screen
+      e.preventDefault();
+      // Prompt the user before leaving the screen
+      Alert.alert(
+        IMLocalized("wording-title-confirmation"),
+        IMLocalized("wording-message-discard-changes"),
+        [
+          {
+            text: IMLocalized("wording-dont-leave"),
+            style: "cancel",
+            onPress: () => {},
+          },
+          {
+            text: IMLocalized("wording-discard-changes"),
+            style: "default",
+            // If the user confirmed, then we dispatch the action we blocked earlier
+            // This will continue the action that had triggered the removal of the screen
+            onPress: () => props.navigation.dispatch(e.data.action),
+          },
+        ]
+      );
+    });
+  }, [hasUnsavedChanges, props.navigation]);
 
   useEffect(() => {
     setPartner(loadedPartner);
