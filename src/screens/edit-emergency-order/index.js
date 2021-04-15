@@ -22,7 +22,11 @@ import {
   CheckBox,
   Icon,
 } from "native-base";
-import { ActivityIndicator, TouchableWithoutFeedback } from "react-native";
+import {
+  ActivityIndicator,
+  TouchableWithoutFeedback,
+  Alert,
+} from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import NumberFormat from "react-number-format";
 import EditQuantityModal from "../../components/atoms/edit-quantity-modal/index";
@@ -66,6 +70,7 @@ const EditEmergencyOrder = (props) => {
   const customer = useSelector((state) => state.account.customer);
   const loadedPartner = useSelector((state) => state.emergency.partner);
 
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [destinationList, setDestinationList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [displayId, setDisplayId] = useState("");
@@ -202,6 +207,39 @@ const EditEmergencyOrder = (props) => {
     setIsLoading(true);
     loadPartner();
   }, []);
+
+  useEffect(() => {
+    props.navigation.addListener("beforeRemove", (e) => {
+      if (!hasUnsavedChanges) {
+        // If we don't have unsaved changes, then we don't need to do anything
+        return;
+      }
+
+      // Prevent default behavior of leaving the screen
+      e.preventDefault();
+
+      // Prompt the user before leaving the screen
+      Alert.alert(
+        IMLocalized("wording-title-confirmation"),
+        IMLocalized("wording-message-discard-changes"),
+        [
+          {
+            text: IMLocalized("wording-dont-leave"),
+            style: "cancel",
+            onPress: () => {},
+          },
+          {
+            text: IMLocalized("wording-discard-changes"),
+            style: "default",
+            // If the user confirmed, then we dispatch the action we blocked earlier
+            // This will continue the action that had triggered the removal of the screen
+            onPress: () => props.navigation.dispatch(e.data.action),
+          },
+        ]
+      );
+    });
+  }, [props.navigation, hasUnsavedChanges]);
+
   useEffect(() => {
     setPartner(loadedPartner);
     setSelectedDestination(
@@ -273,7 +311,6 @@ const EditEmergencyOrder = (props) => {
   };
   const handleSelectSchedule = () => {
     const selection = !isSchedule;
-    console.log("selection", selection);
     setIsSchedule(selection);
     if (selection) {
       setDisplayMode("time");
@@ -297,6 +334,7 @@ const EditEmergencyOrder = (props) => {
                 <>
                   <TouchableWithoutFeedback
                     onPress={() => {
+                      setHasUnsavedChanges(true);
                       setDisplayId(displayId === item.id ? "" : item.id);
                     }}
                   >
@@ -356,6 +394,7 @@ const EditEmergencyOrder = (props) => {
                       selectedColor={DARK_COLOR}
                       selected={selectedDestination.id === destination.id}
                       onPress={() => {
+                        setHasUnsavedChanges(true);
                         setSelectedDestination(destination);
                       }}
                     />
@@ -368,6 +407,7 @@ const EditEmergencyOrder = (props) => {
             </View>
             <TouchableWithoutFeedback
               onPress={() => {
+                setHasUnsavedChanges(true);
                 handleSelectSchedule();
               }}
             >
