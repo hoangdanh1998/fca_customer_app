@@ -240,7 +240,7 @@ const EditEmergencyOrder = (props) => {
         ]
       );
     });
-  }, [hasUnsavedChanges, props.navigation]);
+  }, [props.navigation]);
 
   useEffect(() => {
     setPartner(loadedPartner);
