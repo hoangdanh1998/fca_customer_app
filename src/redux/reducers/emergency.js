@@ -38,6 +38,17 @@ const storeScheduleParam = async (schedule) => {
   }
 };
 
+// const getScheduleParam = async () => {
+//   try {
+//     const scheduleParamString = await AsyncStorage.getItem(
+//       "@storage_ScheduleParam"
+//     );
+//     return scheduleParamString ? JSON.parse(scheduleParamString) : {};
+//   } catch (e) {
+//     console.log("store-schedule", e);
+//   }
+// };
+
 const emergencyReducer = (state = initialState, action) => {
   switch (action.type) {
     case EMERGENCY_ACTION.GET_HISTORY: {
@@ -67,6 +78,8 @@ const emergencyReducer = (state = initialState, action) => {
     }
 
     case EMERGENCY_ACTION.GET_EMERGENCY: {
+      // const schedule = await getScheduleParam();
+      // return { ...state, emergency: { ...action.payload, schedule } };
       return { ...state, emergency: action.payload };
     }
 

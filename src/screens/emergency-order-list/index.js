@@ -27,7 +27,7 @@ const EmergencyOrderList = (props) => {
       alert(error);
     }
   }, [dispatch]);
-  
+
   useEffect(() => {
     loadSuggestionEmergency();
     setIsLoading(false);
@@ -45,7 +45,7 @@ const EmergencyOrderList = (props) => {
     </View>
   ) : (
     <Content>
-      {suggestionEmergency.length > 0 ? (
+      {suggestionEmergency?.length > 0 ? (
         <List
           dataArray={suggestionEmergency}
           renderRow={(partner) => (

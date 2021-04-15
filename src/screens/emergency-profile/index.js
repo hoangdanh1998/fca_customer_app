@@ -14,7 +14,7 @@ import {
   ListItem,
   Right,
 } from "native-base";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, Switch } from "react-native";
 import NumberFormat from "react-number-format";
 import { withNavigation } from "@react-navigation/compat";
 import { Divider } from "react-native-elements";
@@ -130,6 +130,24 @@ const EmergencyProfile = (props) => {
                 <Body style={{ flex: 4 }}>
                   <Text note>{profile?.destination?.description}</Text>
                 </Body>
+              </CardItem>
+              <CardItem>
+                <Left>
+                  <Switch
+                    trackColor={{
+                      false: PRIMARY_LIGHT_COLOR,
+                      true: DARK_COLOR,
+                    }}
+                    thumbColor={LIGHT_COLOR}
+                    ios_backgroundColor={PRIMARY_LIGHT_COLOR}
+                    onValueChange={(newValue) => {
+                      // setVisibleDelayModal(true);
+                    }}
+                    // disabled={isDisableAutoPrepare}
+                    value={profile?.schedule?.isSchedule}
+                  />
+                </Left>
+                <Body></Body>
               </CardItem>
             </View>
           </View>

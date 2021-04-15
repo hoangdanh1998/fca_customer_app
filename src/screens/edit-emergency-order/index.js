@@ -559,7 +559,31 @@ const EditEmergencyOrder = (props) => {
             {IMLocalized("wording-note-automatic-schedule")}
           </Text>
         </CardItem>
-        <CardItem footer bordered>
+        <Footer style={styles.footer}>
+          <View
+            style={{
+              width: "100%",
+              flexDirection: "row",
+              justifyContent: "center",
+              flex: 1,
+            }}
+          >
+            <UnFocusedButton
+              name="cancel"
+              onPress={() => {
+                setDisplayMode("order");
+                setIsSchedule(false);
+              }}
+            />
+            <FocusedButton
+              name="save"
+              onPress={() => {
+                setDisplayMode("order");
+              }}
+            />
+          </View>
+        </Footer>
+        {/* <CardItem footer bordered>
           <Left style={{ flex: 1 }}>
             <UnFocusedButton
               name="later"
@@ -577,7 +601,7 @@ const EditEmergencyOrder = (props) => {
               }}
             />
           </Right>
-        </CardItem>
+        </CardItem> */}
       </>
     );
   };
