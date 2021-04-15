@@ -9,6 +9,7 @@ const initialState = {
   suggestionEmergency: [],
   partner: {},
   destinationList: [],
+  schedule: {},
 };
 
 const storeOrderParam = async (order) => {
@@ -33,6 +34,17 @@ const storeScheduleParam = async (schedule) => {
       "schedule-param-in-storage",
       await AsyncStorage.getItem("@storage_ScheduleParam")
     );
+  } catch (e) {
+    console.log("store-schedule", e);
+  }
+};
+
+const getScheduleParam = async () => {
+  try {
+    const scheduleParamString = await AsyncStorage.getItem(
+      "@storage_ScheduleParam"
+    );
+    return scheduleParamString ? JSON.parse(scheduleParamString) : {};
   } catch (e) {
     console.log("store-schedule", e);
   }
@@ -67,7 +79,18 @@ const emergencyReducer = (state = initialState, action) => {
     }
 
     case EMERGENCY_ACTION.GET_EMERGENCY: {
-      return { ...state, emergency: action.payload };
+      return {
+        ...state,
+        emergency: action.payload,
+        schedule: action.payload.schedule,
+      };
+    }
+
+    case EMERGENCY_ACTION.CREATE_EMERGENCY: {
+      return {
+        ...state,
+        emergency: action.payload,
+      };
     }
 
     case EMERGENCY_ACTION.GET_DESTINATION: {
@@ -90,7 +113,7 @@ const emergencyReducer = (state = initialState, action) => {
 
     case EMERGENCY_ACTION.STORE_SCHEDULE: {
       storeScheduleParam(action.payload);
-      return;
+      return { ...state, schedule: action.payload };
     }
 
     default:

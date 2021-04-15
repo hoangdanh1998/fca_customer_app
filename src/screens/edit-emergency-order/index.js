@@ -22,7 +22,11 @@ import {
   CheckBox,
   Icon,
 } from "native-base";
-import { ActivityIndicator, TouchableWithoutFeedback } from "react-native";
+import {
+  ActivityIndicator,
+  TouchableWithoutFeedback,
+  Alert,
+} from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import NumberFormat from "react-number-format";
 import EditQuantityModal from "../../components/atoms/edit-quantity-modal/index";
@@ -49,8 +53,10 @@ import {
   getPartnerInformation,
   storeOrderParam,
   storeScheduleParam,
+  getEmergency,
 } from "../../redux/actions/emergency";
 import { addSchedule } from "../../service/cronjob/index";
+import { convertDayOfWeekToNumber } from "../../utils/utils";
 import { styles } from "./styles";
 
 Notifications.setNotificationHandler({
@@ -66,6 +72,7 @@ const EditEmergencyOrder = (props) => {
   const customer = useSelector((state) => state.account.customer);
   const loadedPartner = useSelector((state) => state.emergency.partner);
 
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [destinationList, setDestinationList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [displayId, setDisplayId] = useState("");
@@ -110,11 +117,14 @@ const EditEmergencyOrder = (props) => {
     try {
       await dispatch(createEmergency(param));
       if (isSchedule) {
+        console.log("isSchedule", isSchedule);
         await handleSetupSchedule();
       }
+      dispatch(getEmergency(customer.id));
       setVisibleNotificationModal(true);
       setMessageNotificationModal(MESSAGES.SUCCESS);
       setTimeout(() => {
+        setHasUnsavedChanges(false);
         setVisibleNotificationModal(false);
         props.navigation.dispatch(
           CommonActions.navigate({
@@ -174,17 +184,15 @@ const EditEmergencyOrder = (props) => {
       }),
     };
     const scheduleParam = {
+      customerId: customer.id,
       day: scheduleDayList,
       time: scheduleTime,
+      isSchedule: isSchedule,
     };
     // console.log("order-param", orderParam);
     // console.log("schedule", scheduleParam);
-    dispatch(storeOrderParam(orderParam));
     dispatch(storeScheduleParam(scheduleParam));
-    // await addSchedule(
-    //   JSON.stringify(scheduleParam),
-    //   JSON.stringify(orderParam)
-    // );
+    dispatch(storeOrderParam(orderParam));
   };
 
   useEffect(() => {
@@ -198,10 +206,42 @@ const EditEmergencyOrder = (props) => {
       setDestinationList(Object.values(destinations));
     }
   }, []);
+
   useEffect(() => {
     setIsLoading(true);
     loadPartner();
   }, []);
+
+  useEffect(() => {
+    props.navigation.addListener("beforeRemove", (e) => {
+      if (!hasUnsavedChanges) {
+        // If we don't have unsaved changes, then we don't need to do anything
+        return;
+      }
+      // Prevent default behavior of leaving the screen
+      e.preventDefault();
+      // Prompt the user before leaving the screen
+      Alert.alert(
+        IMLocalized("wording-title-confirmation"),
+        IMLocalized("wording-message-discard-changes"),
+        [
+          {
+            text: IMLocalized("wording-dont-leave"),
+            style: "cancel",
+            onPress: () => {},
+          },
+          {
+            text: IMLocalized("wording-discard-changes"),
+            style: "default",
+            // If the user confirmed, then we dispatch the action we blocked earlier
+            // This will continue the action that had triggered the removal of the screen
+            onPress: () => props.navigation.dispatch(e.data.action),
+          },
+        ]
+      );
+    });
+  }, [props.navigation]);
+
   useEffect(() => {
     setPartner(loadedPartner);
     setSelectedDestination(
@@ -273,7 +313,6 @@ const EditEmergencyOrder = (props) => {
   };
   const handleSelectSchedule = () => {
     const selection = !isSchedule;
-    console.log("selection", selection);
     setIsSchedule(selection);
     if (selection) {
       setDisplayMode("time");
@@ -297,6 +336,7 @@ const EditEmergencyOrder = (props) => {
                 <>
                   <TouchableWithoutFeedback
                     onPress={() => {
+                      setHasUnsavedChanges(true);
                       setDisplayId(displayId === item.id ? "" : item.id);
                     }}
                   >
@@ -356,6 +396,7 @@ const EditEmergencyOrder = (props) => {
                       selectedColor={DARK_COLOR}
                       selected={selectedDestination.id === destination.id}
                       onPress={() => {
+                        setHasUnsavedChanges(true);
                         setSelectedDestination(destination);
                       }}
                     />
@@ -368,6 +409,7 @@ const EditEmergencyOrder = (props) => {
             </View>
             <TouchableWithoutFeedback
               onPress={() => {
+                setHasUnsavedChanges(true);
                 handleSelectSchedule();
               }}
             >
@@ -395,8 +437,9 @@ const EditEmergencyOrder = (props) => {
                 name={MESSAGES.SAVE}
                 disable={false}
                 onPress={() => {
-                  // handleCreateEmergency();
-                  handleSetupSchedule();
+                  setHasUnsavedChanges(false);
+                  handleCreateEmergency();
+                  // handleSetupSchedule();
                 }}
               />
             </View>
@@ -520,7 +563,31 @@ const EditEmergencyOrder = (props) => {
             {IMLocalized("wording-note-automatic-schedule")}
           </Text>
         </CardItem>
-        <CardItem footer bordered>
+        <Footer style={styles.footer}>
+          <View
+            style={{
+              width: "100%",
+              flexDirection: "row",
+              justifyContent: "center",
+              flex: 1,
+            }}
+          >
+            <UnFocusedButton
+              name="cancel"
+              onPress={() => {
+                setDisplayMode("order");
+                setIsSchedule(false);
+              }}
+            />
+            <FocusedButton
+              name="save"
+              onPress={() => {
+                setDisplayMode("order");
+              }}
+            />
+          </View>
+        </Footer>
+        {/* <CardItem footer bordered>
           <Left style={{ flex: 1 }}>
             <UnFocusedButton
               name="later"
@@ -538,7 +605,7 @@ const EditEmergencyOrder = (props) => {
               }}
             />
           </Right>
-        </CardItem>
+        </CardItem> */}
       </>
     );
   };

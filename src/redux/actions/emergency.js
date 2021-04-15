@@ -1,8 +1,13 @@
 import moment from "moment";
-import { ResponseStatus } from "../../constants/index";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  ResponseStatus,
+  DATE_TIME_FORMAT_CALL_API,
+} from "../../constants/index";
 import { CUSTOMER_ADDRESS } from "../../constants/seeding";
 import api from "../../service/fca-api/fca-api";
 import { EMERGENCY_ACTION } from "../action-types/actions";
+import { convertDayOfWeekToNumber } from "../../utils/utils";
 
 export const createEmergency = (param) => {
   return async (dispatch) => {
@@ -11,8 +16,9 @@ export const createEmergency = (param) => {
         `/customer/${param.customerId}/favorite`,
         param
       );
+      await AsyncStorage.removeItem("@storage_ScheduleParam");
       dispatch({
-        type: EMERGENCY_ACTION.GET_EMERGENCY,
+        type: EMERGENCY_ACTION.CREATE_EMERGENCY,
         payload: response.data.data.customer.favoriteSummary,
       });
     } catch (err) {
@@ -33,9 +39,17 @@ export const getEmergency = (param) => {
       console.log("getEmergency-fail");
       alert("Something went wrong");
     }
+
+    const scheduleString = await AsyncStorage.getItem("@storage_ScheduleParam");
+    console.log("scheduleString", scheduleString);
+    const schedule =
+      scheduleString && scheduleString.length > 0
+        ? JSON.parse(scheduleString)
+        : {};
     dispatch({
       type: EMERGENCY_ACTION.GET_EMERGENCY,
-      payload: response.data.data.customer.favoriteSummary,
+      payload: { ...response.data.data.customer.favoriteSummary, schedule },
+      // payload: response.data.data.customer.favoriteSummary,
     });
   };
 };
@@ -110,7 +124,19 @@ export const storeOrderParam = (order) => {
 };
 
 export const storeScheduleParam = (schedule) => {
+  const scheduleParam = {
+    customerId: schedule.customerId,
+    dayInWeek: schedule.day.map((day) => {
+      return convertDayOfWeekToNumber(day);
+    }),
+    time: schedule.time.format(DATE_TIME_FORMAT_CALL_API),
+  };
+  console.log("scheduleParam", scheduleParam);
   return async (dispatch) => {
+    const response = await api.post("order/auto-order", scheduleParam);
+    if (response.data.meta.status !== ResponseStatus.SUCCESS) {
+      alert("Something went wrong");
+    }
     dispatch({
       type: EMERGENCY_ACTION.STORE_SCHEDULE,
       payload: schedule,
