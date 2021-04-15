@@ -88,7 +88,7 @@ const OrderDetails = (props) => {
       if (length > 1) {
         const newSuggestion = suggestionStores[length - 2];
         const newSuggestList = suggestionStores.filter(
-          (store) => store.id !== bestSuggestion.id
+          (store) => store?.id !== bestSuggestion.id
         );
         dispatch(setStoreSuggestion(newSuggestion, newSuggestList));
       }

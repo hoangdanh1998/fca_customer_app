@@ -92,7 +92,7 @@ export default function Navigation(props) {
   return (
     // <NavigationContainer>
     <Stack.Navigator>
-      <Stack.Screen
+      {/* <Stack.Screen
         name="FEED_BACK"
         component={FeedBackScreen}
         options={{
@@ -103,7 +103,7 @@ export default function Navigation(props) {
           },
           headerLeft: HeaderBackButton,
         }}
-      />
+      /> */}
       <Stack.Screen
         name="MAP_VIEW"
         component={MapScreen}
