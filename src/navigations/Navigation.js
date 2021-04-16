@@ -38,6 +38,7 @@ import {
 import { registerForPushNotificationsAsync } from "../service/notification/expo-notification";
 import CreateEmergencyOrder from "../screens/create-emergency-order";
 import FeedBackScreen from "../screens/feedback";
+import FavoriteItemScreen from "../screens/favorite-items";
 
 // import EmergencyMapScreen from '../screens/map/emergency-google-map'
 const Stack = createStackNavigator();
@@ -89,6 +90,18 @@ export default function Navigation(props) {
   return (
     // <NavigationContainer>
     <Stack.Navigator>
+      <Stack.Screen
+        name="FAVORITE_ITEM"
+        component={FavoriteItemScreen}
+        options={{
+          title: "Món yêu thích",
+          headerTintColor: LIGHT_COLOR,
+          headerStyle: {
+            backgroundColor: DARK_COLOR,
+          },
+          headerLeft: HeaderBackButton,
+        }}
+      />
       <Stack.Screen
         name="MAP_VIEW"
         component={MapScreen}

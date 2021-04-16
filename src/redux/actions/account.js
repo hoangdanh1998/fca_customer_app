@@ -5,6 +5,7 @@ export const FINISH_LOADING = "FINISH_LOADING";
 export const REGISTER_ACCOUNT = "REGISTER_ACCOUNT";
 export const SET_DEVICE_KEY = "SET_DEVICE_KEY";
 export const CHANGE_ERROR = "CHANGE_ERROR";
+export const GET_FCA_ITEM = "GET_FCA_ITEM";
 
 
 import fca from "../../service/fca-api/fca-api";
@@ -88,3 +89,18 @@ export const changeError = (errMessage) => {
         payload: errMessage
     }
 };
+
+export const getFCAItem = () => {
+    return async dispatch => {
+        try {
+            const response = await fca.get('/fca-item');
+            // console.log("get getFCAItem: " , response);
+            dispatch ({
+                type: GET_FCA_ITEM,
+                payload: response.data.data.fcaItems
+            })
+        } catch (error) {
+            console.error(error);
+        }
+    }
+}
