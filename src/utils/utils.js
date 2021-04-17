@@ -70,6 +70,7 @@ export const convertPartnerItemToEmergencyItem = (item) => {
     name: item.name,
     id: item.id,
     price: item.price,
+    status: item.status,
   };
 };
 
