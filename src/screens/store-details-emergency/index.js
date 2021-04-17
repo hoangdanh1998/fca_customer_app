@@ -102,7 +102,7 @@ const StoreDetailsEmergency = (props) => {
         <StoreProfile store={partner} />
         <Card>
           <List
-            dataArray={partner.items}
+            dataArray={partner?.items}
             renderRow={(item) => (
               <DrinkCard
                 addItem={() => {

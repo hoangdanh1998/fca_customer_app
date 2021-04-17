@@ -1,14 +1,5 @@
 import { withNavigation } from "@react-navigation/compat";
-import {
-  Card,
-  Content,
-  Footer,
-
-  List,
-  Root,
-
-  Toast
-} from "native-base";
+import { Card, Content, Footer, List, Root, Toast } from "native-base";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import DrinkCard from "../../components/atoms/drink-card/index";
@@ -18,13 +9,11 @@ import {
   LANGUAGE,
   MAX_ORDER_ITEM,
   NOTICE_DURATION,
-  PartnerItemStatus
+  PartnerItemStatus,
 } from "../../constants/index.js";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { getPartnerInformation } from "../../redux/actions/partner";
 import { styles } from "./styles";
-
-
 
 const StoreDetails = (props) => {
   init(LANGUAGE.VI);
@@ -102,7 +91,9 @@ const StoreDetails = (props) => {
         <StoreProfile store={partner} />
         <Card>
           <List
-            dataArray={partner.items.filter(item => item.status === PartnerItemStatus.ACTIVE)}
+            dataArray={partner?.items?.filter(
+              (item) => item.status === PartnerItemStatus.ACTIVE
+            )}
             renderRow={(item) => (
               <DrinkCard
                 addItem={() => {

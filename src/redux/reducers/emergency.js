@@ -112,6 +112,7 @@ const emergencyReducer = (state = initialState, action) => {
     }
 
     case EMERGENCY_ACTION.STORE_SCHEDULE: {
+      console.log("STORE_SCHEDULE");
       storeScheduleParam(action.payload);
       return { ...state, schedule: action.payload };
     }

@@ -32,6 +32,7 @@ import {
   LIGHT_COLOR,
   TIME_FORMAT,
 } from "../../constants/index.js";
+import { switchSchedule } from "../../redux/actions/emergency";
 import { convertEmergencyToNormal } from "../../utils/utils";
 
 const EmergencyProfile = (props) => {
@@ -53,14 +54,22 @@ const EmergencyProfile = (props) => {
     ).format(TIME_FORMAT)} ${dayMessage.toString()}`;
   };
 
+  const dispatch = useDispatch();
+  const handleSwitchSchedule = async () => {
+    console.log("handleSwitchSchedule");
+    const mode = !isSchedule;
+    try {
+      await dispatch(switchSchedule(mode));
+      setIsSchedule(mode);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   useEffect(() => {
     if (loadedProfile && loadedProfile?.items) {
       const convertedProfile = convertEmergencyToNormal(loadedProfile);
-      console.log("loadedProfile", loadedProfile?.schedule);
       setProfile(convertedProfile);
-      // setSchedule(loadedProfile?.schedule);
-      // setIsSchedule(loadedProfile?.schedule?.isSchedule);
-      // console.log("loadedProfile.schedule", loadedProfile?.schedule);
     }
     setIsLoading(false);
   }, [loadedProfile]);
@@ -185,8 +194,14 @@ const EmergencyProfile = (props) => {
                       }}
                       thumbColor={LIGHT_COLOR}
                       ios_backgroundColor={PRIMARY_LIGHT_COLOR}
-                      onValueChange={(newValue) => {
-                        setIsSchedule(!isSchedule);
+                      // onValueChange={async () => {
+                      //   setIsSchedule(!isSchedule);
+                      //   const mode = !isSchedule;
+                      //   const isSwitch = await handleSwitchSchedule(mode);
+                      //   setIsSchedule(isSwitch ? mode : !mode);
+                      // }}
+                      onValueChange={() => {
+                        handleSwitchSchedule();
                       }}
                       // disabled={isDisableAutoPrepare}
                       value={isSchedule}

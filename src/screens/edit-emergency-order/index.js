@@ -4,14 +4,28 @@ import { CommonActions } from "@react-navigation/native";
 import * as Notifications from "expo-notifications";
 import moment from "moment";
 import {
-  Body, CardItem, CheckBox, Content, Footer,
-  H3, Icon, Left, List, ListItem, Radio,
-  Right, Root, Text, Toast, View
+  Body,
+  CardItem,
+  CheckBox,
+  Content,
+  Footer,
+  H3,
+  Icon,
+  Left,
+  List,
+  ListItem,
+  Radio,
+  Right,
+  Root,
+  Text,
+  Toast,
+  View,
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Alert, TouchableWithoutFeedback
+  Alert,
+  TouchableWithoutFeedback,
 } from "react-native";
 import NumberFormat from "react-number-format";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,33 +36,23 @@ import OrderDetailCard from "../../components/atoms/order-detail-card/index";
 import UnFocusedButton from "../../components/atoms/unfocused-button/index";
 import {
   DARK_COLOR,
-
-
-
-
-
-
-  DAY_IN_WEEK, LANGUAGE,
+  DAY_IN_WEEK,
+  LANGUAGE,
   MAX_ORDER_ITEM,
   MESSAGES,
   NOTICE_DURATION,
-
-
-
-
-
-  PartnerItemStatus, PRIMARY_LIGHT_COLOR,
-
-
+  PartnerItemStatus,
+  PRIMARY_LIGHT_COLOR,
   SCHEDULE_DAY_OPTION,
-  TIME_FORMAT
+  TIME_FORMAT,
 } from "../../constants/index.js";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
   createEmergency,
-  getEmergency, getPartnerInformation,
+  getEmergency,
+  getPartnerInformation,
   storeOrderParam,
-  storeScheduleParam
+  storeScheduleParam,
 } from "../../redux/actions/emergency";
 import { styles } from "./styles";
 
@@ -155,7 +159,7 @@ const EditEmergencyOrder = (props) => {
     }
   };
   const handleSetupSchedule = async () => {
-    const items = partner.items.filter((item) => item.quantity > 0);
+    const items = partner?.items?.filter((item) => item.quantity > 0);
     const orderParam = {
       customerId: customer.id,
       partnerId: partner.id,
@@ -324,7 +328,9 @@ const EditEmergencyOrder = (props) => {
               {partner?.address?.description}
             </Text>
             <List
-              dataArray={partner.items.filter(item => item.status === PartnerItemStatus.ACTIVE)}
+              dataArray={partner.items.filter(
+                (item) => item.status === PartnerItemStatus.ACTIVE
+              )}
               renderRow={(item) => (
                 <>
                   <TouchableWithoutFeedback
