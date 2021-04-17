@@ -16,5 +16,6 @@ export const convertToCartItem = (item) => {
     price: item.price,
     image: item.imageLink,
     quantity: item.quantity ? item.quantity : 0,
+    status: item.status ? item.status : '',
   };
 };

@@ -1,62 +1,55 @@
-import React, { useEffect, useState } from "react";
-import moment from "moment";
-import * as Notifications from "expo-notifications";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { withNavigation } from "@react-navigation/compat";
-import { useDispatch, useSelector } from "react-redux";
 import { CommonActions } from "@react-navigation/native";
+import * as Notifications from "expo-notifications";
+import moment from "moment";
 import {
-  Body,
-  CardItem,
-  Content,
-  Footer,
-  H3,
-  Left,
-  List,
-  ListItem,
-  Radio,
-  Right,
-  Root,
-  Text,
-  Toast,
-  View,
-  CheckBox,
-  Icon,
+  Body, CardItem, CheckBox, Content, Footer,
+  H3, Icon, Left, List, ListItem, Radio,
+  Right, Root, Text, Toast, View
 } from "native-base";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  TouchableWithoutFeedback,
-  Alert,
+  Alert, TouchableWithoutFeedback
 } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import NumberFormat from "react-number-format";
+import { useDispatch, useSelector } from "react-redux";
 import EditQuantityModal from "../../components/atoms/edit-quantity-modal/index";
 import FocusedButton from "../../components/atoms/focused-button/index";
-import UnFocusedButton from "../../components/atoms/unfocused-button/index";
 import NotificationModal from "../../components/atoms/notification-modal";
 import OrderDetailCard from "../../components/atoms/order-detail-card/index";
-import ScheduleOrderModal from "../../components/molecules/schedule-order-modal";
+import UnFocusedButton from "../../components/atoms/unfocused-button/index";
 import {
   DARK_COLOR,
-  LANGUAGE,
+
+
+
+
+
+
+  DAY_IN_WEEK, LANGUAGE,
   MAX_ORDER_ITEM,
   MESSAGES,
   NOTICE_DURATION,
-  PRIMARY_LIGHT_COLOR,
-  LIGHT_COLOR,
-  DAY_IN_WEEK,
+
+
+
+
+
+  PartnerItemStatus, PRIMARY_LIGHT_COLOR,
+
+
   SCHEDULE_DAY_OPTION,
-  TIME_FORMAT,
+  TIME_FORMAT
 } from "../../constants/index.js";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
   createEmergency,
-  getPartnerInformation,
+  getEmergency, getPartnerInformation,
   storeOrderParam,
-  storeScheduleParam,
-  getEmergency,
+  storeScheduleParam
 } from "../../redux/actions/emergency";
-import { addSchedule } from "../../service/cronjob/index";
-import { convertDayOfWeekToNumber } from "../../utils/utils";
 import { styles } from "./styles";
 
 Notifications.setNotificationHandler({
@@ -100,7 +93,7 @@ const EditEmergencyOrder = (props) => {
     }
   };
   const handleCreateEmergency = async () => {
-    const items = partner.items.filter((item) => item.quantity > 0);
+    const items = partner.items?.filter((item) => item.quantity > 0);
     const param = {
       customerId: customer.id,
       destinationId: selectedDestination.id,
@@ -331,7 +324,7 @@ const EditEmergencyOrder = (props) => {
               {partner?.address?.description}
             </Text>
             <List
-              dataArray={partner.items}
+              dataArray={partner.items.filter(item => item.status === PartnerItemStatus.ACTIVE)}
               renderRow={(item) => (
                 <>
                   <TouchableWithoutFeedback

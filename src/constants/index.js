@@ -81,6 +81,12 @@ export const FCAItemStatus = {
   ARCHIVE: "ARCHIVE",
 };
 
+export const PartnerItemStatus = {
+  PROCESS: "PROCESS",
+  ACTIVE: "ACTIVE",
+  ARCHIVE: "ARCHIVE",
+}
+
 export const RequestItemStatus = {
   PROCESS: "PROCESS",
   APPROVED: "APPROVED",
