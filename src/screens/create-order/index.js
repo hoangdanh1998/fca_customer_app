@@ -16,7 +16,7 @@ import OrderDetail from "../../components/molecules/order-details/index";
 import ProcessingModal from "../../components/molecules/processing-modal/index";
 import {
   DARK_COLOR, LANGUAGE, LIGHT_COLOR, MESSAGES,
-  NOTICE_DURATION, OrderStatus, PRIMARY_LIGHT_COLOR
+  NOTICE_DURATION, OrderStatus
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { cancelOrder, createOrder, resetOrder } from "../../redux/actions/order";
@@ -228,10 +228,11 @@ const CreateOrder = (props) => {
               />
             </View>
           </Footer>
-      ) : (<>
-        <View style={styles.centered}>
-          <ActivityIndicator size="large" color={DARK_COLOR} />
-        </View></>)}
+      ) : (
+        <Footer style={{ backgroundColor: "white" }}>
+            <ActivityIndicator size="large" color={DARK_COLOR} />
+        </Footer>
+      )}
 
       <NotificationModal
         message={notificationMessage}

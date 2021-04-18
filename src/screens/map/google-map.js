@@ -1,15 +1,14 @@
 import * as Location from "expo-location";
 import { Footer, Icon } from "native-base";
 import React, { useEffect, useRef, useState } from "react";
-import AwesomeAlert from "react-native-awesome-alerts";
 import {
   ActivityIndicator,
   Dimensions,
   StyleSheet,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
-import { Tooltip, Text } from "react-native-elements";
+import AwesomeAlert from "react-native-awesome-alerts";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
@@ -20,21 +19,20 @@ import {
   KEY_GOOGLE_MAP,
   LANGUAGE,
   LIGHT_COLOR,
-  MESSAGES,
-  PRIMARY_LIGHT_COLOR,
+  MESSAGES
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
   setDestinationLocation,
-  setPartnerLocation,
+  setPartnerLocation
 } from "../../redux/actions/map";
 import { setPartner } from "../../redux/actions/partner";
 import {
   getStoreSuggestion,
-  setStoreSuggestion,
+  setStoreSuggestion
 } from "../../redux/actions/store";
-import PopupStore from "./popup-store";
 import { convertEmergencyToNormal } from "../../utils/utils";
+import PopupStore from "./popup-store";
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -342,7 +340,7 @@ const MapScreen = (props) => {
     <>
       {isLoading ? (
         <View style={styles.centered}>
-          <ActivityIndicator size="large" color={PRIMARY_LIGHT_COLOR} />
+          <ActivityIndicator size="large" color={DARK_COLOR} />
         </View>
       ) : (
         <View
