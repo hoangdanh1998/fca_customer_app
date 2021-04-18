@@ -117,7 +117,6 @@ const CreateEmergencyOrder = (props) => {
   const handlePressFocusedButton = async () => {
     const balance = parseInt(customer.account.balance);
     const orderTotal = parseInt(order.total);
-    console.log("balance - orderTotal", balance < orderTotal);
     if (orderTotal > balance) {
       Alert.alert(
         IMLocalized("wording-title-notification"),
@@ -126,8 +125,8 @@ const CreateEmergencyOrder = (props) => {
       );
       return;
     }
-    // setVisibleTimer(true);
-    // await submitOrder();
+    setVisibleTimer(true);
+    await submitOrder();
   };
 
   const handlePressCancelOrder = async () => {
