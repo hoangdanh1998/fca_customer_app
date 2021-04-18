@@ -4,13 +4,13 @@ import { getDirection } from '../../service/google-api/google-map-api';
 import { STORE_ACTIONS } from "../action-types/actions";
 
 
-export const getStoreSuggestion = (location, destination) => {
+export const getStoreSuggestion = (customerId, location, destination) => {
     return async (dispatch) => {
         try {
             const direction = await getDirection(location, destination);
             const directionSteps = direction.routes[0].legs[0].steps;
 
-            const response = await api.post(`/partner/suggestion`,
+            const response = await api.post(`/partner/suggestion?customerId=${customerId}`,
                 JSON.stringify(directionSteps), {
                 headers: { 'Content-Type': 'text/plain' }
             }

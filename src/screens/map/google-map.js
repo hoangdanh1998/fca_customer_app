@@ -71,7 +71,7 @@ const MapScreen = (props) => {
       setError();
       setIsLoading(true);
       const location = await Location.getCurrentPositionAsync({});
-      await dispatch(getStoreSuggestion(location.coords, destination));
+      await dispatch(getStoreSuggestion(profile.id, location.coords, destination));
     } catch (error) {
       setError(error.message);
     }
