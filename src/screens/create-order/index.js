@@ -4,10 +4,7 @@ import * as Location from "expo-location";
 import * as Notifications from "expo-notifications";
 import { Content, Footer, View } from "native-base";
 import React, { useEffect, useState } from "react";
-import {
-  ActivityIndicator,
-  StyleSheet
-} from "react-native";
+import { ActivityIndicator, Alert, StyleSheet } from "react-native";
 import AwesomeAlert from "react-native-awesome-alerts";
 import { useDispatch, useSelector } from "react-redux";
 import FocusedButton from "../../components/atoms/focused-button/index";
@@ -19,7 +16,11 @@ import {
   NOTICE_DURATION, OrderStatus
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
-import { cancelOrder, createOrder, resetOrder } from "../../redux/actions/order";
+import {
+  cancelOrder,
+  createOrder,
+  resetOrder
+} from "../../redux/actions/order";
 import { setStoreSuggestion } from "../../redux/actions/store";
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 import { getDistance } from "../../service/google-api/google-map-api";
@@ -51,8 +52,6 @@ const CreateOrder = (props) => {
   const [notificationMessage, setNotificationMessage] = useState("");
   const [visibleConfirmDistance, setVisibleConfirmDistance] = useState(false);
 
-
-  
   const reSuggest = () => {
     if (suggestionStores && bestSuggestion) {
       const length = suggestionStores.length;
@@ -64,7 +63,7 @@ const CreateOrder = (props) => {
         dispatch(setStoreSuggestion(newSuggestion, newSuggestList));
       }
     }
-  }
+  };
 
   const confirmDistance = async () => {
     // const { status } = await Permissions.getAsync(Permissions.LOCATION);
@@ -108,7 +107,7 @@ const CreateOrder = (props) => {
           }),
         })
       );
-      console.log('Before');
+      console.log("Before");
     } catch (error) {
       setVisibleTimer(false);
       setNotificationMessage(MESSAGES.REJECTED);
@@ -134,8 +133,18 @@ const CreateOrder = (props) => {
   };
 
   const handlePressFocusedButton = async () => {
+    
+    const balance = parseInt(customer.account.balance);
+    const orderTotal = parseInt(order.total);
+    if (orderTotal < balance) {
+      Alert.alert(
+        IMLocalized("wording-title-notification"),
+        IMLocalized("wording-message-not-enough-balance"),
+        [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+        );
+        return;
+    }
     await confirmDistance();
-
   };
 
   const handlePressCancelOrder = async () => {
@@ -176,9 +185,7 @@ const CreateOrder = (props) => {
         routes: [
           {
             name: "ORDER_DETAIL",
-            params: {
-
-            },
+            params: {},
           },
         ],
       })
