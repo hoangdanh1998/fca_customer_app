@@ -122,18 +122,17 @@ const CreateOrder = (props) => {
 
   const handlePressFocusedButton = async () => {
     const balance = parseInt(customer.account.balance);
-    console.log("balance", balance);
-    console.log("order", order);
     const orderTotal = parseInt(order.total);
     if (orderTotal > balance) {
       Alert.alert(
-        "Thông báo",
-        "Số dư trong ví của bạn không đủ để thanh toán đơn hàng này",
+        IMLocalized("wording-title-notification"),
+        IMLocalized("wording-message-not-enough-balance"),
         [{ text: "OK", onPress: () => console.log("OK Pressed") }]
       );
+      return;
     }
-    // setVisibleTimer(true);
-    // await submitOrder();
+    setVisibleTimer(true);
+    await submitOrder();
   };
 
   const handlePressCancelOrder = async () => {
