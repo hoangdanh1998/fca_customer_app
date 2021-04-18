@@ -43,7 +43,6 @@ export const delAddress = (customerId, addressId) => {
       const response = await api.delete(
         `/customer/${customerId}/address/${addressId}`
       );
-      console.log(response.d);
       if (response.data.meta.status !== ResponseStatus.SUCCESS) {
         throw new Error("Something went wrong");
       }
