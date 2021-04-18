@@ -1,5 +1,6 @@
 import { withNavigation } from "@react-navigation/compat";
 import { CommonActions } from "@react-navigation/native";
+import { Alert } from "react-native";
 import * as Location from "expo-location";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
@@ -14,10 +15,14 @@ import {
   LANGUAGE,
   MESSAGES,
   NOTICE_DURATION,
-  OrderStatus
+  OrderStatus,
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
-import { cancelOrder, createOrder, resetOrder } from "../../redux/actions/order";
+import {
+  cancelOrder,
+  createOrder,
+  resetOrder,
+} from "../../redux/actions/order";
 import { setStoreSuggestion } from "../../redux/actions/store";
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 
@@ -47,8 +52,6 @@ const CreateOrder = (props) => {
   );
   const [notificationMessage, setNotificationMessage] = useState("");
 
-
-  
   const reSuggest = () => {
     if (suggestionStores && bestSuggestion) {
       const length = suggestionStores.length;
@@ -60,7 +63,7 @@ const CreateOrder = (props) => {
         dispatch(setStoreSuggestion(newSuggestion, newSuggestList));
       }
     }
-  }
+  };
 
   const submitOrder = async () => {
     try {
@@ -92,7 +95,7 @@ const CreateOrder = (props) => {
           }),
         })
       );
-      console.log('Before');
+      console.log("Before");
     } catch (error) {
       setVisibleTimer(false);
       setNotificationMessage(MESSAGES.REJECTED);
@@ -118,6 +121,16 @@ const CreateOrder = (props) => {
   };
 
   const handlePressFocusedButton = async () => {
+    const balance = parseInt(customer.account.balance);
+    const orderTotal = parseInt(order.total);
+    if (orderTotal > balance) {
+      Alert.alert(
+        IMLocalized("wording-title-notification"),
+        IMLocalized("wording-message-not-enough-balance"),
+        [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+      );
+      return;
+    }
     setVisibleTimer(true);
     await submitOrder();
   };
@@ -160,9 +173,7 @@ const CreateOrder = (props) => {
         routes: [
           {
             name: "ORDER_DETAIL",
-            params: {
-
-            },
+            params: {},
           },
         ],
       })
