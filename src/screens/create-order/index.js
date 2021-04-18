@@ -136,7 +136,7 @@ const CreateOrder = (props) => {
     
     const balance = parseInt(customer.account.balance);
     const orderTotal = parseInt(order.total);
-    if (orderTotal < balance) {
+    if (orderTotal > balance) {
       Alert.alert(
         IMLocalized("wording-title-notification"),
         IMLocalized("wording-message-not-enough-balance"),
