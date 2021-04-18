@@ -143,3 +143,44 @@ export const storeScheduleParam = (schedule) => {
     });
   };
 };
+
+export const switchSchedule = (mode) => {
+  return async (dispatch) => {
+    const storageScheduleString = await AsyncStorage.getItem(
+      "@storage_ScheduleParam"
+    );
+    const storageSchedule =
+      storageScheduleString.length > 0 ? JSON.parse(storageScheduleString) : {};
+
+    let scheduleParam;
+    if (mode) {
+      // If turn on schedule
+      scheduleParam = {
+        customerId: storageSchedule.customerId,
+        dayInWeek: storageSchedule.day.map((day) => {
+          return convertDayOfWeekToNumber(day);
+        }),
+        time: moment(storageSchedule.time).format(DATE_TIME_FORMAT_CALL_API),
+      };
+    } else {
+      // If turn off schedule
+      scheduleParam = {
+        customerId: storageSchedule.customerId,
+        dayInWeek: [],
+        time: "",
+      };
+    }
+    console.log("scheduleParam", scheduleParam);
+    storageSchedule.isSchedule = mode;
+    console.log("storageSchedule", storageSchedule);
+    const response = await api.post("order/auto-order", scheduleParam);
+    if (response.data.meta.status !== ResponseStatus.SUCCESS) {
+      alert("Something went wrong");
+    }
+    console.log("return");
+    dispatch({
+      type: EMERGENCY_ACTION.STORE_SCHEDULE,
+      payload: storageSchedule,
+    });
+  };
+};
