@@ -2,24 +2,27 @@ import { withNavigation } from "@react-navigation/compat";
 import { CommonActions } from "@react-navigation/native";
 import * as Location from "expo-location";
 import * as Notifications from "expo-notifications";
-import * as Permissions from "expo-permissions";
 import { Content, Footer, View } from "native-base";
 import React, { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  StyleSheet
+} from "react-native";
+import AwesomeAlert from "react-native-awesome-alerts";
 import { useDispatch, useSelector } from "react-redux";
 import FocusedButton from "../../components/atoms/focused-button/index";
 import NotificationModal from "../../components/atoms/notification-modal/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import ProcessingModal from "../../components/molecules/processing-modal/index";
 import {
-  LANGUAGE,
-  MESSAGES,
-  NOTICE_DURATION,
-  OrderStatus
+  DARK_COLOR, LANGUAGE, LIGHT_COLOR, MESSAGES,
+  NOTICE_DURATION, OrderStatus, PRIMARY_LIGHT_COLOR
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { cancelOrder, createOrder, resetOrder } from "../../redux/actions/order";
 import { setStoreSuggestion } from "../../redux/actions/store";
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
+import { getDistance } from "../../service/google-api/google-map-api";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -33,6 +36,7 @@ const CreateOrder = (props) => {
   const dispatch = useDispatch();
 
   const store = props.route.params.store;
+
   const order = props.route.params.cart;
 
   const suggestionStores = useSelector((state) => state.store.suggestionStores);
@@ -42,10 +46,10 @@ const CreateOrder = (props) => {
   const destination = useSelector((state) => state.map.destinationLocation);
 
   const [visibleTimer, setVisibleTimer] = useState(false);
-  const [visibleNotificationModal, setVisibleNotificationModal] = useState(
-    false
-  );
+  const [isLoading, setIsLoading] = useState(false);
+  const [visibleNotificationModal, setVisibleNotificationModal] = useState(false);
   const [notificationMessage, setNotificationMessage] = useState("");
+  const [visibleConfirmDistance, setVisibleConfirmDistance] = useState(false);
 
 
   
@@ -62,15 +66,27 @@ const CreateOrder = (props) => {
     }
   }
 
-  const submitOrder = async () => {
-    try {
-      const { status } = await Permissions.getAsync(Permissions.LOCATION);
-      if (status !== "granted") {
-        alert(IMLocalized("wording-error-location"));
-        return;
-      }
-      var location = await Location.getCurrentPositionAsync({});
+  const confirmDistance = async () => {
+    // const { status } = await Permissions.getAsync(Permissions.LOCATION);
+    // if (status !== "granted") {
+    //   alert(IMLocalized("wording-error-location"));
+    //   return;
+    // }
+    setIsLoading(true)
+    var location = await Location.getCurrentPositionAsync({});
+    const distance = await getDistance(location.coords, store.address);
+    setIsLoading(false)
+    if (distance.distance.value < 2000) {
+      setVisibleConfirmDistance(true);
+    } else {
+      await submitOrder();
+    }
+  }
 
+  const submitOrder = async () => {
+    setVisibleTimer(true);
+    try {
+      var location = await Location.getCurrentPositionAsync({});
       await dispatch(
         createOrder({
           customerId: customer.id,
@@ -118,23 +134,23 @@ const CreateOrder = (props) => {
   };
 
   const handlePressFocusedButton = async () => {
-    setVisibleTimer(true);
-    await submitOrder();
+    await confirmDistance();
+
   };
 
   const handlePressCancelOrder = async () => {
     setVisibleTimer(false);
     if (createdOrder) {
       await destroyOrder(createdOrder.id);
-      setNotificationMessage(MESSAGES.CANCELLED);
+      // setNotificationMessage(MESSAGES.CANCELLED);
     }
-    setVisibleNotificationModal(true);
-    await new Promise((resolve, reject) => {
-      setTimeout(() => {
-        setVisibleNotificationModal(false);
-        resolve();
-      }, NOTICE_DURATION);
-    });
+    // setVisibleNotificationModal(true);
+    // await new Promise((resolve, reject) => {
+    //   setTimeout(() => {
+    //     setVisibleNotificationModal(false);
+    //     resolve();
+    //   }, NOTICE_DURATION);
+    // });
     dispatch(resetOrder());
   };
 
@@ -187,7 +203,7 @@ const CreateOrder = (props) => {
   }, [createdOrder]);
 
   return (
-    <>
+      <>
       <Content>
         <View style={{ width: "95%", marginLeft: "2.5%" }}>
           <OrderDetail store={store} orderDetails={order} />
@@ -199,24 +215,61 @@ const CreateOrder = (props) => {
           />
         ) : null}
       </Content>
-      <Footer style={{ backgroundColor: "white" }}>
-        <View style={{ flex: 1 }}>
-          <FocusedButton
-            block
-            name={MESSAGES.ORDER}
-            disable={false}
-            onPress={() => {
-              handlePressFocusedButton();
-            }}
-          />
-        </View>
-      </Footer>
+      {!isLoading ? (
+          <Footer style={{ backgroundColor: "white" }}>
+            <View style={{ flex: 1 }}>
+              <FocusedButton
+                block
+                name={MESSAGES.ORDER}
+                disable={false}
+                onPress={() => {
+                  handlePressFocusedButton();
+                }}
+              />
+            </View>
+          </Footer>
+      ) : (<>
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" color={DARK_COLOR} />
+        </View></>)}
+
       <NotificationModal
         message={notificationMessage}
         title={MESSAGES.TITLE_NOTIFICATION}
         visible={visibleNotificationModal}
       />
-    </>
+      <AwesomeAlert
+        show={visibleConfirmDistance}
+        showProgress={false}
+        title={IMLocalized(`wording-title-confirmation`)}
+        message={IMLocalized("wording-not-enough-distance")}
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        contentStyle={{ backgroundColor: LIGHT_COLOR }}
+        contentContainerStyle={{ backgroundColor: LIGHT_COLOR }}
+        cancelText={IMLocalized("wording-cancel")}
+        confirmText={IMLocalized("wording-ok")}
+        confirmButtonColor={DARK_COLOR}
+        showCancelButton={true}
+        showConfirmButton={true}
+        onDismiss={() => {
+          setVisibleConfirmDistance(false);
+        }}
+        onCancelPressed={() => {
+          setVisibleConfirmDistance(false);
+        }}
+        onConfirmPressed={async () => {
+          setVisibleConfirmDistance(false);
+          await submitOrder();
+        }}
+      />
+      </>
   );
 };
+const styles = StyleSheet.create({
+  centered: {
+    flex: 1,
+  },
+
+});
 export default withNavigation(CreateOrder);

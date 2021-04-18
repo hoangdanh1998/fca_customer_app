@@ -123,5 +123,6 @@
     "wording-message-make-order-before-arrive": "Cửa hàng sẽ chuẩn bị đơn hàng trước khi bạn đến",
     "wording-message-make-order-after-arrive": "Cửa hàng sẽ chuẩn bị đơn hàng sau khi bạn đến",
     "wording-message-default-prepare-order": "Chuẩn bị đơn hàng trước khi đến",
-    "wording-message-discard-changes": "Bạn có các thay đổi chưa lưu. Bạn có chắc chắn xoá chúng và rời khỏi màn hình không?"
+    "wording-message-discard-changes": "Bạn có các thay đổi chưa lưu. Bạn có chắc chắn xoá chúng và rời khỏi màn hình không?",
+    "wording-not-enough-distance":"Khoảng cách từ vị trí của bạn đến cửa hàng ít hơn 2km có thể bạn sẽ phải chờ khi đến nơi"
 }
