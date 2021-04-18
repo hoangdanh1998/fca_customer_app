@@ -328,7 +328,7 @@ const EditEmergencyOrder = (props) => {
               {partner?.address?.description}
             </Text>
             <List
-              dataArray={partner.items.filter(
+              dataArray={partner?.items?.filter(
                 (item) => item.status === PartnerItemStatus.ACTIVE
               )}
               renderRow={(item) => (
