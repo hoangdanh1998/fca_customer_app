@@ -39,6 +39,7 @@ import { registerForPushNotificationsAsync } from "../service/notification/expo-
 import CreateEmergencyOrder from "../screens/create-emergency-order";
 import FeedBackScreen from "../screens/feedback";
 import FavoriteItemScreen from "../screens/favorite-items";
+import HeaderHomeButton from "../components/atoms/home-button";
 
 // import EmergencyMapScreen from '../screens/map/emergency-google-map'
 const Stack = createStackNavigator();
@@ -90,7 +91,7 @@ export default function Navigation(props) {
   return (
     // <NavigationContainer>
     <Stack.Navigator>
-      
+
       <Stack.Screen
         name="MAP_VIEW"
         component={MapScreen}
@@ -108,6 +109,7 @@ export default function Navigation(props) {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 width: "120%",
+                paddingRight: 10
               }}
             >
               <Icon
@@ -138,6 +140,10 @@ export default function Navigation(props) {
             backgroundColor: DARK_COLOR,
           },
           headerLeft: HeaderBackButton,
+          headerRight: () => (
+            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            />
+          )
         })}
       />
       <Stack.Screen
@@ -150,6 +156,10 @@ export default function Navigation(props) {
             backgroundColor: DARK_COLOR,
           },
           headerLeft: HeaderBackButton,
+          headerRight: () => (
+            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            />
+          )
         }}
       />
       <Stack.Screen
@@ -162,6 +172,10 @@ export default function Navigation(props) {
             backgroundColor: DARK_COLOR,
           },
           headerLeft: HeaderBackButton,
+          headerRight: () => (
+            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            />
+          )
         }}
       />
       <Stack.Screen
@@ -174,6 +188,10 @@ export default function Navigation(props) {
             backgroundColor: DARK_COLOR,
           },
           headerLeft: HeaderBackButton,
+          headerRight: () => (
+            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            />
+          )
         }}
       />
       <Stack.Screen
@@ -186,6 +204,10 @@ export default function Navigation(props) {
             backgroundColor: DARK_COLOR,
           },
           headerLeft: HeaderBackButton,
+          headerRight: () => (
+            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            />
+          )
         }}
       />
       <Stack.Screen
@@ -198,6 +220,10 @@ export default function Navigation(props) {
             backgroundColor: DARK_COLOR,
           },
           headerLeft: HeaderBackButton,
+          headerRight: () => (
+            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            />
+          )
         }}
       />
       <Stack.Screen
@@ -222,6 +248,10 @@ export default function Navigation(props) {
             backgroundColor: DARK_COLOR,
           },
           headerLeft: HeaderBackButton,
+          headerRight: () => (
+            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            />
+          )
         }}
       />
       <Stack.Screen
@@ -234,6 +264,10 @@ export default function Navigation(props) {
             backgroundColor: DARK_COLOR,
           },
           headerLeft: HeaderBackButton,
+          headerRight: () => (
+            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            />
+          )
         }}
       />
       <Stack.Screen
@@ -270,6 +304,10 @@ export default function Navigation(props) {
             backgroundColor: DARK_COLOR,
           },
           headerLeft: HeaderBackButton,
+          headerRight: () => (
+            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            />
+          )
         }}
       />
       <Stack.Screen
@@ -311,6 +349,10 @@ export default function Navigation(props) {
             backgroundColor: DARK_COLOR,
           },
           headerLeft: HeaderBackButton,
+          headerRight: () => (
+            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            />
+          )
         })}
       />
       <Stack.Screen
@@ -323,6 +365,10 @@ export default function Navigation(props) {
             backgroundColor: DARK_COLOR,
           },
           headerLeft: HeaderBackButton,
+          headerRight: () => (
+            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            />
+          )
         })}
       />
       <Stack.Screen
@@ -335,6 +381,10 @@ export default function Navigation(props) {
             backgroundColor: DARK_COLOR,
           },
           headerLeft: HeaderBackButton,
+          headerRight: () => (
+            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            />
+          )
         })}
       />
       <Stack.Screen
@@ -347,6 +397,10 @@ export default function Navigation(props) {
             backgroundColor: DARK_COLOR,
           },
           headerLeft: HeaderBackButton,
+          headerRight: () => (
+            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            />
+          )
         }}
       />
       <Stack.Screen
@@ -359,6 +413,10 @@ export default function Navigation(props) {
             backgroundColor: DARK_COLOR,
           },
           headerLeft: HeaderBackButton,
+          headerRight: () => (
+            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            />
+          )
         }}
       />
     </Stack.Navigator>

@@ -25,37 +25,24 @@ export default function FavoriteItemScreen(props) {
     useEffect(() => {
         dispatch(getFCAItem());
         if (favoriteFcaItems) {
-            // console.log("props", props.route.params.favoriteFcaItems);
-            // console.log("favoriteFcaItems", [...favoriteFcaItems]);
             const favoriteFcaItemIds = favoriteFcaItems.map((item) => { return item?.id })
             setSelectItemList([...favoriteFcaItemIds]);
         }
     }, [favoriteFcaItems])
-
-    // console.log("fcaItems", listFCAItems);
     const handleSelectFCAItem = (item) => {
-        console.log("selectItem", selectItemList);
         const selectItem = selectItemList.findIndex((i) => i === item?.id);
-        console.log("selected", selectItem);
-
         const newSelectionItemList = [...selectItemList];
-        // console.log("newSelectionItemList:", newSelectionItemList);
         if (selectItem < 0) {
             newSelectionItemList.push(item.id);
-            // console.log();
         } else {
             newSelectionItemList.splice(selectItem, 1);
         }
         setSelectItemList(newSelectionItemList);
-        // console.log(selectItemList.toString());
     };
 
     const handleSaveFavoriteItem = async () => {
         try {
             setIsLoading(true);
-            console.log(selectItemList);
-            // const favoriteFcaItemIds = selectItemList.map(item => item?.id);
-            // console.log("favoriteFcaItemIds", favoriteFcaItemIds);
             await dispatch(saveFavoriteItem(customer?.id, selectItemList));
             setNotificationMessage(MESSAGES.DONE);
             setVisibleNotificationModal(true);
@@ -96,14 +83,6 @@ export default function FavoriteItemScreen(props) {
                                                 : null
                                         }
                                     >
-                                        {/* <Left style={{ flex: 1 }}>
-                                            <CheckBox
-                                            checked={selectItemList.includes(item)}
-                                            color={DARK_COLOR}
-                                            selectedColor={DARK_COLOR}
-                                            onPress={() => handleSelectFCAItem(item)}
-                                        />
-                                        </Left> */}
                                         <Body style={{ flex: 8 }}>
                                             <Text style={{ width: "100%", fontSize: 20 }}>
                                                 {item.name}
