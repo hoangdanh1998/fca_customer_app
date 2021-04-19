@@ -5,6 +5,10 @@ export const FINISH_LOADING = "FINISH_LOADING";
 export const REGISTER_ACCOUNT = "REGISTER_ACCOUNT";
 export const SET_DEVICE_KEY = "SET_DEVICE_KEY";
 export const CHANGE_ERROR = "CHANGE_ERROR";
+export const GET_FCA_ITEM = "GET_FCA_ITEM";
+export const SAVE_FAVORITE_ITEM = "SAVE_FAVORITE_ITEM";
+export const GET_FAVORITE_ITEM = "GET_FAVORITE_ITEM";
+
 export const GET_CUSTOMER = "GET_CUSTOMER";
 
 import fca from "../../service/fca-api/fca-api";
@@ -99,4 +103,53 @@ export const getCustomer = (id) => {
       console.error("error getting customer", error);
     }
   };
-};
+}
+
+export const getFCAItem = () => {
+  return async dispatch => {
+    try {
+      const response = await fca.get('/fca-item');
+      // console.log("get getFCAItem: " , response);
+      dispatch({
+        type: GET_FCA_ITEM,
+        payload: response.data.data.fcaItems
+      })
+    } catch (error) {
+      console.error(error);
+    }
+  }
+}
+
+export const saveFavoriteItem = (id, favoriteFcaItemIds) => {
+  return async (dispatch) => {
+    try {
+      const response = await fca.put(`/customer/${id}/favorite-fca-items`, {
+        favoriteFcaItemIds
+      });
+    
+      // console.log("response save favorite item: " , response.data.data.customer.favoriteFcaItem);
+      dispatch({
+        type: SAVE_FAVORITE_ITEM,
+        payload: response.data.data.customer,
+      });
+    } catch (error) {
+      throw new Error(error.message);
+    }
+  };
+}
+export const getFavoriteItem = (id) => {
+  return async dispatch => {
+    try {
+      const response = await fca.get(`/customer/${id}/favorite`)
+      // console.log("get favorite Item: " , response.data.data.customer.favoriteFcaItem);
+      dispatch({
+        type: GET_FAVORITE_ITEM,
+        payload: response.data.data.customer.favoriteFcaItem
+      })
+    } catch (error) {
+      throw new Error(error.message)
+      // console.error("get favorite Item error: " , error);
+    }
+  }
+}
+

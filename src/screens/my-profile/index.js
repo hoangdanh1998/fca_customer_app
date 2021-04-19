@@ -9,7 +9,7 @@ import {
   Right,
   Text,
 } from "native-base";
-import React from "react";
+import React, {useEffect} from "react";
 import { TouchableWithoutFeedback } from "react-native";
 import { Icon } from "react-native-elements";
 import NumberFormat from "react-number-format";
@@ -22,7 +22,7 @@ import {
   MESSAGES,
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
-import { getCustomer } from "../../redux/actions/account";
+import { getCustomer, getFavoriteItem } from "../../redux/actions/account";
 /* eslint-disable react/prop-types */
 
 init(LANGUAGE.VI);
@@ -30,16 +30,27 @@ const MyProfile = (props) => {
   const handleLogOut = props.route.params.handleLogOut;
 
   const profile = useSelector((state) => state.account.customer);
+  const favoriteFcaItems = useSelector(state => state.account.favoriteFcaItems);
+  console.log("favoriteFcaItems", favoriteFcaItems);
 
   const dispatch = useDispatch();
   const handleRefreshCustomer = () => {
     try {
-      dispatch(getCustomer(profile.id));
+      dispatch(getCustomer(profile?.id));
     } catch (error) {
       alert("Something went wrong");
     }
-    console.log("profile", profile.id);
+    console.log("profile", profile?.id);
   };
+
+  useEffect(() => {
+    try {
+      dispatch(getFavoriteItem(profile?.id));
+    } catch (error) {
+      console.error("Get Favorite Item error", error);
+    }
+    
+  }, [dispatch])
 
   return (
     <>
@@ -157,8 +168,8 @@ const MyProfile = (props) => {
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={() => {
-            // props.navigation.navigate("SAVED_ADDRESS_LIST");
-            alert("Favorite item");
+            props.navigation.navigate("FAVORITE_ITEM", {favoriteFcaItems: favoriteFcaItems});
+            // alert("Favorite item");
           }}
         >
           <Card style={{ flex: 1 }}>
