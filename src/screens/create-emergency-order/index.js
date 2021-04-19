@@ -1,5 +1,6 @@
 import { withNavigation } from "@react-navigation/compat";
 import { CommonActions } from "@react-navigation/native";
+import { Alert } from "react-native";
 import * as Location from "expo-location";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
@@ -114,6 +115,16 @@ const CreateEmergencyOrder = (props) => {
   };
 
   const handlePressFocusedButton = async () => {
+    const balance = parseInt(customer.account.balance);
+    const orderTotal = parseInt(order.total);
+    if (orderTotal > balance) {
+      Alert.alert(
+        IMLocalized("wording-title-notification"),
+        IMLocalized("wording-message-not-enough-balance"),
+        [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+      );
+      return;
+    }
     setVisibleTimer(true);
     await submitOrder();
   };

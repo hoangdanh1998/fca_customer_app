@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import moment from "moment";
 import {
   Card,
   CardItem,
@@ -14,7 +15,7 @@ import {
   ListItem,
   Right,
 } from "native-base";
-import { ActivityIndicator } from "react-native";
+import { ActivityIndicator, Switch } from "react-native";
 import NumberFormat from "react-number-format";
 import { withNavigation } from "@react-navigation/compat";
 import { Divider } from "react-native-elements";
@@ -28,23 +29,58 @@ import {
   DARK_COLOR,
   MESSAGES,
   PRIMARY_LIGHT_COLOR,
+  LIGHT_COLOR,
+  TIME_FORMAT,
 } from "../../constants/index.js";
+import { switchSchedule } from "../../redux/actions/emergency";
 import { convertEmergencyToNormal } from "../../utils/utils";
 
 const EmergencyProfile = (props) => {
   init(LANGUAGE.VI);
   // const profile = EMERGENCY_PROFILE;
   const loadedProfile = useSelector((state) => state.emergency.emergency);
+  const loadedSchedule = useSelector((state) => state.emergency.schedule);
   const [profile, setProfile] = useState(loadedProfile);
+  const [schedule, setSchedule] = useState(loadedSchedule);
+  const [isSchedule, setIsSchedule] = useState(loadedSchedule?.isSchedule);
   const [isLoading, setIsLoading] = useState(true);
+
+  const handleShowScheduleAsMessage = () => {
+    const dayMessage = schedule?.day?.map((d) => {
+      return IMLocalized(`weekly-${d}`);
+    });
+    return `${IMLocalized("wording-message-automatic-schedule")}\n${moment(
+      schedule?.time
+    ).format(TIME_FORMAT)} ${dayMessage.toString()}`;
+  };
+
+  const dispatch = useDispatch();
+  const handleSwitchSchedule = async () => {
+    console.log("handleSwitchSchedule");
+    const mode = !isSchedule;
+    try {
+      await dispatch(switchSchedule(mode));
+      setIsSchedule(mode);
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   useEffect(() => {
     if (loadedProfile && loadedProfile?.items) {
       const convertedProfile = convertEmergencyToNormal(loadedProfile);
-      console.log("loadedProfile", loadedProfile);
       setProfile(convertedProfile);
     }
     setIsLoading(false);
   }, [loadedProfile]);
+
+  useEffect(() => {
+    if (loadedSchedule) {
+      setSchedule(loadedSchedule);
+      setIsSchedule(loadedSchedule?.isSchedule);
+    }
+    setIsLoading(false);
+  }, [loadedSchedule]);
 
   // ================================= HANDLE UI =================================
 
@@ -56,7 +92,12 @@ const EmergencyProfile = (props) => {
             <H3 style={styles.title}>{profile?.partner?.name}</H3>
             <Text
               note
-              style={{ color: DARK_COLOR, width: "95%", marginLeft: "2.5%" }}
+              style={{
+                color: DARK_COLOR,
+                width: "95%",
+                marginLeft: "2.5%",
+                textAlign: "center",
+              }}
             >
               {profile?.partner?.address?.description}
             </Text>
@@ -132,6 +173,58 @@ const EmergencyProfile = (props) => {
                 </Body>
               </CardItem>
             </View>
+            {schedule?.day ? (
+              <View
+                style={{
+                  flex: 1,
+                  marginTop: "5%",
+                  width: "95%",
+                  marginLeft: "2.5%",
+                }}
+              >
+                <Text note style={{ fontWeight: "bold" }}>
+                  {IMLocalized("wording-subtitle-automatic-schedule")}
+                </Text>
+                <CardItem>
+                  <Left style={{ flex: 1 }}>
+                    <Switch
+                      trackColor={{
+                        false: PRIMARY_LIGHT_COLOR,
+                        true: DARK_COLOR,
+                      }}
+                      thumbColor={LIGHT_COLOR}
+                      ios_backgroundColor={PRIMARY_LIGHT_COLOR}
+                      // onValueChange={async () => {
+                      //   setIsSchedule(!isSchedule);
+                      //   const mode = !isSchedule;
+                      //   const isSwitch = await handleSwitchSchedule(mode);
+                      //   setIsSchedule(isSwitch ? mode : !mode);
+                      // }}
+                      onValueChange={() => {
+                        handleSwitchSchedule();
+                      }}
+                      // disabled={isDisableAutoPrepare}
+                      value={isSchedule}
+                    />
+                  </Left>
+                  <Body style={{ flex: 4 }}>
+                    <Text note>
+                      {IMLocalized("wording-automatic-schedule")}
+                    </Text>
+                  </Body>
+                </CardItem>
+                {isSchedule ? (
+                  <CardItem>
+                    <Left style={{ flex: 1 }}></Left>
+                    <Body style={{ flex: 4 }}>
+                      <Text note style={{ width: "100%" }}>
+                        {handleShowScheduleAsMessage()}
+                      </Text>
+                    </Body>
+                  </CardItem>
+                ) : null}
+              </View>
+            ) : null}
           </View>
         </Content>
         <Footer style={styles.footer}>

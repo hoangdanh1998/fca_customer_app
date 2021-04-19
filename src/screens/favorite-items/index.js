@@ -1,29 +1,47 @@
-import { Body, CardItem, CheckBox, Container, Content, Left, List, ListItem, Right } from 'native-base'
+import { Body, Card, CardItem, CheckBox, Container, Content, Footer, Left, List, ListItem, Right } from 'native-base'
 import React, { useEffect, useState } from 'react'
-import { View, Text, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { DARK_COLOR } from '../../constants';
-import { getFCAItem } from '../../redux/actions/account';
+import { DARK_COLOR, LIGHT_COLOR, MESSAGES, NOTICE_DURATION } from '../../constants';
+import { getFCAItem, saveFavoriteItem } from '../../redux/actions/account';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import NotificationModal from '../../components/atoms/notification-modal/index'
+import FocusedButton from '../../components/atoms/focused-button';
 
-export default function FavoriteItemScreen() {
+export default function FavoriteItemScreen(props) {
     const dispatch = useDispatch();
     const listFCAItems = useSelector(state => state.account.fcaItems);
+    const customer = useSelector((state) => state.account.customer);
+    const favoriteFcaItems = useSelector(state => state.account.favoriteFcaItems);
     const [selectItemList, setSelectItemList] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const [visibleNotificationModal, setVisibleNotificationModal] = useState(
+        false
+    );
+    const [notificationMessage, setNotificationMessage] = useState("");
+
 
     useEffect(() => {
         dispatch(getFCAItem());
-    }, [dispatch])
+        if (favoriteFcaItems) {
+            // console.log("props", props.route.params.favoriteFcaItems);
+            // console.log("favoriteFcaItems", [...favoriteFcaItems]);
+            const favoriteFcaItemIds = favoriteFcaItems.map((item) => { return item?.id })
+            setSelectItemList([...favoriteFcaItemIds]);
+        }
+    }, [favoriteFcaItems])
 
     // console.log("fcaItems", listFCAItems);
     const handleSelectFCAItem = (item) => {
-        const selectItem = selectItemList.findIndex((i) => i?.id === item?.id);
-        // console.log("selected", selectItem);
+        console.log("selectItem", selectItemList);
+        const selectItem = selectItemList.findIndex((i) => i === item?.id);
+        console.log("selected", selectItem);
 
         const newSelectionItemList = [...selectItemList];
         // console.log("newSelectionItemList:", newSelectionItemList);
         if (selectItem < 0) {
-            newSelectionItemList.push(item);
+            newSelectionItemList.push(item.id);
             // console.log();
         } else {
             newSelectionItemList.splice(selectItem, 1);
@@ -31,6 +49,31 @@ export default function FavoriteItemScreen() {
         setSelectItemList(newSelectionItemList);
         // console.log(selectItemList.toString());
     };
+
+    const handleSaveFavoriteItem = async () => {
+        try {
+            setIsLoading(true);
+            console.log(selectItemList);
+            // const favoriteFcaItemIds = selectItemList.map(item => item?.id);
+            // console.log("favoriteFcaItemIds", favoriteFcaItemIds);
+            await dispatch(saveFavoriteItem(customer?.id, selectItemList));
+            setNotificationMessage(MESSAGES.DONE);
+            setVisibleNotificationModal(true);
+            setTimeout(() => {
+                setVisibleNotificationModal(false);
+            }, NOTICE_DURATION);
+        } catch (error) {
+            setNotificationMessage(MESSAGES.FAIL);
+            setVisibleNotificationModal(true);
+            setTimeout(() => {
+                setVisibleNotificationModal(false);
+            }, NOTICE_DURATION);
+            console.error("error saving favorite item: ", error);
+        }
+        setIsLoading(false);
+
+    }
+
     return (
         <Container>
             <Content>
@@ -45,38 +88,76 @@ export default function FavoriteItemScreen() {
                                     handleSelectFCAItem(item);
                                 }}
                             >
-                                <CardItem>
-                                    <Left style={{ flex: 1 }}>
-                                        <CheckBox
+                                <Card style={{ width: "95%", alignSelf: "center" }}>
+                                    <CardItem
+                                        style={
+                                            selectItemList.includes(item?.id)
+                                                ? { backgroundColor: LIGHT_COLOR }
+                                                : null
+                                        }
+                                    >
+                                        {/* <Left style={{ flex: 1 }}>
+                                            <CheckBox
                                             checked={selectItemList.includes(item)}
                                             color={DARK_COLOR}
                                             selectedColor={DARK_COLOR}
                                             onPress={() => handleSelectFCAItem(item)}
                                         />
-                                    </Left>
-                                    <Body style={{ flex: 8 }}>
-                                        <Text style={{ width: "100%", fontSize: 20 }}>
-                                            {item.name}
-                                        </Text>
-                                    </Body>
-                                    <Right style={{ flex: 1 }}>
-                                        {
-                                            selectItemList.includes(item)
-                                                ? <AntDesign
-                                                    name="heart"
-                                                    size={25}
-                                                    color="red"
-                                                />
-                                                : null
-                                        }
+                                        </Left> */}
+                                        <Body style={{ flex: 8 }}>
+                                            <Text style={{ width: "100%", fontSize: 20 }}>
+                                                {item.name}
+                                            </Text>
+                                        </Body>
+                                        <Right style={{ flex: 1 }}>
+                                            {
+                                                selectItemList.includes(item?.id)
+                                                    ? <AntDesign
+                                                        name="heart"
+                                                        size={25}
+                                                        color="#f08080"
+                                                    />
+                                                    : null
+                                            }
 
-                                    </Right>
-                                </CardItem>
+                                        </Right>
+                                    </CardItem>
+                                </Card>
+
                             </TouchableWithoutFeedback>
                         );
                     }}
                 />
+
             </Content>
+
+            {
+                (selectItemList?.length != 0 && selectItemList != null)
+                    ? (
+                        <Footer style={{ backgroundColor: "white" }}>
+                            {!isLoading ?
+                                (<View style={{ flex: 1 }}>
+                                    <FocusedButton
+                                        block
+                                        name={MESSAGES.SAVE}
+                                        disable={false}
+                                        onPress={() => {
+                                            handleSaveFavoriteItem();
+                                        }}
+                                    />
+                                </View>)
+                                : (<ActivityIndicator size="large" color={DARK_COLOR} />)
+                            }
+                        </Footer>
+                    )
+                    : null
+            }
+            <NotificationModal
+                message={notificationMessage}
+                title={MESSAGES.TITLE_NOTIFICATION}
+                visible={visibleNotificationModal}
+            />
+
         </Container>
     )
 }

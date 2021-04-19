@@ -1,30 +1,19 @@
-import { CART_MENU_DRINK, MENU_DRINK } from "../../constants/seeding";
-import {
-  Card,
-  Content,
-  Footer,
-  Header,
-  List,
-  Root,
-  Text,
-  Toast,
-} from "native-base";
-import { IMLocalized, init } from "../../i18n/IMLocalized";
+import { withNavigation } from "@react-navigation/compat";
+import { Card, Content, Footer, List, Root, Toast } from "native-base";
+import React, { useCallback, useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import DrinkCard from "../../components/atoms/drink-card/index";
+import StoreCart from "../../components/molecules/store-cart/index";
+import StoreProfile from "../../components/molecules/store-profile/index";
 import {
   LANGUAGE,
   MAX_ORDER_ITEM,
   NOTICE_DURATION,
+  PartnerItemStatus,
 } from "../../constants/index.js";
-
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-
-import DrinkCard from "../../components/atoms/drink-card/index";
-import StoreCart from "../../components/molecules/store-cart/index";
-import StoreProfile from "../../components/molecules/store-profile/index";
+import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { getPartnerInformation } from "../../redux/actions/partner";
 import { styles } from "./styles";
-import { withNavigation } from "@react-navigation/compat";
 
 const StoreDetails = (props) => {
   init(LANGUAGE.VI);
@@ -102,7 +91,9 @@ const StoreDetails = (props) => {
         <StoreProfile store={partner} />
         <Card>
           <List
-            dataArray={partner.items}
+            dataArray={partner?.items?.filter(
+              (item) => item.status === PartnerItemStatus.ACTIVE
+            )}
             renderRow={(item) => (
               <DrinkCard
                 addItem={() => {

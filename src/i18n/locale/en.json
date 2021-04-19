@@ -62,6 +62,8 @@
     "wording-order": "Order",
     "wording-success": "Success",
     "wording-fail": "Fail",
+    "wording-discard-changes": "Discard changes",
+    "wording-dont-leave": "Don't leave",
     "wording-cancel-order": "Cancel",
     "wording-cancelled": "Your order is cancelled",
     "wording-feedback": "Feedback",
@@ -100,6 +102,7 @@
     "wording-config": "Config",
     "wording-ok": "OK",
     "wording-cancel": "Huỷ",
+    "wording-favorite-item": "Favorite items",
     "wording-set-default": "Set as default",
     "wording-setup-schedule": "Make order automatically",
     "wording-title-notification": "Notification",
@@ -108,6 +111,7 @@
     "wording-option-working-day": "From Monday to Friday",
     "wording-option-selection-day": "Selection",
     "wording-subtitle-automatic-schedule": "Automatic order schedule",
+    "wording-automatic-schedule": "Automatic order schedule",
     "wording-note-automatic-schedule": "Please make sure that your balance is enough to make order",
     "wording-message-force-logout": "Your account is logged on other device",
     "wording-message-feedback-order": "How do you feel about this order?",
@@ -115,5 +119,7 @@
     "wording-message-automatic-schedule": "System will make order automatically at",
     "wording-message-make-order-before-arrive": "The store will prepare your order before arriving",
     "wording-message-make-order-after-arrive": "The store will prepare your order after arriving",
-    "wording-message-default-prepare-order": "Prepare order before arriving"
+    "wording-message-default-prepare-order": "Prepare order before arriving",
+    "wording-message-discard-changes": "You have unsaved changes. Are you sure to discard them and leave the screen?",
+    "wording-message-not-enough-balance": "Your balance is not enough to make this order"
 }

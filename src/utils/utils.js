@@ -70,6 +70,7 @@ export const convertPartnerItemToEmergencyItem = (item) => {
     name: item.name,
     id: item.id,
     price: item.price,
+    status: item.status,
   };
 };
 
@@ -89,6 +90,27 @@ export const convertDayOfWeek = (dayAsNumber) => {
       return "friday";
     case 6:
       return "saturday";
+    default:
+      return "";
+  }
+};
+
+export const convertDayOfWeekToNumber = (dayAsString) => {
+  switch (dayAsString) {
+    case "sunday":
+      return "0";
+    case "monday":
+      return "1";
+    case "tuesday":
+      return "2";
+    case "wednesday":
+      return "3";
+    case "thursday":
+      return "4";
+    case "friday":
+      return "5";
+    case "saturday":
+      return "6";
     default:
       return "";
   }

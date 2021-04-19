@@ -1,12 +1,12 @@
-import React, { useCallback, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { Content, List, Text, View } from "native-base";
-import { ActivityIndicator } from "react-native";
-import EmergencyPartnerCard from "../../components/molecules/emergency-partner-card";
 import { withNavigation } from "@react-navigation/compat";
-import { PRIMARY_LIGHT_COLOR, LANGUAGE } from "../../constants";
-import { getHistory } from "../../redux/actions/emergency";
+import { Content, List, Text, View } from "native-base";
+import React, { useCallback, useEffect, useState } from "react";
+import { ActivityIndicator } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import EmergencyPartnerCard from "../../components/molecules/emergency-partner-card";
+import { DARK_COLOR, LANGUAGE } from "../../constants";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
+import { getHistory } from "../../redux/actions/emergency";
 
 init(LANGUAGE.VI);
 const EmergencyOrderList = (props) => {
@@ -17,20 +17,21 @@ const EmergencyOrderList = (props) => {
     return state.emergency.suggestionEmergency;
   });
   const customer = useSelector((state) => state.account.customer);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   const dispatch = useDispatch();
   const loadSuggestionEmergency = useCallback(async () => {
     try {
-      dispatch(getHistory(customer));
+      setIsLoading(true);
+      await dispatch(getHistory(customer));
+      setIsLoading(false);
     } catch (error) {
       alert(error);
     }
   }, [dispatch]);
-  
+
   useEffect(() => {
     loadSuggestionEmergency();
-    setIsLoading(false);
   }, [dispatch, loadSuggestionEmergency]);
 
   const handleOnPressPartner = (partner) => {
@@ -41,11 +42,11 @@ const EmergencyOrderList = (props) => {
 
   return isLoading ? (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <ActivityIndicator size="large" color={PRIMARY_LIGHT_COLOR} />
+      <ActivityIndicator size="large" color={DARK_COLOR} />
     </View>
   ) : (
     <Content>
-      {suggestionEmergency.length > 0 ? (
+      {suggestionEmergency?.length > 0 ? (
         <List
           dataArray={suggestionEmergency}
           renderRow={(partner) => (

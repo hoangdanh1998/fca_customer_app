@@ -14,7 +14,7 @@ const StoreProfile = (props) => {
         <CardItem cardBody>
           <Image
             source={{
-              uri: store.imageLink,
+              uri: store?.imageLink,
             }}
             style={{ height: 300, width: "100%" }}
           />
