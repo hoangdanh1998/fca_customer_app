@@ -31,9 +31,9 @@ import {
 import NumberFormat from "react-number-format";
 import { useDispatch, useSelector } from "react-redux";
 import EditQuantityModal from "../../components/atoms/edit-quantity-modal/index";
-import FocusedButton from "../../components/atoms/focused-button/index";
 import NotificationModal from "../../components/atoms/notification-modal";
 import OrderDetailCard from "../../components/atoms/order-detail-card/index";
+import FocusedButton from "../../components/atoms/focused-button/index";
 import UnFocusedButton from "../../components/atoms/unfocused-button/index";
 import {
   DARK_COLOR,
@@ -367,9 +367,16 @@ const EditEmergencyOrder = (props) => {
                         setSelectedDestination(destination);
                       }}
                     />
-                    <Body>
-                      <Text>{destination.description}</Text>
-                    </Body>
+                    <TouchableWithoutFeedback
+                      onPress={() => {
+                        setHasUnsavedChanges(true);
+                        setSelectedDestination(destination);
+                      }}
+                    >
+                      <Body>
+                        <Text>{destination.description}</Text>
+                      </Body>
+                    </TouchableWithoutFeedback>
                   </ListItem>
                 )}
               />
@@ -578,25 +585,6 @@ const EditEmergencyOrder = (props) => {
                 />
               </View>
             </Footer>
-            {/* <CardItem footer bordered>
-          <Left style={{ flex: 1 }}>
-            <UnFocusedButton
-              name="later"
-              onPress={() => {
-                setDisplayMode("order");
-                setIsSchedule(false);
-              }}
-            />
-          </Left>
-          <Right style={{ flex: 1 }}>
-            <FocusedButton
-              name="save"
-              onPress={() => {
-                setDisplayMode("order");
-              }}
-            />
-          </Right>
-        </CardItem> */}
           </Card>
         </View>
       </TouchableWithoutFeedback>
