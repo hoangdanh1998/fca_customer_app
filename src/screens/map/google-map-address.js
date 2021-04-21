@@ -158,7 +158,6 @@ const AddressScreen = (props) => {
         setIsLoading(true);
         let { status } = await Location.requestPermissionsAsync();
         if (status !== "granted") {
-          console.log("Permission to access location was denied");
           return;
         }
 
