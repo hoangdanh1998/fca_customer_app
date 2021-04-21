@@ -124,24 +124,22 @@ export default function FavoriteItemScreen(props) {
         />
       </Content>
 
-      {selectItemList?.length != 0 && selectItemList != null ? (
-        <Footer style={{ backgroundColor: "white" }}>
-          {!isLoading ? (
-            <View style={{ flex: 1 }}>
-              <FocusedButton
-                block
-                name={MESSAGES.SAVE}
-                disable={false}
-                onPress={() => {
-                  handleSaveFavoriteItem();
-                }}
-              />
-            </View>
-          ) : (
-            <ActivityIndicator size="large" color={DARK_COLOR} />
-          )}
-        </Footer>
-      ) : null}
+      <Footer style={{ backgroundColor: "white" }}>
+        {!isLoading ? (
+          <View style={{ flex: 1 }}>
+            <FocusedButton
+              block
+              name={MESSAGES.SAVE}
+              disable={false}
+              onPress={() => {
+                handleSaveFavoriteItem();
+              }}
+            />
+          </View>
+        ) : (
+          <ActivityIndicator size="large" color={DARK_COLOR} />
+        )}
+      </Footer>
       <NotificationModal
         message={notificationMessage}
         title={MESSAGES.TITLE_NOTIFICATION}
