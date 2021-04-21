@@ -7,9 +7,8 @@ import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { useSelector } from 'react-redux';
 import { KEY_GOOGLE_MAP } from "../../constants/index";
-import { setTrackingOrder } from "../../service/firebase/firebase-realtime";
+import { getOrderOnChange, setTrackingOrder } from "../../service/firebase/firebase-realtime";
 import { getDistance } from "../../service/google-api/google-map-api";
-
 
 const width = Dimensions.get("window").width;
 const height = Dimensions.get("window").height;
@@ -27,7 +26,8 @@ const googleMapNavigation = () => {
   const [userRegion, setUserRegion] = useState(null);
   const [totalTravel, setTotalTravel] = useState(0);
   // const [originLocation, setOriginLocation] = useState(null)
-
+  const [isAutoPrepare, setIsAutoPrepare] = useState(false);
+  const [listenedOrder, setListenedOrder] = useState();
   
 
   const startTrackingLocation = async () => {
@@ -80,12 +80,29 @@ const googleMapNavigation = () => {
     // const d = R * c; //in metres
     // const travel = +(totalTravel + d);
     // setTotalTravel(travel);
-
-    const distance = await getDistance(currentLocation.coords, partnerLocation);
-    setTrackingOrder(createdOrder.id, distance.duration.text);
-
-    return d;
+    
+    if (isAutoPrepare) {
+      const distance = await getDistance(currentLocation.coords, partnerLocation);
+      setTrackingOrder(createdOrder.id, distance.duration.text);
+    }
+    
   };
+
+  useEffect(() => {
+    if (createdOrder) {
+      getOrderOnChange(createdOrder.id, (order) => {
+        setListenedOrder(order);
+      });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (listenedOrder) {
+      if (listenedOrder.isAutoPrepareOrder) {
+        setIsAutoPrepare(listenedOrder.isAutoPrepareOrder)
+      }
+    }
+  }, [listenedOrder]);
 
   TaskManager.defineTask(TASK_FETCH_LOCATION, async ({ data: { locations }, error }) => {
     if (error) {
