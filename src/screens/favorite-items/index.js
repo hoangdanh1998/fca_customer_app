@@ -1,12 +1,12 @@
-import { Body, Card, CardItem, CheckBox, Container, Content, Footer, Left, List, ListItem, Right } from 'native-base'
-import React, { useEffect, useState } from 'react'
-import { View, Text, TouchableWithoutFeedback, ActivityIndicator } from 'react-native';
+import { Body, Card, CardItem, Container, Content, Footer, List, Right } from 'native-base';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Text, TouchableWithoutFeedback, View } from 'react-native';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useDispatch, useSelector } from 'react-redux';
+import FocusedButton from '../../components/atoms/focused-button';
+import NotificationModal from '../../components/atoms/notification-modal/index';
 import { DARK_COLOR, LIGHT_COLOR, MESSAGES, NOTICE_DURATION } from '../../constants';
 import { getFCAItem, saveFavoriteItem } from '../../redux/actions/account';
-import AntDesign from 'react-native-vector-icons/AntDesign';
-import NotificationModal from '../../components/atoms/notification-modal/index'
-import FocusedButton from '../../components/atoms/focused-button';
 
 export default function FavoriteItemScreen(props) {
     const dispatch = useDispatch();
@@ -111,8 +111,7 @@ export default function FavoriteItemScreen(props) {
             </Content>
 
             {
-                (selectItemList?.length != 0 && selectItemList != null)
-                    ? (
+                
                         <Footer style={{ backgroundColor: "white" }}>
                             {!isLoading ?
                                 (<View style={{ flex: 1 }}>
@@ -128,8 +127,6 @@ export default function FavoriteItemScreen(props) {
                                 : (<ActivityIndicator size="large" color={DARK_COLOR} />)
                             }
                         </Footer>
-                    )
-                    : null
             }
             <NotificationModal
                 message={notificationMessage}
