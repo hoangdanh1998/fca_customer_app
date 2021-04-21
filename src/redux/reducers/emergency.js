@@ -15,12 +15,8 @@ const initialState = {
 const storeOrderParam = async (order) => {
   try {
     await AsyncStorage.setItem("@storage_OrderParam", JSON.stringify(order));
-    console.log(
-      "order-param-in-storage",
-      await AsyncStorage.getItem("@storage_OrderParam")
-    );
   } catch (e) {
-    console.log("store-order", e);
+    alert("store order failed");
   }
 };
 
@@ -30,12 +26,8 @@ const storeScheduleParam = async (schedule) => {
       "@storage_ScheduleParam",
       JSON.stringify(schedule)
     );
-    console.log(
-      "schedule-param-in-storage",
-      await AsyncStorage.getItem("@storage_ScheduleParam")
-    );
   } catch (e) {
-    console.log("store-schedule", e);
+    alert("store schedule failed");
   }
 };
 
@@ -46,7 +38,7 @@ const getScheduleParam = async () => {
     );
     return scheduleParamString ? JSON.parse(scheduleParamString) : {};
   } catch (e) {
-    console.log("store-schedule", e);
+    alert("Get schedule failed");
   }
 };
 
@@ -112,7 +104,6 @@ const emergencyReducer = (state = initialState, action) => {
     }
 
     case EMERGENCY_ACTION.STORE_SCHEDULE: {
-      console.log("STORE_SCHEDULE");
       storeScheduleParam(action.payload);
       return { ...state, schedule: action.payload };
     }

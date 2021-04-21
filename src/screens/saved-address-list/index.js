@@ -42,7 +42,6 @@ const SavedAddressList = (props) => {
 
   const loadAddress = async (id) => {
     try {
-      // console.log(customerAccount.customer.account.id);
       await dispatch(delAddress(customerAccount?.customer?.account?.id, id));
     } catch (error) {
       // setError(error);
@@ -116,18 +115,6 @@ const SavedAddressList = (props) => {
                 }}
               >
                 <CardItem style={{ flex: 1, width: "100%" }}>
-                  {/* <Left style={{ flex: 1 }}>
-                        <Icon
-                          name={
-                            item.savedAddress.isDefault
-                              ? "flag"
-                              : "bookmark-outline"
-                          }
-                          type="ionicon"
-                          color={DARK_COLOR}
-                          size={15}
-                        />
-                      </Left> */}
                   <Left style={{ flex: 1 }}>
                     <Icon
                       name="bookmark-outline"

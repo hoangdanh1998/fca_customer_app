@@ -112,7 +112,6 @@ const EmergencyProfile = (props) => {
       newSelectionDayList.splice(selectedDay, 1);
     }
     setParamScheduleDayList(newSelectionDayList);
-    console.log(paramScheduleDayList.toString());
   };
 
   const handleSetupSchedule = async () => {
@@ -497,7 +496,6 @@ const EmergencyProfile = (props) => {
               name={MESSAGES.ORDER}
               disable={false}
               onPress={() => {
-                console.log("press");
                 props.navigation.navigate("CREATE_EMERGENCY_ORDER", {
                   emergencyOrder: profile,
                 });
@@ -515,9 +513,7 @@ const EmergencyProfile = (props) => {
     try {
       await dispatch(switchSchedule(mode));
       setIsSchedule(mode);
-    } catch (error) {
-      console.log("error", error);
-    }
+    } catch (error) {}
   };
 
   // ================================= HANDLE UI =================================

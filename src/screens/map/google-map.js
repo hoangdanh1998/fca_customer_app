@@ -6,7 +6,7 @@ import {
   Dimensions,
   StyleSheet,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import AwesomeAlert from "react-native-awesome-alerts";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
@@ -19,17 +19,17 @@ import {
   KEY_GOOGLE_MAP,
   LANGUAGE,
   LIGHT_COLOR,
-  MESSAGES
+  MESSAGES,
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
   setDestinationLocation,
-  setPartnerLocation
+  setPartnerLocation,
 } from "../../redux/actions/map";
 import { setPartner } from "../../redux/actions/partner";
 import {
   getStoreSuggestion,
-  setStoreSuggestion
+  setStoreSuggestion,
 } from "../../redux/actions/store";
 import { convertEmergencyToNormal } from "../../utils/utils";
 import PopupStore from "./popup-store";
@@ -69,7 +69,9 @@ const MapScreen = (props) => {
       setError();
       setIsLoading(true);
       const location = await Location.getCurrentPositionAsync({});
-      await dispatch(getStoreSuggestion(profile.id, location.coords, destination));
+      await dispatch(
+        getStoreSuggestion(profile.id, location.coords, destination)
+      );
     } catch (error) {
       setError(error.message);
     }
@@ -271,7 +273,6 @@ const MapScreen = (props) => {
             title={MESSAGES.TITLE_NOTIFICATION}
             visible={true}
             onDismiss={() => {
-              // console.log('Dismiss')
               dispatch(setStoreSuggestion(null, null));
             }}
           />
@@ -287,7 +288,7 @@ const MapScreen = (props) => {
         setIsLoading(true);
         let { status } = await Location.requestPermissionsAsync();
         if (status !== "granted") {
-          console.log("Permission to access location was denied");
+          alert("Permission to access location was denied");
           return;
         }
 
@@ -306,7 +307,7 @@ const MapScreen = (props) => {
         setError();
         let { status } = await Location.requestPermissionsAsync();
         if (status !== "granted") {
-          console.log("Permission to access location was denied");
+          alert("Permission to access location was denied");
           return;
         }
 

@@ -34,7 +34,6 @@ export const login = (phone, password) => {
       });
     } catch (error) {
       throw new Error(error);
-      // console.log("login", error);
     }
   };
 };
@@ -84,7 +83,6 @@ export const setDeviceKey = (deviceKey) => {
 };
 
 export const changeError = (errMessage) => {
-  console.log("error", errMessage);
   return {
     type: CHANGE_ERROR,
     payload: errMessage,
@@ -94,40 +92,37 @@ export const getCustomer = (id) => {
   return async (dispatch) => {
     try {
       const response = await fca.get(`/customer/${id}`);
-      console.log("response get customer", response.data.data.customer);
       dispatch({
         type: GET_CUSTOMER,
         payload: response.data.data.customer,
       });
     } catch (error) {
-      console.error("error getting customer", error);
+      alert("Get customer failed");
     }
   };
-}
+};
 
 export const getFCAItem = () => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
-      const response = await fca.get('/fca-item');
-      // console.log("get getFCAItem: " , response);
+      const response = await fca.get("/fca-item");
       dispatch({
         type: GET_FCA_ITEM,
-        payload: response.data.data.fcaItems
-      })
+        payload: response.data.data.fcaItems,
+      });
     } catch (error) {
-      console.error(error);
+      alert("Get FCA group failed");
     }
-  }
-}
+  };
+};
 
 export const saveFavoriteItem = (id, favoriteFcaItemIds) => {
   return async (dispatch) => {
     try {
       const response = await fca.put(`/customer/${id}/favorite-fca-items`, {
-        favoriteFcaItemIds
+        favoriteFcaItemIds,
       });
-    
-      // console.log("response save favorite item: " , response.data.data.customer.favoriteFcaItem);
+
       dispatch({
         type: SAVE_FAVORITE_ITEM,
         payload: response.data.data.customer,
@@ -136,20 +131,17 @@ export const saveFavoriteItem = (id, favoriteFcaItemIds) => {
       throw new Error(error.message);
     }
   };
-}
+};
 export const getFavoriteItem = (id) => {
-  return async dispatch => {
+  return async (dispatch) => {
     try {
-      const response = await fca.get(`/customer/${id}/favorite`)
-      // console.log("get favorite Item: " , response.data.data.customer.favoriteFcaItem);
+      const response = await fca.get(`/customer/${id}/favorite`);
       dispatch({
         type: GET_FAVORITE_ITEM,
-        payload: response.data.data.customer.favoriteFcaItem
-      })
+        payload: response.data.data.customer.favoriteFcaItem,
+      });
     } catch (error) {
-      throw new Error(error.message)
-      // console.error("get favorite Item error: " , error);
+      throw new Error(error.message);
     }
-  }
-}
-
+  };
+};

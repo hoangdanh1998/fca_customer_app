@@ -9,7 +9,7 @@ import {
   Right,
   Text,
 } from "native-base";
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { TouchableWithoutFeedback } from "react-native";
 import { Icon } from "react-native-elements";
 import NumberFormat from "react-number-format";
@@ -30,8 +30,9 @@ const MyProfile = (props) => {
   const handleLogOut = props.route.params.handleLogOut;
 
   const profile = useSelector((state) => state.account.customer);
-  const favoriteFcaItems = useSelector(state => state.account.favoriteFcaItems);
-  console.log("favoriteFcaItems", favoriteFcaItems);
+  const favoriteFcaItems = useSelector(
+    (state) => state.account.favoriteFcaItems
+  );
 
   const dispatch = useDispatch();
   const handleRefreshCustomer = () => {
@@ -40,7 +41,6 @@ const MyProfile = (props) => {
     } catch (error) {
       alert("Something went wrong");
     }
-    console.log("profile", profile?.id);
   };
 
   useEffect(() => {
@@ -49,8 +49,7 @@ const MyProfile = (props) => {
     } catch (error) {
       console.error("Get Favorite Item error", error);
     }
-    
-  }, [dispatch])
+  }, [dispatch]);
 
   return (
     <>
@@ -168,7 +167,9 @@ const MyProfile = (props) => {
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={() => {
-            props.navigation.navigate("FAVORITE_ITEM", {favoriteFcaItems: favoriteFcaItems});
+            props.navigation.navigate("FAVORITE_ITEM", {
+              favoriteFcaItems: favoriteFcaItems,
+            });
             // alert("Favorite item");
           }}
         >

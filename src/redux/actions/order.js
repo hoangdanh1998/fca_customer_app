@@ -1,4 +1,4 @@
-import moment from 'moment';
+import moment from "moment";
 import { ResponseStatus } from "../../constants/index";
 import api from "../../service/fca-api/fca-api";
 import { ORDER_ACTIONS } from "../action-types/actions";
@@ -13,10 +13,8 @@ export const createOrder = (param) => {
         payload: order,
       });
     } catch (err) {
-      // console.log(err);
       throw new Error(err);
     }
-
   };
 };
 
@@ -50,11 +48,13 @@ export const getOrder = (param) => {
 };
 
 export const getHistory = (param) => {
-  const from = moment(param.createdAt).format('YYYY-MM-DD');
-  const now = moment(new Date()).add(1, 'days').format('YYYY-MM-DD');
+  const from = moment(param.createdAt).format("YYYY-MM-DD");
+  const now = moment(new Date()).add(1, "days").format("YYYY-MM-DD");
 
   return async (dispatch) => {
-    const response = await api.get(`/order?customerPhone=${param.phone}&createdDate=${from}&toDate=${now}`);
+    const response = await api.get(
+      `/order?customerPhone=${param.phone}&createdDate=${from}&toDate=${now}`
+    );
     if (response.data.meta.status !== ResponseStatus.SUCCESS) {
       throw new Error("Something went wrong");
     }
@@ -78,7 +78,7 @@ export const restoreOrderCreated = (order) => {
   return async (dispatch) => {
     dispatch({
       type: ORDER_ACTIONS.CREATE_ORDER,
-      payload: order
+      payload: order,
     });
   };
 };

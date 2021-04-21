@@ -94,7 +94,7 @@ const EditEmergencyOrder = (props) => {
     try {
       dispatch(getPartnerInformation(selectedPartner.partner.id));
     } catch (error) {
-      console.log("error", error);
+      alert("Load partner on UI failed");
     }
   };
   const handleCreateEmergency = async () => {
@@ -110,7 +110,6 @@ const EditEmergencyOrder = (props) => {
         };
       }),
     };
-    console.log("param", param);
 
     try {
       await dispatch(createEmergency(param));
@@ -150,7 +149,6 @@ const EditEmergencyOrder = (props) => {
         );
       }, NOTICE_DURATION);
     } catch (error) {
-      console.log("error", error);
       setVisibleNotificationModal(true);
       setMessageNotificationModal(MESSAGES.FAIL);
       setTimeout(() => {
@@ -274,7 +272,6 @@ const EditEmergencyOrder = (props) => {
       newSelectionDayList.splice(selectedDay, 1);
     }
     setScheduleDayList(newSelectionDayList);
-    console.log(scheduleDayList.toString());
   };
   const handleSelectSchedule = () => {
     const selection = !isSchedule;

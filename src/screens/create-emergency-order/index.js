@@ -86,8 +86,6 @@ const CreateEmergencyOrder = (props) => {
           }),
         })
       );
-      console.log("des ", destination);
-      console.log("part", store.address);
       dispatch(setDestinationLocation(destination));
       dispatch(setPartnerLocation(store.address));
     } catch (error) {
@@ -121,7 +119,7 @@ const CreateEmergencyOrder = (props) => {
       Alert.alert(
         IMLocalized("wording-title-notification"),
         IMLocalized("wording-message-not-enough-balance"),
-        [{ text: "OK", onPress: () => console.log("OK Pressed") }]
+        [{ text: "OK", onPress: () => {} }]
       );
       return;
     }

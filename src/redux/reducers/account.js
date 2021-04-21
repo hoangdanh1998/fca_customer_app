@@ -10,7 +10,7 @@ const {
   SAVE_FAVORITE_ITEM,
   GET_FAVORITE_ITEM,
 } = require("../actions/account");
-const { SAVE_ADDRESS } = require("../actions/map");
+const { SAVE_ADDRESS, DEL_ADDRESS } = require("../actions/map");
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const initialState = {
@@ -19,7 +19,7 @@ const initialState = {
   isLoading: true,
   isSignOut: false,
   deviceKey: null,
-  errMessage:null,
+  errMessage: null,
   fcaItems: null,
   favoriteFcaItems: null,
 };
@@ -49,7 +49,7 @@ const removeToken = async () => {
     await AsyncStorage.removeItem("@storage_Customer");
     await AsyncStorage.removeItem("@storage_Emergency");
   } catch (e) {
-    console.log("remove token error: ", e);
+    alert("Remove token failed");
     // throw new Error(error);
   }
 };
@@ -91,11 +91,17 @@ const accountReducer = (state = initialState, action) => {
     }
     case GET_CUSTOMER: {
       storeCustomer(action.payload);
-      return { ...state, customer: action.payload};
-    } case SAVE_FAVORITE_ITEM: {
-      return { ...state, favoriteFcaItems: action.payload.favoriteFcaItem, customer: action.payload}
-    } case GET_FAVORITE_ITEM: {
-      return { ...state, favoriteFcaItems: action.payload}
+      return { ...state, customer: action.payload };
+    }
+    case SAVE_FAVORITE_ITEM: {
+      return {
+        ...state,
+        favoriteFcaItems: action.payload.favoriteFcaItem,
+        customer: action.payload,
+      };
+    }
+    case GET_FAVORITE_ITEM: {
+      return { ...state, favoriteFcaItems: action.payload };
     }
     default:
       return state;

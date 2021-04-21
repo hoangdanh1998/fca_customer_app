@@ -4,6 +4,7 @@ export const SAVE_ADDRESS = "SAVE_ADDRESS";
 export const DEL_ADDRESS = "DEL_ADDRESS";
 
 import api from "../../service/fca-api/fca-api";
+import { ResponseStatus } from "../../constants/index";
 
 export const setDestinationLocation = (location) => {
   return {
@@ -33,12 +34,14 @@ export const saveAddress = (customerId, param) => {
       });
     };
   } catch (error) {
-    console.log("saveAddress", error);
+    throw new Error(error);
   }
 };
 
 export const delAddress = (customerId, addressId) => {
   try {
+    console.log("customerId: " + customerId);
+    console.log("addressId: " + addressId);
     return async (dispatch) => {
       const response = await api.delete(
         `/customer/${customerId}/address/${addressId}`
@@ -46,12 +49,13 @@ export const delAddress = (customerId, addressId) => {
       if (response.data.meta.status !== ResponseStatus.SUCCESS) {
         throw new Error("Something went wrong");
       }
+      console.log("response.data.data.customer", response.data.data.customer);
       dispatch({
         type: DEL_ADDRESS,
         payload: response.data.data.customer,
       });
     };
   } catch (error) {
-    console.log("delAddress", error);
+    throw new Error(error);
   }
 };

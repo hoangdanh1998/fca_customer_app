@@ -1,6 +1,12 @@
 import * as Location from "expo-location";
 import React, { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Dimensions, StyleSheet, TextInput, View } from "react-native";
+import {
+  ActivityIndicator,
+  Dimensions,
+  StyleSheet,
+  TextInput,
+  View,
+} from "react-native";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
@@ -9,12 +15,12 @@ import {
   DARK_COLOR,
   KEY_GOOGLE_MAP,
   LANGUAGE,
-  PRIMARY_LIGHT_COLOR
+  PRIMARY_LIGHT_COLOR,
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
   setDestinationLocation,
-  setPartnerLocation
+  setPartnerLocation,
 } from "../../redux/actions/map";
 import { setPartner } from "../../redux/actions/partner";
 import { getStoreSuggestion } from "../../redux/actions/store";
@@ -76,8 +82,6 @@ const EmergencyMapScreen = () => {
   const openSearchModal = () => {
     return (
       <View style={{ flex: 1 }}>
-      
-        
         <GooglePlacesAutocomplete
           // style={styles.searchBar}
 
@@ -98,7 +102,6 @@ const EmergencyMapScreen = () => {
                 })
               : []
           }
-  
           textInputHide={true}
           autoFocus={false}
           autoCorrect={false}
@@ -235,8 +238,6 @@ const EmergencyMapScreen = () => {
 
   useEffect(() => {
     (async () => {
-      console.log("useEffect");
-
       try {
         setError();
         setIsLoading(true);
@@ -322,7 +323,6 @@ const EmergencyMapScreen = () => {
           underlineColorAndroid="transparent"
           placeholder={IMLocalized("wording-search-destination")}
           placeholderTextColor={DARK_COLOR}
-          
           // defaultValue={savedAddress?.label}
           autoCapitalize="none"
           onChangeText={(text) => (marked.label = text)}
