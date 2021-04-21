@@ -18,6 +18,9 @@ export const TIME_FORMAT = "HH:mm";
 export const DATE_TIME_FORMAT = "DD/MM/YYYY HH:mm";
 export const DATE_FORMAT_CALL_API = "YYYY-MM-DD";
 export const DATE_TIME_FORMAT_CALL_API = "YYYY-MM-DD HH:mm";
+export const FCATime = {
+  PrepareTime: 7,
+}
 export const LANGUAGE = {
   VI: "vi",
   EN: "en",
