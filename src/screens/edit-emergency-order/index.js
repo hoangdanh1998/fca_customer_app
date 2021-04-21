@@ -5,6 +5,7 @@ import * as Notifications from "expo-notifications";
 import moment from "moment";
 import {
   Body,
+  Card,
   CardItem,
   CheckBox,
   Content,
@@ -30,9 +31,9 @@ import {
 import NumberFormat from "react-number-format";
 import { useDispatch, useSelector } from "react-redux";
 import EditQuantityModal from "../../components/atoms/edit-quantity-modal/index";
-import FocusedButton from "../../components/atoms/focused-button/index";
 import NotificationModal from "../../components/atoms/notification-modal";
 import OrderDetailCard from "../../components/atoms/order-detail-card/index";
+import FocusedButton from "../../components/atoms/focused-button/index";
 import UnFocusedButton from "../../components/atoms/unfocused-button/index";
 import {
   DARK_COLOR,
@@ -114,12 +115,11 @@ const EditEmergencyOrder = (props) => {
     try {
       await dispatch(createEmergency(param));
       if (isSchedule) {
-        console.log("isSchedule", isSchedule);
         await handleSetupSchedule();
       }
       dispatch(getEmergency(customer.id));
       setVisibleNotificationModal(true);
-      setMessageNotificationModal(MESSAGES.SUCCESS);
+      setMessageNotificationModal(MESSAGES.DONE);
       setTimeout(() => {
         setHasUnsavedChanges(false);
         setVisibleNotificationModal(false);
@@ -186,8 +186,6 @@ const EditEmergencyOrder = (props) => {
       time: scheduleTime,
       isSchedule: isSchedule,
     };
-    // console.log("order-param", orderParam);
-    // console.log("schedule", scheduleParam);
     dispatch(storeScheduleParam(scheduleParam));
     dispatch(storeOrderParam(orderParam));
   };
@@ -208,36 +206,6 @@ const EditEmergencyOrder = (props) => {
     setIsLoading(true);
     loadPartner();
   }, []);
-
-  useEffect(() => {
-    props.navigation.addListener("beforeRemove", (e) => {
-      if (!hasUnsavedChanges) {
-        // If we don't have unsaved changes, then we don't need to do anything
-        return;
-      }
-      // Prevent default behavior of leaving the screen
-      e.preventDefault();
-      // Prompt the user before leaving the screen
-      Alert.alert(
-        IMLocalized("wording-title-confirmation"),
-        IMLocalized("wording-message-discard-changes"),
-        [
-          {
-            text: IMLocalized("wording-dont-leave"),
-            style: "cancel",
-            onPress: () => {},
-          },
-          {
-            text: IMLocalized("wording-discard-changes"),
-            style: "default",
-            // If the user confirmed, then we dispatch the action we blocked earlier
-            // This will continue the action that had triggered the removal of the screen
-            onPress: () => props.navigation.dispatch(e.data.action),
-          },
-        ]
-      );
-    });
-  }, [props.navigation]);
 
   useEffect(() => {
     setPartner(loadedPartner);
@@ -399,9 +367,16 @@ const EditEmergencyOrder = (props) => {
                         setSelectedDestination(destination);
                       }}
                     />
-                    <Body>
-                      <Text>{destination.description}</Text>
-                    </Body>
+                    <TouchableWithoutFeedback
+                      onPress={() => {
+                        setHasUnsavedChanges(true);
+                        setSelectedDestination(destination);
+                      }}
+                    >
+                      <Body>
+                        <Text>{destination.description}</Text>
+                      </Body>
+                    </TouchableWithoutFeedback>
                   </ListItem>
                 )}
               />
@@ -438,7 +413,6 @@ const EditEmergencyOrder = (props) => {
                 onPress={() => {
                   setHasUnsavedChanges(false);
                   handleCreateEmergency();
-                  // handleSetupSchedule();
                 }}
               />
             </View>
@@ -446,166 +420,174 @@ const EditEmergencyOrder = (props) => {
         ) : null}
         <NotificationModal
           visible={visibleNotificationModal}
-          message={messageNotificationModal}
-          title={MESSAGES.TITLE_NOTIFICATION}
+          title={messageNotificationModal}
         />
       </Root>
     );
   };
   const renderTimePicker = () => {
     return (
-      <>
-        <CardItem header bordered>
-          <Text
+      <TouchableWithoutFeedback
+        onPress={() => {
+          setIsSchedule(false);
+          setDisplayMode("order");
+        }}
+      >
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <Card
             style={{
-              fontWeight: "bold",
-              color: DARK_COLOR,
-              width: "100%",
-              textAlign: "center",
+              width: "90%",
+              // marginLeft: "5%",
+              height: "80%",
+              alignSelf: "center",
+              justifyContent: "center",
             }}
           >
-            {IMLocalized("wording-subtitle-automatic-schedule")}
-          </Text>
-        </CardItem>
-        <CardItem bordered style={{ flexDirection: "column" }}>
-          {visibleTimePicker ? (
-            <DateTimePicker
-              value={scheduleTime.toDate()}
-              mode="time"
-              is24Hour={true}
-              display="spinner"
-              onChange={(event, date) => {
-                setVisibleTimePicker(false);
-                setScheduleTime(moment(date));
-              }}
-            />
-          ) : null}
-          <Text style={{ color: "black" }}>
-            {IMLocalized("wording-message-automatic-schedule")}
-          </Text>
-          <TouchableWithoutFeedback
-            style={{ backgroundColor: "red" }}
-            onPress={() => {
-              setVisibleTimePicker(true);
-            }}
-          >
-            <Text
-              style={{ fontWeight: "bold", fontSize: 30, fontStyle: "normal" }}
-            >
-              {scheduleTime.format(TIME_FORMAT)}
-              <Icon
-                name="time-outline"
-                style={{ fontSize: 20, color: PRIMARY_LIGHT_COLOR }}
-              />
-            </Text>
-          </TouchableWithoutFeedback>
-        </CardItem>
-        <List
-          style={{ height: "auto" }}
-          dataArray={SCHEDULE_DAY_OPTION}
-          renderRow={(item) => {
-            return (
-              <TouchableWithoutFeedback
-                onPress={() => {
-                  handleSelectScheduleDayOption(item);
+            <CardItem header bordered>
+              <Text
+                style={{
+                  fontWeight: "bold",
+                  color: DARK_COLOR,
+                  width: "100%",
+                  textAlign: "center",
                 }}
               >
-                <CardItem>
-                  <Left style={{ flex: 1 }}>
-                    <Radio
-                      selected={item === scheduleDayOption}
-                      color={PRIMARY_LIGHT_COLOR}
-                      selectedColor={DARK_COLOR}
-                    />
-                  </Left>
-                  <Right style={{ flex: 9 }}>
-                    <Text style={{ width: "100%" }}>
-                      {IMLocalized(`wording-option-${item}`)}
-                    </Text>
-                  </Right>
-                </CardItem>
-              </TouchableWithoutFeedback>
-            );
-          }}
-        />
-        {scheduleDayOption === "selection-day" ? (
-          <List
-            dataArray={DAY_IN_WEEK}
-            renderRow={(item) => {
-              return (
-                <TouchableWithoutFeedback
-                  onPress={() => {
-                    handleSelectDayInWeek(item);
+                {IMLocalized("wording-subtitle-automatic-schedule")}
+              </Text>
+            </CardItem>
+            <CardItem bordered style={{ flexDirection: "column" }}>
+              {visibleTimePicker ? (
+                <DateTimePicker
+                  value={scheduleTime.toDate()}
+                  mode="time"
+                  is24Hour={true}
+                  display="spinner"
+                  onChange={(event, date) => {
+                    setVisibleTimePicker(false);
+                    setScheduleTime(moment(date));
+                  }}
+                />
+              ) : null}
+              <Text style={{ color: "black" }}>
+                {IMLocalized("wording-message-automatic-schedule")}
+              </Text>
+              <TouchableWithoutFeedback
+                style={{ backgroundColor: "red" }}
+                onPress={() => {
+                  setVisibleTimePicker(true);
+                }}
+              >
+                <Text
+                  style={{
+                    fontWeight: "bold",
+                    fontSize: 30,
+                    fontStyle: "normal",
                   }}
                 >
-                  <CardItem>
-                    <Left style={{ flex: 1 }}>
-                      <CheckBox
-                        checked={scheduleDayList.includes(item)}
-                        color={DARK_COLOR}
-                        selectedColor={DARK_COLOR}
-                      />
-                    </Left>
-                    <Right style={{ flex: 9 }}>
-                      <Text style={{ width: "100%" }}>
-                        {IMLocalized(`weekly-every-${item}`)}
-                      </Text>
-                    </Right>
-                  </CardItem>
-                </TouchableWithoutFeedback>
-              );
-            }}
-          />
-        ) : null}
-        <CardItem>
-          <Text note style={{ width: "100%", textAlign: "center" }}>
-            {IMLocalized("wording-note-automatic-schedule")}
-          </Text>
-        </CardItem>
-        <Footer style={styles.footer}>
-          <View
-            style={{
-              width: "100%",
-              flexDirection: "row",
-              justifyContent: "center",
-              flex: 1,
-            }}
-          >
-            <UnFocusedButton
-              name="cancel"
-              onPress={() => {
-                setDisplayMode("order");
-                setIsSchedule(false);
+                  {scheduleTime.format(TIME_FORMAT)}
+                  <Icon
+                    name="time-outline"
+                    style={{ fontSize: 20, color: PRIMARY_LIGHT_COLOR }}
+                  />
+                </Text>
+              </TouchableWithoutFeedback>
+            </CardItem>
+            <List
+              style={{ height: "auto" }}
+              dataArray={SCHEDULE_DAY_OPTION}
+              renderRow={(item) => {
+                return (
+                  <TouchableWithoutFeedback
+                    onPress={() => {
+                      handleSelectScheduleDayOption(item);
+                    }}
+                  >
+                    <CardItem>
+                      <Left style={{ flex: 1 }}>
+                        <Radio
+                          selected={item === scheduleDayOption}
+                          color={PRIMARY_LIGHT_COLOR}
+                          selectedColor={DARK_COLOR}
+                        />
+                      </Left>
+                      <Right style={{ flex: 9 }}>
+                        <Text style={{ width: "100%" }}>
+                          {IMLocalized(`wording-option-${item}`)}
+                        </Text>
+                      </Right>
+                    </CardItem>
+                  </TouchableWithoutFeedback>
+                );
               }}
             />
-            <FocusedButton
-              name="save"
-              onPress={() => {
-                setDisplayMode("order");
-              }}
-            />
-          </View>
-        </Footer>
-        {/* <CardItem footer bordered>
-          <Left style={{ flex: 1 }}>
-            <UnFocusedButton
-              name="later"
-              onPress={() => {
-                setDisplayMode("order");
-                setIsSchedule(false);
-              }}
-            />
-          </Left>
-          <Right style={{ flex: 1 }}>
-            <FocusedButton
-              name="save"
-              onPress={() => {
-                setDisplayMode("order");
-              }}
-            />
-          </Right>
-        </CardItem> */}
-      </>
+            {scheduleDayOption === "selection-day" ? (
+              <List
+                dataArray={DAY_IN_WEEK}
+                renderRow={(item) => {
+                  return (
+                    <TouchableWithoutFeedback
+                      onPress={() => {
+                        handleSelectDayInWeek(item);
+                      }}
+                    >
+                      <CardItem>
+                        <Left style={{ flex: 1 }}>
+                          <CheckBox
+                            checked={scheduleDayList.includes(item)}
+                            color={DARK_COLOR}
+                            selectedColor={DARK_COLOR}
+                          />
+                        </Left>
+                        <Right style={{ flex: 9 }}>
+                          <Text style={{ width: "100%" }}>
+                            {IMLocalized(`weekly-every-${item}`)}
+                          </Text>
+                        </Right>
+                      </CardItem>
+                    </TouchableWithoutFeedback>
+                  );
+                }}
+              />
+            ) : null}
+            <CardItem>
+              <Text note style={{ width: "100%", textAlign: "center" }}>
+                {IMLocalized("wording-note-automatic-schedule")}
+              </Text>
+            </CardItem>
+            <Footer style={styles.footer}>
+              <View
+                style={{
+                  width: "100%",
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  flex: 1,
+                }}
+              >
+                <UnFocusedButton
+                  name="cancel"
+                  onPress={() => {
+                    setDisplayMode("order");
+                    setIsSchedule(false);
+                  }}
+                />
+                <FocusedButton
+                  name="save"
+                  onPress={() => {
+                    if (scheduleDayList && scheduleDayList.length <= 0) {
+                      Alert.alert(
+                        IMLocalized("wording-title-notification"),
+                        IMLocalized("wording-message-no-schedule-day")
+                      );
+                    } else {
+                      setDisplayMode("order");
+                    }
+                  }}
+                />
+              </View>
+            </Footer>
+          </Card>
+        </View>
+      </TouchableWithoutFeedback>
     );
   };
   const renderRemindSchedule = () => {
