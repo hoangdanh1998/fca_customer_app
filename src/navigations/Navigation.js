@@ -1,24 +1,29 @@
 import {
   createStackNavigator,
-  HeaderBackButton,
+  HeaderBackButton
 } from "@react-navigation/stack";
+import * as Notifications from "expo-notifications";
 import { Icon, View } from "native-base";
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Alert } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
+import HeaderHomeButton from "../components/atoms/home-button";
 import {
   APP_NAME,
   DARK_COLOR,
   LANGUAGE,
-  LIGHT_COLOR,
+  LIGHT_COLOR
 } from "../constants/index";
 import { IMLocalized, init } from "../i18n/IMLocalized";
 import { setDeviceKey } from "../redux/actions/account";
+import CreateEmergencyOrder from "../screens/create-emergency-order";
 import CreateOrder from "../screens/create-order";
 import DeliveryOrder from "../screens/delivery-order";
 import EditEmergencyOrder from "../screens/edit-emergency-order";
-import EmergencyProfile from "../screens/emergency-profile";
 import EmergencyOrderList from "../screens/emergency-order-list";
+import EmergencyProfile from "../screens/emergency-profile";
+import FavoriteItemScreen from "../screens/favorite-items";
+import FeedBackScreen from "../screens/feedback";
 import HistoryOrder from "../screens/history-order";
 import HistoryOrderDetails from "../screens/history-order-details";
 import MapScreenEmergency from "../screens/map/emergency-google-map";
@@ -33,13 +38,9 @@ import StoreDetailsEmergency from "../screens/store-details-emergency";
 import { updateExpoToken } from "../service/account/account";
 import {
   getDeviceKeyOnChange,
-  setDeviceKeyFirebase,
+  setDeviceKeyFirebase
 } from "../service/firebase/firebase-realtime";
 import { registerForPushNotificationsAsync } from "../service/notification/expo-notification";
-import CreateEmergencyOrder from "../screens/create-emergency-order";
-import FeedBackScreen from "../screens/feedback";
-import FavoriteItemScreen from "../screens/favorite-items";
-import HeaderHomeButton from "../components/atoms/home-button";
 
 // import EmergencyMapScreen from '../screens/map/emergency-google-map'
 const Stack = createStackNavigator();
@@ -86,7 +87,9 @@ export default function Navigation(props) {
       });
     }
   }, []);
-
+  Notifications.addNotificationResponseReceivedListener((notification) => {
+    console.log(notification);
+  })
   // setDeviceKey(customer?.account?.id, deviceKey);
   return (
     // <NavigationContainer>

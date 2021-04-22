@@ -1,8 +1,9 @@
 import * as firebase from "firebase";
-export const setTrackingOrder = (orderId, timeRemain) => {
+export const setTrackingOrder = (orderId, timeRemain, meter) => {
   firebase.database().ref("order").child(orderId).update({
     id: orderId,
     timeRemain,
+    meter,
   });
 };
 
