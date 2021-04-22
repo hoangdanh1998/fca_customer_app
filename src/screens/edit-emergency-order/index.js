@@ -20,20 +20,20 @@ import {
   Root,
   Text,
   Toast,
-  View,
+  View
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
-  TouchableWithoutFeedback,
+  TouchableWithoutFeedback
 } from "react-native";
 import NumberFormat from "react-number-format";
 import { useDispatch, useSelector } from "react-redux";
 import EditQuantityModal from "../../components/atoms/edit-quantity-modal/index";
+import FocusedButton from "../../components/atoms/focused-button/index";
 import NotificationModal from "../../components/atoms/notification-modal";
 import OrderDetailCard from "../../components/atoms/order-detail-card/index";
-import FocusedButton from "../../components/atoms/focused-button/index";
 import UnFocusedButton from "../../components/atoms/unfocused-button/index";
 import {
   DARK_COLOR,
@@ -45,7 +45,7 @@ import {
   PartnerItemStatus,
   PRIMARY_LIGHT_COLOR,
   SCHEDULE_DAY_OPTION,
-  TIME_FORMAT,
+  TIME_FORMAT
 } from "../../constants/index.js";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
@@ -53,7 +53,7 @@ import {
   getEmergency,
   getPartnerInformation,
   storeOrderParam,
-  storeScheduleParam,
+  storeScheduleParam
 } from "../../redux/actions/emergency";
 import { styles } from "./styles";
 
@@ -123,31 +123,6 @@ const EditEmergencyOrder = (props) => {
       setTimeout(() => {
         setHasUnsavedChanges(false);
         setVisibleNotificationModal(false);
-        props.navigation.dispatch(
-          CommonActions.navigate({
-            name: "",
-          })
-        );
-
-        props.navigation.dispatch(
-          CommonActions.reset({
-            index: 1,
-            routes: [
-              {
-                name: "MAP_VIEW",
-                params: {},
-              },
-              {
-                name: "MY_PROFILE",
-                params: {},
-              },
-              {
-                name: "EMERGENCY_PROFILE",
-                params: {},
-              },
-            ],
-          })
-        );
       }, NOTICE_DURATION);
     } catch (error) {
       console.log("error", error);
@@ -389,7 +364,10 @@ const EditEmergencyOrder = (props) => {
             >
               <CardItem style={{ flex: 1 }}>
                 <Left style={{ flex: 1 }}>
-                  <CheckBox color={DARK_COLOR} checked={isSchedule} />
+                  <CheckBox color={DARK_COLOR} checked={isSchedule} onPress={() => {
+                    setHasUnsavedChanges(true);
+                    handleSelectSchedule();
+                  }} />
                 </Left>
                 <Body style={{ flex: 9 }}>
                   <Text style={{ width: "100%" }}>
@@ -421,6 +399,35 @@ const EditEmergencyOrder = (props) => {
         <NotificationModal
           visible={visibleNotificationModal}
           title={messageNotificationModal}
+          onDismiss={() => {
+            setHasUnsavedChanges(false);
+            setVisibleNotificationModal(false);
+            props.navigation.dispatch(
+              CommonActions.navigate({
+                name: "",
+              })
+            );
+
+            props.navigation.dispatch(
+              CommonActions.reset({
+                index: 1,
+                routes: [
+                  {
+                    name: "MAP_VIEW",
+                    params: {},
+                  },
+                  {
+                    name: "MY_PROFILE",
+                    params: {},
+                  },
+                  {
+                    name: "EMERGENCY_PROFILE",
+                    params: {},
+                  },
+                ],
+              })
+            );
+          }}
         />
       </Root>
     );
@@ -438,7 +445,7 @@ const EditEmergencyOrder = (props) => {
             style={{
               width: "90%",
               // marginLeft: "5%",
-              height: "80%",
+              height: "90%",
               alignSelf: "center",
               justifyContent: "center",
             }}

@@ -1,54 +1,35 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import moment from "moment";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { withNavigation } from "@react-navigation/compat";
+import moment from "moment";
 import {
-  Card,
-  CardItem,
-  Content,
-  Left,
-  List,
-  Text,
-  Body,
-  H3,
-  View,
-  Footer,
-  ListItem,
-  Right,
-  Icon,
-  Radio,
-  CheckBox,
+  Body, Card,
+  CardItem, CheckBox, Content, Footer, H3, Icon, Left,
+  List, Radio, Right, Text, View
 } from "native-base";
+import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-  Switch,
-  Alert,
-  TouchableWithoutFeedback,
+
+  Alert, Switch,
+
+  TouchableWithoutFeedback
 } from "react-native";
-import NumberFormat from "react-number-format";
-import { withNavigation } from "@react-navigation/compat";
 import { Divider } from "react-native-elements";
-import OrderDetailCard from "../../components/atoms/order-detail-card/index";
+import NumberFormat from "react-number-format";
+import { useDispatch, useSelector } from "react-redux";
 import FocusedButton from "../../components/atoms/focused-button/index";
+import OrderDetailCard from "../../components/atoms/order-detail-card/index";
 import UnFocusedButton from "../../components/atoms/unfocused-button/index";
-import { styles } from "./styles";
-import { IMLocalized, init } from "../../i18n/IMLocalized";
-import { EMERGENCY_PROFILE } from "../../constants/seeding";
 import {
-  LANGUAGE,
-  DARK_COLOR,
-  MESSAGES,
-  PRIMARY_LIGHT_COLOR,
-  LIGHT_COLOR,
-  TIME_FORMAT,
-  SCHEDULE_DAY_OPTION,
-  DAY_IN_WEEK,
+  DARK_COLOR, DAY_IN_WEEK, LANGUAGE, LIGHT_COLOR, MESSAGES,
+  PRIMARY_LIGHT_COLOR, SCHEDULE_DAY_OPTION, TIME_FORMAT
 } from "../../constants/index.js";
+import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
-  switchSchedule,
-  storeScheduleParam,
+  storeScheduleParam, switchSchedule
 } from "../../redux/actions/emergency";
 import { convertEmergencyToNormal } from "../../utils/utils";
+import { styles } from "./styles";
 
 const EmergencyProfile = (props) => {
   init(LANGUAGE.VI);
@@ -62,9 +43,9 @@ const EmergencyProfile = (props) => {
   const [scheduleDayOption, setScheduleDayOption] = useState(
     SCHEDULE_DAY_OPTION[
       schedule
-        ? schedule.day.length === 7
+      ? schedule?.day?.length === 7
           ? 0
-          : schedule.day.toString() === DAY_IN_WEEK.slice(0, 5).toString()
+        : schedule?.day.toString() === DAY_IN_WEEK.slice(0, 5).toString()
           ? 1
           : 2
         : 0
@@ -157,9 +138,9 @@ const EmergencyProfile = (props) => {
       setScheduleDayOption(
         SCHEDULE_DAY_OPTION[
           schedule
-            ? schedule.day.length === 7
+          ? schedule?.day?.length === 7
               ? 0
-              : schedule.day.length === 5 &&
+            : schedule?.day?.length === 5 &&
                 JSON.stringify(DAY_IN_WEEK.slice(0, 5)) ===
                   JSON.stringify(schedule.day)
               ? 1

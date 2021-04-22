@@ -139,7 +139,7 @@ const OrderDetails = (props) => {
   }, [order]);
 
   useEffect(() => {
-    if (order.id) {
+    if (order?.id) {
       getOrderOnChange(order.id, (order) => {
         setListenedOrder(order);
       });

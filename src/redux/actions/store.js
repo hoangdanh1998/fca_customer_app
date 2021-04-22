@@ -27,6 +27,7 @@ export const getStoreSuggestion = (customerId, location, destination) => {
                 },
             });
         } catch (error) {
+            console.log(error)
             throw new Error(error);
         }
 

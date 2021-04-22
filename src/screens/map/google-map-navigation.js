@@ -26,7 +26,7 @@ const googleMapNavigation = () => {
   const [userRegion, setUserRegion] = useState(null);
   const [totalTravel, setTotalTravel] = useState(0);
   // const [originLocation, setOriginLocation] = useState(null)
-  const [isAutoPrepare, setIsAutoPrepare] = useState(false);
+  const [isAutoPrepare, setIsAutoPrepare] = useState(true);
   const [listenedOrder, setListenedOrder] = useState();
   
 
@@ -83,7 +83,7 @@ const googleMapNavigation = () => {
     
     if (isAutoPrepare) {
       const distance = await getDistance(currentLocation.coords, partnerLocation);
-      setTrackingOrder(createdOrder.id, distance.duration.text);
+      setTrackingOrder(createdOrder.id, distance.duration.text, distance.distance.value);
     }
     
   };
@@ -98,9 +98,7 @@ const googleMapNavigation = () => {
 
   useEffect(() => {
     if (listenedOrder) {
-      if (listenedOrder.isAutoPrepareOrder) {
-        setIsAutoPrepare(listenedOrder.isAutoPrepareOrder)
-      }
+      setIsAutoPrepare(listenedOrder.isAutoPrepareOrder)
     }
   }, [listenedOrder]);
 
