@@ -1,0 +1,17 @@
+import {StyleSheet} from 'react-native';
+
+
+export const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    header: {
+        fontWeight: 'bold',
+        fontSize: 18
+    },
+
+    title: {
+        fontSize: 18,
+        lineHeight:30
+    }
+})

@@ -16,6 +16,7 @@ import {
 } from "../constants/index";
 import { IMLocalized, init } from "../i18n/IMLocalized";
 import { setDeviceKey } from "../redux/actions/account";
+import ContactUsScreen from "../screens/contact-us";
 import CreateEmergencyOrder from "../screens/create-emergency-order";
 import CreateOrder from "../screens/create-order";
 import DeliveryOrder from "../screens/delivery-order";
@@ -94,6 +95,22 @@ export default function Navigation(props) {
   return (
     // <NavigationContainer>
     <Stack.Navigator>
+      {/* <Stack.Screen
+        name="CONTACT_US"
+        component={ContactUsScreen}
+        options={{
+          title: "Giới thiệu về FCA",
+          headerTintColor: LIGHT_COLOR,
+          headerStyle: {
+            backgroundColor: DARK_COLOR,
+          },
+          headerLeft: HeaderBackButton,
+          headerRight: () => (
+            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            />
+          )
+        }}
+      /> */}
 
       <Stack.Screen
         name="MAP_VIEW"
