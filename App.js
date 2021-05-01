@@ -1,17 +1,14 @@
-import OrderDetails from "./src/screens/order-details/index";
-import React from "react";
-import * as Font from "expo-font";
 import { Ionicons } from "@expo/vector-icons";
-import Navigation from "./src/navigations/Navigation";
+import * as Font from "expo-font";
+import * as firebase from "firebase";
+import { Base64 } from 'js-base64';
+import React from "react";
+import { LogBox } from "react-native";
+import { Provider } from "react-redux";
 import { applyMiddleware, createStore } from "redux";
 import ReduxThunk from "redux-thunk";
-import { Provider } from "react-redux";
-import rootReducer from "./src/redux/reducers/root-reducer";
-import * as firebase from "firebase";
-import * as Notifications from "expo-notifications";
-import { registerForPushNotificationsAsync } from "./src/service/notification/expo-notification";
-import { LogBox } from "react-native";
 import LoginNavigation from "./src/navigations/login-navigation";
+import rootReducer from "./src/redux/reducers/root-reducer";
 
 LogBox.ignoreAllLogs();
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
@@ -30,7 +27,7 @@ export default class App extends React.Component {
       ...Ionicons.font,
     });
     this.setState({ isReady: true });
-
+    
     initializeFirebase();
   }
 

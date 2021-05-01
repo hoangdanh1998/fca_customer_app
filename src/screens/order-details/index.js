@@ -3,19 +3,20 @@ import { withNavigation } from "@react-navigation/compat";
 import { CommonActions } from "@react-navigation/native";
 import moment from "moment";
 import {
-  CardItem,
+  Body,
+
+  Card, CardItem,
   Content,
   Footer,
-  Right,
-  View,
+
+
   Left,
-  Body,
-  Text,
-  Card,
+
+  Text, View
 } from "native-base";
+import React, { useEffect, useState } from "react";
 import { Switch, TouchableWithoutFeedback } from "react-native";
 import AwesomeAlert from "react-native-awesome-alerts";
-import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import FocusedButton from "../../components/atoms/focused-button/index";
 import NotificationModal from "../../components/atoms/notification-modal/index";
@@ -23,21 +24,22 @@ import TimelineTransaction from "../../components/atoms/timeline-transaction/ind
 import UnFocusedButton from "../../components/atoms/unfocused-button/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import {
-  DATE_FORMAT,
+  DARK_COLOR, DATE_FORMAT,
   DATE_FORMAT_CALL_API,
   LANGUAGE,
-  MESSAGES,
+
+
+
+  LIGHT_COLOR, MESSAGES,
   OrderStatus,
-  PRIMARY_LIGHT_COLOR,
-  LIGHT_COLOR,
-  DARK_COLOR,
+  PRIMARY_LIGHT_COLOR
 } from "../../constants/index";
-import { init, IMLocalized } from "../../i18n/IMLocalized";
+import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { setStoreSuggestion } from "../../redux/actions/store";
 import * as fcaStorage from "../../service/async-storage/async-storage";
 import {
   getOrderOnChange,
-  setAutoPrepareOrder,
+  setAutoPrepareOrder
 } from "../../service/firebase/firebase-realtime";
 import { convertTransaction } from "../../utils/utils";
 import { ORDER_ACTIONS } from "./../../redux/action-types/actions";
@@ -52,7 +54,6 @@ const arrEndpointStatus = [
 const canDelayOrderStatus = [
   OrderStatus.INITIALIZATION,
   OrderStatus.ACCEPTANCE,
-  OrderStatus.PREPARATION,
 ];
 
 const OrderDetails = (props) => {

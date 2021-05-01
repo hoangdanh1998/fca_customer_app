@@ -1,6 +1,5 @@
-import {
-    KEY_GOOGLE_MAP
-} from "../../constants/index";
+import { Base64 } from 'js-base64';
+const KEY_GOOGLE_MAP = Base64.decode('QUl6YVN5Q2JzUnh1QTNOR3hwT01lQzBVa21KVGkwVjJidlN5QUpv');
 export const getDirection = async (originLocation, destination) => {
     const response = await fetch(
         `https://maps.googleapis.com/maps/api/directions/json?origin=${originLocation.latitude},${originLocation.longitude}&destination=${destination.latitude},${destination.longitude}&key=${KEY_GOOGLE_MAP}`,

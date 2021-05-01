@@ -1,10 +1,11 @@
 import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import React, { useEffect, useState } from "react";
 
-import { KEY_GOOGLE_MAP } from "../../constants/index";
+import { useSelector } from 'react-redux';
 
 const GoogleMatrix = () => {
     const [matrix,setMatrix]=useState(null)
+  const KEY_GOOGLE_MAP = useSelector((state) => state.map.googleKey);
   const google_APIUrl =
     `https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=10.8277609,106.6793874&destinations=10.8224989,106.6880843&key=${KEY_GOOGLE_MAP}`;
   // "&origin="
