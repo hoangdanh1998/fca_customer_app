@@ -121,5 +121,7 @@
     "wording-message-make-order-after-arrive": "The store will prepare your order after arriving",
     "wording-message-default-prepare-order": "Prepare order before arriving",
     "wording-message-discard-changes": "You have unsaved changes. Are you sure to discard them and leave the screen?",
-    "wording-message-not-enough-balance": "Your balance is not enough to make this order"
+    "wording-message-not-enough-balance": "Your balance is not enough to make this order",
+    "wording-message-partner-busy": "This store maybe busy when you arrive. You might wait a few minutes",
+    "wording-message-locked-emergency": "Ops! This feature isn't unlocked\nMake an order and Add it to favorite\nto enjoy this feature"
 }
