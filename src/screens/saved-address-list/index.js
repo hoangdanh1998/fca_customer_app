@@ -30,22 +30,21 @@ import Swipeable from "react-native-swipeable";
 import { withNavigation } from "@react-navigation/compat";
 import { delAddress } from "../../redux/actions/map";
 
-// import { EMERGENCY_LIST } from "../../constants/seeding";
-
 const SavedAddressList = (props) => {
   init(LANGUAGE.VI);
   const dispatch = useDispatch();
   const customerAccount = useSelector((state) =>
     Object.assign({}, state.account)
   );
-  const emergencyList = customerAccount.customer.address;
+  const emergencyList =
+    customerAccount?.customer?.address?.length > 0
+      ? customerAccount.customer.address
+      : [];
 
-  const loadAddress = async (id) => {
+  const deleteAddress = async (id) => {
     try {
-      // console.log(customerAccount.customer.account.id);
       await dispatch(delAddress(customerAccount?.customer?.account?.id, id));
     } catch (error) {
-      // setError(error);
       alert(error);
     }
   };
@@ -71,8 +70,7 @@ const SavedAddressList = (props) => {
     </Button>,
     <Button
       onPress={() => {
-        alert("Adress deleted!");
-        loadAddress(item.id);
+        deleteAddress(item.id);
       }}
       style={{
         backgroundColor: "#ff4747",
@@ -116,18 +114,6 @@ const SavedAddressList = (props) => {
                 }}
               >
                 <CardItem style={{ flex: 1, width: "100%" }}>
-                  {/* <Left style={{ flex: 1 }}>
-                        <Icon
-                          name={
-                            item.savedAddress.isDefault
-                              ? "flag"
-                              : "bookmark-outline"
-                          }
-                          type="ionicon"
-                          color={DARK_COLOR}
-                          size={15}
-                        />
-                      </Left> */}
                   <Left style={{ flex: 1 }}>
                     <Icon
                       name="bookmark-outline"

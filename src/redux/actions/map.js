@@ -6,6 +6,7 @@ export const DEL_ADDRESS = "DEL_ADDRESS";
 export const SET_GOOGLE_KEY = "SET_GOOGLE_KEY";
 
 import api from "../../service/fca-api/fca-api";
+import { ResponseStatus } from "../../constants/index";
 
 export const setDestinationLocation = (location) => {
   return {
@@ -35,7 +36,7 @@ export const saveAddress = (customerId, param) => {
       });
     };
   } catch (error) {
-    console.log("saveAddress", error);
+    throw new Error(`Save address fail because ${error}`);
   }
 };
 
@@ -54,7 +55,7 @@ export const delAddress = (customerId, addressId) => {
       });
     };
   } catch (error) {
-    console.log("delAddress", error);
+    throw new Error(`Save address fail because ${error}`);
   }
 };
 

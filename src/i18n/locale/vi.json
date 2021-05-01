@@ -128,5 +128,7 @@
     "wording-message-default-prepare-order": "Chuẩn bị đơn hàng trước khi đến",
     "wording-message-discard-changes": "Bạn có các thay đổi chưa lưu. Bạn có chắc chắn xoá chúng và rời khỏi màn hình không?",
     "wording-not-enough-distance":"Khoảng cách từ vị trí của bạn đến cửa hàng ít hơn 2km có thể bạn sẽ phải chờ khi đến nơi",
-    "wording-message-not-enough-balance": "Số dư trong ví của bạn không đủ để thực hiện đơn hàng này"
+    "wording-message-not-enough-balance": "Số dư trong ví của bạn không đủ để thực hiện đơn hàng này",
+    "wording-message-partner-busy": "Cửa hàng có thể sẽ bận vào thời điểm bạn đến, bạn có thể phải đợi một lát.",
+    "wording-message-locked-emergency": "Ops! Tính năng này của bạn vẫn chưa được mở\nHãy tạo một đơn hàng mới và Lưu lại đơn hàng yêu thích của bạn\nđể có thể trải nghiệm tính năng này"
 }

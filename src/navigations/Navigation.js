@@ -1,6 +1,6 @@
 import {
   createStackNavigator,
-  HeaderBackButton
+  HeaderBackButton,
 } from "@react-navigation/stack";
 import * as Notifications from "expo-notifications";
 import { Base64 } from 'js-base64';
@@ -13,7 +13,7 @@ import {
   APP_NAME,
   DARK_COLOR,
   LANGUAGE,
-  LIGHT_COLOR
+  LIGHT_COLOR,
 } from "../constants/index";
 import { IMLocalized, init } from "../i18n/IMLocalized";
 import { setDeviceKey } from "../redux/actions/account";
@@ -40,7 +40,7 @@ import StoreDetailsEmergency from "../screens/store-details-emergency";
 import { updateExpoToken } from "../service/account/account";
 import {
   getDeviceKeyOnChange,
-  setDeviceKeyFirebase
+  setDeviceKeyFirebase,
 } from "../service/firebase/firebase-realtime";
 import { registerForPushNotificationsAsync } from "../service/notification/expo-notification";
 
@@ -93,12 +93,11 @@ export default function Navigation(props) {
   }, []);
   Notifications.addNotificationResponseReceivedListener((notification) => {
     console.log(notification);
-  })
+  });
   // setDeviceKey(customer?.account?.id, deviceKey);
   return (
     // <NavigationContainer>
     <Stack.Navigator>
-
       <Stack.Screen
         name="MAP_VIEW"
         component={MapScreen}
@@ -116,7 +115,7 @@ export default function Navigation(props) {
                 flexDirection: "row",
                 justifyContent: "space-between",
                 width: "120%",
-                paddingRight: 10
+                paddingRight: 10,
               }}
             >
               <Icon
@@ -148,9 +147,10 @@ export default function Navigation(props) {
           },
           headerLeft: HeaderBackButton,
           headerRight: () => (
-            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            <HeaderHomeButton
+              onPress={() => props.navigation.navigate("MAP_VIEW")}
             />
-          )
+          ),
         })}
       />
       <Stack.Screen
@@ -164,9 +164,10 @@ export default function Navigation(props) {
           },
           headerLeft: HeaderBackButton,
           headerRight: () => (
-            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            <HeaderHomeButton
+              onPress={() => props.navigation.navigate("MAP_VIEW")}
             />
-          )
+          ),
         }}
       />
       <Stack.Screen
@@ -180,9 +181,10 @@ export default function Navigation(props) {
           },
           headerLeft: HeaderBackButton,
           headerRight: () => (
-            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            <HeaderHomeButton
+              onPress={() => props.navigation.navigate("MAP_VIEW")}
             />
-          )
+          ),
         }}
       />
       <Stack.Screen
@@ -196,9 +198,10 @@ export default function Navigation(props) {
           },
           headerLeft: HeaderBackButton,
           headerRight: () => (
-            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            <HeaderHomeButton
+              onPress={() => props.navigation.navigate("MAP_VIEW")}
             />
-          )
+          ),
         }}
       />
       <Stack.Screen
@@ -212,9 +215,10 @@ export default function Navigation(props) {
           },
           headerLeft: HeaderBackButton,
           headerRight: () => (
-            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            <HeaderHomeButton
+              onPress={() => props.navigation.navigate("MAP_VIEW")}
             />
-          )
+          ),
         }}
       />
       <Stack.Screen
@@ -228,9 +232,10 @@ export default function Navigation(props) {
           },
           headerLeft: HeaderBackButton,
           headerRight: () => (
-            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            <HeaderHomeButton
+              onPress={() => props.navigation.navigate("MAP_VIEW")}
             />
-          )
+          ),
         }}
       />
       <Stack.Screen
@@ -256,9 +261,10 @@ export default function Navigation(props) {
           },
           headerLeft: HeaderBackButton,
           headerRight: () => (
-            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            <HeaderHomeButton
+              onPress={() => props.navigation.navigate("MAP_VIEW")}
             />
-          )
+          ),
         }}
       />
       <Stack.Screen
@@ -272,9 +278,10 @@ export default function Navigation(props) {
           },
           headerLeft: HeaderBackButton,
           headerRight: () => (
-            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            <HeaderHomeButton
+              onPress={() => props.navigation.navigate("MAP_VIEW")}
             />
-          )
+          ),
         }}
       />
       <Stack.Screen
@@ -312,9 +319,10 @@ export default function Navigation(props) {
           },
           headerLeft: HeaderBackButton,
           headerRight: () => (
-            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            <HeaderHomeButton
+              onPress={() => props.navigation.navigate("MAP_VIEW")}
             />
-          )
+          ),
         }}
       />
       <Stack.Screen
@@ -327,23 +335,34 @@ export default function Navigation(props) {
             backgroundColor: DARK_COLOR,
           },
           headerLeft: HeaderBackButton,
-          headerRight: () => (
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                width: "120%",
-              }}
-            >
+          headerRight: () =>
+            customer?.favoriteSummary ? (
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  width: "120%",
+                }}
+              >
+                <Icon
+                  name="pencil-outline"
+                  style={{ color: LIGHT_COLOR }}
+                  onPress={() => {
+                    navigation.navigate("EMERGENCY_ORDER_LIST");
+                  }}
+                />
+              </View>
+            ) : customer?.orders && customer?.orders?.length > 0 ? (
               <Icon
-                name="pencil-outline"
+                name="add-circle-outline"
                 style={{ color: LIGHT_COLOR }}
                 onPress={() => {
                   navigation.navigate("EMERGENCY_ORDER_LIST");
                 }}
               />
-            </View>
-          ),
+            ) : (
+              <></>
+            ),
         })}
       />
       <Stack.Screen
@@ -357,9 +376,10 @@ export default function Navigation(props) {
           },
           headerLeft: HeaderBackButton,
           headerRight: () => (
-            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            <HeaderHomeButton
+              onPress={() => props.navigation.navigate("MAP_VIEW")}
             />
-          )
+          ),
         })}
       />
       <Stack.Screen
@@ -373,9 +393,10 @@ export default function Navigation(props) {
           },
           headerLeft: HeaderBackButton,
           headerRight: () => (
-            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            <HeaderHomeButton
+              onPress={() => props.navigation.navigate("MAP_VIEW")}
             />
-          )
+          ),
         })}
       />
       <Stack.Screen
@@ -389,9 +410,10 @@ export default function Navigation(props) {
           },
           headerLeft: HeaderBackButton,
           headerRight: () => (
-            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            <HeaderHomeButton
+              onPress={() => props.navigation.navigate("MAP_VIEW")}
             />
-          )
+          ),
         })}
       />
       <Stack.Screen
@@ -405,9 +427,10 @@ export default function Navigation(props) {
           },
           headerLeft: HeaderBackButton,
           headerRight: () => (
-            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            <HeaderHomeButton
+              onPress={() => props.navigation.navigate("MAP_VIEW")}
             />
-          )
+          ),
         }}
       />
       <Stack.Screen
@@ -421,9 +444,10 @@ export default function Navigation(props) {
           },
           headerLeft: HeaderBackButton,
           headerRight: () => (
-            <HeaderHomeButton onPress={() => props.navigation.navigate("MAP_VIEW")}
+            <HeaderHomeButton
+              onPress={() => props.navigation.navigate("MAP_VIEW")}
             />
-          )
+          ),
         }}
       />
     </Stack.Navigator>

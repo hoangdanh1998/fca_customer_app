@@ -2,17 +2,27 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { withNavigation } from "@react-navigation/compat";
 import moment from "moment";
 import {
-  Body, Card,
-  CardItem, CheckBox, Content, Footer, H3, Icon, Left,
-  List, Radio, Right, Text, View
+  Body,
+  Card,
+  CardItem,
+  CheckBox,
+  Content,
+  Footer,
+  H3,
+  Icon,
+  Left,
+  List,
+  Radio,
+  Right,
+  Text,
+  View,
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
-
-  Alert, Switch,
-
-  TouchableWithoutFeedback
+  Alert,
+  Switch,
+  TouchableWithoutFeedback,
 } from "react-native";
 import { Divider } from "react-native-elements";
 import NumberFormat from "react-number-format";
@@ -21,12 +31,19 @@ import FocusedButton from "../../components/atoms/focused-button/index";
 import OrderDetailCard from "../../components/atoms/order-detail-card/index";
 import UnFocusedButton from "../../components/atoms/unfocused-button/index";
 import {
-  DARK_COLOR, DAY_IN_WEEK, LANGUAGE, LIGHT_COLOR, MESSAGES,
-  PRIMARY_LIGHT_COLOR, SCHEDULE_DAY_OPTION, TIME_FORMAT
+  DARK_COLOR,
+  DAY_IN_WEEK,
+  LANGUAGE,
+  LIGHT_COLOR,
+  MESSAGES,
+  PRIMARY_LIGHT_COLOR,
+  SCHEDULE_DAY_OPTION,
+  TIME_FORMAT,
 } from "../../constants/index.js";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
-  storeScheduleParam, switchSchedule
+  storeScheduleParam,
+  switchSchedule,
 } from "../../redux/actions/emergency";
 import { convertEmergencyToNormal } from "../../utils/utils";
 import { styles } from "./styles";
@@ -43,9 +60,9 @@ const EmergencyProfile = (props) => {
   const [scheduleDayOption, setScheduleDayOption] = useState(
     SCHEDULE_DAY_OPTION[
       schedule
-      ? schedule?.day?.length === 7
+        ? schedule?.day?.length === 7
           ? 0
-        : schedule?.day.toString() === DAY_IN_WEEK.slice(0, 5).toString()
+          : schedule?.day.toString() === DAY_IN_WEEK.slice(0, 5).toString()
           ? 1
           : 2
         : 0
@@ -138,9 +155,9 @@ const EmergencyProfile = (props) => {
       setScheduleDayOption(
         SCHEDULE_DAY_OPTION[
           schedule
-          ? schedule?.day?.length === 7
+            ? schedule?.day?.length === 7
               ? 0
-            : schedule?.day?.length === 5 &&
+              : schedule?.day?.length === 5 &&
                 JSON.stringify(DAY_IN_WEEK.slice(0, 5)) ===
                   JSON.stringify(schedule.day)
               ? 1
@@ -511,7 +528,12 @@ const EmergencyProfile = (props) => {
         renderTimerPicker()
       )
     ) : (
-      <View></View>
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <Icon name="sad-outline" style={{ color: DARK_COLOR, fontSize: 50 }} />
+        <Text style={{ textAlign: "center", color: DARK_COLOR }}>
+          {IMLocalized("wording-message-locked-emergency")}
+        </Text>
+      </View>
     )
   ) : (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
