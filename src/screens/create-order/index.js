@@ -2,8 +2,8 @@ import { withNavigation } from "@react-navigation/compat";
 import { CommonActions } from "@react-navigation/native";
 import * as Location from "expo-location";
 import * as Notifications from "expo-notifications";
-import moment from 'moment';
-import { Content, Footer, View } from "native-base";
+import moment from "moment";
+import { Card, CardItem, Content, Footer, View } from "native-base";
 import { default as React, useEffect, useState } from "react";
 import { ActivityIndicator, Alert, StyleSheet, Text } from "react-native";
 import AwesomeAlert from "react-native-awesome-alerts";
@@ -13,14 +13,19 @@ import NotificationModal from "../../components/atoms/notification-modal/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import ProcessingModal from "../../components/molecules/processing-modal/index";
 import {
-  DARK_COLOR, LANGUAGE, LIGHT_COLOR, MESSAGES,
-  NOTICE_DURATION, OrderStatus, FCATime,
+  DARK_COLOR,
+  LANGUAGE,
+  LIGHT_COLOR,
+  MESSAGES,
+  NOTICE_DURATION,
+  OrderStatus,
+  FCATime,
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
   cancelOrder,
   createOrder,
-  resetOrder
+  resetOrder,
 } from "../../redux/actions/order";
 import { setStoreSuggestion } from "../../redux/actions/store";
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
@@ -46,10 +51,12 @@ const CreateOrder = (props) => {
   const createdOrder = useSelector((state) => state.order.createdOrder);
   const customer = useSelector((state) => state.account.customer);
   const destination = useSelector((state) => state.map.destinationLocation);
-  
+
   const [visibleTimer, setVisibleTimer] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [visibleNotificationModal, setVisibleNotificationModal] = useState(false);
+  const [visibleNotificationModal, setVisibleNotificationModal] = useState(
+    false
+  );
   const [notificationMessage, setNotificationMessage] = useState("");
   const [visibleConfirmDistance, setVisibleConfirmDistance] = useState(false);
   const [currentLocation, setCurrentLocation] = useState();
@@ -70,20 +77,15 @@ const CreateOrder = (props) => {
   };
 
   const confirmDistance = async () => {
-    // const { status } = await Permissions.getAsync(Permissions.LOCATION);
-    // if (status !== "granted") {
-    //   alert(IMLocalized("wording-error-location"));
-    //   return;
-    // }
-    setIsLoading(true)
+    setIsLoading(true);
     const distance = await getDistance(currentLocation.coords, store.address);
-    setIsLoading(false)
+    setIsLoading(false);
     if (distance.distance.value < 2000) {
       setVisibleConfirmDistance(true);
     } else {
       await submitOrder();
     }
-  }
+  };
 
   const submitOrder = async () => {
     setVisibleTimer(true);
@@ -137,7 +139,6 @@ const CreateOrder = (props) => {
   };
 
   const handlePressFocusedButton = async () => {
-    
     const balance = parseInt(customer.account.balance);
     const orderTotal = parseInt(order.total);
     if (orderTotal > balance) {
@@ -145,8 +146,8 @@ const CreateOrder = (props) => {
         IMLocalized("wording-title-notification"),
         IMLocalized("wording-message-not-enough-balance"),
         [{ text: "OK", onPress: () => console.log("OK Pressed") }]
-        );
-        return;
+      );
+      return;
     }
     await confirmDistance();
   };
@@ -155,15 +156,7 @@ const CreateOrder = (props) => {
     setVisibleTimer(false);
     if (createdOrder) {
       await destroyOrder(createdOrder.id);
-      // setNotificationMessage(MESSAGES.CANCELLED);
     }
-    // setVisibleNotificationModal(true);
-    // await new Promise((resolve, reject) => {
-    //   setTimeout(() => {
-    //     setVisibleNotificationModal(false);
-    //     resolve();
-    //   }, NOTICE_DURATION);
-    // });
     dispatch(resetOrder());
   };
 
@@ -218,37 +211,39 @@ const CreateOrder = (props) => {
       var location = await Location.getCurrentPositionAsync({});
       const distance = await getDistance(location.coords, store.address);
       setCurrentLocation(location);
-      setEstimateTime(distance.duration.value)
-    })()
-  }, [])
+      setEstimateTime(distance.duration.value);
+    })();
+  }, []);
 
   useEffect(() => {
-
     if (currentLocation && store.busyTime && estimateTime) {
       for (const busyTime of store.busyTime) {
-        const start = moment(new Date(+busyTime.split(' - ')[0]));
-        const end = moment(new Date(+busyTime.split(' - ')[1]));
-        const estimate = moment().add(estimateTime - FCATime.PrepareTime * 60, 'second');
+        const start = moment(new Date(+busyTime.split(" - ")[0]));
+        const end = moment(new Date(+busyTime.split(" - ")[1]));
+        const estimate = moment().add(
+          estimateTime - FCATime.PrepareTime * 60,
+          "second"
+        );
         if (estimate.isBetween(start, end, true)) {
-          setIsWaiting(true)
+          setIsWaiting(true);
         }
       }
     }
-
-  }, [currentLocation, estimateTime])
-
+  }, [currentLocation, estimateTime]);
 
   return (
-      <>
+    <>
       <Content>
         <View style={{ width: "95%", marginLeft: "2.5%" }}>
           {isWaiting ? (
-            <Text>
-              Cửa hàng có phục vụ một đơn hàng khác trùng với thời gian bạn đến, có thể sẽ trễ để phục vụ cho bạn.
-            </Text>)
-            :
+            <Card>
+              <CardItem style={{ backgroundColor: LIGHT_COLOR }}>
+                <Text>{IMLocalized("wording-message-partner-busy")}</Text>
+              </CardItem>
+            </Card>
+          ) : (
             <></>
-          }
+          )}
           <OrderDetail store={store} orderDetails={order} />
         </View>
         {visibleTimer ? (
@@ -306,13 +301,12 @@ const CreateOrder = (props) => {
           await submitOrder();
         }}
       />
-      </>
+    </>
   );
 };
 const styles = StyleSheet.create({
   centered: {
     flex: 1,
   },
-
 });
 export default withNavigation(CreateOrder);
