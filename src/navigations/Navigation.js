@@ -68,7 +68,7 @@ export default function Navigation(props) {
 
   useEffect(() => {
     handleSetDeviceKey();
-    setKeyGoogle(Base64.decode('QUl6YVN5Q2JzUnh1QTNOR3hwT01lQzBVa21KVGkwVjJidlN5QUpv'));
+    dispatch(setKeyGoogle(Base64.decode('QUl6YVN5Q2JzUnh1QTNOR3hwT01lQzBVa21KVGkwVjJidlN5QUpv')));
   }, []);
 
   useEffect(() => {
