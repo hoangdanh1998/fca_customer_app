@@ -35,15 +35,6 @@ const AddressScreen = (props) => {
 
   const dispatch = useDispatch();
   const customer = useSelector((state) => state.account.customer);
-  // const { addressId } = props.route.params;
-  // addressId
-  //   ? setmarked({
-  //       longitude: addressId.longitude,
-  //       latitude: addressId.latitude,
-  //       description: addressId.description,
-  //       label: addressId.label,
-  //     })
-  //   : null;
   const saveAddressLabel = async () => {
     try {
       await dispatch(
@@ -56,7 +47,6 @@ const AddressScreen = (props) => {
         })
       );
     } catch (error) {
-      // setError(error);
       alert(error);
     }
   };
@@ -65,7 +55,6 @@ const AddressScreen = (props) => {
     return (
       <View style={{ flex: 1 }}>
         <GooglePlacesAutocomplete
-          // style={styles.searchBar}
           keyboardShouldPersistTaps="handled"
           placeholder={IMLocalized("wording-choose-saved-address")}
           minLength={2}
@@ -158,7 +147,7 @@ const AddressScreen = (props) => {
         setIsLoading(true);
         let { status } = await Location.requestPermissionsAsync();
         if (status !== "granted") {
-          console.log("Permission to access location was denied");
+          alert("Permission to access location was denied");
           return;
         }
 
@@ -251,7 +240,7 @@ const AddressScreen = (props) => {
                     onChangeText={(text) => (marked.label = text)}
                   />
                 </CardItem>
-                <Text>{marked?.name}</Text>
+                {/* <Text>{marked?.name}</Text> */}
                 <CardItem bordered>
                   <Text
                     style={{
