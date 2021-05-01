@@ -5,7 +5,7 @@ import { Button, Form, Text } from "native-base";
 import { Card, CardItem, Footer, Left, Right } from "native-base";
 import {
   DARK_COLOR,
-  KEY_GOOGLE_MAP,
+
   LANGUAGE,
   MESSAGES,
   PRIMARY_LIGHT_COLOR,
@@ -32,7 +32,7 @@ const AddressScreen = (props) => {
   const [error, setError] = useState();
   const [marked, setmarked] = useState(null);
   const [savedAddress, setsavedAdrees] = useState(props.route.params.addressId);
-
+  const KEY_GOOGLE_MAP = useSelector((state) => state.map.googleKey);
   const dispatch = useDispatch();
   const customer = useSelector((state) => state.account.customer);
   // const { addressId } = props.route.params;

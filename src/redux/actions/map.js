@@ -2,6 +2,7 @@ export const SET_DESTINATION_LOCATION = "SET_DESTINATION_LOCATION ";
 export const SET_PARTNER_LOCATION = "SET_PARTNER_LOCATION ";
 export const SAVE_ADDRESS = "SAVE_ADDRESS";
 export const DEL_ADDRESS = "DEL_ADDRESS";
+export const SET_GOOGLE_KEY = "SET_GOOGLE_KEY";
 
 import api from "../../service/fca-api/fca-api";
 
@@ -49,6 +50,19 @@ export const delAddress = (customerId, addressId) => {
       dispatch({
         type: DEL_ADDRESS,
         payload: response.data.data.customer,
+      });
+    };
+  } catch (error) {
+    console.log("delAddress", error);
+  }
+};
+
+export const setKeyGoogle = (key) => {
+  try {
+    return async (dispatch) => {
+      dispatch({
+        type: SET_GOOGLE_KEY,
+        payload: key,
       });
     };
   } catch (error) {

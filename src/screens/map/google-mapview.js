@@ -4,7 +4,7 @@ import { Dimensions, StyleSheet, Text, View } from "react-native";
 import MapView, { PROVIDER_GOOGLE } from "react-native-maps";
 import React, { useEffect, useState } from "react";
 
-import { KEY_GOOGLE_MAP } from "../../constance/constance";
+
 import MapViewDirections from "react-native-maps-directions";
 
 const width = Dimensions.get("window").width;
@@ -14,7 +14,8 @@ const MapScreen = () => {
     const [location, setLocation] = useState(null);
     const [errorMsg, setErrorMsg] = useState(null);
     const [userRegion, setUserRegion] = useState(null);
-
+    const KEY_GOOGLE_MAP = useSelector((state) => state.map.googleKey);
+    
     useEffect(() => {
         (async () => {
             let { status } = await Location.requestPermissionsAsync();

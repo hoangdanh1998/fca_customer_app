@@ -7,7 +7,6 @@ import MapViewDirections from "react-native-maps-directions";
 import { useDispatch, useSelector } from "react-redux";
 import {
   DARK_COLOR,
-  KEY_GOOGLE_MAP,
   LANGUAGE,
   PRIMARY_LIGHT_COLOR
 } from "../../constants/index";
@@ -40,6 +39,7 @@ const EmergencyMapScreen = () => {
   const [isShowPopup, setIsShowPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
+  const KEY_GOOGLE_MAP = useSelector((state) => state.map.googleKey);
 
   const handleSetDetailsGeometry = (location) => {
     dispatch(setDestinationLocation(location));

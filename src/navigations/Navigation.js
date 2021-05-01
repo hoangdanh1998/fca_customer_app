@@ -3,6 +3,7 @@ import {
   HeaderBackButton
 } from "@react-navigation/stack";
 import * as Notifications from "expo-notifications";
+import { Base64 } from 'js-base64';
 import { Icon, View } from "native-base";
 import React, { useEffect, useState } from "react";
 import { Alert } from "react-native";
@@ -16,6 +17,7 @@ import {
 } from "../constants/index";
 import { IMLocalized, init } from "../i18n/IMLocalized";
 import { setDeviceKey } from "../redux/actions/account";
+import { setKeyGoogle } from '../redux/actions/map';
 import CreateEmergencyOrder from "../screens/create-emergency-order";
 import CreateOrder from "../screens/create-order";
 import DeliveryOrder from "../screens/delivery-order";
@@ -63,8 +65,10 @@ export default function Navigation(props) {
   };
 
   const handleLogOut = props.route.params.handleLogOut;
+
   useEffect(() => {
     handleSetDeviceKey();
+    setKeyGoogle(Base64.decode('QUl6YVN5Q2JzUnh1QTNOR3hwT01lQzBVa21KVGkwVjJidlN5QUpv'));
   }, []);
 
   useEffect(() => {

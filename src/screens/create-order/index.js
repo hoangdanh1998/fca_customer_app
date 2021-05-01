@@ -13,8 +13,9 @@ import NotificationModal from "../../components/atoms/notification-modal/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import ProcessingModal from "../../components/molecules/processing-modal/index";
 import {
-  DARK_COLOR, LANGUAGE, LIGHT_COLOR, MESSAGES,
-  NOTICE_DURATION, OrderStatus, FCATime,
+  DARK_COLOR,
+  FCATime, LANGUAGE, LIGHT_COLOR, MESSAGES,
+  NOTICE_DURATION, OrderStatus
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
@@ -55,6 +56,7 @@ const CreateOrder = (props) => {
   const [currentLocation, setCurrentLocation] = useState();
   const [estimateTime, setEstimateTime] = useState();
   const [isWaiting, setIsWaiting] = useState(false);
+  const [timeOutState, setTimeOutState] = useState(null);
 
   const reSuggest = () => {
     if (suggestionStores && bestSuggestion) {
@@ -76,7 +78,8 @@ const CreateOrder = (props) => {
     //   return;
     // }
     setIsLoading(true)
-    const distance = await getDistance(currentLocation.coords, store.address);
+    var location = await Location.getCurrentPositionAsync({});
+    const distance = await getDistance(location.coords, store.address);
     setIsLoading(false)
     if (distance.distance.value < 2000) {
       setVisibleConfirmDistance(true);
@@ -86,8 +89,8 @@ const CreateOrder = (props) => {
   }
 
   const submitOrder = async () => {
-    setVisibleTimer(true);
     try {
+      setIsLoading(true);
       var location = await Location.getCurrentPositionAsync({});
       await dispatch(
         createOrder({
@@ -112,13 +115,20 @@ const CreateOrder = (props) => {
         })
       );
       console.log("Before");
+      setVisibleTimer(true);
+      setIsLoading(false);
     } catch (error) {
       setVisibleTimer(false);
-      setNotificationMessage(MESSAGES.REJECTED);
+      if ((error + '').indexOf('412') !== -1) {
+        setNotificationMessage(MESSAGES.INCOMPLETE);
+      } else {
+        setNotificationMessage(MESSAGES.REJECTED);
+      }
+      setIsLoading(false);
       setVisibleNotificationModal(true);
-      setTimeout(() => {
+      setTimeOutState(setTimeout(() => {
         setVisibleNotificationModal(false);
-      }, NOTICE_DURATION);
+      }, NOTICE_DURATION));
     }
   };
 
@@ -297,6 +307,7 @@ const CreateOrder = (props) => {
         showConfirmButton={true}
         onDismiss={() => {
           setVisibleConfirmDistance(false);
+          clearTimeout(timeOutState);
         }}
         onCancelPressed={() => {
           setVisibleConfirmDistance(false);

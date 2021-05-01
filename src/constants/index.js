@@ -1,5 +1,5 @@
 // API KEY
-export const KEY_GOOGLE_MAP = "AIzaSyCbsRxuA3NGxpOMeC0UkmJTi0V2bvSyAJo";
+// export const KEY_GOOGLE_MAP = "AIzaSyCbsRxuA3NGxpOMeC0UkmJTi0V2bvSyAJo";
 
 // APP CONFIG
 export const APP_NAME = "FAST COFFEE";
@@ -51,6 +51,7 @@ export const MESSAGES = {
   SET_DEFAULT: "set-default",
   NO_SUGGESTION: "no-suggestion",
   TITLE_NOTIFICATION: "title-notification",
+  INCOMPLETE: 'title-incomplete',
   STORE_CLOSING: "store-closing",
 };
 

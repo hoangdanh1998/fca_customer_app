@@ -2,7 +2,8 @@ import { Dimensions, View } from "react-native";
 import React, { } from "react";
 
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
-import { KEY_GOOGLE_MAP } from "../../constants/index";
+
+import { useSelector } from 'react-redux';
 
 var screenWidth = Dimensions.get("window").width;
 // const [initialRegion, setInitialRegion] = useState({
@@ -14,6 +15,7 @@ var screenWidth = Dimensions.get("window").width;
 // });
 
 const openSearchModal = () => {
+    const KEY_GOOGLE_MAP = useSelector((state) => state.map.googleKey);
     // const showToast = () => {
     //   ToastAndroid.show(`${initialRegion.description} + ${initialRegion.latitude}`, ToastAndroid.SHORT);
     // };

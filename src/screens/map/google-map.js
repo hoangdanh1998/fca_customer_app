@@ -16,7 +16,6 @@ import { useDispatch, useSelector } from "react-redux";
 import NotificationModal from "../../components/atoms/notification-modal/index";
 import {
   DARK_COLOR,
-  KEY_GOOGLE_MAP,
   LANGUAGE,
   LIGHT_COLOR,
   MESSAGES
@@ -43,6 +42,7 @@ const MapScreen = (props) => {
   const dispatch = useDispatch();
   const mapRef = useRef(null);
 
+
   const destinationLocation = useSelector(
     (state) => state.map.destinationLocation
   );
@@ -52,7 +52,8 @@ const MapScreen = (props) => {
   const profile = useSelector((state) => state.account.customer);
   const createdOrder = useSelector((state) => state.order.createdOrder);
   const emergency = useSelector((state) => state.emergency.emergency);
-
+  const KEY_GOOGLE_MAP = useSelector((state) => state.map.googleKey);
+  console.log("Key", KEY_GOOGLE_MAP)
   const [location, setLocation] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
   const [isShowPopup, setIsShowPopup] = useState(false);

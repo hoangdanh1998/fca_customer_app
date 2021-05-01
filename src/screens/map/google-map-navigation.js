@@ -6,7 +6,7 @@ import { Dimensions, StyleSheet, View } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { useSelector } from 'react-redux';
-import { KEY_GOOGLE_MAP } from "../../constants/index";
+
 import { getOrderOnChange, setTrackingOrder } from "../../service/firebase/firebase-realtime";
 import { getDistance } from "../../service/google-api/google-map-api";
 
@@ -20,6 +20,7 @@ const googleMapNavigation = () => {
   const partnerLocation = useSelector(state => state.map.partnerLocation);
   const destinationLocation = useSelector(state => state.map.destinationLocation);
   const createdOrder = useSelector(state => state.order.createdOrder);
+  const KEY_GOOGLE_MAP = useSelector((state) => state.map.googleKey);
 
   const [originDistance2Partner, setOriginDistance2Partner] = useState(0);
   const [startLocation, setStartLocation] = useState(null);
@@ -80,12 +81,9 @@ const googleMapNavigation = () => {
     // const d = R * c; //in metres
     // const travel = +(totalTravel + d);
     // setTotalTravel(travel);
-    
-    if (isAutoPrepare) {
-      const distance = await getDistance(currentLocation.coords, partnerLocation);
-      setTrackingOrder(createdOrder.id, distance.duration.text, distance.distance.value);
-    }
-    
+    const distance = await getDistance(currentLocation.coords, partnerLocation);
+    setTrackingOrder(createdOrder.id, distance.duration.text, distance.distance.value);
+    if (isAutoPrepare) {}
   };
 
   useEffect(() => {
