@@ -20,13 +20,13 @@ import {
   Root,
   Text,
   Toast,
-  View
+  View,
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Alert,
-  TouchableWithoutFeedback
+  TouchableWithoutFeedback,
 } from "react-native";
 import NumberFormat from "react-number-format";
 import { useDispatch, useSelector } from "react-redux";
@@ -45,7 +45,7 @@ import {
   PartnerItemStatus,
   PRIMARY_LIGHT_COLOR,
   SCHEDULE_DAY_OPTION,
-  TIME_FORMAT
+  TIME_FORMAT,
 } from "../../constants/index.js";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
@@ -53,7 +53,7 @@ import {
   getEmergency,
   getPartnerInformation,
   storeOrderParam,
-  storeScheduleParam
+  storeScheduleParam,
 } from "../../redux/actions/emergency";
 import { styles } from "./styles";
 
@@ -73,6 +73,7 @@ const EditEmergencyOrder = (props) => {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [destinationList, setDestinationList] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [displayId, setDisplayId] = useState("");
   const [visibleNotificationModal, setVisibleNotificationModal] = useState(
     false
@@ -163,6 +164,33 @@ const EditEmergencyOrder = (props) => {
     };
     dispatch(storeScheduleParam(scheduleParam));
     dispatch(storeOrderParam(orderParam));
+  };
+  const handleNavigateAfterCreateSchedule = () => {
+    props.navigation.dispatch(
+      CommonActions.navigate({
+        name: "",
+      })
+    );
+
+    props.navigation.dispatch(
+      CommonActions.reset({
+        index: 1,
+        routes: [
+          {
+            name: "MAP_VIEW",
+            params: {},
+          },
+          {
+            name: "MY_PROFILE",
+            params: {},
+          },
+          {
+            name: "EMERGENCY_PROFILE",
+            params: {},
+          },
+        ],
+      })
+    );
   };
 
   useEffect(() => {
@@ -364,10 +392,14 @@ const EditEmergencyOrder = (props) => {
             >
               <CardItem style={{ flex: 1 }}>
                 <Left style={{ flex: 1 }}>
-                  <CheckBox color={DARK_COLOR} checked={isSchedule} onPress={() => {
-                    setHasUnsavedChanges(true);
-                    handleSelectSchedule();
-                  }} />
+                  <CheckBox
+                    color={DARK_COLOR}
+                    checked={isSchedule}
+                    onPress={() => {
+                      setHasUnsavedChanges(true);
+                      handleSelectSchedule();
+                    }}
+                  />
                 </Left>
                 <Body style={{ flex: 9 }}>
                   <Text style={{ width: "100%" }}>
@@ -383,52 +415,34 @@ const EditEmergencyOrder = (props) => {
           return (sum += item.quantity);
         }, 0) !== 0 ? (
           <Footer style={styles.footer}>
-            <View style={{ flex: 1 }}>
-              <FocusedButton
-                block
-                name={MESSAGES.SAVE}
-                disable={false}
-                onPress={() => {
-                  setHasUnsavedChanges(false);
-                  handleCreateEmergency();
+            {isSubmitting ? (
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                  justifyContent: "center",
                 }}
-              />
-            </View>
+              >
+                <ActivityIndicator size="large" color={PRIMARY_LIGHT_COLOR} />
+              </View>
+            ) : (
+              <View style={{ flex: 1 }}>
+                <FocusedButton
+                  block
+                  name={MESSAGES.SAVE}
+                  disable={false}
+                  onPress={async () => {
+                    setIsSubmitting(true);
+                    setHasUnsavedChanges(false);
+                    await handleCreateEmergency();
+                    setIsSubmitting(false);
+                    handleNavigateAfterCreateSchedule();
+                  }}
+                />
+              </View>
+            )}
           </Footer>
         ) : null}
-        <NotificationModal
-          visible={visibleNotificationModal}
-          title={messageNotificationModal}
-          onDismiss={() => {
-            setHasUnsavedChanges(false);
-            setVisibleNotificationModal(false);
-            props.navigation.dispatch(
-              CommonActions.navigate({
-                name: "",
-              })
-            );
-
-            props.navigation.dispatch(
-              CommonActions.reset({
-                index: 1,
-                routes: [
-                  {
-                    name: "MAP_VIEW",
-                    params: {},
-                  },
-                  {
-                    name: "MY_PROFILE",
-                    params: {},
-                  },
-                  {
-                    name: "EMERGENCY_PROFILE",
-                    params: {},
-                  },
-                ],
-              })
-            );
-          }}
-        />
       </Root>
     );
   };
