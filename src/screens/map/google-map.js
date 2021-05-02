@@ -6,7 +6,7 @@ import {
   Dimensions,
   StyleSheet,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import AwesomeAlert from "react-native-awesome-alerts";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
@@ -18,18 +18,19 @@ import {
   DARK_COLOR,
   LANGUAGE,
   LIGHT_COLOR,
-  MESSAGES
+  MESSAGES,
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
   setDestinationLocation,
-  setPartnerLocation
+  setPartnerLocation,
 } from "../../redux/actions/map";
 import { setPartner } from "../../redux/actions/partner";
 import {
   getStoreSuggestion,
-  setStoreSuggestion
+  setStoreSuggestion,
 } from "../../redux/actions/store";
+import { getEmergency } from "../../redux/actions/emergency";
 import { convertEmergencyToNormal } from "../../utils/utils";
 import PopupStore from "./popup-store";
 
@@ -42,7 +43,6 @@ const MapScreen = (props) => {
   const dispatch = useDispatch();
   const mapRef = useRef(null);
 
-
   const destinationLocation = useSelector(
     (state) => state.map.destinationLocation
   );
@@ -53,7 +53,7 @@ const MapScreen = (props) => {
   const createdOrder = useSelector((state) => state.order.createdOrder);
   const emergency = useSelector((state) => state.emergency.emergency);
   const KEY_GOOGLE_MAP = useSelector((state) => state.map.googleKey);
-  console.log("Key", KEY_GOOGLE_MAP)
+  console.log("Key", KEY_GOOGLE_MAP);
   const [location, setLocation] = useState(null);
   const [userRegion, setUserRegion] = useState(null);
   const [isShowPopup, setIsShowPopup] = useState(false);
@@ -70,7 +70,9 @@ const MapScreen = (props) => {
       setError();
       setIsLoading(true);
       const location = await Location.getCurrentPositionAsync({});
-      await dispatch(getStoreSuggestion(profile.id, location.coords, destination));
+      await dispatch(
+        getStoreSuggestion(profile.id, location.coords, destination)
+      );
     } catch (error) {
       setError(error.message);
     }
@@ -310,6 +312,8 @@ const MapScreen = (props) => {
           console.log("Permission to access location was denied");
           return;
         }
+
+        dispatch(getEmergency(profile.id));
 
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);

@@ -3,7 +3,7 @@ import {
   HeaderBackButton,
 } from "@react-navigation/stack";
 import * as Notifications from "expo-notifications";
-import { Base64 } from 'js-base64';
+import { Base64 } from "js-base64";
 import { Icon, View } from "native-base";
 import React, { useEffect, useState } from "react";
 import { Alert } from "react-native";
@@ -17,7 +17,7 @@ import {
 } from "../constants/index";
 import { IMLocalized, init } from "../i18n/IMLocalized";
 import { setDeviceKey } from "../redux/actions/account";
-import { setKeyGoogle } from '../redux/actions/map';
+import { setKeyGoogle } from "../redux/actions/map";
 import CreateEmergencyOrder from "../screens/create-emergency-order";
 import CreateOrder from "../screens/create-order";
 import DeliveryOrder from "../screens/delivery-order";
@@ -50,6 +50,7 @@ init(LANGUAGE.VI);
 export default function Navigation(props) {
   const deviceKey = useSelector((state) => state.account.deviceKey);
   const customer = useSelector((state) => state.account.customer);
+  const emergencyOrder = useSelector((state) => state.emergency.emergency);
   const [isShowAlert, setIsShowAlert] = useState(false);
   const [listenAccount, setListenAccount] = useState(null);
   const dispatch = useDispatch();
@@ -68,7 +69,11 @@ export default function Navigation(props) {
 
   useEffect(() => {
     handleSetDeviceKey();
-    dispatch(setKeyGoogle(Base64.decode('QUl6YVN5Q2JzUnh1QTNOR3hwT01lQzBVa21KVGkwVjJidlN5QUpv')));
+    dispatch(
+      setKeyGoogle(
+        Base64.decode("QUl6YVN5Q2JzUnh1QTNOR3hwT01lQzBVa21KVGkwVjJidlN5QUpv")
+      )
+    );
   }, []);
 
   useEffect(() => {
@@ -336,7 +341,7 @@ export default function Navigation(props) {
           },
           headerLeft: HeaderBackButton,
           headerRight: () =>
-            customer?.favoriteSummary ? (
+            emergencyOrder && emergencyOrder?.items ? (
               <View
                 style={{
                   flexDirection: "row",
