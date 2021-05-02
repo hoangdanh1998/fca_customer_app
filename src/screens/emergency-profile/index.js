@@ -53,6 +53,7 @@ const EmergencyProfile = (props) => {
   // const profile = EMERGENCY_PROFILE;
   const loadedProfile = useSelector((state) => state.emergency.emergency);
   const loadedSchedule = useSelector((state) => state.emergency.schedule);
+  const customer = useSelector((state) => state.account.customer);
 
   const [visibleTimePicker, setVisibleTimePicker] = useState(false);
   const [paramScheduleTime, setParamScheduleTime] = useState(moment());
@@ -115,7 +116,7 @@ const EmergencyProfile = (props) => {
 
   const handleSetupSchedule = async () => {
     const scheduleParam = {
-      customerId: schedule.customerId,
+      customerId: customer.id,
       day: paramScheduleDayList,
       time: paramScheduleTime,
       isSchedule: isSchedule,
@@ -140,6 +141,7 @@ const EmergencyProfile = (props) => {
     if (loadedProfile && loadedProfile?.items) {
       const convertedProfile = convertEmergencyToNormal(loadedProfile);
       setProfile(convertedProfile);
+      console.log("loadedProfile", loadedProfile);
     }
     setIsLoading(false);
   }, [loadedProfile]);
@@ -279,7 +281,7 @@ const EmergencyProfile = (props) => {
                       <CardItem>
                         <Left style={{ flex: 1 }}>
                           <CheckBox
-                            checked={paramScheduleDayList.includes(item)}
+                            checked={paramScheduleDayList?.includes(item)}
                             color={DARK_COLOR}
                             selectedColor={DARK_COLOR}
                           />
@@ -329,6 +331,7 @@ const EmergencyProfile = (props) => {
                     } else {
                       await handleSetupSchedule();
                       setDisplayMode("order");
+                      setIsSchedule(true);
                     }
                   }}
                 />
@@ -429,63 +432,61 @@ const EmergencyProfile = (props) => {
                 </Body>
               </CardItem>
             </View>
-            {schedule?.day ? (
-              <View
-                style={{
-                  flex: 1,
-                  marginTop: "5%",
-                  width: "95%",
-                  marginLeft: "2.5%",
-                }}
-              >
-                <Text note style={{ fontWeight: "bold" }}>
-                  {IMLocalized("wording-subtitle-automatic-schedule")}
-                </Text>
-                <CardItem>
-                  <Left style={{ flex: 1 }}>
-                    <Switch
-                      trackColor={{
-                        false: PRIMARY_LIGHT_COLOR,
-                        true: DARK_COLOR,
-                      }}
-                      thumbColor={LIGHT_COLOR}
-                      ios_backgroundColor={PRIMARY_LIGHT_COLOR}
-                      onValueChange={() => {
-                        handleSwitchSchedule();
-                      }}
-                      value={isSchedule}
-                    />
-                  </Left>
-                  <TouchableWithoutFeedback
-                    onPress={() => {
-                      setDisplayMode("time");
+            <View
+              style={{
+                flex: 1,
+                marginTop: "5%",
+                width: "95%",
+                marginLeft: "2.5%",
+              }}
+            >
+              <Text note style={{ fontWeight: "bold" }}>
+                {IMLocalized("wording-subtitle-automatic-schedule")}
+              </Text>
+              <CardItem>
+                <Left style={{ flex: 1 }}>
+                  <Switch
+                    trackColor={{
+                      false: PRIMARY_LIGHT_COLOR,
+                      true: DARK_COLOR,
                     }}
-                  >
+                    thumbColor={LIGHT_COLOR}
+                    ios_backgroundColor={PRIMARY_LIGHT_COLOR}
+                    onValueChange={() => {
+                      handleSwitchSchedule();
+                    }}
+                    value={isSchedule}
+                  />
+                </Left>
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    setDisplayMode("time");
+                  }}
+                >
+                  <Body style={{ flex: 4 }}>
+                    <Text note>
+                      {IMLocalized("wording-automatic-schedule")}
+                    </Text>
+                  </Body>
+                </TouchableWithoutFeedback>
+              </CardItem>
+              {isSchedule ? (
+                <TouchableWithoutFeedback
+                  onPress={() => {
+                    setDisplayMode("time");
+                  }}
+                >
+                  <CardItem>
+                    <Left style={{ flex: 1 }}></Left>
                     <Body style={{ flex: 4 }}>
-                      <Text note>
-                        {IMLocalized("wording-automatic-schedule")}
+                      <Text note style={{ width: "100%" }}>
+                        {handleShowScheduleAsMessage()}
                       </Text>
                     </Body>
-                  </TouchableWithoutFeedback>
-                </CardItem>
-                {isSchedule ? (
-                  <TouchableWithoutFeedback
-                    onPress={() => {
-                      setDisplayMode("time");
-                    }}
-                  >
-                    <CardItem>
-                      <Left style={{ flex: 1 }}></Left>
-                      <Body style={{ flex: 4 }}>
-                        <Text note style={{ width: "100%" }}>
-                          {handleShowScheduleAsMessage()}
-                        </Text>
-                      </Body>
-                    </CardItem>
-                  </TouchableWithoutFeedback>
-                ) : null}
-              </View>
-            ) : null}
+                  </CardItem>
+                </TouchableWithoutFeedback>
+              ) : null}
+            </View>
           </View>
         </Content>
         <Footer style={styles.footer}>

@@ -9,7 +9,7 @@ import {
   Right,
   Text,
 } from "native-base";
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import { TouchableWithoutFeedback } from "react-native";
 import { Icon } from "react-native-elements";
 import NumberFormat from "react-number-format";
@@ -23,6 +23,7 @@ import {
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { getCustomer, getFavoriteItem } from "../../redux/actions/account";
+import { getEmergency } from "../../redux/actions/emergency";
 /* eslint-disable react/prop-types */
 
 init(LANGUAGE.VI);
@@ -30,7 +31,10 @@ const MyProfile = (props) => {
   const handleLogOut = props.route.params.handleLogOut;
 
   const profile = useSelector((state) => state.account.customer);
-  const favoriteFcaItems = useSelector(state => state.account.favoriteFcaItems);
+  const emergency = useSelector((state) => state.emergency.emergency);
+  const favoriteFcaItems = useSelector(
+    (state) => state.account.favoriteFcaItems
+  );
   console.log("favoriteFcaItems", favoriteFcaItems);
 
   const dispatch = useDispatch();
@@ -43,19 +47,32 @@ const MyProfile = (props) => {
     console.log("profile", profile?.id);
   };
 
+  const handleRefreshEmergency = async () => {
+    try {
+      await dispatch(getEmergency(profile.id));
+      console.log("emergency", emergency);
+    } catch (error) {
+      alert("Get emergency profile fail because " + error);
+    }
+  };
+
   useEffect(() => {
     try {
       dispatch(getFavoriteItem(profile?.id));
     } catch (error) {
-      console.error("Get Favorite Item error", error);
+      alert("Get favorite item error " + error);
     }
-    
-  }, [dispatch])
+  }, [dispatch]);
 
   return (
     <>
       <Content style={{ backgroundColor: "white" }}>
-        <TouchableWithoutFeedback onPress={handleRefreshCustomer}>
+        <TouchableWithoutFeedback
+          onPress={async () => {
+            handleRefreshCustomer;
+            await handleRefreshEmergency();
+          }}
+        >
           <Card style={{ flex: 1, backgroundColor: LIGHT_COLOR }}>
             <CardItem style={{ backgroundColor: LIGHT_COLOR }}>
               <Left>
@@ -106,7 +123,8 @@ const MyProfile = (props) => {
           </Card>
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
-          onPress={() => {
+          onPress={async () => {
+            await handleRefreshEmergency();
             props.navigation.navigate("EMERGENCY_PROFILE");
           }}
         >
@@ -168,8 +186,9 @@ const MyProfile = (props) => {
         </TouchableWithoutFeedback>
         <TouchableWithoutFeedback
           onPress={() => {
-            props.navigation.navigate("FAVORITE_ITEM", {favoriteFcaItems: favoriteFcaItems});
-            // alert("Favorite item");
+            props.navigation.navigate("FAVORITE_ITEM", {
+              favoriteFcaItems: favoriteFcaItems,
+            });
           }}
         >
           <Card style={{ flex: 1 }}>
