@@ -50,7 +50,6 @@ const MyProfile = (props) => {
   const handleRefreshEmergency = async () => {
     try {
       await dispatch(getEmergency(profile.id));
-      console.log("emergency", emergency);
     } catch (error) {
       alert("Get emergency profile fail because " + error);
     }
@@ -60,7 +59,7 @@ const MyProfile = (props) => {
     try {
       dispatch(getFavoriteItem(profile?.id));
     } catch (error) {
-      alert("Get favorite item error " + error);
+      alert("Get favorite item fail because " + error);
     }
   }, [dispatch]);
 
