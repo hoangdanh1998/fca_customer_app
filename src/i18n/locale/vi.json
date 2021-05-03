@@ -130,5 +130,6 @@
     "wording-not-enough-distance":"Khoảng cách từ vị trí của bạn đến cửa hàng ít hơn 2km có thể bạn sẽ phải chờ khi đến nơi",
     "wording-message-not-enough-balance": "Số dư trong ví của bạn không đủ để thực hiện đơn hàng này",
     "wording-message-partner-busy": "Cửa hàng có thể sẽ bận vào thời điểm bạn đến, bạn có thể phải đợi một lát.",
-    "wording-message-locked-emergency": "Ops! Tính năng này của bạn vẫn chưa được mở\nHãy tạo một đơn hàng mới và Lưu lại đơn hàng yêu thích\nđể có thể trải nghiệm tính năng này"
+    "wording-message-locked-emergency": "Ops! Tính năng này của bạn vẫn chưa được mở\nHãy tạo một đơn hàng mới và Lưu lại đơn hàng yêu thích\nđể có thể trải nghiệm tính năng này",
+    "wording-message-cancel-order-without-reason": "[Khách huỷ] Huỷ trong lúc đợi xác nhận đơn hàng"
 }

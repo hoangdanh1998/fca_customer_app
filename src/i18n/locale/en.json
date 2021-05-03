@@ -123,5 +123,6 @@
     "wording-message-discard-changes": "You have unsaved changes. Are you sure to discard them and leave the screen?",
     "wording-message-not-enough-balance": "Your balance is not enough to make this order",
     "wording-message-partner-busy": "This store maybe busy when you arrive. You might wait a few minutes",
-    "wording-message-locked-emergency": "Ops! This feature isn't unlocked\nMake an order and Add it to favorite\nto enjoy this feature"
+    "wording-message-locked-emergency": "Ops! This feature isn't unlocked\nMake an order and Add it to favorite\nto enjoy this feature",
+    "wording-message-cancel-order-without-reason": "[Customer] Canceling order after making order"
 }
