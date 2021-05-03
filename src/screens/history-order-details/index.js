@@ -74,7 +74,10 @@ const HistoryOrderDetails = (props) => {
               name={MESSAGES.FEEDBACK}
               disable={false}
               onPress={() => {
-                props.navigation.navigate("FEEDBACK", { order });
+                props.navigation.navigate("FEEDBACK", {
+                  order,
+                  screenName: "HISTORY_ORDER_DETAILS",
+                });
               }}
             />
           </View>
