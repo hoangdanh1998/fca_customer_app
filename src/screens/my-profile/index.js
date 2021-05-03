@@ -217,6 +217,18 @@ const MyProfile = (props) => {
             </CardItem>
           </Card>
         </TouchableWithoutFeedback>
+        <CardItem
+          style={{
+            flex: 1,
+            flexDirection: "column",
+            justifyContent: "flex-end",
+          }}
+        >
+          <Text note>Fast Coffee Application</Text>
+          <Text note style={{ fontWeight: "bold" }}>
+            Hotline: 0364133838
+          </Text>
+        </CardItem>
       </Content>
       <Footer style={{ backgroundColor: "white" }}>
         <UnFocusedButton
