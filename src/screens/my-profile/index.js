@@ -42,14 +42,13 @@ const MyProfile = (props) => {
     try {
       dispatch(getCustomer(profile?.id));
     } catch (error) {
-      alert("Something went wrong");
+      alert("Get profile fail because " + error);
     }
-    console.log("profile", profile?.id);
   };
 
   const handleRefreshEmergency = async () => {
     try {
-      await dispatch(getEmergency(profile.id));
+      await dispatch(getEmergency(profile?.id));
     } catch (error) {
       alert("Get emergency profile fail because " + error);
     }
@@ -68,7 +67,7 @@ const MyProfile = (props) => {
       <Content style={{ backgroundColor: "white" }}>
         <TouchableWithoutFeedback
           onPress={async () => {
-            handleRefreshCustomer;
+            handleRefreshCustomer();
             await handleRefreshEmergency();
           }}
         >

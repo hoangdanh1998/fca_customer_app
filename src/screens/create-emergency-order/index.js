@@ -27,6 +27,7 @@ import {
   createOrder,
   resetOrder,
 } from "../../redux/actions/order";
+import { getCustomer } from "../../redux/actions/account";
 import { setStoreSuggestion } from "../../redux/actions/store";
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 
@@ -92,6 +93,11 @@ const CreateEmergencyOrder = (props) => {
       dispatch(setPartnerLocation(store.address));
     } catch (error) {
       setVisibleTimer(false);
+      if ((error + "").indexOf("412") !== -1) {
+        setNotificationMessage(MESSAGES.INCOMPLETE);
+      } else {
+        setNotificationMessage(MESSAGES.REJECTED);
+      }
       setNotificationMessage(MESSAGES.REJECTED);
       setVisibleNotificationModal(true);
       setTimeout(() => {
@@ -168,6 +174,7 @@ const CreateEmergencyOrder = (props) => {
   };
 
   const handleAcceptedOrder = () => {
+    dispatch(getCustomer(customer.id));
     setVisibleTimer(false);
     props.navigation.dispatch(
       CommonActions.reset({
@@ -198,6 +205,10 @@ const CreateEmergencyOrder = (props) => {
       });
     }
   }, [createdOrder]);
+
+  useEffect(() => {
+    dispatch(getCustomer(customer.id));
+  }, []);
 
   return (
     <>

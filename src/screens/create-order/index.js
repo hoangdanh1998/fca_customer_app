@@ -14,8 +14,12 @@ import OrderDetail from "../../components/molecules/order-details/index";
 import ProcessingModal from "../../components/molecules/processing-modal/index";
 import {
   DARK_COLOR,
-  FCATime, LANGUAGE, LIGHT_COLOR, MESSAGES,
-  NOTICE_DURATION, OrderStatus
+  FCATime,
+  LANGUAGE,
+  LIGHT_COLOR,
+  MESSAGES,
+  NOTICE_DURATION,
+  OrderStatus,
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import {
@@ -23,6 +27,7 @@ import {
   createOrder,
   resetOrder,
 } from "../../redux/actions/order";
+import { getCustomer } from "../../redux/actions/account";
 import { setStoreSuggestion } from "../../redux/actions/store";
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 import { getDistance } from "../../service/google-api/google-map-api";
@@ -79,10 +84,10 @@ const CreateOrder = (props) => {
     //   alert(IMLocalized("wording-error-location"));
     //   return;
     // }
-    setIsLoading(true)
+    setIsLoading(true);
     var location = await Location.getCurrentPositionAsync({});
     const distance = await getDistance(location.coords, store.address);
-    setIsLoading(false)
+    setIsLoading(false);
     if (distance.distance.value < 2000) {
       setVisibleConfirmDistance(true);
     } else {
@@ -121,16 +126,18 @@ const CreateOrder = (props) => {
       setIsLoading(false);
     } catch (error) {
       setVisibleTimer(false);
-      if ((error + '').indexOf('412') !== -1) {
+      if ((error + "").indexOf("412") !== -1) {
         setNotificationMessage(MESSAGES.INCOMPLETE);
       } else {
         setNotificationMessage(MESSAGES.REJECTED);
       }
       setIsLoading(false);
       setVisibleNotificationModal(true);
-      setTimeOutState(setTimeout(() => {
-        setVisibleNotificationModal(false);
-      }, NOTICE_DURATION));
+      setTimeOutState(
+        setTimeout(() => {
+          setVisibleNotificationModal(false);
+        }, NOTICE_DURATION)
+      );
     }
   };
 
@@ -185,6 +192,7 @@ const CreateOrder = (props) => {
   };
 
   const handleAcceptedOrder = () => {
+    dispatch(getCustomer(customer.id));
     setVisibleTimer(false);
     props.navigation.dispatch(
       CommonActions.reset({
