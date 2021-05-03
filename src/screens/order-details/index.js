@@ -10,7 +10,7 @@ import {
   Footer,
   Left,
   Text,
-  View,
+  View
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import { Switch, TouchableWithoutFeedback } from "react-native";
@@ -29,14 +29,14 @@ import {
   LIGHT_COLOR,
   MESSAGES,
   OrderStatus,
-  PRIMARY_LIGHT_COLOR,
+  PRIMARY_LIGHT_COLOR
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { setStoreSuggestion } from "../../redux/actions/store";
 import * as fcaStorage from "../../service/async-storage/async-storage";
 import {
   getOrderOnChange,
-  setAutoPrepareOrder,
+  setAutoPrepareOrder
 } from "../../service/firebase/firebase-realtime";
 import { convertTransaction } from "../../utils/utils";
 import { ORDER_ACTIONS } from "./../../redux/action-types/actions";
@@ -79,6 +79,8 @@ const OrderDetails = (props) => {
       orderId: orderId,
     });
   };
+
+
 
   const reSuggest = () => {
     if (suggestionStores && bestSuggestion) {
@@ -135,6 +137,13 @@ const OrderDetails = (props) => {
       setIsComplete(true);
     }
   }, [order]);
+
+  useEffect(() => {
+    dispatch({
+      type: ORDER_ACTIONS.IS_AUTO_PREPARE_ORDER,
+      payload: { isAutoPrepare },
+    });
+  }, [isAutoPrepare])
 
   useEffect(() => {
     if (order?.id) {

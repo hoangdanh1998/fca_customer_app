@@ -8,6 +8,7 @@ const initialState = {
   prepareEmergencyOrder: {},
   originalPrepareEmergencyOrder: {},
   history: [],
+  isAutoPrepare: true,
 };
 
 const orderReducer = (state = initialState, action) => {
@@ -15,6 +16,10 @@ const orderReducer = (state = initialState, action) => {
     case ORDER_ACTIONS.CREATE_ORDER: {
       const data = action.payload;
       return { ...state, createdOrder: data };
+    }
+    case ORDER_ACTIONS.IS_AUTO_PREPARE_ORDER: {
+      const isAutoPrepare = action.payload.isAutoPrepare;
+      return {...state, isAutoPrepare}
     }
     case ORDER_ACTIONS.SET_CREATED_ORDER: {
       const data = action.payload;
