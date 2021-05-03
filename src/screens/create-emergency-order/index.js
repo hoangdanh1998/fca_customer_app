@@ -87,8 +87,6 @@ const CreateEmergencyOrder = (props) => {
           }),
         })
       );
-      console.log("des ", destination);
-      console.log("part", store.address);
       dispatch(setDestinationLocation(destination));
       dispatch(setPartnerLocation(store.address));
     } catch (error) {
@@ -98,7 +96,6 @@ const CreateEmergencyOrder = (props) => {
       } else {
         setNotificationMessage(MESSAGES.REJECTED);
       }
-      setNotificationMessage(MESSAGES.REJECTED);
       setVisibleNotificationModal(true);
       setTimeout(() => {
         setVisibleNotificationModal(false);
