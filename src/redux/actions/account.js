@@ -94,7 +94,6 @@ export const getCustomer = (id) => {
   return async (dispatch) => {
     try {
       const response = await fca.get(`/customer/${id}`);
-      console.log("response get customer", response.data.data.customer);
       dispatch({
         type: GET_CUSTOMER,
         payload: response.data.data.customer,
