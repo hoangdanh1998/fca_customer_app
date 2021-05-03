@@ -1,7 +1,11 @@
 import { withNavigation } from "@react-navigation/compat";
 import { Card, Content, Footer, List, Root, Toast } from "native-base";
 import React, { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, View } from "react-native";
+import {
+  ActivityIndicator,
+  View,
+  TouchableWithoutFeedback,
+} from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import DrinkCard from "../../components/atoms/drink-card/index";
 import StoreCart from "../../components/molecules/store-cart/index";
@@ -15,6 +19,7 @@ import {
 } from "../../constants/index.js";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { getPartnerInformation } from "../../redux/actions/partner";
+import { getCustomer } from "../../redux/actions/account";
 import { styles } from "./styles";
 
 const StoreDetails = (props) => {
@@ -24,6 +29,7 @@ const StoreDetails = (props) => {
   const partner = useSelector((state) => {
     return state.partner.partner;
   });
+  const profile = useSelector((state) => state.account.customer);
 
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState();
@@ -46,7 +52,15 @@ const StoreDetails = (props) => {
   }, [dispatch, setIsLoading]);
   useEffect(() => {
     loadPartner();
+    loadCustomer();
   }, [dispatch, loadPartner]);
+  const loadCustomer = () => {
+    try {
+      dispatch(getCustomer(profile?.id));
+    } catch (error) {
+      alert("Get profile fail because " + error);
+    }
+  };
 
   // ================================= HANDLE UI =================================
 

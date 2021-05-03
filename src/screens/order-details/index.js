@@ -4,15 +4,13 @@ import { CommonActions } from "@react-navigation/native";
 import moment from "moment";
 import {
   Body,
-
-  Card, CardItem,
+  Card,
+  CardItem,
   Content,
   Footer,
-
-
   Left,
-
-  Text, View
+  Text,
+  View,
 } from "native-base";
 import React, { useEffect, useState } from "react";
 import { Switch, TouchableWithoutFeedback } from "react-native";
@@ -24,22 +22,21 @@ import TimelineTransaction from "../../components/atoms/timeline-transaction/ind
 import UnFocusedButton from "../../components/atoms/unfocused-button/index";
 import OrderDetail from "../../components/molecules/order-details/index";
 import {
-  DARK_COLOR, DATE_FORMAT,
+  DARK_COLOR,
+  DATE_FORMAT,
   DATE_FORMAT_CALL_API,
   LANGUAGE,
-
-
-
-  LIGHT_COLOR, MESSAGES,
+  LIGHT_COLOR,
+  MESSAGES,
   OrderStatus,
-  PRIMARY_LIGHT_COLOR
+  PRIMARY_LIGHT_COLOR,
 } from "../../constants/index";
 import { IMLocalized, init } from "../../i18n/IMLocalized";
 import { setStoreSuggestion } from "../../redux/actions/store";
 import * as fcaStorage from "../../service/async-storage/async-storage";
 import {
   getOrderOnChange,
-  setAutoPrepareOrder
+  setAutoPrepareOrder,
 } from "../../service/firebase/firebase-realtime";
 import { convertTransaction } from "../../utils/utils";
 import { ORDER_ACTIONS } from "./../../redux/action-types/actions";
