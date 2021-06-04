@@ -70,7 +70,7 @@ const DeliveryOrder = (props) => {
         />
 
         <Text style={{ textAlign: "center", fontSize: 20, fontWeight: "bold" }}>
-          #{renderOrderID()}
+          {renderOrderID()}
         </Text>
       </View>
       <NotificationModal
