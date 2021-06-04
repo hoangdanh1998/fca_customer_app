@@ -1,16 +1,17 @@
-import { useIsFocused } from '@react-navigation/native';
+import { useIsFocused } from "@react-navigation/native";
 import * as Notifications from "expo-notifications";
 import { Content } from "native-base";
 import React, { useEffect, useState } from "react";
-import { Image, View } from "react-native";
+import { Image, View, Text } from "react-native";
 import NotificationModal from "../../components/atoms/notification-modal/index";
-import { MESSAGES, NOTICE_DURATION, OrderStatus } from "../../constants/index.js";
-import * as firebase from '../../service/firebase/firebase-realtime';
+import {
+  MESSAGES,
+  NOTICE_DURATION,
+  OrderStatus,
+} from "../../constants/index.js";
+import * as firebase from "../../service/firebase/firebase-realtime";
 import { getOrderOnChange } from "../../service/firebase/firebase-realtime";
 import { styles } from "./styles";
-
-
-
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -27,9 +28,16 @@ const DeliveryOrder = (props) => {
   const [visible, setVisible] = useState(false);
 
   if (!useIsFocused()) {
-    firebase.updateQRCode(orderId, '');
+    firebase.updateQRCode(orderId, "");
   }
 
+  const renderOrderID = () => {
+    if (orderId) {
+      let subID = orderId.substr(orderId?.length - 4, 4);
+      // console.log("sub id: " , subID);
+      return subID;
+    }
+  };
 
   const handleScanSuccess = () => {
     setVisible(true);
@@ -60,6 +68,10 @@ const DeliveryOrder = (props) => {
           }}
           source={{ uri: qrCode }}
         />
+
+        <Text style={{ textAlign: "center", fontSize: 20, fontWeight: "bold" }}>
+          {renderOrderID()}
+        </Text>
       </View>
       <NotificationModal
         message={MESSAGES.DONE}
