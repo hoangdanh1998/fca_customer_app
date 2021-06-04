@@ -18,11 +18,14 @@ export const getStoreSuggestion = (customerId, location, destination) => {
             if (response.data.meta.status !== ResponseStatus.SUCCESS) {
                 throw new Error("Something went wrong");
             }
-
+            let listPartner = response.data.data.partners;
+            console.log(listPartner.length)
+            const listPartnerSuggest = [...new Map(listPartner.map(partner => [partner[`id`], partner])).values()]
+            console.log(listPartnerSuggest.length)
             dispatch({
                 type: STORE_ACTIONS.SET_SUGGESTION_STORES,
                 payload: {
-                    suggestionStores: response.data.data.partners,
+                    suggestionStores: listPartnerSuggest,
                     bestSuggestion: response.data.data.suggestion,
                 },
             });
